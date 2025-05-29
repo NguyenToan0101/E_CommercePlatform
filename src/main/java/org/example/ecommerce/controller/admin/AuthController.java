@@ -33,7 +33,7 @@ public class AuthController {
             model.addAttribute("users", users);
             return "admin/home";
         }else{
-            model.addAttribute("error", "Invalid username or password");
+            model.addAttribute("error", "lInvalid username or password");
             return "admin/login";
         }
     }
