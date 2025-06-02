@@ -1,2 +1,8 @@
 ###
 GET http://localhost:8080/admin/demo
+
+###
+GET http://localhost:8080/system/email/sendHtml
+
+###
+GET http://localhost:8080/admin/dashboard
