@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thanh toán thành công</title>
+    <meta charset="utf-8" />
+</head>
+<body>
+<h2 style="color: green;">✔ thanh toán thành công!</h2>
+<p th:text="${message}">cảm ơn bạn đã mua hàng.</p>
+
+<a href="/products">← tiếp tục mua sắm</a> |
+<a href="/wallet">xem ví</a> |
+<a href="/orders">xem đơn hàng</a>
+</body>
+</html>
