@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Center Dashboard</title>
+    <link rel="stylesheet" href="Seller.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+                <span>Seller Center</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                <li class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </li>
+                <li class="nav-item" data-page="products">
+                    <i class="fas fa-box"></i>
+                    <span>Products</span>
+                </li>
+                <li class="nav-item" data-page="orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                </li>
+                <li class="nav-item" data-page="inventory">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Inventory</span>
+                </li>
+                <li class="nav-item" data-page="customers">
+                    <i class="fas fa-users"></i>
+                    <span>Customers</span>
+                </li>
+                <li class="nav-item" data-page="messages">
+                    <i class="fas fa-envelope"></i>
+                    <span>Messages</span>
+                </li>
+                <li class="nav-item" data-page="marketing">
+                    <i class="fas fa-bullhorn"></i>
+                    <span>Marketing</span>
+                </li>
+                <li class="nav-item" data-page="analytics">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Analytics</span>
+                </li>
+                <li class="nav-item" data-page="finance">
+                    <i class="fas fa-dollar-sign"></i>
+                    <span>Finance</span>
+                </li>
+                <li class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 id="page-title">Dashboard</h1>
+            </div>
+            <div class="header-right">
+                <button class="btn-secondary">Notifications</button>
+                <button class="btn-secondary">My Shop</button>
+                <div class="user-avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Page -->
+        <div id="dashboard-page" class="page active">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Revenue</span>
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-value">$15,231.89</div>
+                    <div class="stat-change positive">+20.1% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Orders</span>
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value">+573</div>
+                    <div class="stat-change positive">+12% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Products</span>
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-value">128</div>
+                    <div class="stat-change positive">+8 new products</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Conversion Rate</span>
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value">3.2%</div>
+                    <div class="stat-change positive">+0.5% from last month</div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Overview</h3>
+                        <p>Sales performance for the past 30 days</p>
+                    </div>
+                    <canvas id="salesChart"></canvas>
+                </div>
+                <div class="recent-sales">
+                    <div class="chart-header">
+                        <h3>Recent Sales</h3>
+                        <p>Latest orders from your customers</p>
+                    </div>
+                    <div class="sales-list">
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">Olivia Martin</div>
+                                <div class="customer-email">olivia.martin@email.com</div>
+                            </div>
+                            <div class="sale-amount">$199.99</div>
+                        </div>
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">Jackson Lee</div>
+                                <div class="customer-email">jackson.lee@email.com</div>
+                            </div>
+                            <div class="sale-amount">$39.99</div>
+                        </div>
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">Isabella Nguyen</div>
+                                <div class="customer-email">isabella.nguyen@email.com</div>
+                            </div>
+                            <div class="sale-amount">$299.99</div>
+                        </div>
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">William Kim</div>
+                                <div class="customer-email">will.kim@email.com</div>
+                            </div>
+                            <div class="sale-amount">$99.99</div>
+                        </div>
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">Sofia Davis</div>
+                                <div class="customer-email">sofia.davis@email.com</div>
+                            </div>
+                            <div class="sale-amount">$149.99</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Page -->
+        <div id="products-page" class="page">
+            <div class="page-header">
+                <h2>All Products</h2>
+                <div class="page-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search products...">
+                    </div>
+                    <button class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Add Product
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Wireless Earbuds</td>
+                        <td>Electronics</td>
+                        <td>$59.99</td>
+                        <td>45</td>
+                        <td><span class="status active">Active</span></td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Smart Watch</td>
+                        <td>Electronics</td>
+                        <td>$129.99</td>
+                        <td>32</td>
+                        <td><span class="status active">Active</span></td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Bluetooth Speaker</td>
+                        <td>Electronics</td>
+                        <td>$89.99</td>
+                        <td>18</td>
+                        <td><span class="status active">Active</span></td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Phone Case</td>
+                        <td>Accessories</td>
+                        <td>$19.99</td>
+                        <td>124</td>
+                        <td><span class="status active">Active</span></td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Laptop Sleeve</td>
+                        <td>Accessories</td>
+                        <td>$29.99</td>
+                        <td>0</td>
+                        <td><span class="status out-of-stock">Out of Stock</span></td>
+                        <td>
+                            <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Orders Page -->
+        <div id="orders-page" class="page">
+            <div class="page-header">
+                <h2>All Orders</h2>
+                <div class="page-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search orders...">
+                    </div>
+                    <select class="filter-select">
+                        <option>All Orders</option>
+                        <option>Pending</option>
+                        <option>Processing</option>
+                        <option>Shipped</option>
+                        <option>Delivered</option>
+                        <option>Cancelled</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Products</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>#ORD-7652</td>
+                        <td>John Smith</td>
+                        <td>2023-06-01</td>
+                        <td>3 items</td>
+                        <td>$129.99</td>
+                        <td><span class="status delivered">Delivered</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD-7651</td>
+                        <td>Sarah Johnson</td>
+                        <td>2023-06-01</td>
+                        <td>1 item</td>
+                        <td>$59.99</td>
+                        <td><span class="status shipped">Shipped</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD-7650</td>
+                        <td>Michael Brown</td>
+                        <td>2023-05-31</td>
+                        <td>2 items</td>
+                        <td>$89.98</td>
+                        <td><span class="status processing">Processing</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD-7649</td>
+                        <td>Emily Davis</td>
+                        <td>2023-05-31</td>
+                        <td>4 items</td>
+                        <td>$239.96</td>
+                        <td><span class="status pending">Pending</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD-7648</td>
+                        <td>Robert Wilson</td>
+                        <td>2023-05-30</td>
+                        <td>1 item</td>
+                        <td>$29.99</td>
+                        <td><span class="status cancelled">Cancelled</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Inventory Page -->
+        <div id="inventory-page" class="page">
+            <div class="page-header">
+                <h2>Inventory Management</h2>
+                <div class="page-actions">
+                    <button class="btn-secondary">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                    <button class="btn-secondary">
+                        <i class="fas fa-upload"></i>
+                        Import
+                    </button>
+                    <button class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Add Product
+                    </button>
+                </div>
+            </div>
+
+            <!-- Inventory Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Products</div>
+                    <div class="stat-value">1,245</div>
+                    <div class="stat-change positive">+12 new this month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Low Stock</div>
+                    <div class="stat-value">28</div>
+                    <div class="stat-change">Items below threshold</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Out of Stock</div>
+                    <div class="stat-value">15</div>
+                    <div class="stat-change">Items need restocking</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Value</div>
+                    <div class="stat-value">$124,500</div>
+                    <div class="stat-change">Based on cost price</div>
+                </div>
+            </div>
+
+            <!-- Inventory Table -->
+            <div class="inventory-filters">
+                <button class="filter-btn active">All Products</button>
+                <button class="filter-btn">Low Stock</button>
+                <button class="filter-btn">Out of Stock</button>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Product</th>
+                        <th>SKU</th>
+                        <th>Category</th>
+                        <th>In Stock</th>
+                        <th>Reserved</th>
+                        <th>Available</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Wireless Earbuds</td>
+                        <td>WE-001</td>
+                        <td>Electronics</td>
+                        <td>45</td>
+                        <td>3</td>
+                        <td>42</td>
+                        <td><span class="status in-stock">In Stock</span></td>
+                        <td><button class="btn-link">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Smart Watch</td>
+                        <td>SW-002</td>
+                        <td>Electronics</td>
+                        <td>32</td>
+                        <td>5</td>
+                        <td>27</td>
+                        <td><span class="status in-stock">In Stock</span></td>
+                        <td><button class="btn-link">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Bluetooth Speaker</td>
+                        <td>BS-003</td>
+                        <td>Electronics</td>
+                        <td>18</td>
+                        <td>2</td>
+                        <td>16</td>
+                        <td><span class="status in-stock">In Stock</span></td>
+                        <td><button class="btn-link">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Phone Case</td>
+                        <td>PC-004</td>
+                        <td>Accessories</td>
+                        <td>124</td>
+                        <td>10</td>
+                        <td>114</td>
+                        <td><span class="status in-stock">In Stock</span></td>
+                        <td><button class="btn-link">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Laptop Sleeve</td>
+                        <td>LS-005</td>
+                        <td>Accessories</td>
+                        <td>8</td>
+                        <td>2</td>
+                        <td>6</td>
+                        <td><span class="status low-stock">Low Stock</span></td>
+                        <td><button class="btn-link">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Wireless Charger</td>
+                        <td>WC-006</td>
+                        <td>Electronics</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td><span class="status out-of-stock">Out of Stock</span></td>
+                        <td><button class="btn-link">Update</button></td>
+                    </tr>
+                    <tr>
+                        <td><div class="product-image"></div></td>
+                        <td>Fitness Tracker</td>
+                        <td>FT-007</td>
+                        <td>Electronics</td>
+                        <td>5</td>
+                        <td>1</td>
+                        <td>4</td>
+                        <td><span class="status low-stock">Low Stock</span></td>
+                        <td><button class="btn-link">Update</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Customers Page -->
+        <div id="customers-page" class="page">
+            <div class="page-header">
+                <h2>All Customers</h2>
+                <div class="page-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search customers...">
+                    </div>
+                    <button class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Add Customer
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Orders</th>
+                        <th>Total Spent</th>
+                        <th>Rating</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <div class="customer-info">
+                                <div class="customer-avatar"></div>
+                                <span>John Smith</span>
+                            </div>
+                        </td>
+                        <td>john.smith@example.com</td>
+                        <td>+1 (555) 123-4567</td>
+                        <td>8</td>
+                        <td>$729.99</td>
+                        <td>
+                            <div class="rating">
+                                <span class="stars">★</span>
+                                <span>4.8</span>
+                            </div>
+                        </td>
+                        <td><button class="btn-link">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="customer-info">
+                                <div class="customer-avatar"></div>
+                                <span>Sarah Johnson</span>
+                            </div>
+                        </td>
+                        <td>sarah.j@example.com</td>
+                        <td>+1 (555) 234-5678</td>
+                        <td>12</td>
+                        <td>$1249.95</td>
+                        <td>
+                            <div class="rating">
+                                <span class="stars">★</span>
+                                <span>5</span>
+                            </div>
+                        </td>
+                        <td><button class="btn-link">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="customer-info">
+                                <div class="customer-avatar"></div>
+                                <span>Michael Brown</span>
+                            </div>
+                        </td>
+                        <td>michael.b@example.com</td>
+                        <td>+1 (555) 345-6789</td>
+                        <td>3</td>
+                        <td>$189.97</td>
+                        <td>
+                            <div class="rating">
+                                <span class="stars">★</span>
+                                <span>4.2</span>
+                            </div>
+                        </td>
+                        <td><button class="btn-link">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="customer-info">
+                                <div class="customer-avatar"></div>
+                                <span>Emily Davis</span>
+                            </div>
+                        </td>
+                        <td>emily.davis@example.com</td>
+                        <td>+1 (555) 456-7890</td>
+                        <td>15</td>
+                        <td>$1879.50</td>
+                        <td>
+                            <div class="rating">
+                                <span class="stars">★</span>
+                                <span>4.9</span>
+                            </div>
+                        </td>
+                        <td><button class="btn-link">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="customer-info">
+                                <div class="customer-avatar"></div>
+                                <span>Robert Wilson</span>
+                            </div>
+                        </td>
+                        <td>robert.w@example.com</td>
+                        <td>+1 (555) 567-8901</td>
+                        <td>1</td>
+                        <td>$59.99</td>
+                        <td>
+                            <div class="rating">
+                                <span class="stars">★</span>
+                                <span>4</span>
+                            </div>
+                        </td>
+                        <td><button class="btn-link">View</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Messages Page -->
+        <div id="messages-page" class="page">
+            <div class="messages-container">
+                <div class="messages-sidebar">
+                    <div class="messages-header">
+                        <h3>Conversations</h3>
+                        <span class="unread-count">12</span>
+                    </div>
+                    <div class="conversation-search">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search messages...">
+                        </div>
+                    </div>
+                    <div class="conversation-filters">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Unread</button>
+                        <button class="filter-btn">Archived</button>
+                    </div>
+                    <div class="conversations-list">
+                        <div class="conversation-item active" data-customer="sarah">
+                            <div class="conversation-avatar"></div>
+                            <div class="conversation-info">
+                                <div class="conversation-header">
+                                    <span class="customer-name">Sarah Johnson</span>
+                                    <span class="message-time">7 minutes ago</span>
+                                </div>
+                                <div class="last-message">Hi, I have a question about m...</div>
+                            </div>
+                            <div class="unread-indicator">2</div>
+                        </div>
+                        <div class="conversation-item" data-customer="michael">
+                            <div class="conversation-avatar"></div>
+                            <div class="conversation-info">
+                                <div class="conversation-header">
+                                    <span class="customer-name">Michael Brown</span>
+                                    <span class="message-time">32 minutes ago</span>
+                                </div>
+                                <div class="last-message">When will my order be shippe...</div>
+                            </div>
+                            <div class="unread-indicator">1</div>
+                        </div>
+                        <div class="conversation-item" data-customer="emily">
+                            <div class="conversation-avatar"></div>
+                            <div class="conversation-info">
+                                <div class="conversation-header">
+                                    <span class="customer-name">Emily Davis</span>
+                                    <span class="message-time">about 2 hours ago</span>
+                                </div>
+                                <div class="last-message">Thank you for the quick response!</div>
+                            </div>
+                        </div>
+                        <div class="conversation-item" data-customer="robert">
+                            <div class="conversation-avatar"></div>
+                            <div class="conversation-info">
+                                <div class="conversation-header">
+                                    <span class="customer-name">Robert Wilson</span>
+                                    <span class="message-time">about 4 hours ago</span>
+                                </div>
+                                <div class="last-message">I need to return this item</div>
+                            </div>
+                            <div class="unread-indicator">3</div>
+                        </div>
+                        <div class="conversation-item" data-customer="lisa">
+                            <div class="conversation-avatar"></div>
+                            <div class="conversation-info">
+                                <div class="conversation-header">
+                                    <span class="customer-name">Lisa Anderson</span>
+                                    <span class="message-time">1 day ago</span>
+                                </div>
+                                <div class="last-message">Great product, very satisfied!</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-area">
+                    <div class="chat-header">
+                        <div class="chat-customer-info">
+                            <div class="customer-avatar large"></div>
+                            <div class="customer-details">
+                                <h3>Sarah Johnson</h3>
+                                <span class="customer-status online">Online</span>
+                            </div>
+                        </div>
+                        <div class="chat-actions">
+                            <button class="btn-icon"><i class="fas fa-phone"></i></button>
+                            <button class="btn-icon"><i class="fas fa-video"></i></button>
+                            <button class="btn-icon"><i class="fas fa-info-circle"></i></button>
+                            <button class="btn-icon"><i class="fas fa-ellipsis-v"></i></button>
+                        </div>
+                    </div>
+                    <div class="chat-messages">
+                        <div class="message customer-message">
+                            <div class="message-content">Hi, I have a question about my recent order #ORD-7651</div>
+                            <div class="message-time">32 minutes ago</div>
+                        </div>
+                        <div class="message seller-message">
+                            <div class="message-content">Hello! I'd be happy to help you with your order. What would you like to know?</div>
+                            <div class="message-time">27 minutes ago</div>
+                        </div>
+                        <div class="message customer-message">
+                            <div class="message-content">I was wondering when it will be shipped. I placed the order yesterday.</div>
+                            <div class="message-time">22 minutes ago</div>
+                        </div>
+                        <div class="message seller-message">
+                            <div class="message-content">Let me check that for you. Your order is currently being processed and will be shipped within 24 hours. You'll receive a tracking number via email once it's dispatched.</div>
+                            <div class="message-time">17 minutes ago</div>
+                        </div>
+                        <div class="message customer-message">
+                            <div class="message-content">That's great! Thank you for the quick response.</div>
+                            <div class="message-time">12 minutes ago</div>
+                        </div>
+                        <div class="message seller-message">
+                            <div class="message-content">You're welcome! Is there anything else I can help you with?</div>
+                            <div class="message-time">7 minutes ago</div>
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <button class="btn-icon"><i class="fas fa-paperclip"></i></button>
+                        <button class="btn-icon"><i class="fas fa-image"></i></button>
+                        <input type="text" placeholder="Type a message..." class="message-input">
+                        <button class="btn-icon"><i class="fas fa-smile"></i></button>
+                        <button class="btn-primary send-btn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="customer-info-panel">
+                    <div class="panel-header">
+                        <h3>Customer Info</h3>
+                    </div>
+                    <div class="customer-profile">
+                        <div class="customer-avatar large"></div>
+                        <h3>Sarah Johnson</h3>
+                        <p>Customer since Jan 2023</p>
+                    </div>
+                    <div class="contact-info">
+                        <h4>Contact Information</h4>
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>sarah.j@example.com</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <span>+1 (555) 234-5678</span>
+                        </div>
+                    </div>
+                    <div class="order-history">
+                        <h4>Order History</h4>
+                        <div class="order-stats">
+                            <div class="stat">
+                                <span class="label">Total Orders</span>
+                                <span class="value">12</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Total Spent</span>
+                                <span class="value">$1,249.95</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Last Order</span>
+                                <span class="value">Jun 1, 2023</span>
+                            </div>
+                        </div>
+                        <div class="recent-orders">
+                            <h4>Recent Orders</h4>
+                            <div class="order-item">
+                                <span class="order-id">#ORD-7651</span>
+                                <span class="order-date">Jun 1, 2023</span>
+                                <span class="order-total">$59.99</span>
+                            </div>
+                            <div class="order-item">
+                                <span class="order-id">#ORD-7589</span>
+                                <span class="order-date">May 22, 2023</span>
+                                <span class="order-total">$149.97</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Marketing Page -->
+        <div id="marketing-page" class="page">
+            <div class="page-header">
+                <h2>Marketing</h2>
+                <div class="page-actions">
+                    <button class="btn-secondary">
+                        <i class="fas fa-download"></i>
+                        Export Report
+                    </button>
+                    <button class="btn-primary">
+                        <i class="fas fa-plus"></i>
+                        Create Campaign
+                    </button>
+                </div>
+            </div>
+
+            <!-- Marketing Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Active Campaigns</span>
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-change positive">+2 this month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Email Subscribers</span>
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="stat-value">2,847</div>
+                    <div class="stat-change positive">+15.3% growth</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Click Rate</span>
+                        <i class="fas fa-mouse-pointer"></i>
+                    </div>
+                    <div class="stat-value">4.2%</div>
+                    <div class="stat-change positive">+0.8% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">ROI</span>
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value">320%</div>
+                    <div class="stat-change positive">+12% improvement</div>
+                </div>
+            </div>
+
+            <!-- Marketing Tools -->
+            <div class="marketing-tools">
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <h3>Email Marketing</h3>
+                    <p>Create and send email campaigns to your customers</p>
+                    <button class="btn-primary">Create Email</button>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <h3>Discount Codes</h3>
+                    <p>Generate discount codes and promotional offers</p>
+                    <button class="btn-primary">Create Discount</button>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3>Social Media</h3>
+                    <p>Manage your social media presence and posts</p>
+                    <button class="btn-primary">Manage Social</button>
+                </div>
+                <div class="tool-card">
+                    <div class="tool-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3>SEO Tools</h3>
+                    <p>Optimize your products for search engines</p>
+                    <button class="btn-primary">Optimize SEO</button>
+                </div>
+            </div>
+
+            <!-- Recent Campaigns -->
+            <div class="recent-campaigns">
+                <h3>Recent Campaigns</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                        <tr>
+                            <th>Campaign</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Sent</th>
+                            <th>Opens</th>
+                            <th>Clicks</th>
+                            <th>Revenue</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Summer Sale 2023</td>
+                            <td>Email</td>
+                            <td><span class="status active">Active</span></td>
+                            <td>2,847</td>
+                            <td>1,203 (42.3%)</td>
+                            <td>156 (5.5%)</td>
+                            <td>$3,240</td>
+                            <td>
+                                <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                                <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>New Product Launch</td>
+                            <td>Social</td>
+                            <td><span class="status processing">Running</span></td>
+                            <td>-</td>
+                            <td>892 likes</td>
+                            <td>45 shares</td>
+                            <td>$1,890</td>
+                            <td>
+                                <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                                <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Holiday Special</td>
+                            <td>Email</td>
+                            <td><span class="status pending">Draft</span></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>
+                                <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                                <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Spring Collection</td>
+                            <td>Email + Social</td>
+                            <td><span class="status delivered">Completed</span></td>
+                            <td>2,532</td>
+                            <td>1,432 (56.6%)</td>
+                            <td>287 (11.3%)</td>
+                            <td>$5,780</td>
+                            <td>
+                                <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                                <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Page -->
+        <div id="analytics-page" class="page">
+            <div class="page-header">
+                <h2>Analytics</h2>
+                <div class="page-actions">
+                    <select class="filter-select">
+                        <option>Last 30 days</option>
+                        <option>Last 7 days</option>
+                        <option>Last 90 days</option>
+                        <option>This year</option>
+                    </select>
+                    <button class="btn-secondary">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Analytics Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Revenue</span>
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-value">$45,231.89</div>
+                    <div class="stat-change positive">+20.1% from last month</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 75%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Conversion Rate</span>
+                        <i class="fas fa-percentage"></i>
+                    </div>
+                    <div class="stat-value">3.2%</div>
+                    <div class="stat-change positive">+0.5% from last month</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 32%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Average Order Value</span>
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-value">$59.78</div>
+                    <div class="stat-change positive">+2.3% from last month</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 60%"></div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Orders</span>
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <div class="stat-value">1,204</div>
+                    <div class="stat-change positive">+12% from last month</div>
+                    <div class="stat-progress">
+                        <div class="progress-bar" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analytics Charts -->
+            <div class="analytics-charts">
+                <div class="chart-tabs">
+                    <button class="tab-btn active" data-tab="sales">Sales</button>
+                    <button class="tab-btn" data-tab="traffic">Traffic</button>
+                    <button class="tab-btn" data-tab="products">Products</button>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Sales Overview</h3>
+                        <p>View your sales performance over time</p>
+                    </div>
+                    <canvas id="analyticsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Top Products -->
+            <div class="top-products">
+                <h3>Top Performing Products</h3>
+                <div class="products-grid">
+                    <div class="product-performance">
+                        <div class="product-info">
+                            <div class="product-image"></div>
+                            <div class="product-details">
+                                <h4>Wireless Earbuds</h4>
+                                <p>Electronics</p>
+                            </div>
+                        </div>
+                        <div class="performance-stats">
+                            <div class="stat">
+                                <span class="label">Sales</span>
+                                <span class="value">234</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Revenue</span>
+                                <span class="value">$14,026</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Growth</span>
+                                <span class="value positive">+15.3%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-performance">
+                        <div class="product-info">
+                            <div class="product-image"></div>
+                            <div class="product-details">
+                                <h4>Smart Watch</h4>
+                                <p>Electronics</p>
+                            </div>
+                        </div>
+                        <div class="performance-stats">
+                            <div class="stat">
+                                <span class="label">Sales</span>
+                                <span class="value">189</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Revenue</span>
+                                <span class="value">$24,561</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Growth</span>
+                                <span class="value positive">+8.7%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-performance">
+                        <div class="product-info">
+                            <div class="product-image"></div>
+                            <div class="product-details">
+                                <h4>Bluetooth Speaker</h4>
+                                <p>Electronics</p>
+                            </div>
+                        </div>
+                        <div class="performance-stats">
+                            <div class="stat">
+                                <span class="label">Sales</span>
+                                <span class="value">156</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Revenue</span>
+                                <span class="value">$14,028</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Growth</span>
+                                <span class="value positive">+12.1%</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-performance">
+                        <div class="product-info">
+                            <div class="product-image"></div>
+                            <div class="product-details">
+                                <h4>Phone Case</h4>
+                                <p>Accessories</p>
+                            </div>
+                        </div>
+                        <div class="performance-stats">
+                            <div class="stat">
+                                <span class="label">Sales</span>
+                                <span class="value">423</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Revenue</span>
+                                <span class="value">$8,456</span>
+                            </div>
+                            <div class="stat">
+                                <span class="label">Growth</span>
+                                <span class="value positive">+23.5%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Finance Page -->
+        <div id="finance-page" class="page">
+            <div class="page-header">
+                <h2>Finance</h2>
+                <div class="page-actions">
+                    <select class="filter-select">
+                        <option>This Month</option>
+                        <option>Last Month</option>
+                        <option>This Quarter</option>
+                        <option>This Year</option>
+                    </select>
+                    <button class="btn-secondary">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Financial Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Revenue</span>
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-value">$45,231.89</div>
+                    <div class="stat-change positive">+20.1% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Expenses</span>
+                        <i class="fas fa-credit-card"></i>
+                    </div>
+                    <div class="stat-value">$12,345.67</div>
+                    <div class="stat-change negative">+5.2% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Net Profit</span>
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value">$32,886.22</div>
+                    <div class="stat-change positive">+12.3% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Pending Payouts</span>
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value">$5,432.10</div>
+                    <div class="stat-change">Next payout on Jun 15, 2023</div>
+                </div>
+            </div>
+
+            <!-- Financial Charts -->
+            <div class="finance-charts">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Revenue Overview</h3>
+                        <p>Monthly revenue breakdown</p>
+                    </div>
+                    <canvas id="revenueChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Sales Breakdown</h3>
+                        <p>Revenue by product category</p>
+                    </div>
+                    <canvas id="categoryChart"></canvas>
+                    <div class="category-legend">
+                        <div class="legend-item">
+                            <span class="color-dot" style="background: #ff5722;"></span>
+                            <span>Electronics - $45,000</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="color-dot" style="background: #2196f3;"></span>
+                            <span>Clothing - $25,000</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="color-dot" style="background: #4caf50;"></span>
+                            <span>Home & Kitchen - $18,000</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="color-dot" style="background: #9c27b0;"></span>
+                            <span>Beauty - $12,000</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="color-dot" style="background: #ff9800;"></span>
+                            <span>Sports - $8,000</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction Tabs -->
+            <div class="transaction-section">
+                <div class="transaction-tabs">
+                    <button class="tab-btn active" data-tab="transactions">Transactions</button>
+                    <button class="tab-btn" data-tab="payouts">Payouts</button>
+                    <button class="tab-btn" data-tab="taxes">Taxes</button>
+                </div>
+
+                <div class="tab-content active" id="transactions-tab">
+                    <div class="section-header">
+                        <h3>Recent Transactions</h3>
+                        <p>Latest financial activities</p>
+                        <button class="btn-link">View All</button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>Transaction ID</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>TXN-001</td>
+                                <td><span class="transaction-type sale">Sale</span></td>
+                                <td>Order #ORD-7651 - Wireless Earbuds</td>
+                                <td>Sarah Johnson</td>
+                                <td class="amount positive">+$59.99</td>
+                                <td><span class="status delivered">Completed</span></td>
+                                <td>2023-06-01 14:30</td>
+                            </tr>
+                            <tr>
+                                <td>TXN-002</td>
+                                <td><span class="transaction-type refund">Refund</span></td>
+                                <td>Refund for Order #ORD-7589</td>
+                                <td>Michael Brown</td>
+                                <td class="amount negative">-$29.99</td>
+                                <td><span class="status processing">Processing</span></td>
+                                <td>2023-06-01 12:15</td>
+                            </tr>
+                            <tr>
+                                <td>TXN-003</td>
+                                <td><span class="transaction-type sale">Sale</span></td>
+                                <td>Order #ORD-7650 - Bluetooth Speaker</td>
+                                <td>John Smith</td>
+                                <td class="amount positive">+$89.99</td>
+                                <td><span class="status delivered">Completed</span></td>
+                                <td>2023-05-31 09:45</td>
+                            </tr>
+                            <tr>
+                                <td>TXN-004</td>
+                                <td><span class="transaction-type fee">Fee</span></td>
+                                <td>Platform fee for May 2023</td>
+                                <td>-</td>
+                                <td class="amount negative">-$125.50</td>
+                                <td><span class="status delivered">Completed</span></td>
+                                <td>2023-05-31 00:00</td>
+                            </tr>
+                            <tr>
+                                <td>TXN-005</td>
+                                <td><span class="transaction-type payout">Payout</span></td>
+                                <td>Monthly payout to bank account</td>
+                                <td>-</td>
+                                <td class="amount negative">-$3,245.67</td>
+                                <td><span class="status delivered">Completed</span></td>
+                                <td>2023-05-15 12:00</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="payouts-tab">
+                    <div class="section-header">
+                        <h3>Payout History</h3>
+                        <p>Record of all payouts to your bank account</p>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>Payout ID</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Bank Account</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>PAY-001</td>
+                                <td>$3,245.67</td>
+                                <td><span class="status delivered">Completed</span></td>
+                                <td>**** 1234</td>
+                                <td>2023-05-15</td>
+                                <td><button class="btn-link">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>PAY-002</td>
+                                <td>$2,876.45</td>
+                                <td><span class="status delivered">Completed</span></td>
+                                <td>**** 1234</td>
+                                <td>2023-04-15</td>
+                                <td><button class="btn-link">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>PAY-003</td>
+                                <td>$3,012.89</td>
+                                <td><span class="status delivered">Completed</span></td>
+                                <td>**** 1234</td>
+                                <td>2023-03-15</td>
+                                <td><button class="btn-link">View</button></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="taxes-tab">
+                    <div class="section-header">
+                        <h3>Tax Information</h3>
+                        <p>Summary of taxes collected and paid</p>
+                    </div>
+                    <div class="tax-summary">
+                        <div class="tax-period">
+                            <h4>Current Year (2023)</h4>
+                            <div class="tax-stats">
+                                <div class="tax-stat">
+                                    <span class="label">Sales Tax Collected</span>
+                                    <span class="value">$3,456.78</span>
+                                </div>
+                                <div class="tax-stat">
+                                    <span class="label">Sales Tax Remitted</span>
+                                    <span class="value">$2,890.45</span>
+                                </div>
+                                <div class="tax-stat">
+                                    <span class="label">Income Tax Owed</span>
+                                    <span class="value">$8,234.56</span>
+                                </div>
+                                <div class="tax-stat">
+                                    <span class="label">Tax Deductions</span>
+                                    <span class="value">$1,567.89</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Page -->
+        <div id="settings-page" class="page">
+            <div class="settings-container">
+                <div class="settings-tabs">
+                    <button class="tab-btn active" data-tab="shop">Shop Profile</button>
+                    <button class="tab-btn" data-tab="payment">Payment</button>
+                    <button class="tab-btn" data-tab="shipping">Shipping</button>
+                    <button class="tab-btn" data-tab="account">Account</button>
+                </div>
+
+                <!-- Shop Profile Tab -->
+                <div class="tab-content active" id="shop-tab">
+                    <div class="settings-section">
+                        <h3>Shop Information</h3>
+                        <p>Update your shop details and profile</p>
+
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <div class="logo-upload">
+                                    <div class="current-logo"></div>
+                                    <button type="button" class="btn-secondary">Change Logo</button>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Shop Name</label>
+                                <input type="text" value="My Awesome Shop" class="form-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Shop Description</label>
+                                <textarea class="form-textarea" rows="4">We sell high-quality products at affordable prices.</textarea>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Contact Email</label>
+                                    <input type="email" value="contact@myshop.com" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Contact Phone</label>
+                                    <input type="tel" value="+1 (555) 123-4567" class="form-input">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary">Save Changes</button>
+                        </form>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Shop Address</h3>
+                        <p>Update your shop's physical address</p>
+
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <label>Address Line 1</label>
+                                <input type="text" value="123 Main St" class="form-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Address Line 2</label>
+                                <input type="text" value="Suite 101" class="form-input">
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>City</label>
+                                    <input type="text" value="San Francisco" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>State/Province</label>
+                                    <input type="text" value="California" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>ZIP/Postal Code</label>
+                                    <input type="text" value="94105" class="form-input">
+                                </div>
+                            </div>
+
+                            <button type="submit" class="btn-primary">Save Address</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Payment Tab -->
+                <div class="tab-content" id="payment-tab">
+                    <div class="settings-section">
+                        <h3>Payment Methods</h3>
+                        <p>Manage your payment and payout settings</p>
+
+                        <div class="payment-methods">
+                            <div class="payment-method">
+                                <div class="method-info">
+                                    <i class="fab fa-cc-visa"></i>
+                                    <div class="method-details">
+                                        <span class="method-name">Visa ending in 4242</span>
+                                        <span class="method-type">Primary payment method</span>
+                                    </div>
+                                </div>
+                                <button class="btn-secondary">Edit</button>
+                            </div>
+                            <div class="payment-method">
+                                <div class="method-info">
+                                    <i class="fab fa-paypal"></i>
+                                    <div class="method-details">
+                                        <span class="method-name">PayPal</span>
+                                        <span class="method-type">contact@myshop.com</span>
+                                    </div>
+                                </div>
+                                <button class="btn-secondary">Edit</button>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Payment Method
+                        </button>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Payout Settings</h3>
+                        <p>Configure how you receive payments</p>
+
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <label>Payout Schedule</label>
+                                <select class="form-select">
+                                    <option>Weekly</option>
+                                    <option>Bi-weekly</option>
+                                    <option>Monthly</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Minimum Payout Amount</label>
+                                <input type="number" value="100" class="form-input">
+                            </div>
+
+                            <button type="submit" class="btn-primary">Save Settings</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Shipping Tab -->
+                <div class="tab-content" id="shipping-tab">
+                    <div class="settings-section">
+                        <h3>Shipping Zones</h3>
+                        <p>Configure shipping rates and zones</p>
+
+                        <div class="shipping-zones">
+                            <div class="shipping-zone">
+                                <div class="zone-info">
+                                    <h4>Domestic Shipping</h4>
+                                    <p>United States</p>
+                                </div>
+                                <div class="zone-rates">
+                                    <span>Standard: $5.99</span>
+                                    <span>Express: $12.99</span>
+                                </div>
+                                <button class="btn-secondary">Edit</button>
+                            </div>
+                            <div class="shipping-zone">
+                                <div class="zone-info">
+                                    <h4>International Shipping</h4>
+                                    <p>Worldwide</p>
+                                </div>
+                                <div class="zone-rates">
+                                    <span>Standard: $15.99</span>
+                                    <span>Express: $29.99</span>
+                                </div>
+                                <button class="btn-secondary">Edit</button>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Add Shipping Zone
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Account Tab -->
+                <div class="tab-content" id="account-tab">
+                    <div class="settings-section">
+                        <h3>Account Information</h3>
+                        <p>Manage your account details and security</p>
+
+                        <form class="settings-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" value="John" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" value="Doe" class="form-input">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" value="john.doe@example.com" class="form-input">
+                            </div>
+
+                            <button type="submit" class="btn-primary">Update Account</button>
+                        </form>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3>Security</h3>
+                        <p>Manage your password and security settings</p>
+
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <label>Current Password</label>
+                                <input type="password" class="form-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label>New Password</label>
+                                <input type="password" class="form-input">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Confirm New Password</label>
+                                <input type="password" class="form-input">
+                            </div>
+
+                            <button type="submit" class="btn-primary">Change Password</button>
+                        </form>
+
+                        <div class="security-options">
+                            <div class="security-option">
+                                <div class="option-info">
+                                    <h4>Two-Factor Authentication</h4>
+                                    <p>Add an extra layer of security to your account</p>
+                                </div>
+                                <button class="btn-secondary">Enable</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal Styles -->
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0,0,0,0.5);
+    }
+
+    .modal-content {
+        background-color: white;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 500px;
+        position: relative;
+    }
+
+    .close-btn {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+        color: #aaa;
+    }
+
+    .close-btn:hover {
+        color: #000;
+    }
+
+    .modal form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .modal label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .modal input, .modal textarea {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.375rem;
+        font-size: 0.875rem;
+    }
+
+    .modal button[type="submit"] {
+        background: #ff5722;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 0.375rem;
+        cursor: pointer;
+        font-size: 0.875rem;
+        margin-top: 1rem;
+    }
+
+    .modal button[type="submit"]:hover {
+        background: #e64a19;
+    }
+</style>
+
+<script src="Seller.js"></script>
+</body>
+</html>
