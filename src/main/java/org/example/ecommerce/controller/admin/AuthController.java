@@ -46,6 +46,7 @@ public class AuthController {
 
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
+//        String greeting = "Heloo";
         String greeting = messageSource.getMessage("greeting", null, locale);
         model.addAttribute("greeting", greeting);
         return "admin/home";
