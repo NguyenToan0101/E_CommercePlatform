@@ -16,22 +16,6 @@ public class LoginController {
     @Autowired
     private CustomerService customerService;
 
-    @PostMapping("/login")
-    public String login(@RequestParam String email,
-                        @RequestParam String password,
-                        HttpSession session,
-                        Model model) {
-        Customer customer = customerService.login(email, password);
-        if (customer != null) {
-            session.setAttribute("customer", customer);
-            session.setAttribute("role", customer.getRole());
-            return "redirect:/home";
-        }else{
-            model.addAttribute("errorMessage", "email hoặc mật khẩu không đúng");
-            return "login";
-        }
-    }
-
     @GetMapping("/login")
     public String showLoginForm() {
         return "login";

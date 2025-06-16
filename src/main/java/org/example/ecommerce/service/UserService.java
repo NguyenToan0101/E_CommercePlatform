@@ -14,10 +14,6 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public boolean login(String firstname, String password) {
-//        return userRepository.findByFirtstnameAndPassword(firstname,password).isPresent();
-        return false;
-    }
     public List<User> findAll() {
 //        return userRepository.findAll();
         return null;
