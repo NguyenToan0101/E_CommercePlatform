@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nạp tiền vào ví</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-black: #0a0a0a;
+      --secondary-black: #1a1a1a;
+      --accent-gray: #2a2a2a;
+      --light-gray: #f8f8f8;
+      --border-gray: #e5e5e5;
+      --text-gray: #666666;
+      --white: #ffffff;
+      --gold-accent: #d4af37;
+      --success-green: #10b981;
+      --error-red: #dc2626;
+      --orange-accent: #ff6b35;
+      --blue-accent: #3b82f6;
+      --shopee-orange: #ee4d2d;
+      --shadow-light: rgba(0, 0, 0, 0.05);
+      --shadow-medium: rgba(0, 0, 0, 0.1);
+      --shadow-heavy: rgba(0, 0, 0, 0.15);
+
+      /* Gradient colors */
+      --gradient-start: #0a4d68;
+      --gradient-mid: #088395;
+      --gradient-end: #05bfdb;
+      --gradient-light-end: #8de0a6;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-light-end) 100%);
+      min-height: 100vh;
+      color: var(--primary-black);
+      line-height: 1.6;
+    }
+
+    /* Header matching wallet style */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-gray);
+      z-index: 1000;
+      padding: 16px 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: inline-block;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .logo-placeholder {
+      width: 120px;
+      height: 40px;
+      background: var(--light-gray);
+      border: 2px dashed var(--border-gray);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-gray);
+      font-size: 10px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .nav-link {
+      color: var(--primary-black);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      padding: 8px 16px;
+      border-radius: 8px;
+    }
+
+    .nav-link:hover {
+      background: var(--light-gray);
+      color: var(--gradient-mid);
+    }
+
+    /* Main Content */
+    .main-content {
+      padding: 120px 40px 40px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary-black);
+      margin-bottom: 10px;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      color: var(--text-gray);
+      font-weight: 500;
+    }
+
+    .deposit-card {
+      background: var(--white);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 16px 48px var(--shadow-light);
+      border: 1px solid var(--border-gray);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .deposit-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 64px var(--shadow-medium);
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--primary-black);
+      margin-bottom: 12px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 16px 20px;
+      border: 2px solid var(--border-gray);
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--primary-black);
+      background: var(--white);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      font-family: inherit;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--gradient-mid);
+      box-shadow: 0 0 0 4px rgba(8, 131, 149, 0.1);
+      transform: translateY(-1px);
+    }
+
+    .form-input:hover {
+      border-color: var(--accent-gray);
+    }
+
+    .input-hint {
+      font-size: 14px;
+      color: var(--text-gray);
+      margin-top: 8px;
+      font-weight: 500;
+    }
+
+    .amount-suggestions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .amount-btn {
+      background: var(--light-gray);
+      border: 2px solid var(--border-gray);
+      color: var(--primary-black);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      text-align: center;
+    }
+
+    .amount-btn:hover {
+      background: var(--gradient-mid);
+      color: var(--white);
+      border-color: var(--gradient-mid);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--gradient-mid), var(--gradient-end));
+      color: var(--white);
+      padding: 18px 24px;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(8, 131, 149, 0.3);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--text-gray);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 14px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      padding: 8px 12px;
+      border-radius: 8px;
+    }
+
+    .back-link:hover {
+      background: var(--light-gray);
+      color: var(--primary-black);
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .payment-info {
+      background: var(--light-gray);
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 30px;
+      border-left: 4px solid var(--gradient-mid);
+    }
+
+    .payment-info-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--primary-black);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .payment-info-text {
+      font-size: 14px;
+      color: var(--text-gray);
+      line-height: 1.5;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .header-content {
+        padding: 0 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .nav-links {
+        gap: 15px;
+      }
+
+      .main-content {
+        padding: 140px 20px 20px;
+      }
+
+      .page-title {
+        font-size: 24px;
+      }
+
+      .deposit-card {
+        padding: 24px;
+      }
+
+      .amount-suggestions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="header-content">
+    <a href="/home" class="logo-container">
+      <div class="logo-placeholder">
+        <span>Your Logo</span>
+      </div>
+    </a>
+
+    <nav class="nav-links">
+      <a href="/home" class="nav-link">Trang chủ</a>
+      <a href="/cart" class="nav-link">Giỏ hàng</a>
+      <a href="/wallet" class="nav-link">Ví điện tử</a>
+    </nav>
+  </div>
+</header>
+
+<main class="main-content">
+  <!-- Back Link -->
+  <a href="/wallet" class="back-link">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 12H5M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    Quay lại ví điện tử
+  </a>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1 class="page-title">Nạp tiền vào ví</h1>
+    <p class="page-subtitle">Chọn số tiền bạn muốn nạp vào ví điện tử</p>
+  </div>
+
+  <!-- Deposit Form -->
+  <div class="deposit-card">
+    <form th:action="@{/wallet/deposit}" method="post">
+      <div class="form-group">
+        <label for="amount" class="form-label">
+          <svg class="icon" style="display: inline; margin-right: 8px;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2V22M17 5H9.5C8.57174 5 7.6815 5.36875 7.02513 6.02513C6.36875 6.6815 6 7.57174 6 8.5C6 9.42826 6.36875 10.3185 7.02513 10.9749C7.6815 11.6312 8.57174 12 9.5 12H14.5C15.4283 12 16.3185 12.3687 16.9749 13.0251C17.6312 13.6815 18 14.5717 18 15.5C18 16.4283 17.6312 17.3185 16.9749 17.9749C16.3185 18.6312 15.4283 19 14.5 19H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Số tiền (VND)
+        </label>
+        <input
+                type="number"
+                id="amount"
+                name="amount"
+                step="1000"
+                min="1000"
+                required
+                class="form-input"
+                placeholder="Nhập số tiền muốn nạp..."
+        >
+        <div class="input-hint">Số tiền tối thiểu: 1.000 VND</div>
+
+        <!-- Quick Amount Selection -->
+        <div class="amount-suggestions">
+          <button type="button" class="amount-btn" onclick="setAmount(50000)">50.000 ₫</button>
+          <button type="button" class="amount-btn" onclick="setAmount(100000)">100.000 ₫</button>
+          <button type="button" class="amount-btn" onclick="setAmount(200000)">200.000 ₫</button>
+          <button type="button" class="amount-btn" onclick="setAmount(500000)">500.000 ₫</button>
+          <button type="button" class="amount-btn" onclick="setAmount(1000000)">1.000.000 ₫</button>
+          <button type="button" class="amount-btn" onclick="setAmount(2000000)">2.000.000 ₫</button>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="1" y="4" width="22" height="16" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+          <line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        Nạp tiền qua VNPAY
+      </button>
+    </form>
+
+    <!-- Payment Info -->
+    <div class="payment-info">
+      <div class="payment-info-title">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+          <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Thông tin thanh toán
+      </div>
+      <div class="payment-info-text">
+        Bạn sẽ được chuyển hướng đến cổng thanh toán VNPAY để hoàn tất giao dịch.
+        Giao dịch sẽ được xử lý ngay lập tức và số tiền sẽ được cộng vào ví của bạn.
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  function setAmount(amount) {
+    document.getElementById('amount').value = amount;
+  }
+
+  // Format number input with thousand separators
+  document.getElementById('amount').addEventListener('input', function(e) {
+    let value = e.target.value.replace(/\D/g, '');
+    if (value) {
+      // Ensure minimum value
+      if (parseInt(value) < 1000) {
+        value = '1000';
+      }
+      e.target.value = value;
+    }
+  });
+</script>
+
+</body>
+</html>

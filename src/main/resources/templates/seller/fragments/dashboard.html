@@ -1,0 +1,96 @@
+        <div id="dashboard-page" class="page active" th:fragment="dashboard">
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Revenue</span>
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-value">$15,231.89</div>
+                    <div class="stat-change positive">+20.1% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Orders</span>
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value">+573</div>
+                    <div class="stat-change positive">+12% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Products</span>
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-value">128</div>
+                    <div class="stat-change positive">+8 new products</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span class="stat-label">Conversion Rate</span>
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-value">3.2%</div>
+                    <div class="stat-change positive">+0.5% from last month</div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-container">
+                    <div class="chart-header">
+                        <h3>Overview</h3>
+                        <p>Sales performance for the past 30 days</p>
+                    </div>
+                    <canvas id="salesChart"></canvas>
+                </div>
+                <div class="recent-sales">
+                    <div class="chart-header">
+                        <h3>Recent Sales</h3>
+                        <p>Latest orders from your customers</p>
+                    </div>
+                    <div class="sales-list">
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">Olivia Martin</div>
+                                <div class="customer-email">olivia.martin@email.com</div>
+                            </div>
+                            <div class="sale-amount">$199.99</div>
+                        </div>
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">Jackson Lee</div>
+                                <div class="customer-email">jackson.lee@email.com</div>
+                            </div>
+                            <div class="sale-amount">$39.99</div>
+                        </div>
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">Isabella Nguyen</div>
+                                <div class="customer-email">isabella.nguyen@email.com</div>
+                            </div>
+                            <div class="sale-amount">$299.99</div>
+                        </div>
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">William Kim</div>
+                                <div class="customer-email">will.kim@email.com</div>
+                            </div>
+                            <div class="sale-amount">$99.99</div>
+                        </div>
+                        <div class="sale-item">
+                            <div class="customer-avatar"></div>
+                            <div class="sale-info">
+                                <div class="customer-name">Sofia Davis</div>
+                                <div class="customer-email">sofia.davis@email.com</div>
+                            </div>
+                            <div class="sale-amount">$149.99</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>

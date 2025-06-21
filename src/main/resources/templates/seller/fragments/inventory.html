@@ -1,0 +1,147 @@
+<div id="inventory-page" class="page" th:fragment="inventory">
+    <div class="page-header">
+        <h2>Inventory Management</h2>
+        <div class="page-actions">
+            <button class="btn-secondary">
+                <i class="fas fa-download"></i>
+                Export
+            </button>
+            <button class="btn-secondary">
+                <i class="fas fa-upload"></i>
+                Import
+            </button>
+            <button class="btn-primary">
+                <i class="fas fa-plus"></i>
+                Add Product
+            </button>
+        </div>
+    </div>
+
+    <!-- Inventory Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-label">Total Products</div>
+            <div class="stat-value">1,245</div>
+            <div class="stat-change positive">+12 new this month</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Low Stock</div>
+            <div class="stat-value">28</div>
+            <div class="stat-change">Items below threshold</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Out of Stock</div>
+            <div class="stat-value">15</div>
+            <div class="stat-change">Items need restocking</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Value</div>
+            <div class="stat-value">$124,500</div>
+            <div class="stat-change">Based on cost price</div>
+        </div>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="inventory-filters">
+        <button class="filter-btn active">All Products</button>
+        <button class="filter-btn">Low Stock</button>
+        <button class="filter-btn">Out of Stock</button>
+    </div>
+
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>Image</th>
+                <th>Product</th>
+                <th>SKU</th>
+                <th>Category</th>
+                <th>In Stock</th>
+                <th>Reserved</th>
+                <th>Available</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><div class="product-image"></div></td>
+                <td>Wireless Earbuds</td>
+                <td>WE-001</td>
+                <td>Electronics</td>
+                <td>45</td>
+                <td>3</td>
+                <td>42</td>
+                <td><span class="status in-stock">In Stock</span></td>
+                <td><button class="btn-link">Update</button></td>
+            </tr>
+            <tr>
+                <td><div class="product-image"></div></td>
+                <td>Smart Watch</td>
+                <td>SW-002</td>
+                <td>Electronics</td>
+                <td>32</td>
+                <td>5</td>
+                <td>27</td>
+                <td><span class="status in-stock">In Stock</span></td>
+                <td><button class="btn-link">Update</button></td>
+            </tr>
+            <tr>
+                <td><div class="product-image"></div></td>
+                <td>Bluetooth Speaker</td>
+                <td>BS-003</td>
+                <td>Electronics</td>
+                <td>18</td>
+                <td>2</td>
+                <td>16</td>
+                <td><span class="status in-stock">In Stock</span></td>
+                <td><button class="btn-link">Update</button></td>
+            </tr>
+            <tr>
+                <td><div class="product-image"></div></td>
+                <td>Phone Case</td>
+                <td>PC-004</td>
+                <td>Accessories</td>
+                <td>124</td>
+                <td>10</td>
+                <td>114</td>
+                <td><span class="status in-stock">In Stock</span></td>
+                <td><button class="btn-link">Update</button></td>
+            </tr>
+            <tr>
+                <td><div class="product-image"></div></td>
+                <td>Laptop Sleeve</td>
+                <td>LS-005</td>
+                <td>Accessories</td>
+                <td>8</td>
+                <td>2</td>
+                <td>6</td>
+                <td><span class="status low-stock">Low Stock</span></td>
+                <td><button class="btn-link">Update</button></td>
+            </tr>
+            <tr>
+                <td><div class="product-image"></div></td>
+                <td>Wireless Charger</td>
+                <td>WC-006</td>
+                <td>Electronics</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td><span class="status out-of-stock">Out of Stock</span></td>
+                <td><button class="btn-link">Update</button></td>
+            </tr>
+            <tr>
+                <td><div class="product-image"></div></td>
+                <td>Fitness Tracker</td>
+                <td>FT-007</td>
+                <td>Electronics</td>
+                <td>5</td>
+                <td>1</td>
+                <td>4</td>
+                <td><span class="status low-stock">Low Stock</span></td>
+                <td><button class="btn-link">Update</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

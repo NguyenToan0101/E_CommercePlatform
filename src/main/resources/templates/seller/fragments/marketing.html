@@ -1,0 +1,162 @@
+<div id="marketing-page" class="page" th:fragment="marketing">
+    <div class="page-header">
+        <h2>Marketing</h2>
+        <div class="page-actions">
+            <button class="btn-secondary">
+                <i class="fas fa-download"></i>
+                Export Report
+            </button>
+            <button class="btn-primary">
+                <i class="fas fa-plus"></i>
+                Create Campaign
+            </button>
+        </div>
+    </div>
+
+    <!-- Marketing Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Active Campaigns</span>
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <div class="stat-value">8</div>
+            <div class="stat-change positive">+2 this month</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Email Subscribers</span>
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="stat-value">2,847</div>
+            <div class="stat-change positive">+15.3% growth</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Click Rate</span>
+                <i class="fas fa-mouse-pointer"></i>
+            </div>
+            <div class="stat-value">4.2%</div>
+            <div class="stat-change positive">+0.8% from last month</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">ROI</span>
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-value">320%</div>
+            <div class="stat-change positive">+12% improvement</div>
+        </div>
+    </div>
+
+    <!-- Marketing Tools -->
+    <div class="marketing-tools">
+        <div class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <h3>Email Marketing</h3>
+            <p>Create and send email campaigns to your customers</p>
+            <button class="btn-primary">Create Email</button>
+        </div>
+        <div class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-percentage"></i>
+            </div>
+            <h3>Discount Codes</h3>
+            <p>Generate discount codes and promotional offers</p>
+            <button class="btn-primary">Create Discount</button>
+        </div>
+        <div class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-share-alt"></i>
+            </div>
+            <h3>Social Media</h3>
+            <p>Manage your social media presence and posts</p>
+            <button class="btn-primary">Manage Social</button>
+        </div>
+        <div class="tool-card">
+            <div class="tool-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3>SEO Tools</h3>
+            <p>Optimize your products for search engines</p>
+            <button class="btn-primary">Optimize SEO</button>
+        </div>
+    </div>
+
+    <!-- Recent Campaigns -->
+    <div class="recent-campaigns">
+        <h3>Recent Campaigns</h3>
+        <div class="table-container">
+            <table class="data-table">
+                <thead>
+                <tr>
+                    <th>Campaign</th>
+                    <th>Type</th>
+                    <th>Status</th>
+                    <th>Sent</th>
+                    <th>Opens</th>
+                    <th>Clicks</th>
+                    <th>Revenue</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Summer Sale 2023</td>
+                    <td>Email</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>2,847</td>
+                    <td>1,203 (42.3%)</td>
+                    <td>156 (5.5%)</td>
+                    <td>$3,240</td>
+                    <td>
+                        <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                        <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>New Product Launch</td>
+                    <td>Social</td>
+                    <td><span class="status processing">Running</span></td>
+                    <td>-</td>
+                    <td>892 likes</td>
+                    <td>45 shares</td>
+                    <td>$1,890</td>
+                    <td>
+                        <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                        <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Holiday Special</td>
+                    <td>Email</td>
+                    <td><span class="status pending">Draft</span></td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>
+                        <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                        <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Spring Collection</td>
+                    <td>Email + Social</td>
+                    <td><span class="status delivered">Completed</span></td>
+                    <td>2,532</td>
+                    <td>1,432 (56.6%)</td>
+                    <td>287 (11.3%)</td>
+                    <td>$5,780</td>
+                    <td>
+                        <button class="btn-icon"><i class="fas fa-eye"></i></button>
+                        <button class="btn-icon"><i class="fas fa-edit"></i></button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
