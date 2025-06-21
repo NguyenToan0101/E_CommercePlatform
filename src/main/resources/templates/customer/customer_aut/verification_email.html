@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác thực tài khoản</title>
+    <!--[if mso]>
+    <noscript>
+        <xml>
+            <o:OfficeDocumentSettings>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+            </o:OfficeDocumentSettings>
+        </xml>
+    </noscript>
+    <![endif]-->
+    <style>
+        /* Reset styles for email clients */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, Arial, sans-serif;
+            background: linear-gradient(135deg, #0a4d68 0%, #8de0a6 100%);
+            color: #0a0a0a;
+            line-height: 1.6;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+        }
+
+        table {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+            -ms-interpolation-mode: bicubic;
+        }
+
+        /* Container */
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .email-header {
+            background: linear-gradient(135deg, #0a4d68 0%, #088395 100%);
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            padding: 40px 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-container {
+            margin-bottom: 24px;
+        }
+
+        .logo-placeholder {
+            display: inline-block;
+            width: 120px;
+            height: 50px;
+            background-color: #ffffff;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            line-height: 46px;
+            text-align: center;
+            color: #0a4d68;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #05bfdb 0%, #8de0a6 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(5, 191, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
+        }
+
+        .header-title {
+            color: rgba(3, 25, 71, 0.97);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .header-subtitle {
+            color: rgba(3, 25, 71, 0.97);
+            font-size: 15px;
+            font-weight: 400;
+        }
+
+        /* Body */
+        .email-body {
+            padding: 40px 30px;
+        }
+
+        .greeting {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0a4d68;
+            margin-bottom: 16px;
+        }
+
+        .welcome-message {
+            font-size: 16px;
+            color: #088395;
+            font-weight: 600;
+            margin-bottom: 24px;
+            text-align: center;
+            padding: 16px;
+            background: rgba(8, 131, 149, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #088395;
+        }
+
+        .message-text {
+            font-size: 15px;
+            color: #666666;
+            line-height: 1.7;
+            margin-bottom: 32px;
+        }
+
+        /* Benefits Section */
+        .benefits-section {
+            background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(8, 131, 149, 0.1);
+        }
+
+        .benefits-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #0a4d68;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .benefit-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #088395 0%, #05bfdb 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        /* CTA Button */
+        .cta-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #088395 0%, #05bfdb 100%);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 18px 36px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 24px rgba(8, 131, 149, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background: linear-gradient(135deg, #0a4d68 0%, #088395 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(8, 131, 149, 0.4);
+        }
+
+        /* Security Notice */
+        .security-notice {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+            border-left: 4px solid #d4af37;
+            padding: 20px;
+            margin-bottom: 32px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .security-notice-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #0a4d68;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .security-notice-text {
+            font-size: 13px;
+            color: #666666;
+            line-height: 1.6;
+        }
+
+        /* Next Steps */
+        .next-steps {
+            background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(8, 131, 149, 0.1);
+        }
+
+        .next-steps-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0a4d68;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .step-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .step-number {
+            background: linear-gradient(135deg, #0a4d68 0%, #088395 100%);
+            color: #ffffff;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        .email-footer {
+            background: linear-gradient(135deg, #0a4d68 0%, #088395 100%);
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+        }
+
+        .footer-link {
+            color: #8de0a6;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 500;
+            margin: 0 12px;
+        }
+
+        .footer-link:hover {
+            text-decoration: underline;
+            color: #05bfdb;
+        }
+
+        .footer-company {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .email-container {
+                width: 100% !important;
+                margin: 0 !important;
+                border-radius: 0 !important;
+            }
+
+            .email-header,
+            .email-body,
+            .email-footer {
+                padding: 24px 20px !important;
+            }
+
+            .header-title {
+                font-size: 26px !important;
+            }
+
+            .cta-button {
+                padding: 16px 28px !important;
+                font-size: 14px !important;
+            }
+
+            .logo-placeholder {
+                width: 100px !important;
+                height: 40px !important;
+                line-height: 36px !important;
+                font-size: 9px !important;
+            }
+
+            .header-icon {
+                width: 80px !important;
+                height: 80px !important;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .email-container {
+                background-color: #1a1a1a !important;
+            }
+
+            .email-body {
+                background-color: #1a1a1a !important;
+            }
+
+            .greeting {
+                color: #05bfdb !important;
+            }
+
+            .message-text {
+                color: #cccccc !important;
+            }
+
+            .benefits-section,
+            .next-steps {
+                background: rgba(8, 131, 149, 0.1) !important;
+                border-color: rgba(8, 131, 149, 0.2) !important;
+            }
+
+            .security-notice {
+                background: rgba(212, 175, 55, 0.1) !important;
+            }
+
+            .benefits-title,
+            .next-steps-title,
+            .security-notice-title {
+                color: #05bfdb !important;
+            }
+
+            .benefit-item,
+            .step-item,
+            .security-notice-text {
+                color: #cccccc !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<div style="background: linear-gradient(135deg, #0a4d68 0%, #8de0a6 100%); padding: 20px 0;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+        <tr>
+            <td align="center">
+                <div class="email-container">
+                    <!-- Header -->
+                    <div class="email-header">
+                        <div class="logo-container">
+                            <div class="logo-placeholder">
+                                Your Logo
+                            </div>
+                        </div>
+
+                        <div class="header-icon">
+                            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+
+                        <h1 class="header-title">Chúc mừng!</h1>
+                        <p class="header-subtitle">Tài khoản của bạn đã được tạo thành công</p>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="email-body">
+                        <div class="greeting">Chào bạn,</div>
+
+                        <div class="welcome-message">
+                            🎉 Chào mừng bạn đến với cộng đồng của chúng tôi!
+                        </div>
+
+                        <div class="message-text">
+                            Cảm ơn bạn đã đăng ký tài khoản. Để hoàn tất quá trình đăng ký và bắt đầu sử dụng
+                            tất cả tính năng của chúng tôi, vui lòng xác thực tài khoản bằng cách nhấp vào nút bên dưới.
+                        </div>
+
+                        <!-- CTA Button -->
+                        <div class="cta-container">
+                            <a th:href="${verifyURL}" class="cta-button" style="color: #ffffff; text-decoration: none;">
+                                Xác thực tài khoản ngay
+                            </a>
+                        </div>
+
+                        <!-- Benefits Section -->
+                        <div class="benefits-section">
+                            <div class="benefits-title">Những gì bạn sẽ nhận được:</div>
+
+                            <div class="benefit-item">
+                                <div class="benefit-icon">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div>Truy cập đầy đủ tất cả tính năng premium</div>
+                            </div>
+
+                            <div class="benefit-item">
+                                <div class="benefit-icon">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div>Hỗ trợ khách hàng ưu tiên 24/7</div>
+                            </div>
+
+                            <div class="benefit-item">
+                                <div class="benefit-icon">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div>Nhận thông báo về tính năng và cập nhật mới</div>
+                            </div>
+
+                            <div class="benefit-item">
+                                <div class="benefit-icon">
+                                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M20 6L9 17L4 12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </div>
+                                <div>Tham gia cộng đồng người dùng độc quyền</div>
+                            </div>
+                        </div>
+
+                        <!-- Next Steps -->
+                        <div class="next-steps">
+                            <div class="next-steps-title">Các bước tiếp theo:</div>
+
+                            <div class="step-item">
+                                <div class="step-number">1</div>
+                                <div>Nhấp vào nút "Xác thực tài khoản ngay" ở trên</div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-number">2</div>
+                                <div>Tài khoản sẽ được kích hoạt ngay lập tức</div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-number">3</div>
+                                <div>Đăng nhập và bắt đầu khám phá các tính năng</div>
+                            </div>
+
+                            <div class="step-item">
+                                <div class="step-number">4</div>
+                                <div>Hoàn thiện hồ sơ cá nhân để có trải nghiệm tốt nhất</div>
+                            </div>
+                        </div>
+
+                        <div class="security-notice">
+                            <div class="security-notice-title">🔒 Thông báo bảo mật</div>
+                            <div class="security-notice-text">
+                                Liên kết xác thực này chỉ có hiệu lực trong 24 giờ. Nếu bạn không thực hiện
+                                yêu cầu đăng ký này, vui lòng bỏ qua email này hoặc liên hệ với chúng tôi.
+                            </div>
+                        </div>
+
+                        <div class="message-text">
+                            <strong>Gặp vấn đề?</strong> Nếu nút không hoạt động, bạn có thể sao chép và dán liên kết sau vào trình duyệt:
+                            <br><br>
+                            <span style="color: #088395; word-break: break-all;" th:text="${verifyURL}"></span>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="email-footer">
+                        <div class="footer-text">
+                            Cảm ơn bạn đã tin tưởng và lựa chọn dịch vụ của chúng tôi.
+                            Chúng tôi cam kết mang đến trải nghiệm tuyệt vời nhất.
+                        </div>
+
+                        <div class="footer-links">
+                            <a href="#" class="footer-link">Hướng dẫn sử dụng</a>
+                            <a href="#" class="footer-link">Trung tâm hỗ trợ</a>
+                            <a href="#" class="footer-link">Liên hệ</a>
+                        </div>
+
+                        <div class="footer-company">
+                            © 2024 Your Company Name. Tất cả quyền được bảo lưu.
+                            <br>
+                            Địa chỉ: 123 Đường ABC, Quận XYZ, TP. 123
+                            <br>
+                            Email: support@yourcompany.com | Hotline: 1900-xxxx
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

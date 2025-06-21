@@ -1,0 +1,180 @@
+<div id="analytics-page" class="page" th:fragment="analytics">
+    <div class="page-header">
+        <h2>Analytics</h2>
+        <div class="page-actions">
+            <select class="filter-select">
+                <option>Last 30 days</option>
+                <option>Last 7 days</option>
+                <option>Last 90 days</option>
+                <option>This year</option>
+            </select>
+            <button class="btn-secondary">
+                <i class="fas fa-download"></i>
+                Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Analytics Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Total Revenue</span>
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-value">$45,231.89</div>
+            <div class="stat-change positive">+20.1% from last month</div>
+            <div class="stat-progress">
+                <div class="progress-bar" style="width: 75%"></div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Conversion Rate</span>
+                <i class="fas fa-percentage"></i>
+            </div>
+            <div class="stat-value">3.2%</div>
+            <div class="stat-change positive">+0.5% from last month</div>
+            <div class="stat-progress">
+                <div class="progress-bar" style="width: 32%"></div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Average Order Value</span>
+                <i class="fas fa-shopping-cart"></i>
+            </div>
+            <div class="stat-value">$59.78</div>
+            <div class="stat-change positive">+2.3% from last month</div>
+            <div class="stat-progress">
+                <div class="progress-bar" style="width: 60%"></div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Total Orders</span>
+                <i class="fas fa-box"></i>
+            </div>
+            <div class="stat-value">1,204</div>
+            <div class="stat-change positive">+12% from last month</div>
+            <div class="stat-progress">
+                <div class="progress-bar" style="width: 85%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Charts -->
+    <div class="analytics-charts">
+        <div class="chart-tabs">
+            <button class="tab-btn active" data-tab="sales">Sales</button>
+            <button class="tab-btn" data-tab="traffic">Traffic</button>
+            <button class="tab-btn" data-tab="products">Products</button>
+        </div>
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Sales Overview</h3>
+                <p>View your sales performance over time</p>
+            </div>
+            <canvas id="analyticsChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="top-products">
+        <h3>Top Performing Products</h3>
+        <div class="products-grid">
+            <div class="product-performance">
+                <div class="product-info">
+                    <div class="product-image"></div>
+                    <div class="product-details">
+                        <h4>Wireless Earbuds</h4>
+                        <p>Electronics</p>
+                    </div>
+                </div>
+                <div class="performance-stats">
+                    <div class="stat">
+                        <span class="label">Sales</span>
+                        <span class="value">234</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Revenue</span>
+                        <span class="value">$14,026</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Growth</span>
+                        <span class="value positive">+15.3%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-performance">
+                <div class="product-info">
+                    <div class="product-image"></div>
+                    <div class="product-details">
+                        <h4>Smart Watch</h4>
+                        <p>Electronics</p>
+                    </div>
+                </div>
+                <div class="performance-stats">
+                    <div class="stat">
+                        <span class="label">Sales</span>
+                        <span class="value">189</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Revenue</span>
+                        <span class="value">$24,561</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Growth</span>
+                        <span class="value positive">+8.7%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-performance">
+                <div class="product-info">
+                    <div class="product-image"></div>
+                    <div class="product-details">
+                        <h4>Bluetooth Speaker</h4>
+                        <p>Electronics</p>
+                    </div>
+                </div>
+                <div class="performance-stats">
+                    <div class="stat">
+                        <span class="label">Sales</span>
+                        <span class="value">156</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Revenue</span>
+                        <span class="value">$14,028</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Growth</span>
+                        <span class="value positive">+12.1%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="product-performance">
+                <div class="product-info">
+                    <div class="product-image"></div>
+                    <div class="product-details">
+                        <h4>Phone Case</h4>
+                        <p>Accessories</p>
+                    </div>
+                </div>
+                <div class="performance-stats">
+                    <div class="stat">
+                        <span class="label">Sales</span>
+                        <span class="value">423</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Revenue</span>
+                        <span class="value">$8,456</span>
+                    </div>
+                    <div class="stat">
+                        <span class="label">Growth</span>
+                        <span class="value positive">+23.5%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

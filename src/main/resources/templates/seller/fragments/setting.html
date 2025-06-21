@@ -1,0 +1,243 @@
+<div id="settings-page" class="page" th:fragment="setting">
+    <div class="settings-container">
+        <div class="settings-tabs">
+            <button class="tab-btn active" data-tab="shop">Shop Profile</button>
+            <button class="tab-btn" data-tab="payment">Payment</button>
+            <button class="tab-btn" data-tab="shipping">Shipping</button>
+            <button class="tab-btn" data-tab="account">Account</button>
+        </div>
+
+        <!-- Shop Profile Tab -->
+        <div class="tab-content active" id="shop-tab">
+            <div class="settings-section">
+                <h3>Shop Information</h3>
+                <p>Update your shop details and profile</p>
+
+                <form class="settings-form">
+                    <div class="form-group">
+                        <div class="logo-upload">
+                            <div class="current-logo"></div>
+                            <button type="button" class="btn-secondary">Change Logo</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Shop Name</label>
+                        <input type="text" value="My Awesome Shop" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Shop Description</label>
+                        <textarea class="form-textarea" rows="4">We sell high-quality products at affordable prices.</textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Contact Email</label>
+                            <input type="email" value="contact@myshop.com" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Contact Phone</label>
+                            <input type="tel" value="+1 (555) 123-4567" class="form-input">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                </form>
+            </div>
+
+            <div class="settings-section">
+                <h3>Shop Address</h3>
+                <p>Update your shop's physical address</p>
+
+                <form class="settings-form">
+                    <div class="form-group">
+                        <label>Address Line 1</label>
+                        <input type="text" value="123 Main St" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Address Line 2</label>
+                        <input type="text" value="Suite 101" class="form-input">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" value="San Francisco" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>State/Province</label>
+                            <input type="text" value="California" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>ZIP/Postal Code</label>
+                            <input type="text" value="94105" class="form-input">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-primary">Save Address</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Payment Tab -->
+        <div class="tab-content" id="payment-tab">
+            <div class="settings-section">
+                <h3>Payment Methods</h3>
+                <p>Manage your payment and payout settings</p>
+
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <div class="method-info">
+                            <i class="fab fa-cc-visa"></i>
+                            <div class="method-details">
+                                <span class="method-name">Visa ending in 4242</span>
+                                <span class="method-type">Primary payment method</span>
+                            </div>
+                        </div>
+                        <button class="btn-secondary">Edit</button>
+                    </div>
+                    <div class="payment-method">
+                        <div class="method-info">
+                            <i class="fab fa-paypal"></i>
+                            <div class="method-details">
+                                <span class="method-name">PayPal</span>
+                                <span class="method-type">contact@myshop.com</span>
+                            </div>
+                        </div>
+                        <button class="btn-secondary">Edit</button>
+                    </div>
+                </div>
+
+                <button class="btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add Payment Method
+                </button>
+            </div>
+
+            <div class="settings-section">
+                <h3>Payout Settings</h3>
+                <p>Configure how you receive payments</p>
+
+                <form class="settings-form">
+                    <div class="form-group">
+                        <label>Payout Schedule</label>
+                        <select class="form-select">
+                            <option>Weekly</option>
+                            <option>Bi-weekly</option>
+                            <option>Monthly</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Minimum Payout Amount</label>
+                        <input type="number" value="100" class="form-input">
+                    </div>
+
+                    <button type="submit" class="btn-primary">Save Settings</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Shipping Tab -->
+        <div class="tab-content" id="shipping-tab">
+            <div class="settings-section">
+                <h3>Shipping Zones</h3>
+                <p>Configure shipping rates and zones</p>
+
+                <div class="shipping-zones">
+                    <div class="shipping-zone">
+                        <div class="zone-info">
+                            <h4>Domestic Shipping</h4>
+                            <p>United States</p>
+                        </div>
+                        <div class="zone-rates">
+                            <span>Standard: $5.99</span>
+                            <span>Express: $12.99</span>
+                        </div>
+                        <button class="btn-secondary">Edit</button>
+                    </div>
+                    <div class="shipping-zone">
+                        <div class="zone-info">
+                            <h4>International Shipping</h4>
+                            <p>Worldwide</p>
+                        </div>
+                        <div class="zone-rates">
+                            <span>Standard: $15.99</span>
+                            <span>Express: $29.99</span>
+                        </div>
+                        <button class="btn-secondary">Edit</button>
+                    </div>
+                </div>
+
+                <button class="btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Add Shipping Zone
+                </button>
+            </div>
+        </div>
+
+        <!-- Account Tab -->
+        <div class="tab-content" id="account-tab">
+            <div class="settings-section">
+                <h3>Account Information</h3>
+                <p>Manage your account details and security</p>
+
+                <form class="settings-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" value="John" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" value="Doe" class="form-input">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" value="john.doe@example.com" class="form-input">
+                    </div>
+
+                    <button type="submit" class="btn-primary">Update Account</button>
+                </form>
+            </div>
+
+            <div class="settings-section">
+                <h3>Security</h3>
+                <p>Manage your password and security settings</p>
+
+                <form class="settings-form">
+                    <div class="form-group">
+                        <label>Current Password</label>
+                        <input type="password" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label>New Password</label>
+                        <input type="password" class="form-input">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm New Password</label>
+                        <input type="password" class="form-input">
+                    </div>
+
+                    <button type="submit" class="btn-primary">Change Password</button>
+                </form>
+
+                <div class="security-options">
+                    <div class="security-option">
+                        <div class="option-info">
+                            <h4>Two-Factor Authentication</h4>
+                            <p>Add an extra layer of security to your account</p>
+                        </div>
+                        <button class="btn-secondary">Enable</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

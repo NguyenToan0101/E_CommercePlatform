@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh sửa thông tin cá nhân</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #0a4d68;
+            --secondary-blue: #088395;
+            --accent-teal: #05bfdb;
+            --light-green: #8de0a6;
+            --light-gray: #f8f8f8;
+            --border-gray: #e5e5e5;
+            --text-gray: #666666;
+            --white: #ffffff;
+            --gold-accent: #d4af37;
+            --error-red: #dc2626;
+            --success-green: #10b981;
+            --shadow-light: rgba(10, 77, 104, 0.05);
+            --shadow-medium: rgba(10, 77, 104, 0.1);
+            --shadow-heavy: rgba(10, 77, 104, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-green) 100%);
+            min-height: 100vh;
+            color: var(--primary-blue);
+            line-height: 1.6;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-container {
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-container:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-placeholder {
+            width: 140px;
+            height: 60px;
+            background: var(--white);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-blue);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px var(--shadow-light);
+        }
+
+        .logo-placeholder:hover {
+            border-color: var(--accent-teal);
+            background: var(--white);
+            transform: scale(1.05);
+        }
+
+        /* Edit Container */
+        .edit-container {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow:
+                    0 32px 64px var(--shadow-light),
+                    0 16px 32px var(--shadow-medium),
+                    0 0 0 1px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+            position: relative;
+        }
+
+        .edit-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-teal) 50%, var(--primary-blue) 100%);
+        }
+
+        .edit-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            color: var(--white);
+            padding: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .edit-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .edit-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .edit-icon svg {
+            width: 36px;
+            height: 36px;
+            color: var(--secondary-blue);
+        }
+
+        .edit-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .edit-subtitle {
+            font-size: 15px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .edit-body {
+            padding: 40px;
+        }
+
+        /* Image Section */
+        .image-section {
+            background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border: 2px dashed var(--border-gray);
+            text-align: center;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .image-section:hover {
+            border-color: var(--accent-teal);
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px var(--shadow-light);
+        }
+
+        .image-section h3 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-blue);
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent-teal);
+        }
+
+        .current-image {
+            margin-bottom: 24px;
+        }
+
+        .current-image img {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--white);
+            box-shadow: 0 15px 35px var(--shadow-medium);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .current-image img:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-teal);
+        }
+
+        .image-placeholder {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--border-gray) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: var(--text-gray);
+            margin: 0 auto 24px;
+            border: 4px solid var(--white);
+            box-shadow: 0 15px 35px var(--shadow-medium);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .image-placeholder:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-teal);
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .file-input-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-teal) 100%);
+            color: var(--white);
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 8px 25px rgba(8, 131, 149, 0.3);
+        }
+
+        .file-input-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(8, 131, 149, 0.4);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        }
+
+        .file-input-label svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .image-preview {
+            margin-top: 24px;
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .image-preview p {
+            color: var(--text-gray);
+            font-size: 14px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .image-preview img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--white);
+            box-shadow: 0 8px 25px var(--shadow-medium);
+            transition: all 0.3s ease;
+        }
+
+        .image-preview img:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-teal);
+        }
+
+        /* Form Styles */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid var(--border-gray);
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--light-gray);
+            color: var(--primary-blue);
+            font-family: inherit;
+        }
+
+        .form-control::placeholder {
+            color: var(--text-gray);
+            opacity: 0.7;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary-blue);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(8, 131, 149, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-control:invalid {
+            border-color: var(--error-red);
+        }
+
+        .form-control.valid {
+            border-color: var(--success-green);
+        }
+
+        .error-message {
+            color: var(--error-red);
+            font-size: 12px;
+            margin-top: 8px;
+            display: none;
+            font-weight: 500;
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .validation-message {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--error-red);
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 24px;
+            border-left: 4px solid var(--error-red);
+            display: none;
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 500;
+        }
+
+        .success-message {
+            background: rgba(8, 131, 149, 0.1);
+            color: var(--secondary-blue);
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            margin-bottom: 24px;
+            border-left: 4px solid var(--secondary-blue);
+            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 500;
+        }
+
+        /* Button Styles */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-teal) 100%);
+            color: var(--white);
+            padding: 18px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 25px rgba(8, 131, 149, 0.3);
+            font-family: inherit;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px rgba(8, 131, 149, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .submit-btn svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        .back-link {
+            text-align: center;
+            margin-top: 8px;
+        }
+
+        .back-link a {
+            color: var(--text-gray);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .back-link a:hover {
+            color: var(--secondary-blue);
+            transform: translateX(-4px);
+        }
+
+        .back-link a svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .back-link a:hover svg {
+            transform: translateX(-2px);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+
+            .container {
+                margin: 0;
+            }
+
+            .edit-header {
+                padding: 30px 24px;
+            }
+
+            .edit-body {
+                padding: 30px 24px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .edit-header h2 {
+                font-size: 28px;
+            }
+
+            .image-section {
+                padding: 24px 20px;
+            }
+
+            .current-image img,
+            .image-placeholder {
+                width: 120px;
+                height: 120px;
+            }
+
+            .logo-placeholder {
+                width: 120px;
+                height: 50px;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .edit-header h2 {
+                font-size: 24px;
+            }
+
+            .edit-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .edit-icon svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .current-image img,
+            .image-placeholder {
+                width: 100px;
+                height: 100px;
+            }
+
+            .file-input-label {
+                padding: 12px 20px;
+                font-size: 13px;
+            }
+        }
+
+        /* Focus states for accessibility */
+        .form-control:focus,
+        .submit-btn:focus,
+        .file-input-label:focus,
+        .back-link a:focus,
+        .logo-container:focus {
+            outline: 2px solid var(--accent-teal);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .form-control {
+                border-width: 3px;
+            }
+
+            .submit-btn {
+                border: 3px solid var(--secondary-blue);
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Logo Section -->
+    <div class="logo-section">
+        <a href="/home" class="logo-container" aria-label="Về trang chủ">
+            <div class="logo-placeholder">
+                <!-- Replace this div with your logo image -->
+                <span>Your Logo</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="edit-container">
+        <div class="edit-header">
+            <div class="edit-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2>Chỉnh sửa thông tin cá nhân</h2>
+            <p class="edit-subtitle">Cập nhật thông tin của bạn để hoàn thiện hồ sơ cá nhân</p>
+        </div>
+
+        <div class="edit-body">
+            <form th:action="@{/customers/update}" th:object="${customer}" method="post" enctype="multipart/form-data" id="editForm">
+
+                <div class="image-section">
+                    <h3>Ảnh đại diện</h3>
+
+                    <div class="current-image">
+                        <img th:if="${base64Image != null}"
+                             th:src="'data:image/jpeg;base64,' + ${base64Image}"
+                             alt="Ảnh đại diện hiện tại"
+                             id="currentAvatar" />
+                        <div th:unless="${base64Image != null}" class="image-placeholder" id="avatarPlaceholder">
+                            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M20 21C20 18.7909 20 17.6863 19.3259 16.9393C18.6519 16.1924 17.596 16.0399 15.484 15.7347C14.1106 15.5413 12.7213 15.4446 11.3309 15.4446C9.94035 15.4446 8.55102 15.5413 7.17766 15.7347C5.06566 16.0399 4.00967 16.1924 3.33564 16.9393C2.66162 17.6863 2.66162 18.7909 2.66162 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="file-input-wrapper">
+                        <input type="file" name="imageFile" id="imageFile" class="file-input" accept="image/*" aria-label="Chọn ảnh đại diện mới">
+                        <label for="imageFile" class="file-input-label">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M8.5 10C9.32843 10 10 9.32843 10 8.5C10 7.67157 9.32843 7 8.5 7C7.67157 7 7 7.67157 7 8.5C7 9.32843 7.67157 10 8.5 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M21 15L16 10L5 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Thay đổi ảnh đại diện
+                        </label>
+                    </div>
+
+                    <div class="image-preview" id="imagePreview">
+                        <p>Ảnh mới đã chọn:</p>
+                        <img id="previewImg" alt="Xem trước ảnh mới">
+                    </div>
+                </div>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="firstName">Họ <span style="color: var(--error-red);">*</span></label>
+                        <input type="text" th:field="*{firstname}" id="firstName" class="form-control" required placeholder="Nhập họ của bạn" autocomplete="given-name">
+                        <div class="error-message" id="firstNameError">Vui lòng nhập họ</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="lastName">Tên <span style="color: var(--error-red);">*</span></label>
+                        <input type="text" th:field="*{lastname}" id="lastName" class="form-control" required placeholder="Nhập tên của bạn" autocomplete="family-name">
+                        <div class="error-message" id="lastNameError">Vui lòng nhập tên</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Số điện thoại <span style="color: var(--error-red);">*</span></label>
+                        <input type="tel" th:field="*{phone}" id="phone" class="form-control" required placeholder="Nhập số điện thoại" autocomplete="tel">
+                        <div class="error-message" id="phoneError">Vui lòng nhập số điện thoại hợp lệ</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateOfBirth">Ngày sinh <span style="color: var(--error-red);">*</span></label>
+                        <input type="date" th:field="*{dateofbirth}" id="dateOfBirth" class="form-control" required autocomplete="bday">
+                        <div class="error-message" id="dobError">Bạn phải trên 16 tuổi</div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="address">Địa chỉ</label>
+                        <input type="text" th:field="*{address}" id="address" class="form-control" placeholder="Nhập địa chỉ của bạn" autocomplete="street-address">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Giới tính</label>
+                        <select th:field="*{gender}" id="gender" class="form-control" autocomplete="sex">
+                            <option value="">Chọn giới tính</option>
+                            <option value="M" th:selected="${customer.gender == 'M'}">Nam</option>
+                            <option value="F" th:selected="${customer.gender == 'F'}">Nữ</option>
+                            <option value="O" th:selected="${customer.gender == 'O'}">Khác</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="validation-message" id="validationMessage"></div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16L21 8V19C21 20.1046 20.1046 21 19 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 21V13H7V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M7 3V8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Cập nhật thông tin
+                </button>
+            </form>
+
+            <div class="back-link">
+                <a th:href="@{/customers/profile}">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Quay lại trang cá nhân
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Enhanced image preview functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageFile = document.getElementById('imageFile');
+        const preview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const currentAvatar = document.getElementById('currentAvatar');
+        const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+
+        imageFile.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+
+            if (file) {
+                // Validate file type
+                const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Vui lòng chọn file hình ảnh hợp lệ (JPEG, PNG, GIF)');
+                    this.value = '';
+                    preview.style.display = 'none';
+                    return;
+                }
+
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Kích thước file quá lớn. Vui lòng chọn file nhỏ hơn 5MB');
+                    this.value = '';
+                    preview.style.display = 'none';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+
+                    // Add animation to preview
+                    previewImg.style.animation = 'fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // Age validation function with improved calculation
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birth = new Date(birthDate);
+
+            // Check for invalid date
+            if (isNaN(birth.getTime())) return -1;
+
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+
+            return age;
+        }
+
+        // Enhanced phone validation function
+        function isValidPhone(phone) {
+            // Remove spaces, dashes, and parentheses
+            const cleanPhone = phone.replace(/[\s\-$$$$]/g, '');
+            const phoneRegex = /^[0-9]{10,11}$/;
+            return phoneRegex.test(cleanPhone);
+        }
+
+        // Form validation with enhanced UX
+        const editForm = document.getElementById('editForm');
+        const validationMessage = document.getElementById('validationMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Set max date to 16 years ago
+        const today = new Date();
+        const maxDate = new Date(today.getFullYear() - 16, today.getMonth(), today.getDate());
+        document.getElementById('dateOfBirth').max = maxDate.toISOString().split('T')[0];
+
+        // Real-time validation for all fields
+        const formControls = document.querySelectorAll('.form-control');
+        formControls.forEach(control => {
+            control.addEventListener('input', function() {
+                validateField(this);
+            });
+
+            control.addEventListener('blur', function() {
+                validateField(this, true);
+            });
+        });
+
+        function validateField(field, showError = false) {
+            const id = field.id;
+            const value = field.value.trim();
+            let isValid = true;
+            let errorMsg = '';
+
+            // Reset field styling
+            field.classList.remove('valid');
+
+            switch(id) {
+                case 'firstName':
+                    if (!value) {
+                        isValid = false;
+                        errorMsg = 'Vui lòng nhập họ';
+                    } else if (value.length < 2) {
+                        isValid = false;
+                        errorMsg = 'Họ phải có ít nhất 2 ký tự';
+                    }
+                    break;
+
+                case 'lastName':
+                    if (!value) {
+                        isValid = false;
+                        errorMsg = 'Vui lòng nhập tên';
+                    } else if (value.length < 2) {
+                        isValid = false;
+                        errorMsg = 'Tên phải có ít nhất 2 ký tự';
+                    }
+                    break;
+
+                case 'phone':
+                    if (!value) {
+                        isValid = false;
+                        errorMsg = 'Vui lòng nhập số điện thoại';
+                    } else if (!isValidPhone(value)) {
+                        isValid = false;
+                        errorMsg = 'Số điện thoại phải có 10-11 chữ số';
+                    }
+                    break;
+
+                case 'dateOfBirth':
+                    if (!value) {
+                        isValid = false;
+                        errorMsg = 'Vui lòng nhập ngày sinh';
+                    } else {
+                        const age = calculateAge(value);
+                        if (age < 16) {
+                            isValid = false;
+                            errorMsg = `Bạn mới ${age} tuổi. Phải trên 16 tuổi.`;
+                        }
+                    }
+                    break;
+            }
+
+            const errorElement = document.getElementById(`${id}Error`);
+
+            if (!isValid && (showError || value)) {
+                field.style.borderColor = 'var(--error-red)';
+                if (errorElement) {
+                    errorElement.textContent = errorMsg;
+                    errorElement.style.display = 'block';
+                }
+            } else if (value) {
+                if (isValid) {
+                    field.style.borderColor = 'var(--success-green)';
+                    field.classList.add('valid');
+                }
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            } else {
+                field.style.borderColor = '';
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            }
+
+            return isValid;
+        }
+
+        // Form submission with enhanced validation
+        editForm.addEventListener('submit', function(e) {
+            let isValid = true;
+
+            // Reset validation message
+            validationMessage.style.display = 'none';
+
+            // Validate all required fields
+            const requiredFields = ['firstName', 'lastName', 'phone', 'dateOfBirth'];
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!validateField(field, true)) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+
+                // Show validation message
+                validationMessage.textContent = 'Vui lòng kiểm tra và sửa các lỗi trên form.';
+                validationMessage.style.display = 'block';
+
+                // Scroll to first error with smooth behavior
+                const firstError = document.querySelector('.form-control[style*="border-color: var(--error-red)"]');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => firstError.focus(), 500);
+                }
+
+                // Shake validation message for attention
+                validationMessage.style.animation = 'none';
+                setTimeout(() => {
+                    validationMessage.style.animation = 'fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+                }, 10);
+            } else {
+                // Add loading state to button
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Đang cập nhật...';
+                submitBtn.disabled = true;
+                submitBtn.style.cursor = 'not-allowed';
+            }
+        });
+
+        // Add keyboard navigation for better accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Clear focus from current element
+                document.activeElement.blur();
+            }
+        });
+    });
+</script>
+</body>
+</html>
