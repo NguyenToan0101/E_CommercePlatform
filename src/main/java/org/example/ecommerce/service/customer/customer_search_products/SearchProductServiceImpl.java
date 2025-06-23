@@ -37,88 +37,78 @@ public class SearchProductServiceImpl implements SearchProductService {
 
     @Override
     public List<ProductView> getProductCategory(Integer categoryId) {
-        return List.of();
+        List<ProductView> views = new ArrayList<>();
+
+        List<Product> products = productRepository.findAll();
+
+        for (Product p : products) {
+            if (p.getStatus().equals("active") && p.getCategoryid() != null && p.getCategoryid().getId().equals(categoryId) && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
+
+                int totalSold = inventoryRepository.findInventoryById(p.getId())
+                        .stream()
+                        .mapToInt(Inventory::getSolditems)
+                        .sum();
+
+                List<Productimage> imgs = productimageRepository.findProductimageById(p.getId());
+                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
+
+                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
+                String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
+
+                List<Integer> rates = reviewRepository.findRateById(p.getId());
+                float rate = 0f;
+                if (!rates.isEmpty()) {
+                    float sum = 0f;
+                    for (int r : rates) {
+                        sum += r;
+                    }
+                    rate = Math.round((sum / rates.size()) * 10f) / 10f;
+                }
+
+                String categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
+
+                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName
+                ));
+            }
+        }
+
+        return views;
     }
 
-    @Override
     public List<ProductView> searchByName(String keyword) {
-        return List.of();
+        List<Product> products = productRepository.findByNameContainingIgnoreCase(keyword);
+        List<ProductView> views = new ArrayList<>();
+        for (Product p : products) {
+            if (p.getStatus().equals("active")){
+                int totalSold = inventoryRepository.findInventoryById(p.getId())
+                        .stream()
+                        .mapToInt(i -> i.getSolditems())
+                        .sum();
+
+                List<Productimage> imgs = productimageRepository.findProductimageById(p.getId());
+                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
+
+                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
+                String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
+
+                List<Integer> rates = reviewRepository.findRateById(p.getId());
+                float rate = 0f;
+                if (!rates.isEmpty()) {
+                    float sum = 0f;
+                    for (int r : rates) sum += r;
+                    rate = Math.round((sum / rates.size()) * 10f) / 10f;
+                }
+
+                Integer categoryId = null;
+                String categoryName = null;
+                if (p.getCategoryid() != null) {
+                    categoryId = p.getCategoryid().getId();
+                    categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
+                }
+
+                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+            }
+        }
+        return views;
     }
-
-//    @Override
-//    public List<ProductView> getProductCategory(Integer categoryId) {
-//        List<ProductView> views = new ArrayList<>();
-//
-//        List<Product> products = productRepository.findAll();
-//
-//        for (Product p : products) {
-//            if (p.getStatus().equals("active") && p.getCategoryid() != null && p.getCategoryid().getId().equals(categoryId) && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
-//
-//                int totalSold = inventoryRepository.findInventoryById(p.getId())
-//                        .stream()
-//                        .mapToInt(Inventory::getSolditems)
-//                        .sum();
-//
-//                List<Productimage> imgs = productimageRepository.findProductimageById(p.getId());
-//                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
-//
-//                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getWarehouseaddress();
-//                String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
-//
-//                List<Integer> rates = reviewRepository.findRateById(p.getId());
-//                float rate = 0f;
-//                if (!rates.isEmpty()) {
-//                    float sum = 0f;
-//                    for (int r : rates) {
-//                        sum += r;
-//                    }
-//                    rate = Math.round((sum / rates.size()) * 10f) / 10f;
-//                }
-//
-//                String categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
-//
-//                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName
-//                ));
-//            }
-//        }
-//
-//        return views;
-//    }
-
-//    public List<ProductView> searchByName(String keyword) {
-//        List<Product> products = productRepository.findByNameContainingIgnoreCase(keyword);
-//        List<ProductView> views = new ArrayList<>();
-//        for (Product p : products) {
-//            if (p.getStatus().equals("active")){
-//                int totalSold = inventoryRepository.findInventoryById(p.getId())
-//                        .stream()
-//                        .mapToInt(i -> i.getSolditems())
-//                        .sum();
-//
-//                List<Productimage> imgs = productimageRepository.findProductimageById(p.getId());
-//                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
-//
-//                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getWarehouseaddress();
-//                String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
-//
-//                List<Integer> rates = reviewRepository.findRateById(p.getId());
-//                float rate = 0f;
-//                if (!rates.isEmpty()) {
-//                    float sum = 0f;
-//                    for (int r : rates) sum += r;
-//                    rate = Math.round((sum / rates.size()) * 10f) / 10f;
-//                }
-//
-//                Integer categoryId = null;
-//                String categoryName = null;
-//                if (p.getCategoryid() != null) {
-//                    categoryId = p.getCategoryid().getId();
-//                    categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
-//                }
-//
-//                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
-//            }
-//        }
-//        return views;
-//    }
 }

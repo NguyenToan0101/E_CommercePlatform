@@ -17,7 +17,7 @@ public class CustomerProductServiceImpl implements CustomerProductService {
     @Autowired
     private final ProductimageRepository productimageRepository;
     @Autowired
-    private final InventoryRepository inventoryRepository;
+    private final InventoryRepository   inventoryRepository;
     @Autowired
     private final ShopRepository shopRepository;
     @Autowired
@@ -47,8 +47,8 @@ public class CustomerProductServiceImpl implements CustomerProductService {
                 List<Productimage> imgs = productimageRepository.findProductimageById(p.getId());
                 String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
-//                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getWarehouseaddress();
-//                String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
+                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
+                String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
 
                 List<Integer> rates = reviewRepository.findRateById(p.getId());
                 float rate = 0f;
@@ -67,7 +67,7 @@ public class CustomerProductServiceImpl implements CustomerProductService {
                     categoryName= categoryRepository.findById(categoryId).get().getCategoryname();
                 }
 
-//                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
             }
         }
         return views;

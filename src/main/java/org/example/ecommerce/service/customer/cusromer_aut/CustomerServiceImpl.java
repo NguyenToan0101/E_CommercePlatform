@@ -79,6 +79,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer login(String email, String password) {
+        
         Customer customer = customerRepository.findByEmail(email);
         if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.getStatus() == "active") {
             return customer;

@@ -6,3 +6,6 @@ GET http://localhost:8080/system/email/sendHtml
 
 ###
 GET http://localhost:8080/admin/dashboard
+
+###
+GET http://localhost:8080/registration/api/get-address

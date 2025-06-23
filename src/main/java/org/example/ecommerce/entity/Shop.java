@@ -1,52 +1,61 @@
 package org.example.ecommerce.entity;
-
 import jakarta.persistence.*;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import jakarta.validation.constraints.*;
+import org.hibernate.annotations.Nationalized;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "shop")
+@Data
 public class Shop {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shopid", nullable = false)
     private Integer id;
 
+    @OneToOne()
+    @JoinColumn(name = "shopid", nullable = false, unique = true)
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "shopid", nullable = false)
-    private Seller sellers;
-
-    @Column(name = "shopname", length = Integer.MAX_VALUE)
+    private Seller sellerid;
+    @Version
+    private Integer version;
+    @Nationalized
+    @Column(name = "shopname", nullable = false, unique = true, length = 100)
     private String shopname;
 
-    @Column(name = "description", length = Integer.MAX_VALUE)
+    @Size(max = 500)
+    @Nationalized
+    @Column(name = "description", length = 500)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maincategoryid")
     private Category maincategoryid;
 
-    @Column(name = "fulladdress", length = Integer.MAX_VALUE)
+    @Nationalized
+    @Column(name = "fulladdress", nullable = false, unique = true)
     private String fulladdress;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "createdat")
-    private Instant createdat;
+    @Column(name = "createdat", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
+    private LocalDateTime createdat = LocalDateTime.now();
 
-    @Column(name = "status", length = Integer.MAX_VALUE)
+
+    @Column(name = "status")
     private String status;
 
-    @Column(name = "imageshop", length = Integer.MAX_VALUE)
+
+    @Nationalized
+    @Column(name = "imageshop")
     private String imageshop;
 
-    @Column(name = "managename", length = Integer.MAX_VALUE)
-    private String managename;
 
-    @Column(name = "phone", length = Integer.MAX_VALUE)
+    @Nationalized
+    @Column(name = "managename", nullable = false)
+    private String manageName;
+
+   
+    @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
     @Column(name = "express")
@@ -59,214 +68,42 @@ public class Shop {
     private Boolean economy;
 
     @Column(name = "lockerdelivery")
-    private Boolean lockerdelivery;
+    private Boolean lockerDelivery;
 
     @Column(name = "bulkyitems")
-    private Boolean bulkyitems;
+    private Boolean bulkyItems;
 
-    @Column(name = "businesstype", length = Integer.MAX_VALUE)
-    private String businesstype;
 
-    @Column(name = "businessaddress", length = Integer.MAX_VALUE)
-    private String businessaddress;
+    @Nationalized
+    @Column(name = "businesstype", nullable = false, unique = true)
+    private String businessType;
 
-    @Column(name = "invoiceemail", length = Integer.MAX_VALUE)
-    private String invoiceemail;
+    @Size(max = 255)
+    @Nationalized
+    @Column(name = "businessaddress", nullable = false, unique = true)
+    private String businessAddress;
 
-    @Column(name = "taxcode", length = Integer.MAX_VALUE)
-    private String taxcode;
+    @Email
+    @Size(max = 100)
+    @Column(name = "invoiceemail", nullable = false, unique = true)
+    private String invoiceEmail;
 
-    @Column(name = "version")
-    private Long version;
+    @Size(max = 20)
+    @Column(name = "taxcode", nullable = false, unique = true)
+    private String taxCode;
 
-    @OneToMany(mappedBy = "shopid")
-    private Set<Product> products = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "shopid")
-    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
+    public Shop(Integer id,String status) {
         this.id = id;
-    }
-
-    public Seller getSellers() {
-        return sellers;
-    }
-
-    public void setSellers(Seller sellers) {
-        this.sellers = sellers;
-    }
-
-    public String getShopname() {
-        return shopname;
-    }
-
-    public void setShopname(String shopname) {
-        this.shopname = shopname;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Category getMaincategoryid() {
-        return maincategoryid;
-    }
-
-    public void setMaincategoryid(Category maincategoryid) {
-        this.maincategoryid = maincategoryid;
-    }
-
-    public String getFulladdress() {
-        return fulladdress;
-    }
-
-    public void setFulladdress(String fulladdress) {
-        this.fulladdress = fulladdress;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
         this.status = status;
     }
 
-    public String getImageshop() {
-        return imageshop;
+    public Shop() {
+
     }
 
-    public void setImageshop(String imageshop) {
-        this.imageshop = imageshop;
+    public enum Status{
+        PENDING_APPROVAL,
+        ACTIVE,
+        LOCK
     }
-
-    public String getManagename() {
-        return managename;
-    }
-
-    public void setManagename(String managename) {
-        this.managename = managename;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Boolean getExpress() {
-        return express;
-    }
-
-    public void setExpress(Boolean express) {
-        this.express = express;
-    }
-
-    public Boolean getFast() {
-        return fast;
-    }
-
-    public void setFast(Boolean fast) {
-        this.fast = fast;
-    }
-
-    public Boolean getEconomy() {
-        return economy;
-    }
-
-    public void setEconomy(Boolean economy) {
-        this.economy = economy;
-    }
-
-    public Boolean getLockerdelivery() {
-        return lockerdelivery;
-    }
-
-    public void setLockerdelivery(Boolean lockerdelivery) {
-        this.lockerdelivery = lockerdelivery;
-    }
-
-    public Boolean getBulkyitems() {
-        return bulkyitems;
-    }
-
-    public void setBulkyitems(Boolean bulkyitems) {
-        this.bulkyitems = bulkyitems;
-    }
-
-    public String getBusinesstype() {
-        return businesstype;
-    }
-
-    public void setBusinesstype(String businesstype) {
-        this.businesstype = businesstype;
-    }
-
-    public String getBusinessaddress() {
-        return businessaddress;
-    }
-
-    public void setBusinessaddress(String businessaddress) {
-        this.businessaddress = businessaddress;
-    }
-
-    public String getInvoiceemail() {
-        return invoiceemail;
-    }
-
-    public void setInvoiceemail(String invoiceemail) {
-        this.invoiceemail = invoiceemail;
-    }
-
-    public String getTaxcode() {
-        return taxcode;
-    }
-
-    public void setTaxcode(String taxcode) {
-        this.taxcode = taxcode;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-    public Set<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(Set<Product> products) {
-        this.products = products;
-    }
-
-    public Set<PromotionTarget> getPromotionTargets() {
-        return promotionTargets;
-    }
-
-    public void setPromotionTargets(Set<PromotionTarget> promotionTargets) {
-        this.promotionTargets = promotionTargets;
-    }
-
 }

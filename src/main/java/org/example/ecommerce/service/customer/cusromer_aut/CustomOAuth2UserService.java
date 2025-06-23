@@ -1,7 +1,7 @@
 package org.example.ecommerce.service.customer.cusromer_aut;
 
 import org.example.ecommerce.entity.Customer;
-import org.example.ecommerce.repository.CustomerRepository;
+import org.example.ecommerce.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -16,7 +16,7 @@ import java.time.Instant;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository customerRepository;
 
     @Autowired
     private HttpSession session;
@@ -38,6 +38,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             customer.setRole("Customer");
             customer.setStatus("Active");
             customer.setCreatedat(Instant.now());
+//            customer.setSeller(new Seller(customer.getId()));
             customerRepository.save(customer);
         }
         session.setAttribute("customer", customer);
