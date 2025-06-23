@@ -1,0 +1,81 @@
+  <div id="orders-page" class="page" th:fragment="orders">
+            <div class="page-header">
+                <h2>All Orders</h2>
+                <div class="page-actions">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search orders...">
+                    </div>
+                    <select class="filter-select">
+                        <option>All Orders</option>
+                        <option>Pending</option>
+                        <option>Processing</option>
+                        <option>Shipped</option>
+                        <option>Delivered</option>
+                        <option>Cancelled</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Products</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>#ORD-7652</td>
+                        <td>John Smith</td>
+                        <td>2023-06-01</td>
+                        <td>3 items</td>
+                        <td>$129.99</td>
+                        <td><span class="status delivered">Delivered</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD-7651</td>
+                        <td>Sarah Johnson</td>
+                        <td>2023-06-01</td>
+                        <td>1 item</td>
+                        <td>$59.99</td>
+                        <td><span class="status shipped">Shipped</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD-7650</td>
+                        <td>Michael Brown</td>
+                        <td>2023-05-31</td>
+                        <td>2 items</td>
+                        <td>$89.98</td>
+                        <td><span class="status processing">Processing</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD-7649</td>
+                        <td>Emily Davis</td>
+                        <td>2023-05-31</td>
+                        <td>4 items</td>
+                        <td>$239.96</td>
+                        <td><span class="status pending">Pending</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    <tr>
+                        <td>#ORD-7648</td>
+                        <td>Robert Wilson</td>
+                        <td>2023-05-30</td>
+                        <td>1 item</td>
+                        <td>$29.99</td>
+                        <td><span class="status cancelled">Cancelled</span></td>
+                        <td><button class="btn-link">Details</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>

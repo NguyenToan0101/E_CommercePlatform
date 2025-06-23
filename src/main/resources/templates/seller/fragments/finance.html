@@ -1,0 +1,249 @@
+<div id="finance-page" class="page" th:fragment="finance">
+    <div class="page-header">
+        <h2>Finance</h2>
+        <div class="page-actions">
+            <select class="filter-select">
+                <option>This Month</option>
+                <option>Last Month</option>
+                <option>This Quarter</option>
+                <option>This Year</option>
+            </select>
+            <button class="btn-secondary">
+                <i class="fas fa-download"></i>
+                Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Financial Stats -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Total Revenue</span>
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="stat-value">$45,231.89</div>
+            <div class="stat-change positive">+20.1% from last month</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Expenses</span>
+                <i class="fas fa-credit-card"></i>
+            </div>
+            <div class="stat-value">$12,345.67</div>
+            <div class="stat-change negative">+5.2% from last month</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Net Profit</span>
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="stat-value">$32,886.22</div>
+            <div class="stat-change positive">+12.3% from last month</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-header">
+                <span class="stat-label">Pending Payouts</span>
+                <i class="fas fa-clock"></i>
+            </div>
+            <div class="stat-value">$5,432.10</div>
+            <div class="stat-change">Next payout on Jun 15, 2023</div>
+        </div>
+    </div>
+
+    <!-- Financial Charts -->
+    <div class="finance-charts">
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Revenue Overview</h3>
+                <p>Monthly revenue breakdown</p>
+            </div>
+            <canvas id="revenueChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <div class="chart-header">
+                <h3>Sales Breakdown</h3>
+                <p>Revenue by product category</p>
+            </div>
+            <canvas id="categoryChart"></canvas>
+            <div class="category-legend">
+                <div class="legend-item">
+                    <span class="color-dot" style="background: #ff5722;"></span>
+                    <span>Electronics - $45,000</span>
+                </div>
+                <div class="legend-item">
+                    <span class="color-dot" style="background: #2196f3;"></span>
+                    <span>Clothing - $25,000</span>
+                </div>
+                <div class="legend-item">
+                    <span class="color-dot" style="background: #4caf50;"></span>
+                    <span>Home & Kitchen - $18,000</span>
+                </div>
+                <div class="legend-item">
+                    <span class="color-dot" style="background: #9c27b0;"></span>
+                    <span>Beauty - $12,000</span>
+                </div>
+                <div class="legend-item">
+                    <span class="color-dot" style="background: #ff9800;"></span>
+                    <span>Sports - $8,000</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Tabs -->
+    <div class="transaction-section">
+        <div class="transaction-tabs">
+            <button class="tab-btn active" data-tab="transactions">Transactions</button>
+            <button class="tab-btn" data-tab="payouts">Payouts</button>
+            <button class="tab-btn" data-tab="taxes">Taxes</button>
+        </div>
+
+        <div class="tab-content active" id="transactions-tab">
+            <div class="section-header">
+                <h3>Recent Transactions</h3>
+                <p>Latest financial activities</p>
+                <button class="btn-link">View All</button>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Type</th>
+                        <th>Description</th>
+                        <th>Customer</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>TXN-001</td>
+                        <td><span class="transaction-type sale">Sale</span></td>
+                        <td>Order #ORD-7651 - Wireless Earbuds</td>
+                        <td>Sarah Johnson</td>
+                        <td class="amount positive">+$59.99</td>
+                        <td><span class="status delivered">Completed</span></td>
+                        <td>2023-06-01 14:30</td>
+                    </tr>
+                    <tr>
+                        <td>TXN-002</td>
+                        <td><span class="transaction-type refund">Refund</span></td>
+                        <td>Refund for Order #ORD-7589</td>
+                        <td>Michael Brown</td>
+                        <td class="amount negative">-$29.99</td>
+                        <td><span class="status processing">Processing</span></td>
+                        <td>2023-06-01 12:15</td>
+                    </tr>
+                    <tr>
+                        <td>TXN-003</td>
+                        <td><span class="transaction-type sale">Sale</span></td>
+                        <td>Order #ORD-7650 - Bluetooth Speaker</td>
+                        <td>John Smith</td>
+                        <td class="amount positive">+$89.99</td>
+                        <td><span class="status delivered">Completed</span></td>
+                        <td>2023-05-31 09:45</td>
+                    </tr>
+                    <tr>
+                        <td>TXN-004</td>
+                        <td><span class="transaction-type fee">Fee</span></td>
+                        <td>Platform fee for May 2023</td>
+                        <td>-</td>
+                        <td class="amount negative">-$125.50</td>
+                        <td><span class="status delivered">Completed</span></td>
+                        <td>2023-05-31 00:00</td>
+                    </tr>
+                    <tr>
+                        <td>TXN-005</td>
+                        <td><span class="transaction-type payout">Payout</span></td>
+                        <td>Monthly payout to bank account</td>
+                        <td>-</td>
+                        <td class="amount negative">-$3,245.67</td>
+                        <td><span class="status delivered">Completed</span></td>
+                        <td>2023-05-15 12:00</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="payouts-tab">
+            <div class="section-header">
+                <h3>Payout History</h3>
+                <p>Record of all payouts to your bank account</p>
+            </div>
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                    <tr>
+                        <th>Payout ID</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Bank Account</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>PAY-001</td>
+                        <td>$3,245.67</td>
+                        <td><span class="status delivered">Completed</span></td>
+                        <td>**** 1234</td>
+                        <td>2023-05-15</td>
+                        <td><button class="btn-link">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>PAY-002</td>
+                        <td>$2,876.45</td>
+                        <td><span class="status delivered">Completed</span></td>
+                        <td>**** 1234</td>
+                        <td>2023-04-15</td>
+                        <td><button class="btn-link">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>PAY-003</td>
+                        <td>$3,012.89</td>
+                        <td><span class="status delivered">Completed</span></td>
+                        <td>**** 1234</td>
+                        <td>2023-03-15</td>
+                        <td><button class="btn-link">View</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="tab-content" id="taxes-tab">
+            <div class="section-header">
+                <h3>Tax Information</h3>
+                <p>Summary of taxes collected and paid</p>
+            </div>
+            <div class="tax-summary">
+                <div class="tax-period">
+                    <h4>Current Year (2023)</h4>
+                    <div class="tax-stats">
+                        <div class="tax-stat">
+                            <span class="label">Sales Tax Collected</span>
+                            <span class="value">$3,456.78</span>
+                        </div>
+                        <div class="tax-stat">
+                            <span class="label">Sales Tax Remitted</span>
+                            <span class="value">$2,890.45</span>
+                        </div>
+                        <div class="tax-stat">
+                            <span class="label">Income Tax Owed</span>
+                            <span class="value">$8,234.56</span>
+                        </div>
+                        <div class="tax-stat">
+                            <span class="label">Tax Deductions</span>
+                            <span class="value">$1,567.89</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -20,20 +20,20 @@ public class CheckoutController {
         this.paymentService = paymentService;
     }
 
-    @PostMapping
-    public String processCheckout(@RequestParam("cartItemIds") List<Integer> cartItemIds,
-                                  HttpSession session, Model model) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        if (customer == null) {
-            return "redirect:/login";
-        }
-        String result = paymentService.checkout(customer, cartItemIds);
-        if ("Thanh toán thành công".equals(result)) {
-            model.addAttribute("message", result);
-            return "/customer/wallet/checkout-success";
-        } else {
-            model.addAttribute("error", result);
-            return "/customer/wallet/checkout-fail";
-        }
-    }
+//    @PostMapping
+//    public String processCheckout(@RequestParam("cartItemIds") List<Integer> cartItemIds,
+//                                  HttpSession session, Model model) {
+//        Customer customer = (Customer) session.getAttribute("customer");
+//        if (customer == null) {
+//            return "redirect:/login";
+//        }
+//        String result = paymentService.checkout(customer, cartItemIds);
+//        if ("Thanh toán thành công".equals(result)) {
+//            model.addAttribute("message", result);
+//            return "/customer/wallet/checkout-success";
+//        } else {
+//            model.addAttribute("error", result);
+//            return "/customer/wallet/checkout-fail";
+//        }
+//    }
 }

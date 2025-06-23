@@ -1,53 +1,89 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "shops")
+@Table(name = "shop")
 public class Shop {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shopid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sellerid")
-    private Seller sellerid;
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "shopid", nullable = false)
+    private Seller sellers;
 
-    @Size(max = 100)
-    @Nationalized
-    @Column(name = "shopname", length = 100)
+    @Column(name = "shopname", length = Integer.MAX_VALUE)
     private String shopname;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "imageshop")
-    private String imageshop;
-
-    @Size(max = 500)
-    @Nationalized
-    @Column(name = "description", length = 500)
+    @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maincategoryid")
     private Category maincategoryid;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "warehouseaddress")
-    private String warehouseaddress;
+    @Column(name = "fulladdress", length = Integer.MAX_VALUE)
+    private String fulladdress;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
 
-    @Size(max = 20)
-    @Column(name = "status", length = 20)
+    @Column(name = "status", length = Integer.MAX_VALUE)
     private String status;
+
+    @Column(name = "imageshop", length = Integer.MAX_VALUE)
+    private String imageshop;
+
+    @Column(name = "managename", length = Integer.MAX_VALUE)
+    private String managename;
+
+    @Column(name = "phone", length = Integer.MAX_VALUE)
+    private String phone;
+
+    @Column(name = "express")
+    private Boolean express;
+
+    @Column(name = "fast")
+    private Boolean fast;
+
+    @Column(name = "economy")
+    private Boolean economy;
+
+    @Column(name = "lockerdelivery")
+    private Boolean lockerdelivery;
+
+    @Column(name = "bulkyitems")
+    private Boolean bulkyitems;
+
+    @Column(name = "businesstype", length = Integer.MAX_VALUE)
+    private String businesstype;
+
+    @Column(name = "businessaddress", length = Integer.MAX_VALUE)
+    private String businessaddress;
+
+    @Column(name = "invoiceemail", length = Integer.MAX_VALUE)
+    private String invoiceemail;
+
+    @Column(name = "taxcode", length = Integer.MAX_VALUE)
+    private String taxcode;
+
+    @Column(name = "version")
+    private Long version;
+
+    @OneToMany(mappedBy = "shopid")
+    private Set<Product> products = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "shopid")
+    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -57,12 +93,12 @@ public class Shop {
         this.id = id;
     }
 
-    public Seller getSellerid() {
-        return sellerid;
+    public Seller getSellers() {
+        return sellers;
     }
 
-    public void setSellerid(Seller sellerid) {
-        this.sellerid = sellerid;
+    public void setSellers(Seller sellers) {
+        this.sellers = sellers;
     }
 
     public String getShopname() {
@@ -71,14 +107,6 @@ public class Shop {
 
     public void setShopname(String shopname) {
         this.shopname = shopname;
-    }
-
-    public String getImageshop() {
-        return imageshop;
-    }
-
-    public void setImageshop(String imageshop) {
-        this.imageshop = imageshop;
     }
 
     public String getDescription() {
@@ -97,12 +125,12 @@ public class Shop {
         this.maincategoryid = maincategoryid;
     }
 
-    public String getWarehouseaddress() {
-        return warehouseaddress;
+    public String getFulladdress() {
+        return fulladdress;
     }
 
-    public void setWarehouseaddress(String warehouseaddress) {
-        this.warehouseaddress = warehouseaddress;
+    public void setFulladdress(String fulladdress) {
+        this.fulladdress = fulladdress;
     }
 
     public Instant getCreatedat() {
@@ -119,6 +147,126 @@ public class Shop {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getImageshop() {
+        return imageshop;
+    }
+
+    public void setImageshop(String imageshop) {
+        this.imageshop = imageshop;
+    }
+
+    public String getManagename() {
+        return managename;
+    }
+
+    public void setManagename(String managename) {
+        this.managename = managename;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Boolean getExpress() {
+        return express;
+    }
+
+    public void setExpress(Boolean express) {
+        this.express = express;
+    }
+
+    public Boolean getFast() {
+        return fast;
+    }
+
+    public void setFast(Boolean fast) {
+        this.fast = fast;
+    }
+
+    public Boolean getEconomy() {
+        return economy;
+    }
+
+    public void setEconomy(Boolean economy) {
+        this.economy = economy;
+    }
+
+    public Boolean getLockerdelivery() {
+        return lockerdelivery;
+    }
+
+    public void setLockerdelivery(Boolean lockerdelivery) {
+        this.lockerdelivery = lockerdelivery;
+    }
+
+    public Boolean getBulkyitems() {
+        return bulkyitems;
+    }
+
+    public void setBulkyitems(Boolean bulkyitems) {
+        this.bulkyitems = bulkyitems;
+    }
+
+    public String getBusinesstype() {
+        return businesstype;
+    }
+
+    public void setBusinesstype(String businesstype) {
+        this.businesstype = businesstype;
+    }
+
+    public String getBusinessaddress() {
+        return businessaddress;
+    }
+
+    public void setBusinessaddress(String businessaddress) {
+        this.businessaddress = businessaddress;
+    }
+
+    public String getInvoiceemail() {
+        return invoiceemail;
+    }
+
+    public void setInvoiceemail(String invoiceemail) {
+        this.invoiceemail = invoiceemail;
+    }
+
+    public String getTaxcode() {
+        return taxcode;
+    }
+
+    public void setTaxcode(String taxcode) {
+        this.taxcode = taxcode;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
+    public Set<PromotionTarget> getPromotionTargets() {
+        return promotionTargets;
+    }
+
+    public void setPromotionTargets(Set<PromotionTarget> promotionTargets) {
+        this.promotionTargets = promotionTargets;
     }
 
 }

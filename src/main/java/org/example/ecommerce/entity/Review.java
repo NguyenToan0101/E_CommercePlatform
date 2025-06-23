@@ -1,8 +1,7 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
@@ -25,18 +24,19 @@ public class Review {
     @Column(name = "rating")
     private Integer rating;
 
-    @Nationalized
-    @Lob
-    @Column(name = "comment")
+    @Column(name = "comment", length = Integer.MAX_VALUE)
     private String comment;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "imagereviews")
+    @Column(name = "imagereviews", length = Integer.MAX_VALUE)
     private String imagereviews;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
+
+    @ColumnDefault("false")
+    @Column(name = "is_hidden")
+    private Boolean isHidden;
 
     public Integer getId() {
         return id;
@@ -92,6 +92,14 @@ public class Review {
 
     public void setCreatedat(Instant createdat) {
         this.createdat = createdat;
+    }
+
+    public Boolean getIsHidden() {
+        return isHidden;
+    }
+
+    public void setIsHidden(Boolean isHidden) {
+        this.isHidden = isHidden;
     }
 
 }

@@ -1,0 +1,127 @@
+<div id="customers-page" class="page" th:fragment="customers">
+    <div class="page-header">
+        <h2>All Customers</h2>
+        <div class="page-actions">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search customers...">
+            </div>
+            <button class="btn-primary">
+                <i class="fas fa-plus"></i>
+                Add Customer
+            </button>
+        </div>
+    </div>
+    <div class="table-container">
+        <table class="data-table">
+            <thead>
+            <tr>
+                <th>Customer</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Orders</th>
+                <th>Total Spent</th>
+                <th>Rating</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <div class="customer-info">
+                        <div class="customer-avatar"></div>
+                        <span>John Smith</span>
+                    </div>
+                </td>
+                <td>john.smith@example.com</td>
+                <td>+1 (555) 123-4567</td>
+                <td>8</td>
+                <td>$729.99</td>
+                <td>
+                    <div class="rating">
+                        <span class="stars">★</span>
+                        <span>4.8</span>
+                    </div>
+                </td>
+                <td><button class="btn-link">View</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="customer-info">
+                        <div class="customer-avatar"></div>
+                        <span>Sarah Johnson</span>
+                    </div>
+                </td>
+                <td>sarah.j@example.com</td>
+                <td>+1 (555) 234-5678</td>
+                <td>12</td>
+                <td>$1249.95</td>
+                <td>
+                    <div class="rating">
+                        <span class="stars">★</span>
+                        <span>5</span>
+                    </div>
+                </td>
+                <td><button class="btn-link">View</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="customer-info">
+                        <div class="customer-avatar"></div>
+                        <span>Michael Brown</span>
+                    </div>
+                </td>
+                <td>michael.b@example.com</td>
+                <td>+1 (555) 345-6789</td>
+                <td>3</td>
+                <td>$189.97</td>
+                <td>
+                    <div class="rating">
+                        <span class="stars">★</span>
+                        <span>4.2</span>
+                    </div>
+                </td>
+                <td><button class="btn-link">View</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="customer-info">
+                        <div class="customer-avatar"></div>
+                        <span>Emily Davis</span>
+                    </div>
+                </td>
+                <td>emily.davis@example.com</td>
+                <td>+1 (555) 456-7890</td>
+                <td>15</td>
+                <td>$1879.50</td>
+                <td>
+                    <div class="rating">
+                        <span class="stars">★</span>
+                        <span>4.9</span>
+                    </div>
+                </td>
+                <td><button class="btn-link">View</button></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="customer-info">
+                        <div class="customer-avatar"></div>
+                        <span>Robert Wilson</span>
+                    </div>
+                </td>
+                <td>robert.w@example.com</td>
+                <td>+1 (555) 567-8901</td>
+                <td>1</td>
+                <td>$59.99</td>
+                <td>
+                    <div class="rating">
+                        <span class="stars">★</span>
+                        <span>4</span>
+                    </div>
+                </td>
+                <td><button class="btn-link">View</button></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

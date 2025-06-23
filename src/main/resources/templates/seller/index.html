@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="seller/fragments/head :: head"></head>
+<body>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+<div th:replace="seller/fragments/sidebar :: sidebar"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+
+        <div th:replace="seller/fragments/header :: header"></div>
+        <!-- Dashboard Page -->
+
+        <div th:replace="seller/fragments/dashboard :: dashboard"></div>
+        <!-- Products Page -->
+
+
+        <!-- Orders Page -->
+        <div th:replace="seller/fragments/orders :: orders"></div>
+
+        <!-- Inventory Page -->
+        <div th:replace="seller/fragments/inventory :: inventory"></div>
+
+        <!-- Customers Page -->
+        <div th:replace="seller/fragments/customers :: customers"></div>
+
+        <!-- Messages Page -->
+        <div th:replace="seller/fragments/messages :: messages"></div>
+
+        <!-- Marketing Page -->
+        <div th:replace="seller/fragments/marketing :: marketing"></div>
+
+        <!-- Analytics Page -->
+        <div th:replace="seller/fragments/analytics :: analytics"></div>
+
+        <!-- Finance Page -->
+        <div th:replace="seller/fragments/finance :: finance"></div>
+
+        <!-- Settings Page -->
+        <div th:replace="seller/fragments/setting :: setting"></div>
+    </main>
+</div>
+
+<div th:replace="seller/fragments/footer :: footer"></div>
+<!-- Modal Styles -->
+
+</body>
+</html>
