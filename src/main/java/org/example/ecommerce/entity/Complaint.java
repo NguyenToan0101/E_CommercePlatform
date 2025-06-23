@@ -1,23 +1,33 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
-@Table(name = "carts")
-public class Cart {
+@Table(name = "complaints")
+public class Complaint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cartid", nullable = false)
+    @Column(name = "complaintid", nullable = false)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customerid")
     private Customer customerid;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderid")
+    private Order orderid;
+
+    @NotNull
+    @Column(name = "content", nullable = false, length = Integer.MAX_VALUE)
+    private String content;
+
+    @Column(name = "status", length = Integer.MAX_VALUE)
+    private String status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
@@ -25,9 +35,6 @@ public class Cart {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
-
-    @OneToMany(mappedBy = "cartid")
-    private Set<Cartitem> cartitems = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -45,6 +52,30 @@ public class Cart {
         this.customerid = customerid;
     }
 
+    public Order getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Order orderid) {
+        this.orderid = orderid;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public Instant getCreatedat() {
         return createdat;
     }
@@ -59,14 +90,6 @@ public class Cart {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public Set<Cartitem> getCartitems() {
-        return cartitems;
-    }
-
-    public void setCartitems(Set<Cartitem> cartitems) {
-        this.cartitems = cartitems;
     }
 
 }

@@ -20,14 +20,10 @@ public class Orderitem {
     @JoinColumn(name = "productid")
     private Product productid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "inventoryid")
-    private Inventory inventoryid;
-
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "unitprice", precision = 18, scale = 2)
+    @Column(name = "unitprice")
     private BigDecimal unitprice;
 
     public Integer getId() {
@@ -52,14 +48,6 @@ public class Orderitem {
 
     public void setProductid(Product productid) {
         this.productid = productid;
-    }
-
-    public Inventory getInventoryid() {
-        return inventoryid;
-    }
-
-    public void setInventoryid(Inventory inventoryid) {
-        this.inventoryid = inventoryid;
     }
 
     public Integer getQuantity() {

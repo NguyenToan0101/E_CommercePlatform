@@ -11,10 +11,6 @@ public class Cartitem {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "inventoryid")
-    private Inventory inventoryid;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cartid")
     private Cart cartid;
 
@@ -31,14 +27,6 @@ public class Cartitem {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Inventory getInventoryid() {
-        return inventoryid;
-    }
-
-    public void setInventoryid(Inventory inventoryid) {
-        this.inventoryid = inventoryid;
     }
 
     public Cart getCartid() {

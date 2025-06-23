@@ -1,8 +1,10 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "categories")
@@ -12,15 +14,19 @@ public class Category {
     @Column(name = "categoryid", nullable = false)
     private Integer id;
 
-    @Size(max = 100)
-    @Nationalized
-    @Column(name = "categoryname", length = 100)
+    @NotNull
+    @Column(name = "categoryname", nullable = false, length = Integer.MAX_VALUE)
     private String categoryname;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "description")
-    private String description;
+
+    @OneToMany(mappedBy = "categoryid")
+    private Set<Product> products = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "categoryid")
+    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "maincategoryid")
+    private Set<Shop> shops = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -38,12 +44,30 @@ public class Category {
         this.categoryname = categoryname;
     }
 
-    public String getDescription() {
-        return description;
+
+
+    public Set<Product> getProducts() {
+        return products;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
+
+    public Set<PromotionTarget> getPromotionTargets() {
+        return promotionTargets;
+    }
+
+    public void setPromotionTargets(Set<PromotionTarget> promotionTargets) {
+        this.promotionTargets = promotionTargets;
+    }
+
+    public Set<Shop> getShops() {
+        return shops;
+    }
+
+    public void setShops(Set<Shop> shops) {
+        this.shops = shops;
     }
 
 }

@@ -2,11 +2,12 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "customer")
@@ -16,56 +17,80 @@ public class Customer {
     @Column(name = "customerid", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "firstname", length = 50)
+    @Column(name = "firstname", length = Integer.MAX_VALUE)
     private String firstname;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "lastname", length = 50)
+    @Column(name = "lastname", length = Integer.MAX_VALUE)
     private String lastname;
 
-    @Column(name = "image")
-    private byte[] image;
-
-    @Size(max = 100)
     @NotNull
-    @Nationalized
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", nullable = false, length = Integer.MAX_VALUE)
     private String email;
 
-    @Size(max = 20)
     @NotNull
-    @Nationalized
-    @Column(name = "phone", nullable = false, length = 20)
+    @Column(name = "phone", nullable = false, length = Integer.MAX_VALUE)
     private String phone;
 
-    @Column(name = "gender")
-    private Character gender;
+    @Column(name = "gender", length = Integer.MAX_VALUE)
+    private String gender;
 
     @Column(name = "dateofbirth")
     private LocalDate dateofbirth;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "address")
+    @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "password")
+    @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
 
-    @Size(max = 20)
-    @Column(name = "role", length = 20)
+    @Column(name = "role", length = Integer.MAX_VALUE)
     private String role;
 
-    @Column(name = "status")
-    private Boolean status;
+    @Column(name = "status", length = Integer.MAX_VALUE)
+    private String status;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
+
+    @Column(name = "image", length = Integer.MAX_VALUE)
+    private String image;
+
+    @Column(name = "version")
+    private Long version;
+
+    @OneToMany(mappedBy = "adminid")
+    private Set<Adminlog> adminlogs = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Cart> carts = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Complaint> complaints = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Conversation> conversations = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Order> orders = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Review> reviews = new LinkedHashSet<>();
+
+    @OneToOne
+    private Seller seller;
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Userpromotion> userpromotions = new LinkedHashSet<>();
+
+    @OneToOne(mappedBy = "customerid")
+    private Wallet wallet;
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -91,14 +116,6 @@ public class Customer {
         this.lastname = lastname;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -115,11 +132,11 @@ public class Customer {
         this.phone = phone;
     }
 
-    public Character getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Character gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -155,11 +172,11 @@ public class Customer {
         this.role = role;
     }
 
-    public Boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -169,6 +186,110 @@ public class Customer {
 
     public void setCreatedat(Instant createdat) {
         this.createdat = createdat;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
+
+    public Set<Adminlog> getAdminlogs() {
+        return adminlogs;
+    }
+
+    public void setAdminlogs(Set<Adminlog> adminlogs) {
+        this.adminlogs = adminlogs;
+    }
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public Set<Complaint> getComplaints() {
+        return complaints;
+    }
+
+    public void setComplaints(Set<Complaint> complaints) {
+        this.complaints = complaints;
+    }
+
+    public Set<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(Set<Conversation> conversations) {
+        this.conversations = conversations;
+    }
+
+    public Set<Ordernotification> getOrdernotifications() {
+        return ordernotifications;
+    }
+
+    public void setOrdernotifications(Set<Ordernotification> ordernotifications) {
+        this.ordernotifications = ordernotifications;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Set<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(Set<Review> reviews) {
+        this.reviews = reviews;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public Set<Userpromotion> getUserpromotions() {
+        return userpromotions;
+    }
+
+    public void setUserpromotions(Set<Userpromotion> userpromotions) {
+        this.userpromotions = userpromotions;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    public Set<Wishlist> getWishlists() {
+        return wishlists;
+    }
+
+    public void setWishlists(Set<Wishlist> wishlists) {
+        this.wishlists = wishlists;
     }
 
 }

@@ -1,8 +1,10 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+
+import java.time.Instant;
 
 @Entity
 @Table(name = "inventory")
@@ -16,24 +18,23 @@ public class Inventory {
     @JoinColumn(name = "productid")
     private Product productid;
 
-    @Column(name = "quantity")
+    @NotNull
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
-
-    @Column(name = "lowstockthreshold")
-    private Integer lowstockthreshold;
 
     @Column(name = "solditems")
     private Integer solditems;
 
     @Size(max = 100)
-    @Nationalized
     @Column(name = "color", length = 100)
     private String color;
 
     @Size(max = 100)
-    @Nationalized
     @Column(name = "dimension", length = 100)
     private String dimension;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
     public Integer getId() {
         return id;
@@ -59,14 +60,6 @@ public class Inventory {
         this.quantity = quantity;
     }
 
-    public Integer getLowstockthreshold() {
-        return lowstockthreshold;
-    }
-
-    public void setLowstockthreshold(Integer lowstockthreshold) {
-        this.lowstockthreshold = lowstockthreshold;
-    }
-
     public Integer getSolditems() {
         return solditems;
     }
@@ -89,6 +82,14 @@ public class Inventory {
 
     public void setDimension(String dimension) {
         this.dimension = dimension;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
 }

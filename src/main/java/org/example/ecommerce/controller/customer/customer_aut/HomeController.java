@@ -22,10 +22,10 @@ public class HomeController {
             return "customer/customer_aut/home";
         }
 
-        if (customer.getImage() != null) {
-            String base64Image = Base64.getEncoder().encodeToString(customer.getImage());
-            model.addAttribute("base64Image", base64Image);
-        }
+//        if (customer.getImage() != null) {
+//            String base64Image = Base64.getEncoder().encodeToString(customer.getImage());
+//            model.addAttribute("base64Image", base64Image);
+//        }
 
         model.addAttribute("customer", customer);
 

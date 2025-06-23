@@ -1,8 +1,9 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 
 @Entity
@@ -13,17 +14,30 @@ public class Payment {
     @Column(name = "paymentid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "walletid")
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "walletid", nullable = false)
     private Wallet walletid;
 
-    @Size(max = 50)
-    @Column(name = "method", length = 50)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderid")
+    private Order orderid;
+
+    @NotNull
+    @Column(name = "amount", nullable = false)
+    private BigDecimal amount;
+
+    @Column(name = "method", length = Integer.MAX_VALUE)
     private String method;
 
-    @Size(max = 20)
-    @Column(name = "paymentstatus", length = 20)
+    @Column(name = "paymentstatus", length = Integer.MAX_VALUE)
     private String paymentstatus;
+
+    @Column(name = "transaction_id", length = Integer.MAX_VALUE)
+    private String transactionId;
+
+    @Column(name = "gateway", length = Integer.MAX_VALUE)
+    private String gateway;
 
     @Column(name = "paidat")
     private Instant paidat;
@@ -44,6 +58,22 @@ public class Payment {
         this.walletid = walletid;
     }
 
+    public Order getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Order orderid) {
+        this.orderid = orderid;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
     public String getMethod() {
         return method;
     }
@@ -58,6 +88,22 @@ public class Payment {
 
     public void setPaymentstatus(String paymentstatus) {
         this.paymentstatus = paymentstatus;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
+    }
+
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+
+    public String getGateway() {
+        return gateway;
+    }
+
+    public void setGateway(String gateway) {
+        this.gateway = gateway;
     }
 
     public Instant getPaidat() {
