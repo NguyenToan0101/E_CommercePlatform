@@ -34,9 +34,9 @@ public class LoginController {
                         @RequestParam String password,
                         HttpSession session,
                         Model model) {
-        if(adminService.isAdmin(email,password)){
-            return "redirect:/adminHome";
-        }
+//        if(adminService.isAdmin(email,password)){
+//            return "redirect:/adminHome";
+//        }
         Customer customer = customerService.login(email, password);
         if (customer != null) {
 

@@ -2,8 +2,9 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -16,56 +17,47 @@ public class Customer {
     @Column(name = "customerid", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "firstname", length = 50)
+    @Column(name = "firstname", length = Integer.MAX_VALUE)
     private String firstname;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "lastname", length = 50)
+    @Column(name = "lastname", length = Integer.MAX_VALUE)
     private String lastname;
 
-    @Column(name = "image")
-    private byte[] image;
-
-    @Size(max = 100)
     @NotNull
-    @Nationalized
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", nullable = false, length = Integer.MAX_VALUE)
     private String email;
 
-    @Size(max = 20)
     @NotNull
-    @Nationalized
-    @Column(name = "phone", nullable = false, length = 20)
+    @Column(name = "phone", nullable = false, length = Integer.MAX_VALUE)
     private String phone;
 
-    @Column(name = "gender")
-    private Character gender;
+    @Column(name = "gender", length = Integer.MAX_VALUE)
+    private String gender;
 
     @Column(name = "dateofbirth")
     private LocalDate dateofbirth;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "address")
+    @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "password")
+    @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
 
-    @Size(max = 20)
-    @Column(name = "role", length = 20)
+    @Column(name = "role", length = Integer.MAX_VALUE)
     private String role;
 
-    @Column(name = "status")
-    private Boolean status;
+    @Column(name = "status", length = Integer.MAX_VALUE)
+    private String status;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
+
+    @Column(name = "image")
+    private byte[] image;
+
+    @Column(name = "version")
+    private Long version;
 
     public Integer getId() {
         return id;
@@ -91,14 +83,6 @@ public class Customer {
         this.lastname = lastname;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -115,11 +99,11 @@ public class Customer {
         this.phone = phone;
     }
 
-    public Character getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Character gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -155,11 +139,11 @@ public class Customer {
         this.role = role;
     }
 
-    public Boolean getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -171,4 +155,19 @@ public class Customer {
         this.createdat = createdat;
     }
 
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
+    }
 }

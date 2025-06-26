@@ -107,7 +107,7 @@ public class PaymentService {
                 oi.setUnitprice(ci.getProductid().getPrice());
                 orderItemsRepository.save(oi);
 
-                Customer seller = ci.getProductid().getShopid().getSellerid().getCustomer();
+                Customer seller = ci.getProductid().getShopid().getSellers().getCustomerid();
                 Wallet sellerWallet = walletRepository.findByCustomerid(seller);
                 if (sellerWallet == null) {
                     sellerWallet = new Wallet();
@@ -192,7 +192,7 @@ public class PaymentService {
         oi.setUnitprice(price);
         orderItemsRepository.save(oi);
 
-        Customer seller = product.getShopid().getSellerid().getCustomer();
+        Customer seller = product.getShopid().getSellers().getCustomerid();
         Wallet sellerWallet = walletRepository.findByCustomerid(seller);
         if (sellerWallet == null) {
             sellerWallet = new Wallet();
