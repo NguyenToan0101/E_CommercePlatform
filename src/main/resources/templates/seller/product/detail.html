@@ -1,0 +1,14 @@
+<div class="product-details">
+    <h2 th:text="${product.name}">Tên sản phẩm</h2>
+    <p><strong>Giá:</strong> <span th:text="${product.price}">100000</span></p>
+    <p><strong>Mô tả:</strong></p>
+    <p th:text="${product.description}"></p>
+    <p><strong>Danh mục:</strong> <span th:text="${product.categoryid.name}"></span></p>
+
+    <div class="product-images">
+        <h4>Hình ảnh</h4>
+        <div th:each="img : ${images}">
+            <img th:src="@{'/uploads/' + ${img.imageurl}}" width="200" />
+        </div>
+    </div>
+</div>

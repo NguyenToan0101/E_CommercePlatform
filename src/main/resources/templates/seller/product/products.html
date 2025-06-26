@@ -1,0 +1,284 @@
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org" lang="vi">
+    <head th:replace="seller/fragments/head :: head">
+        <title>Danh sách sản phẩm</title>
+        <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    </head>
+
+    <body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div th:replace="seller/fragments/sidebar :: sidebar"></div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <div th:replace="seller/fragments/header :: header"></div>
+
+            <!-- Products Page -->
+            <div class="products-page">
+                <!-- Page Header -->
+                <div class="page-header-section">
+                    <div class="header-left">
+                        <h1 class="page-title">
+                            <i class="fas fa-box-open"></i>
+                            Tất cả sản phẩm
+                        </h1>
+                        <p class="page-subtitle">Quản lý danh sách sản phẩm của bạn</p>
+                    </div>
+
+                    <div class="header-actions">
+                        <div class="search-wrapper">
+                            <form method="get" th:action="@{/seller/products}" class="search-form">
+                                <div class="search-input-group">
+                                    <i class="fas fa-search search-icon"></i>
+                                    <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm..."
+                                           th:value="${keyword}" class="search-input" />
+                                    <button type="submit" class="search-btn">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <a href="/seller/products/create" class="btn-add-new">
+                            <i class="fas fa-plus"></i>
+                            <span>Thêm sản phẩm</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Products Table -->
+                <div class="products-table-wrapper">
+                    <div class="table-header">
+                        <div class="table-info">
+                            <span class="total-count">
+                                Tổng cộng: <strong th:text="${#lists.size(products)}">0</strong> sản phẩm
+                            </span>
+                        </div>
+                        <div class="table-filters">
+                            <select class="filter-select">
+                                <option>Tất cả trạng thái</option>
+                                <option>Đang bán</option>
+                                <option>Ngừng bán</option>
+                                <option>Hết hàng</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="products-table">
+                            <thead>
+                            <tr>
+                                <th class="col-image">Hình ảnh</th>
+                                <th class="col-name">Thông tin sản phẩm</th>
+                                <th class="col-category">Danh mục</th>
+                                <th class="col-price">Giá bán</th>
+                                <th class="col-stock">Tồn kho</th>
+                                <th class="col-status">Trạng thái</th>
+                                <th class="col-actions">Thao tác</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product : ${products}" class="product-row" th:data-product-id="${product.id}">
+                                <td class="col-image">
+                                    <div class="product-image-container">
+                                        <img th:if="${product.productimages.size() > 0}"
+                                             th:src="${product.productimages[0].imageurl}"
+                                             alt="Hình ảnh sản phẩm"
+                                             class="product-image" />
+                                        <div th:if="${product.productimages.size() == 0}" class="no-image">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="col-name">
+                                    <div class="product-info">
+                                        <h3 class="product-name" th:text="${product.name}">Tên sản phẩm</h3>
+                                        <button class="variants-toggle" th:if="${product.inventories.size() > 0}"
+                                                th:onclick="'toggleVariants(' + ${product.id} + ')'">
+                                            <i class="fas fa-chevron-down variant-toggle-icon"></i>
+                                            <span th:text="${product.inventories.size()} + ' biến thể'">Biến thể</span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td class="col-category">
+                                    <span class="category-badge" th:if="${product.categoryid != null}" th:text="${product.categoryid.categoryname}">Danh mục</span>
+                                    <span class="category-badge" th:unless="${product.categoryid != null}">Không có</span>
+                                </td>
+                                <td class="col-price">
+                                    <div class="price-info">
+                                        <span class="current-price" th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                                    </div>
+                                </td>
+                                <td class="col-stock">
+                                    <div class="stock-info">
+                                            <span class="stock-number">
+                                                <span th:if="${product.inventories.size() > 0}" th:text="${totalQuantity}">0</span>
+                                                <span th:if="${product.inventories.size() == 0}">0</span>
+                                            </span>
+                                        <span class="stock-label">sản phẩm</span>
+                                    </div>
+                                </td>
+                                <td class="col-status">
+                                        <span th:if="${product.status == 'available'}" class="status-badge status-active">
+                                            <i class="fas fa-check-circle"></i>
+                                            Đang bán
+                                        </span>
+                                    <span th:if="${product.status == 'INACTIVE'}" class="status-badge status-inactive">
+                                            <i class="fas fa-pause-circle"></i>
+                                            Ngừng bán
+                                        </span>
+
+                                    <span th:if="${product.inventories.size() > 0 && totalQuantity == 0}"
+                                          class="status-badge status-out-of-stock">
+                                            <i class="fas fa-exclamation-circle"></i>
+                                            Hết hàng
+                                        </span>
+                                </td>
+                                <td class="col-actions">
+                                    <div class="action-buttons">
+
+                                        <!-- Xem chi tiết (nếu có trang detail, có thể bỏ nếu không cần) -->
+                                        <a class="action-btn btn-view" title="Xem chi tiết"
+                                           th:href="@{/seller/products/view/{id}(id=${product.id})}">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+
+                                        <!-- Chỉnh sửa -->
+                                        <a class="action-btn btn-edit" title="Chỉnh sửa"
+                                           th:href="@{/seller/products/edit/{id}(id=${product.id})}">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+
+                                        <!-- Xóa (soft delete) -->
+                                        <form th:action="@{/seller/products/delete/{id}(id=${product.id})}" method="post" style="display:inline;">
+                                            <button type="submit" class="action-btn btn-delete" title="Xóa"
+                                                    onclick="return confirm('Bạn có chắc muốn ẩn sản phẩm này không?');">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+
+                                    </div>
+                                </td>
+
+                            </tr>
+
+                            <!-- Variants Row -->
+                            <tr th:each="product : ${products}" th:if="${product.inventories.size() > 0}"
+                                class="variants-row" th:data-product-id="${product.id}" style="display: none;">
+                                <td colspan="7">
+                                    <div class="variants-container">
+                                        <div class="variants-header">
+                                            <h4><i class="fas fa-layer-group"></i> Biến thể sản phẩm</h4>
+                                        </div>
+                                        <div class="variants-grid">
+                                            <div th:each="variant : ${product.inventories}" class="variant-card">
+                                                <div class="variant-info">
+                                                    <div class="variant-detail">
+                                                        <label>Màu sắc:</label>
+                                                        <span th:text="${variant.color}">Màu</span>
+                                                    </div>
+                                                    <div class="variant-detail">
+                                                        <label>Kích thước:</label>
+                                                        <span th:text="${variant.dimension}">Kích thước</span>
+                                                    </div>
+                                                    <div class="variant-detail">
+                                                        <label>Tồn kho:</label>
+                                                        <span th:text="${variant.quantity}">0</span>
+                                                    </div>
+                                                    <div class="variant-detail">
+                                                        <label>Đã bán:</label>
+                                                        <span th:text="${variant.solditems}">0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr th:if="${products.isEmpty()}">
+                                <td colspan="7" class="empty-state">
+                                    <div class="empty-content">
+                                        <i class="fas fa-box-open"></i>
+                                        <h3>Chưa có sản phẩm nào</h3>
+
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div th:replace="seller/fragments/footer :: footer"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle variants function
+            window.toggleVariants = function(productId) {
+                const productRow = document.querySelector('.product-row[data-product-id="' + productId + '"]');
+                const variantsRow = document.querySelector('.variants-row[data-product-id="' + productId + '"]');
+                const toggleIcon = productRow.querySelector('.variant-toggle-icon');
+
+                if (variantsRow && toggleIcon) {
+                    if (variantsRow.style.display === 'none' || variantsRow.style.display === '') {
+                        // Show variants
+                        variantsRow.style.display = 'table-row';
+                        toggleIcon.classList.remove('fa-chevron-down');
+                        toggleIcon.classList.add('fa-chevron-up');
+                        productRow.classList.add('expanded');
+                    } else {
+                        // Hide variants
+                        variantsRow.style.display = 'none';
+                        toggleIcon.classList.remove('fa-chevron-up');
+                        toggleIcon.classList.add('fa-chevron-down');
+                        productRow.classList.remove('expanded');
+                    }
+                }
+            };
+
+            // Alternative click handler for product names (backward compatibility)
+            document.querySelectorAll('.product-name').forEach(function(element) {
+                element.addEventListener('click', function() {
+                    const productRow = this.closest('.product-row');
+                    const productId = productRow.getAttribute('data-product-id');
+                    toggleVariants(productId);
+                });
+            });
+
+            // Filter functionality
+            document.querySelector('.filter-select')?.addEventListener('change', function() {
+                const filterValue = this.value;
+                const rows = document.querySelectorAll('.product-row');
+
+                rows.forEach(function(row) {
+                    const statusElement = row.querySelector('.status-badge');
+                    if (filterValue === 'Tất cả trạng thái') {
+                        row.style.display = '';
+                    } else {
+                        const statusText = statusElement ? statusElement.textContent.trim() : '';
+                        if (
+                            (filterValue === 'Đang bán' && statusText.includes('Đang bán')) ||
+                            (filterValue === 'Ngừng bán' && statusText.includes('Ngừng bán')) ||
+                            (filterValue === 'Hết hàng' && statusText.includes('Hết hàng'))
+                        ) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    }
+                });
+            });
+        });
+
+
+    </script>
+
+    </body>
+    </html>
