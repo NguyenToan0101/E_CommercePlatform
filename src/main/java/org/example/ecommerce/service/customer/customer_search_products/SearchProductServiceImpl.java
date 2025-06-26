@@ -44,7 +44,7 @@ public class SearchProductServiceImpl implements SearchProductService {
         for (Product p : products) {
             if (p.getStatus().equals("active") && p.getCategoryid() != null && p.getCategoryid().getId().equals(categoryId) && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
 
-                int totalSold = inventoryRepository.findInventoryById(p.getId())
+                int totalSold = inventoryRepository.findInventoryByProductid(p)
                         .stream()
                         .mapToInt(Inventory::getSolditems)
                         .sum();
@@ -80,7 +80,7 @@ public class SearchProductServiceImpl implements SearchProductService {
         List<ProductView> views = new ArrayList<>();
         for (Product p : products) {
             if (p.getStatus().equals("active")){
-                int totalSold = inventoryRepository.findInventoryById(p.getId())
+                int totalSold = inventoryRepository.findInventoryByProductid(p)
                         .stream()
                         .mapToInt(i -> i.getSolditems())
                         .sum();

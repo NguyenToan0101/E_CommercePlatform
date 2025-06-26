@@ -86,14 +86,14 @@ public class RegistrationController {
             }
 
             // Cập nhật thông tin seller
-            seller.setIdNumber(registrationDTO.getIdNumber());
+            seller.setIdnumber(registrationDTO.getIdNumber());
 
             // Xử lý file upload
             if (registrationDTO.getFrontIdImage() != null && !registrationDTO.getFrontIdImage().trim().isEmpty()) {
-                seller.setFrontIdImage(registrationDTO.getFrontIdImage());
+                seller.setFrontidimage(registrationDTO.getFrontIdImage());
             }
             if (registrationDTO.getBackIdImage() != null && !registrationDTO.getBackIdImage().trim().isEmpty()) {
-                seller.setBackIdImage(registrationDTO.getBackIdImage());
+                seller.setBackidimage(registrationDTO.getBackIdImage());
             }
 
             // Tạo hoặc cập nhật Shop entity
@@ -110,24 +110,24 @@ public class RegistrationController {
                     shop.setId(seller.getId());
 
                 }
-                shop.setSellerid(seller);
+                shop.setSeller( seller);
                 seller.setShop(shop);
             }
 
             // Cập nhật thông tin shop
             shop.setShopname(registrationDTO.getShopName());
-            shop.setManageName(registrationDTO.getOwnerName());
+            shop.setManagename(registrationDTO.getOwnerName());
             shop.setPhone(registrationDTO.getPhone());
             shop.setFulladdress(registrationDTO.getAddress().getFullAddress());
             shop.setExpress(registrationDTO.getExpress());
             shop.setFast(registrationDTO.getFast());
             shop.setEconomy(registrationDTO.getEconomy());
-            shop.setLockerDelivery(registrationDTO.getLockerDelivery());
-            shop.setBulkyItems(registrationDTO.getBulkyItems());
-            shop.setBusinessType(registrationDTO.getBusinessType());
-            shop.setBusinessAddress(registrationDTO.getBusinessAddress());
-            shop.setInvoiceEmail(registrationDTO.getInvoiceEmail());
-            shop.setTaxCode(registrationDTO.getTaxCode());
+            shop.setLockerdelivery(registrationDTO.getLockerDelivery());
+            shop.setBulkyitems(registrationDTO.getBulkyItems());
+            shop.setBusinesstype(registrationDTO.getBusinessType());
+            shop.setBusinessaddress(registrationDTO.getBusinessAddress());
+            shop.setInvoiceemail(registrationDTO.getInvoiceEmail());
+            shop.setTaxcode(registrationDTO.getTaxCode());
             shop.setStatus(Shop.Status.PENDING_APPROVAL.toString());
 
             // Lưu theo thứ tự: Customer -> Seller -> Shop
@@ -138,6 +138,7 @@ public class RegistrationController {
 
             // Update session với managed entity
             session.setAttribute("customer", managedCustomer);
+
 
             return ResponseEntity.ok("Registration successful");
 

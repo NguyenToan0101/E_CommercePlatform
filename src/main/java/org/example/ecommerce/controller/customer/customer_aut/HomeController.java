@@ -46,10 +46,10 @@ public class HomeController {
             return "customer/customer_aut/home";
         }
 
-//        if (customer.getImage() != null) {
-//            String base64Image = Base64.getEncoder().encodeToString(customer.getImage());
-//            model.addAttribute("base64Image", base64Image);
-//        }
+        if (customer.getImage() != null) {
+            String base64Image = Base64.getEncoder().encodeToString(customer.getImage());
+            model.addAttribute("base64Image", base64Image);
+        }
 
         model.addAttribute("customer", customer);
 
@@ -113,7 +113,7 @@ public class HomeController {
                 Shop shop = shopOpt.orElseGet(() -> {
                     Shop sh = new Shop();
                     sh.setId(customer.getId());
-                    sh.setSellerid(seller);
+                    sh.setSeller(seller);
                     return sh;
                 });
 
@@ -132,7 +132,7 @@ public class HomeController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(frontendSellerUrl));
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+        return new ResponseEntity<>(headers, HttpStatus.FOUND); 
     }
 
 }

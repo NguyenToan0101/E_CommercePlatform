@@ -1,61 +1,56 @@
 package org.example.ecommerce.entity;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import org.hibernate.annotations.Nationalized;
-import lombok.*;
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+
+import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "shop")
-@Data
+@Getter
+@Setter
 public class Shop {
 
     @Id
-    @Column(name = "shopid", nullable = false)
+    @Column(name = "shopid")
     private Integer id;
 
-    @OneToOne()
-    @JoinColumn(name = "shopid", nullable = false, unique = true)
     @MapsId
-    private Seller sellerid;
-    @Version
-    private Integer version;
-    @Nationalized
-    @Column(name = "shopname", nullable = false, unique = true, length = 100)
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "shopid")
+    private Seller seller;
+
+    @Column(name = "shopname")
     private String shopname;
 
-    @Size(max = 500)
-    @Nationalized
-    @Column(name = "description", length = 500)
+    @Column(name = "description")
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maincategoryid")
     private Category maincategoryid;
 
-    @Nationalized
-    @Column(name = "fulladdress", nullable = false, unique = true)
+    @Column(name = "fulladdress")
     private String fulladdress;
 
-    @Column(name = "createdat", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
-    private LocalDateTime createdat = LocalDateTime.now();
-
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "createdat")
+    private Instant createdat;
 
     @Column(name = "status")
     private String status;
 
-
-    @Nationalized
     @Column(name = "imageshop")
     private String imageshop;
 
+    @Column(name = "managename")
+    private String managename;
 
-    @Nationalized
-    @Column(name = "managename", nullable = false)
-    private String manageName;
-
-   
-    @Column(name = "phone", nullable = false, unique = true)
+    @Column(name = "phone")
     private String phone;
 
     @Column(name = "express")
@@ -68,40 +63,41 @@ public class Shop {
     private Boolean economy;
 
     @Column(name = "lockerdelivery")
-    private Boolean lockerDelivery;
+    private Boolean lockerdelivery;
 
     @Column(name = "bulkyitems")
-    private Boolean bulkyItems;
+    private Boolean bulkyitems;
 
+    @Column(name = "businesstype")
+    private String businesstype;
 
-    @Nationalized
-    @Column(name = "businesstype", nullable = false, unique = true)
-    private String businessType;
+    @Column(name = "businessaddress")
+    private String businessaddress;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "businessaddress", nullable = false, unique = true)
-    private String businessAddress;
+    @Column(name = "invoiceemail")
+    private String invoiceemail;
 
-    @Email
-    @Size(max = 100)
-    @Column(name = "invoiceemail", nullable = false, unique = true)
-    private String invoiceEmail;
+    @Column(name = "taxcode")
+    private String taxcode;
 
-    @Size(max = 20)
-    @Column(name = "taxcode", nullable = false, unique = true)
-    private String taxCode;
+    @Column(name = "version")
+    private Long version;
 
-    public Shop(Integer id,String status) {
+    @OneToMany(mappedBy = "shopid")
+    private Set<Product> products = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "shopid")
+    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
+
+    public Shop() {
+    }
+
+    public Shop(Integer id, String status) {
         this.id = id;
         this.status = status;
     }
 
-    public Shop() {
-
-    }
-
-    public enum Status{
+    public enum Status {
         PENDING_APPROVAL,
         ACTIVE,
         LOCK

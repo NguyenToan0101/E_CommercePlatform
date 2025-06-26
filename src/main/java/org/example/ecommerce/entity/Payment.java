@@ -2,10 +2,14 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "payments")
 public class Payment {
@@ -41,77 +45,5 @@ public class Payment {
 
     @Column(name = "paidat")
     private Instant paidat;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Wallet getWalletid() {
-        return walletid;
-    }
-
-    public void setWalletid(Wallet walletid) {
-        this.walletid = walletid;
-    }
-
-    public Order getOrderid() {
-        return orderid;
-    }
-
-    public void setOrderid(Order orderid) {
-        this.orderid = orderid;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
-    public String getPaymentstatus() {
-        return paymentstatus;
-    }
-
-    public void setPaymentstatus(String paymentstatus) {
-        this.paymentstatus = paymentstatus;
-    }
-
-    public String getTransactionId() {
-        return transactionId;
-    }
-
-    public void setTransactionId(String transactionId) {
-        this.transactionId = transactionId;
-    }
-
-    public String getGateway() {
-        return gateway;
-    }
-
-    public void setGateway(String gateway) {
-        this.gateway = gateway;
-    }
-
-    public Instant getPaidat() {
-        return paidat;
-    }
-
-    public void setPaidat(Instant paidat) {
-        this.paidat = paidat;
-    }
 
 }

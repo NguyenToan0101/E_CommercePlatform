@@ -1,12 +1,16 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "conversations")
 public class Conversation {
@@ -35,61 +39,5 @@ public class Conversation {
 
     @OneToMany(mappedBy = "conversationid")
     private Set<Message> messages = new LinkedHashSet<>();
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Customer getCustomerid() {
-        return customerid;
-    }
-
-    public void setCustomerid(Customer customerid) {
-        this.customerid = customerid;
-    }
-
-    public Seller getSellerid() {
-        return sellerid;
-    }
-
-    public void setSellerid(Seller sellerid) {
-        this.sellerid = sellerid;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
-
-    public Instant getLastmessageat() {
-        return lastmessageat;
-    }
-
-    public void setLastmessageat(Instant lastmessageat) {
-        this.lastmessageat = lastmessageat;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Set<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(Set<Message> messages) {
-        this.messages = messages;
-    }
 
 }

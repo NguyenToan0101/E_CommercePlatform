@@ -2,10 +2,14 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "ordernotifications")
 public class Ordernotification {
@@ -36,61 +40,5 @@ public class Ordernotification {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Customer getCustomerid() {
-        return customerid;
-    }
-
-    public void setCustomerid(Customer customerid) {
-        this.customerid = customerid;
-    }
-
-    public Order getOrderid() {
-        return orderid;
-    }
-
-    public void setOrderid(Order orderid) {
-        this.orderid = orderid;
-    }
-
-    public String getMessageKey() {
-        return messageKey;
-    }
-
-    public void setMessageKey(String messageKey) {
-        this.messageKey = messageKey;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Boolean getIsread() {
-        return isread;
-    }
-
-    public void setIsread(Boolean isread) {
-        this.isread = isread;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
 
 }

@@ -43,8 +43,8 @@ public class CartServiceImpl implements CartService {
             dto.setProductName(item.getProductid().getName());
             dto.setPrice(item.getProductid().getPrice());
             dto.setQuantity(item.getQuantity());
-//            dto.setColor(item.getInventoryid().getColor());
-//            dto.setDimension(item.getInventoryid().getDimension());
+            dto.setColor(item.getInventoryid().getColor());
+            dto.setDimension(item.getInventoryid().getDimension());
 
             List<Productimage> images =productimageRepository.findProductimageById(item.getProductid().getId()) ;
             if (images != null && images.size() > 0) {
@@ -66,36 +66,36 @@ public class CartServiceImpl implements CartService {
             cartRepository.save(cart);
         }
 
-//        Product product = productRepository.findById(productId);
+        Product product = productRepository.findById(productId);
         Inventory inventory = inventoryRepository.findInventoriesById(inventoryId);
-//        Cartitem existingItem = cartitemRepository.findCartitemByProductidAndInventoryidAndCartid(product, inventory,cart);
+        Cartitem existingItem = cartitemRepository.findCartitemByProductidAndInventoryidAndCartid(product, inventory,cart);
 
-//        if (existingItem != null) {
-//            int newQuantity = existingItem.getQuantity() + quantity;
-//            existingItem.setQuantity(newQuantity);
-//            cartitemRepository.save(existingItem);
-//        } else {
-//            Cartitem newItem = new Cartitem();
-//            newItem.setCartid(cart);
-//            newItem.setProductid(product);
-//            newItem.setInventoryid(inventory);
-//            newItem.setQuantity(quantity);
-//            cartitemRepository.save(newItem);
-//        }
+        if (existingItem != null) {
+            int newQuantity = existingItem.getQuantity() + quantity;
+            existingItem.setQuantity(newQuantity);
+            cartitemRepository.save(existingItem);
+        } else {
+            Cartitem newItem = new Cartitem();
+            newItem.setCartid(cart);
+            newItem.setProductid(product);
+            newItem.setInventoryid(inventory);
+            newItem.setQuantity(quantity);
+            cartitemRepository.save(newItem);
+        }
     }
 
     public void updateCartItem(int cartItemId, int quantity) {
-//        Cartitem item = cartitemRepository.findById(cartItemId);
-//        if (item != null) {
-//            item.setQuantity(quantity);
-//            cartitemRepository.save(item);
-//        }
+        Cartitem item = cartitemRepository.findById(cartItemId).orElse(null);
+        if (item != null) {
+            item.setQuantity(quantity);
+            cartitemRepository.save(item);
+        }
     }
 
     public void removeCartItem(int cartItemId) {
-//        Cartitem item = cartitemRepository.findById(cartItemId);
-//        if (item != null) {
-//            cartitemRepository.delete(item);
-//        }
+        Cartitem item = cartitemRepository.findById(cartItemId).orElse(null);
+        if (item != null) {
+            cartitemRepository.delete(item);
+        }
     }
 }

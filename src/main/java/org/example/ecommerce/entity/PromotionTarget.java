@@ -2,9 +2,13 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "promotion_targets")
 public class PromotionTarget {
@@ -30,45 +34,5 @@ public class PromotionTarget {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shopid")
     private Shop shopid;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Promotion getPromotionid() {
-        return promotionid;
-    }
-
-    public void setPromotionid(Promotion promotionid) {
-        this.promotionid = promotionid;
-    }
-
-    public Product getProductid() {
-        return productid;
-    }
-
-    public void setProductid(Product productid) {
-        this.productid = productid;
-    }
-
-    public Category getCategoryid() {
-        return categoryid;
-    }
-
-    public void setCategoryid(Category categoryid) {
-        this.categoryid = categoryid;
-    }
-
-    public Shop getShopid() {
-        return shopid;
-    }
-
-    public void setShopid(Shop shopid) {
-        this.shopid = shopid;
-    }
 
 }

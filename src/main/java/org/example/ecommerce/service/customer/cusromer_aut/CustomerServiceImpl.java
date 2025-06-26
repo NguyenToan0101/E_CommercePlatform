@@ -148,7 +148,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer != null) {
             customer.setFirstname(updatedCustomer.getFirstname());
             customer.setLastname(updatedCustomer.getLastname());
-            if (updatedCustomer.getImage() != null && updatedCustomer.getImage().length() > 0) {
+            if (updatedCustomer.getImage() != null && updatedCustomer.getImage().length > 0) {
                 customer.setImage(updatedCustomer.getImage());
             }
             customer.setPhone(updatedCustomer.getPhone());

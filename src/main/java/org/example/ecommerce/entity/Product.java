@@ -1,12 +1,18 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "products")
 public class Product {
@@ -23,88 +29,43 @@ public class Product {
     @JoinColumn(name = "categoryid")
     private Category categoryid;
 
-    @Size(max = 100)
-    @Nationalized
-    @Column(name = "name", length = 100)
+    @NotNull
+    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
     private String name;
 
-    @Nationalized
-//    @Lob
-    @Column(name = "description")
+    @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
 
-    @Column(name = "price", precision = 18, scale = 2)
+    @NotNull
+    @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @Size(max = 20)
-    @Column(name = "status", length = 20)
+    @Column(name = "status", length = Integer.MAX_VALUE)
     private String status;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
 
-    public Integer getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Cartitem> cartitems = new LinkedHashSet<>();
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Inventory> inventories = new LinkedHashSet<>();
 
-    public Shop getShopid() {
-        return shopid;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Orderitem> orderitems = new LinkedHashSet<>();
 
-    public void setShopid(Shop shopid) {
-        this.shopid = shopid;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Productimage> productimages = new LinkedHashSet<>();
 
-    public Category getCategoryid() {
-        return categoryid;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
 
-    public void setCategoryid(Category categoryid) {
-        this.categoryid = categoryid;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Review> reviews = new LinkedHashSet<>();
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
 }

@@ -2,12 +2,17 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -16,175 +21,73 @@ public class Customer {
     @Column(name = "customerid", nullable = false)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customer")
-    private Seller seller;
-
-    @Version
-    private Integer version;
-
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "firstname", length = 50)
+    @Column(name = "firstname", length = Integer.MAX_VALUE)
     private String firstname;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "lastname", length = 50)
+    @Column(name = "lastname", length = Integer.MAX_VALUE)
     private String lastname;
 
-    @Column(name = "image")
-    private byte[] image;
-
-    @Size(max = 100)
     @NotNull
-    @Nationalized
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", nullable = false, length = Integer.MAX_VALUE)
     private String email;
 
-    @Size(max = 20)
     @NotNull
-    @Nationalized
-    @Column(name = "phone", nullable = false, length = 20)
+    @Column(name = "phone", nullable = false, length = Integer.MAX_VALUE)
     private String phone;
 
-    @Column(name = "gender")
-    private Character gender;
+    @Column(name = "gender", length = Integer.MAX_VALUE)
+    private String gender;
 
     @Column(name = "dateofbirth")
     private LocalDate dateofbirth;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "address")
+    @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "password")
+    @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
 
-    @Size(max = 20)
-    @Column(name = "role", length = 20)
+    @Column(name = "role", length = Integer.MAX_VALUE)
     private String role;
 
-    @Column(name = "status")
-    private Boolean status;
+    @Column(name = "status", length = Integer.MAX_VALUE)
+    private String status;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
 
+    @Column(name = "image", length = Integer.MAX_VALUE)
+    private byte[] image;
 
+    @Column(name = "version")
+    private Long version;
 
-    public Seller getSeller() {
-        return seller;
-    }
+    @OneToMany(mappedBy = "customerid")
+    private Set<Cart> carts = new LinkedHashSet<>();
 
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
+    @OneToMany(mappedBy = "customerid")
+    private Set<Complaint> complaints = new LinkedHashSet<>();
 
-    public Integer getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "customerid")
+    private Set<Conversation> conversations = new LinkedHashSet<>();
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "customerid")
+    private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
 
-    public String getFirstname() {
-        return firstname;
-    }
+    @OneToMany(mappedBy = "customerid")
+    private Set<Order> orders = new LinkedHashSet<>();
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
+    @OneToMany(mappedBy = "customerid")
+    private Set<Review> reviews = new LinkedHashSet<>();
 
-    public String getLastname() {
-        return lastname;
-    }
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    private Seller seller;
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
+    @OneToOne(mappedBy = "customerid")
+    private Wallet wallet;
 
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Character getGender() {
-        return gender;
-    }
-
-    public void setGender(Character gender) {
-        this.gender = gender;
-    }
-
-    public LocalDate getDateofbirth() {
-        return dateofbirth;
-    }
-
-    public void setDateofbirth(LocalDate dateofbirth) {
-        this.dateofbirth = dateofbirth;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
+    @OneToMany(mappedBy = "customerid")
+    private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
 }

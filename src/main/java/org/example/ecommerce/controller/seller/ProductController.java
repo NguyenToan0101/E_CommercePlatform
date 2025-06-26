@@ -1,9 +1,9 @@
 package org.example.ecommerce.controller.seller;
 
-import org.example.ecommerce.entity.Category;
-import org.example.ecommerce.entity.Inventory;
-import org.example.ecommerce.entity.Product;
-import org.example.ecommerce.service.StorageService;
+import jakarta.servlet.http.HttpSession;
+import jakarta.websocket.Session;
+import org.example.ecommerce.entity.*;
+
 import org.example.ecommerce.service.seller.CategoryService;
 import org.example.ecommerce.service.seller.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +20,19 @@ public class ProductController {
 
     @Autowired private ProductService productService;
     @Autowired private CategoryService categoryService;
-    @Autowired private StorageService storageService;
+
 
 
     @GetMapping
-    public String listProducts(@RequestParam(value = "keyword", required = false) String keyword, Model model) {
+    public String listProducts(@RequestParam(value = "keyword", required = false) String keyword, Model model, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        }
+        Integer shopId = customer.getSeller().getShop().getId();
         List<Product> products = (keyword != null && !keyword.isEmpty())
-                ? productService.searchByKeyword(keyword)
-                : productService.findAllProducts();
+                ? productService.searchByKeyword(keyword, shopId)
+                : productService.findAllProductsByShop(shopId);
 
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
@@ -38,31 +43,63 @@ public class ProductController {
                 .sum();
 
         model.addAttribute("totalQuantity", totalQuantity);
-
         return "seller/product/products";
     }
 
     @GetMapping("/create")
-    public String showCreateForm(Model model) {
+    public String showCreateForm(Model model, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("product", new Product());
         model.addAttribute("categories", categoryService.getAllCategories());
         return "seller/product/create";
     }
-
     @PostMapping("/save")
     public String createProduct(@ModelAttribute Product product,
-                                @RequestParam("images") MultipartFile[] images) {
-
-        productService.save(product, images);
+                                @RequestParam("images") MultipartFile[] images,
+                                HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        }
+        Integer shopId = customer.getSeller().getShop().getId();
+        productService.save(product, images, shopId);
         return "redirect:/seller/products";
     }
 
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Integer id, Model model) {
+    public String showEditForm(@PathVariable Integer id, Model model, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        }
         model.addAttribute("product", productService.getById(id));
         model.addAttribute("categories", categoryService.getAllCategories());
         return "seller/product/create";
     }
 
+    @PostMapping("/edit/{id}")
+    public String updateProduct(@PathVariable Integer id,
+                                @ModelAttribute Product product,
+                                @RequestParam("images") MultipartFile[] images,
+                                HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        }
+        productService.updateProduct(id, product, images);
+        return "redirect:/seller/products";
+    }
+    @PostMapping("/delete/{id}")
+    public String deleteProduct(@PathVariable Integer id, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        }
+        productService.softDeleteProduct(id);
+        return "redirect:/seller/products";
+    }
 
 }

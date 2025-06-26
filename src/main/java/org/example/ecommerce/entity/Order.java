@@ -2,6 +2,8 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -9,6 +11,8 @@ import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -58,117 +62,5 @@ public class Order {
 
     @OneToMany(mappedBy = "orderid")
     private Set<Payment> payments = new LinkedHashSet<>();
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Customer getCustomerid() {
-        return customerid;
-    }
-
-    public void setCustomerid(Customer customerid) {
-        this.customerid = customerid;
-    }
-
-    public Instant getOrderdate() {
-        return orderdate;
-    }
-
-    public void setOrderdate(Instant orderdate) {
-        this.orderdate = orderdate;
-    }
-
-    public BigDecimal getTotalamount() {
-        return totalamount;
-    }
-
-    public void setTotalamount(BigDecimal totalamount) {
-        this.totalamount = totalamount;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(String paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public Set<Complaint> getComplaints() {
-        return complaints;
-    }
-
-    public void setComplaints(Set<Complaint> complaints) {
-        this.complaints = complaints;
-    }
-
-    public Set<Orderitem> getOrderitems() {
-        return orderitems;
-    }
-
-    public void setOrderitems(Set<Orderitem> orderitems) {
-        this.orderitems = orderitems;
-    }
-
-    public Set<Ordernotification> getOrdernotifications() {
-        return ordernotifications;
-    }
-
-    public void setOrdernotifications(Set<Ordernotification> ordernotifications) {
-        this.ordernotifications = ordernotifications;
-    }
-
-    public Set<Payment> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(Set<Payment> payments) {
-        this.payments = payments;
-    }
 
 }

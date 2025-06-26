@@ -13,20 +13,9 @@ public class HomeSellerController {
 
 
     @GetMapping
-    public String goToSellerPage(HttpSession session) {
-//        Customer customer = (Customer) session.getAttribute("Customer");
-//
-//        if (customer == null) {
-//            return "redirect:/login";
-//        }
+    public String goToSellerPage() {
 
-//        Seller seller = customer.getSeller();
-
-//        if (seller == null || seller.getShop() == null) {
-//            return "redirect:/seller/register";
-//        }
-
-        return "seller/index";
+        return "seller/product/products";
     }
 
 }

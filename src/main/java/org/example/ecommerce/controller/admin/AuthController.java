@@ -2,8 +2,6 @@ package org.example.ecommerce.controller.admin;
 
 import org.example.ecommerce.dto.AdminLoginRequest;
 import org.example.ecommerce.dto.AdminLoginResponse;
-import org.example.ecommerce.model.User;
-import org.example.ecommerce.service.UserService;
 import org.example.ecommerce.service.admin.AdminService;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -24,7 +22,7 @@ public class AuthController {
     private String frontendAdminUrl;
 
 
-    public AuthController(UserService userService, AdminService adminService) {
+    public AuthController( AdminService adminService) {
         this.adminService = adminService;
     }
 
