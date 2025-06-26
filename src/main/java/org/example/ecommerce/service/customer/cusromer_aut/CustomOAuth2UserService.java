@@ -34,9 +34,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             customer.setEmail(email);
             customer.setFirstname(name);
             customer.setLastname("");
-            customer.setPhone("**********");
+            customer.setPhone("");
             customer.setRole("Customer");
-            customer.setStatus(true);
+            customer.setStatus("active");
             customer.setCreatedat(Instant.now());
             customerRepository.save(customer);
         }

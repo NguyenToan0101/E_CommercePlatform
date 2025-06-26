@@ -1,31 +1,47 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import org.hibernate.annotations.Nationalized;
+
 
 @Entity
 @Table(name = "sellers")
+@Data
 public class Seller {
     @Id
     @Column(name = "sellerid", nullable = false)
     private Integer id;
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "sellerid")
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerid")
-    private Customer customerid;
-
+    private Shop shop;
+    @OneToOne()
+    @JoinColumn(name = "sellerid")
+    @MapsId
+    private Customer customer;
+    @Version
+    private Integer version;
     @Size(max = 20)
-    @NotNull
     @Nationalized
-    @Column(name = "cccd", nullable = false, length = 20)
-    private String cccd;
+    @Column(name = "idnumber", nullable = false, length = 20)
+    private String idNumber;
+    @Column(name = "frontidimage")
+    private String frontIdImage; // base64 hoặc URL
+    @Column(name = "backidimage")
+    private String backIdImage;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "taxcode", length = 50)
-    private String taxcode;
+
+
+
+
+    public Seller() {
+    }
+    public Seller(Integer id) {
+        this.id = id;
+    }
 
     public Integer getId() {
         return id;
@@ -35,28 +51,51 @@ public class Seller {
         this.id = id;
     }
 
-    public Customer getCustomerid() {
-        return customerid;
+    public Shop getShop() {
+        return shop;
     }
 
-    public void setCustomerid(Customer customerid) {
-        this.customerid = customerid;
+    public void setShop(Shop shop) {
+        this.shop = shop;
     }
 
-    public String getCccd() {
-        return cccd;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setCccd(String cccd) {
-        this.cccd = cccd;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public String getTaxcode() {
-        return taxcode;
+    public Integer getVersion() {
+        return version;
     }
 
-    public void setTaxcode(String taxcode) {
-        this.taxcode = taxcode;
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
+    public String getIdNumber() {
+        return idNumber;
+    }
+
+    public void setIdNumber(String idNumber) {
+        this.idNumber = idNumber;
+    }
+
+    public String getFrontIdImage() {
+        return frontIdImage;
+    }
+
+    public void setFrontIdImage(String frontIdImage) {
+        this.frontIdImage = frontIdImage;
+    }
+
+    public String getBackIdImage() {
+        return backIdImage;
+    }
+
+    public void setBackIdImage(String backIdImage) {
+        this.backIdImage = backIdImage;
+    }
 }

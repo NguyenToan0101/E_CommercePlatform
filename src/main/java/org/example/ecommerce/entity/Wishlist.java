@@ -1,8 +1,12 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+
 
 @Entity
 @Table(name = "wishlist")
@@ -20,6 +24,7 @@ public class Wishlist {
     @JoinColumn(name = "productid")
     private Product productid;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "added_at")
     private Instant addedAt;
 
@@ -54,5 +59,4 @@ public class Wishlist {
     public void setAddedAt(Instant addedAt) {
         this.addedAt = addedAt;
     }
-
 }

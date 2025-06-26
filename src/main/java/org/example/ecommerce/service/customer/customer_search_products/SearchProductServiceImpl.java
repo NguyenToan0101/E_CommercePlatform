@@ -44,15 +44,15 @@ public class SearchProductServiceImpl implements SearchProductService {
         for (Product p : products) {
             if (p.getStatus().equals("active") && p.getCategoryid() != null && p.getCategoryid().getId().equals(categoryId) && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
 
-                int totalSold = inventoryRepository.findInventoryById(p.getId())
+                int totalSold = inventoryRepository.findAllByProductid(p)
                         .stream()
                         .mapToInt(Inventory::getSolditems)
                         .sum();
 
-                List<Productimage> imgs = productimageRepository.findProductimageById(p.getId());
+                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
                 String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
-                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getWarehouseaddress();
+                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
                 String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
 
                 List<Integer> rates = reviewRepository.findRateById(p.getId());
@@ -80,15 +80,15 @@ public class SearchProductServiceImpl implements SearchProductService {
         List<ProductView> views = new ArrayList<>();
         for (Product p : products) {
             if (p.getStatus().equals("active")){
-                int totalSold = inventoryRepository.findInventoryById(p.getId())
+                int totalSold = inventoryRepository.findAllByProductid(p)
                         .stream()
                         .mapToInt(i -> i.getSolditems())
                         .sum();
 
-                List<Productimage> imgs = productimageRepository.findProductimageById(p.getId());
+                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
                 String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
-                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getWarehouseaddress();
+                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
                 String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
 
                 List<Integer> rates = reviewRepository.findRateById(p.getId());

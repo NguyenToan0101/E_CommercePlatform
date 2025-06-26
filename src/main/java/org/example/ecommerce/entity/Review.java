@@ -1,10 +1,12 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+
 
 @Entity
 @Table(name = "reviews")
@@ -19,24 +21,25 @@ public class Review {
     private Product productid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerid")
-    private Customer customerid;
+    @JoinColumn(name = "orderid")
+    private Order orderid;
 
     @Column(name = "rating")
     private Integer rating;
 
-    @Nationalized
-    @Lob
-    @Column(name = "comment")
+    @Column(name = "comment", length = Integer.MAX_VALUE)
     private String comment;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "imagereviews")
+    @Column(name = "imagereviews", length = Integer.MAX_VALUE)
     private String imagereviews;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
+
+    @ColumnDefault("false")
+    @Column(name = "is_hidden")
+    private Boolean isHidden;
 
     public Integer getId() {
         return id;
@@ -54,12 +57,12 @@ public class Review {
         this.productid = productid;
     }
 
-    public Customer getCustomerid() {
-        return customerid;
+    public Order getOrderid() {
+        return orderid;
     }
 
-    public void setCustomerid(Customer customerid) {
-        this.customerid = customerid;
+    public void setOrderid(Order orderid) {
+        this.orderid = orderid;
     }
 
     public Integer getRating() {
@@ -94,4 +97,11 @@ public class Review {
         this.createdat = createdat;
     }
 
+    public Boolean getHidden() {
+        return isHidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        isHidden = hidden;
+    }
 }

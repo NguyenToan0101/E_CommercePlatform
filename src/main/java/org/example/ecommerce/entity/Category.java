@@ -17,10 +17,6 @@ public class Category {
     @Column(name = "categoryname", length = 100)
     private String categoryname;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "description")
-    private String description;
 
     public Integer getId() {
         return id;
@@ -38,12 +34,5 @@ public class Category {
         this.categoryname = categoryname;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
 }

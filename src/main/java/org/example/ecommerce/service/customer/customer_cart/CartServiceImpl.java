@@ -46,7 +46,7 @@ public class CartServiceImpl implements CartService {
             dto.setColor(item.getInventoryid().getColor());
             dto.setDimension(item.getInventoryid().getDimension());
 
-            List<Productimage> images =productimageRepository.findProductimageById(item.getProductid().getId()) ;
+            List<Productimage> images =productimageRepository.findAllByProductid(item.getProductid()) ;
             if (images != null && images.size() > 0) {
                 dto.setImageUrl(images.get(0).getImageurl());
             } else {
