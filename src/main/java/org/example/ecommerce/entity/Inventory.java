@@ -19,8 +19,6 @@ public class Inventory {
     @Column(name = "quantity")
     private Integer quantity;
 
-    @Column(name = "lowstockthreshold")
-    private Integer lowstockthreshold;
 
     @Column(name = "solditems")
     private Integer solditems;
@@ -59,13 +57,6 @@ public class Inventory {
         this.quantity = quantity;
     }
 
-    public Integer getLowstockthreshold() {
-        return lowstockthreshold;
-    }
-
-    public void setLowstockthreshold(Integer lowstockthreshold) {
-        this.lowstockthreshold = lowstockthreshold;
-    }
 
     public Integer getSolditems() {
         return solditems;
