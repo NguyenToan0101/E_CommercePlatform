@@ -1,28 +1,32 @@
 package org.example.ecommerce.entity;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.Nationalized;
-import lombok.*;
-import java.time.LocalDateTime;
+
+import java.time.Instant;
 
 @Entity
-@Table(name = "shop")
-@Data
+@Table(name = "shops")
 public class Shop {
-
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shopid", nullable = false)
     private Integer id;
 
-    @OneToOne()
-    @JoinColumn(name = "shopid", nullable = false, unique = true)
-    @MapsId
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sellerid")
     private Seller sellerid;
-    @Version
-    private Integer version;
+
+    @Size(max = 100)
     @Nationalized
-    @Column(name = "shopname", nullable = false, unique = true, length = 100)
+    @Column(name = "shopname", length = 100)
     private String shopname;
+
+    @Size(max = 255)
+    @Nationalized
+    @Column(name = "imageshop")
+    private String imageshop;
 
     @Size(max = 500)
     @Nationalized
@@ -33,77 +37,88 @@ public class Shop {
     @JoinColumn(name = "maincategoryid")
     private Category maincategoryid;
 
-    @Nationalized
-    @Column(name = "fulladdress", nullable = false, unique = true)
-    private String fulladdress;
-
-    @Column(name = "createdat", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
-    private LocalDateTime createdat = LocalDateTime.now();
-
-
-    @Column(name = "status")
-    private String status;
-
-
-    @Nationalized
-    @Column(name = "imageshop")
-    private String imageshop;
-
-
-    @Nationalized
-    @Column(name = "managename", nullable = false)
-    private String manageName;
-
-   
-    @Column(name = "phone", nullable = false, unique = true)
-    private String phone;
-
-    @Column(name = "express")
-    private Boolean express;
-
-    @Column(name = "fast")
-    private Boolean fast;
-
-    @Column(name = "economy")
-    private Boolean economy;
-
-    @Column(name = "lockerdelivery")
-    private Boolean lockerDelivery;
-
-    @Column(name = "bulkyitems")
-    private Boolean bulkyItems;
-
-
-    @Nationalized
-    @Column(name = "businesstype", nullable = false, unique = true)
-    private String businessType;
-
     @Size(max = 255)
     @Nationalized
-    @Column(name = "businessaddress", nullable = false, unique = true)
-    private String businessAddress;
+    @Column(name = "warehouseaddress")
+    private String warehouseaddress;
 
-    @Email
-    @Size(max = 100)
-    @Column(name = "invoiceemail", nullable = false, unique = true)
-    private String invoiceEmail;
+    @Column(name = "createdat")
+    private Instant createdat;
 
     @Size(max = 20)
-    @Column(name = "taxcode", nullable = false, unique = true)
-    private String taxCode;
+    @Column(name = "status", length = 20)
+    private String status;
 
-    public Shop(Integer id,String status) {
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Seller getSellerid() {
+        return sellerid;
+    }
+
+    public void setSellerid(Seller sellerid) {
+        this.sellerid = sellerid;
+    }
+
+    public String getShopname() {
+        return shopname;
+    }
+
+    public void setShopname(String shopname) {
+        this.shopname = shopname;
+    }
+
+    public String getImageshop() {
+        return imageshop;
+    }
+
+    public void setImageshop(String imageshop) {
+        this.imageshop = imageshop;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Category getMaincategoryid() {
+        return maincategoryid;
+    }
+
+    public void setMaincategoryid(Category maincategoryid) {
+        this.maincategoryid = maincategoryid;
+    }
+
+    public String getWarehouseaddress() {
+        return warehouseaddress;
+    }
+
+    public void setWarehouseaddress(String warehouseaddress) {
+        this.warehouseaddress = warehouseaddress;
+    }
+
+    public Instant getCreatedat() {
+        return createdat;
+    }
+
+    public void setCreatedat(Instant createdat) {
+        this.createdat = createdat;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public Shop() {
-
-    }
-
-    public enum Status{
-        PENDING_APPROVAL,
-        ACTIVE,
-        LOCK
-    }
 }

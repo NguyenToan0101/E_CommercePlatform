@@ -1,45 +1,62 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import org.hibernate.annotations.Nationalized;
-
 
 @Entity
 @Table(name = "sellers")
-@Data
 public class Seller {
     @Id
     @Column(name = "sellerid", nullable = false)
     private Integer id;
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "sellerid")
 
-    private Shop shop;
-    @OneToOne()
-    @JoinColumn(name = "sellerid")
-    @MapsId
-    private Customer customer;
-    @Version
-    private Integer version;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customerid")
+    private Customer customerid;
+
     @Size(max = 20)
+    @NotNull
     @Nationalized
-    @Column(name = "idnumber", nullable = false, length = 20)
-    private String idNumber;
-    @Column(name = "frontidimage")
-    private String frontIdImage; // base64 hoặc URL
-    @Column(name = "backidimage")
-    private String backIdImage;
+    @Column(name = "cccd", nullable = false, length = 20)
+    private String cccd;
 
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "taxcode", length = 50)
+    private String taxcode;
 
-
-
-
-    public Seller() {
+    public Integer getId() {
+        return id;
     }
-    public Seller(Integer id) {
+
+    public void setId(Integer id) {
         this.id = id;
     }
+
+    public Customer getCustomerid() {
+        return customerid;
+    }
+
+    public void setCustomerid(Customer customerid) {
+        this.customerid = customerid;
+    }
+
+    public String getCccd() {
+        return cccd;
+    }
+
+    public void setCccd(String cccd) {
+        this.cccd = cccd;
+    }
+
+    public String getTaxcode() {
+        return taxcode;
+    }
+
+    public void setTaxcode(String taxcode) {
+        this.taxcode = taxcode;
+    }
+
 }

@@ -26,6 +26,7 @@ public class CartController {
     public String viewCart(HttpSession session, Model model) {
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) return "redirect:/login";
+        model.addAttribute("customer", customer);
 
         List<CartItemDTO> cartItems = cartService.getCartItemsByCustomer(customer);
         model.addAttribute("cartItems", cartItems);

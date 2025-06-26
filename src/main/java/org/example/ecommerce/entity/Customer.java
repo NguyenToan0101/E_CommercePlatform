@@ -16,12 +16,6 @@ public class Customer {
     @Column(name = "customerid", nullable = false)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customer")
-    private Seller seller;
-
-    @Version
-    private Integer version;
-
     @Size(max = 50)
     @Nationalized
     @Column(name = "firstname", length = 50)
@@ -72,16 +66,6 @@ public class Customer {
 
     @Column(name = "createdat")
     private Instant createdat;
-
-
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
 
     public Integer getId() {
         return id;

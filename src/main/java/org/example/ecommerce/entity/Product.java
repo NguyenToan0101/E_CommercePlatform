@@ -29,7 +29,7 @@ public class Product {
     private String name;
 
     @Nationalized
-//    @Lob
+    @Lob
     @Column(name = "description")
     private String description;
 

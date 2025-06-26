@@ -28,6 +28,18 @@ public class Payment {
     @Column(name = "paidat")
     private Instant paidat;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderid")
+    private Order orderid;
+
+    public Order getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Order orderid) {
+        this.orderid = orderid;
+    }
+
     public Integer getId() {
         return id;
     }
