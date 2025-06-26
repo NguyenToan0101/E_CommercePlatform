@@ -9,6 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 import java.time.Instant;
 import java.time.LocalDate;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "customer")
 public class Customer {

@@ -1,13 +1,8 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-
-import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
-
+import org.hibernate.annotations.Nationalized;
 
 @Entity
 @Table(name = "inventory")
@@ -21,29 +16,24 @@ public class Inventory {
     @JoinColumn(name = "productid")
     private Product productid;
 
-    @NotNull
-    @Column(name = "quantity", nullable = false)
+    @Column(name = "quantity")
     private Integer quantity;
+
+    @Column(name = "lowstockthreshold")
+    private Integer lowstockthreshold;
 
     @Column(name = "solditems")
     private Integer solditems;
 
     @Size(max = 100)
+    @Nationalized
     @Column(name = "color", length = 100)
     private String color;
 
     @Size(max = 100)
+    @Nationalized
     @Column(name = "dimension", length = 100)
     private String dimension;
-
-    @Column(name = "updated_at")
-    private Instant updatedAt;
-
-    @OneToMany(mappedBy = "inventoryid")
-    private Set<Cartitem> cartitems = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "inventoryid")
-    private Set<Orderitem> orderitems = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -67,6 +57,14 @@ public class Inventory {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Integer getLowstockthreshold() {
+        return lowstockthreshold;
+    }
+
+    public void setLowstockthreshold(Integer lowstockthreshold) {
+        this.lowstockthreshold = lowstockthreshold;
     }
 
     public Integer getSolditems() {
@@ -93,27 +91,4 @@ public class Inventory {
         this.dimension = dimension;
     }
 
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Set<Cartitem> getCartitems() {
-        return cartitems;
-    }
-
-    public void setCartitems(Set<Cartitem> cartitems) {
-        this.cartitems = cartitems;
-    }
-
-    public Set<Orderitem> getOrderitems() {
-        return orderitems;
-    }
-
-    public void setOrderitems(Set<Orderitem> orderitems) {
-        this.orderitems = orderitems;
-    }
 }

@@ -1,53 +1,60 @@
 package org.example.ecommerce.entity;
-
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.time.Instant;
-
+import jakarta.validation.constraints.*;
+import org.hibernate.annotations.Nationalized;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "shop")
 public class Shop {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "shopid", nullable = false)
     private Integer id;
 
+    @OneToOne()
+    @JoinColumn(name = "shopid", nullable = false, unique = true)
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "shopid", nullable = false)
-    private Seller sellers;
-
-    @Column(name = "shopname", length = Integer.MAX_VALUE)
+    private Seller sellerid;
+    @Version
+    private Integer version;
+    @Nationalized
+    @Column(name = "shopname", nullable = false, unique = true, length = 100)
     private String shopname;
 
-    @Column(name = "description", length = Integer.MAX_VALUE)
+    @Size(max = 500)
+    @Nationalized
+    @Column(name = "description", length = 500)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maincategoryid")
     private Category maincategoryid;
 
-    @Column(name = "fulladdress", length = Integer.MAX_VALUE)
+    @Nationalized
+    @Column(name = "fulladdress", nullable = false, unique = true)
     private String fulladdress;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "createdat")
-    private Instant createdat;
+    @Column(name = "createdat", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
+    private LocalDateTime createdat = LocalDateTime.now();
 
-    @Column(name = "status", length = Integer.MAX_VALUE)
+
+    @Column(name = "status")
     private String status;
 
-    @Column(name = "imageshop", length = Integer.MAX_VALUE)
+
+    @Nationalized
+    @Column(name = "imageshop")
     private String imageshop;
 
-    @Column(name = "managename", length = Integer.MAX_VALUE)
-    private String managename;
 
-    @Column(name = "phone", length = Integer.MAX_VALUE)
+    @Nationalized
+    @Column(name = "managename", nullable = false)
+    private String manageName;
+
+   
+    @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
     @Column(name = "express")
@@ -60,25 +67,44 @@ public class Shop {
     private Boolean economy;
 
     @Column(name = "lockerdelivery")
-    private Boolean lockerdelivery;
+    private Boolean lockerDelivery;
 
     @Column(name = "bulkyitems")
-    private Boolean bulkyitems;
+    private Boolean bulkyItems;
 
-    @Column(name = "businesstype", length = Integer.MAX_VALUE)
-    private String businesstype;
 
-    @Column(name = "businessaddress", length = Integer.MAX_VALUE)
-    private String businessaddress;
+    @Nationalized
+    @Column(name = "businesstype", nullable = false, unique = true)
+    private String businessType;
 
-    @Column(name = "invoiceemail", length = Integer.MAX_VALUE)
-    private String invoiceemail;
+    @Size(max = 255)
+    @Nationalized
+    @Column(name = "businessaddress", nullable = false, unique = true)
+    private String businessAddress;
 
-    @Column(name = "taxcode", length = Integer.MAX_VALUE)
-    private String taxcode;
+    @Email
+    @Size(max = 100)
+    @Column(name = "invoiceemail", nullable = false, unique = true)
+    private String invoiceEmail;
 
-    @Column(name = "version")
-    private Long version;
+    @Size(max = 20)
+    @Column(name = "taxcode", nullable = false, unique = true)
+    private String taxCode;
+
+    public Shop(Integer id,String status) {
+        this.id = id;
+        this.status = status;
+    }
+
+    public Shop() {
+
+    }
+
+    public enum Status{
+        PENDING_APPROVAL,
+        ACTIVE,
+        LOCK
+    }
 
     public Integer getId() {
         return id;
@@ -88,12 +114,20 @@ public class Shop {
         this.id = id;
     }
 
-    public Seller getSellers() {
-        return sellers;
+    public Seller getSellerid() {
+        return sellerid;
     }
 
-    public void setSellers(Seller sellers) {
-        this.sellers = sellers;
+    public void setSellerid(Seller sellerid) {
+        this.sellerid = sellerid;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
     }
 
     public String getShopname() {
@@ -128,11 +162,11 @@ public class Shop {
         this.fulladdress = fulladdress;
     }
 
-    public Instant getCreatedat() {
+    public LocalDateTime getCreatedat() {
         return createdat;
     }
 
-    public void setCreatedat(Instant createdat) {
+    public void setCreatedat(LocalDateTime createdat) {
         this.createdat = createdat;
     }
 
@@ -152,12 +186,12 @@ public class Shop {
         this.imageshop = imageshop;
     }
 
-    public String getManagename() {
-        return managename;
+    public String getManageName() {
+        return manageName;
     }
 
-    public void setManagename(String managename) {
-        this.managename = managename;
+    public void setManageName(String manageName) {
+        this.manageName = manageName;
     }
 
     public String getPhone() {
@@ -192,59 +226,51 @@ public class Shop {
         this.economy = economy;
     }
 
-    public Boolean getLockerdelivery() {
-        return lockerdelivery;
+    public Boolean getLockerDelivery() {
+        return lockerDelivery;
     }
 
-    public void setLockerdelivery(Boolean lockerdelivery) {
-        this.lockerdelivery = lockerdelivery;
+    public void setLockerDelivery(Boolean lockerDelivery) {
+        this.lockerDelivery = lockerDelivery;
     }
 
-    public Boolean getBulkyitems() {
-        return bulkyitems;
+    public Boolean getBulkyItems() {
+        return bulkyItems;
     }
 
-    public void setBulkyitems(Boolean bulkyitems) {
-        this.bulkyitems = bulkyitems;
+    public void setBulkyItems(Boolean bulkyItems) {
+        this.bulkyItems = bulkyItems;
     }
 
-    public String getBusinesstype() {
-        return businesstype;
+    public String getBusinessType() {
+        return businessType;
     }
 
-    public void setBusinesstype(String businesstype) {
-        this.businesstype = businesstype;
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
     }
 
-    public String getBusinessaddress() {
-        return businessaddress;
+    public String getBusinessAddress() {
+        return businessAddress;
     }
 
-    public void setBusinessaddress(String businessaddress) {
-        this.businessaddress = businessaddress;
+    public void setBusinessAddress(String businessAddress) {
+        this.businessAddress = businessAddress;
     }
 
-    public String getInvoiceemail() {
-        return invoiceemail;
+    public String getInvoiceEmail() {
+        return invoiceEmail;
     }
 
-    public void setInvoiceemail(String invoiceemail) {
-        this.invoiceemail = invoiceemail;
+    public void setInvoiceEmail(String invoiceEmail) {
+        this.invoiceEmail = invoiceEmail;
     }
 
-    public String getTaxcode() {
-        return taxcode;
+    public String getTaxCode() {
+        return taxCode;
     }
 
-    public void setTaxcode(String taxcode) {
-        this.taxcode = taxcode;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
+    public void setTaxCode(String taxCode) {
+        this.taxCode = taxCode;
     }
 }
