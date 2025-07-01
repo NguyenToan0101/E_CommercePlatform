@@ -1,7 +1,7 @@
 package org.example.ecommerce.service.customer.cusromer_aut;
 
 import org.example.ecommerce.entity.Customer;
-import org.example.ecommerce.repository.CustomerRepository;
+import org.example.ecommerce.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -25,9 +25,9 @@ public class CustomerServiceImpl implements CustomerService {
     Instant instant = localDateTime.atZone(zoneId).toInstant();
 
     @Autowired
-    private final CustomerRepository customerRepository;
+    private final UserRepository customerRepository;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
+    public CustomerServiceImpl(UserRepository customerRepository, PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -51,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.setRole("Customer");
-        customer.setStatus("active");
+        customer.setStatus(true);
         customer.setCreatedat(instant);
 
         String token = UUID.randomUUID().toString();
@@ -81,7 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer login(String email, String password) {
         
         Customer customer = customerRepository.findByEmail(email);
-        if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.getStatus() == "active") {
+        if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.getStatus().equals("active")) {
             return customer;
         }
         return null;

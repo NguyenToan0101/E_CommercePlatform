@@ -1,56 +1,60 @@
 package org.example.ecommerce.entity;
-
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
-
-import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import jakarta.validation.constraints.*;
+import org.hibernate.annotations.Nationalized;
+import lombok.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "shop")
-@Getter
-@Setter
 public class Shop {
 
     @Id
-    @Column(name = "shopid")
+    @Column(name = "shopid", nullable = false)
     private Integer id;
 
+    @OneToOne()
+    @JoinColumn(name = "shopid", nullable = false, unique = true)
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "shopid")
-    private Seller seller;
-
-    @Column(name = "shopname")
+    private Seller sellerid;
+    @Version
+    private Integer version;
+    @Nationalized
+    @Column(name = "shopname", nullable = false, unique = true, length = 100)
     private String shopname;
 
-    @Column(name = "description")
+    @Size(max = 500)
+    @Nationalized
+    @Column(name = "description", length = 500)
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maincategoryid")
     private Category maincategoryid;
 
-    @Column(name = "fulladdress")
+    @Nationalized
+    @Column(name = "fulladdress", nullable = false, unique = true)
     private String fulladdress;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "createdat")
-    private Instant createdat;
+    @Column(name = "createdat", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
+    private LocalDateTime createdat = LocalDateTime.now();
+
 
     @Column(name = "status")
     private String status;
 
+
+    @Nationalized
     @Column(name = "imageshop")
     private String imageshop;
 
-    @Column(name = "managename")
-    private String managename;
 
-    @Column(name = "phone")
+    @Nationalized
+    @Column(name = "managename", nullable = false)
+    private String manageName;
+
+   
+    @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
     @Column(name = "express")
@@ -63,43 +67,210 @@ public class Shop {
     private Boolean economy;
 
     @Column(name = "lockerdelivery")
-    private Boolean lockerdelivery;
+    private Boolean lockerDelivery;
 
     @Column(name = "bulkyitems")
-    private Boolean bulkyitems;
+    private Boolean bulkyItems;
 
-    @Column(name = "businesstype")
-    private String businesstype;
 
-    @Column(name = "businessaddress")
-    private String businessaddress;
+    @Nationalized
+    @Column(name = "businesstype", nullable = false, unique = true)
+    private String businessType;
 
-    @Column(name = "invoiceemail")
-    private String invoiceemail;
+    @Size(max = 255)
+    @Nationalized
+    @Column(name = "businessaddress", nullable = false, unique = true)
+    private String businessAddress;
 
-    @Column(name = "taxcode")
-    private String taxcode;
+    @Email
+    @Size(max = 100)
+    @Column(name = "invoiceemail", nullable = false, unique = true)
+    private String invoiceEmail;
 
-    @Column(name = "version")
-    private Long version;
+    @Size(max = 20)
+    @Column(name = "taxcode", nullable = false, unique = true)
+    private String taxCode;
 
-    @OneToMany(mappedBy = "shopid")
-    private Set<Product> products = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "shopid")
-    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
-
-    public Shop() {
-    }
-
-    public Shop(Integer id, String status) {
+    public Shop(Integer id,String status) {
         this.id = id;
         this.status = status;
     }
 
-    public enum Status {
+    public Shop() {
+
+    }
+
+    public enum Status{
         PENDING_APPROVAL,
         ACTIVE,
         LOCK
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Seller getSellerid() {
+        return sellerid;
+    }
+
+    public void setSellerid(Seller sellerid) {
+        this.sellerid = sellerid;
+    }
+
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public String getShopname() {
+        return shopname;
+    }
+
+    public void setShopname(String shopname) {
+        this.shopname = shopname;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Category getMaincategoryid() {
+        return maincategoryid;
+    }
+
+    public void setMaincategoryid(Category maincategoryid) {
+        this.maincategoryid = maincategoryid;
+    }
+
+    public String getFulladdress() {
+        return fulladdress;
+    }
+
+    public void setFulladdress(String fulladdress) {
+        this.fulladdress = fulladdress;
+    }
+
+    public LocalDateTime getCreatedat() {
+        return createdat;
+    }
+
+    public void setCreatedat(LocalDateTime createdat) {
+        this.createdat = createdat;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getImageshop() {
+        return imageshop;
+    }
+
+    public void setImageshop(String imageshop) {
+        this.imageshop = imageshop;
+    }
+
+    public String getManageName() {
+        return manageName;
+    }
+
+    public void setManageName(String manageName) {
+        this.manageName = manageName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public Boolean getExpress() {
+        return express;
+    }
+
+    public void setExpress(Boolean express) {
+        this.express = express;
+    }
+
+    public Boolean getFast() {
+        return fast;
+    }
+
+    public void setFast(Boolean fast) {
+        this.fast = fast;
+    }
+
+    public Boolean getEconomy() {
+        return economy;
+    }
+
+    public void setEconomy(Boolean economy) {
+        this.economy = economy;
+    }
+
+    public Boolean getLockerDelivery() {
+        return lockerDelivery;
+    }
+
+    public void setLockerDelivery(Boolean lockerDelivery) {
+        this.lockerDelivery = lockerDelivery;
+    }
+
+    public Boolean getBulkyItems() {
+        return bulkyItems;
+    }
+
+    public void setBulkyItems(Boolean bulkyItems) {
+        this.bulkyItems = bulkyItems;
+    }
+
+    public String getBusinessType() {
+        return businessType;
+    }
+
+    public void setBusinessType(String businessType) {
+        this.businessType = businessType;
+    }
+
+    public String getBusinessAddress() {
+        return businessAddress;
+    }
+
+    public void setBusinessAddress(String businessAddress) {
+        this.businessAddress = businessAddress;
+    }
+
+    public String getInvoiceEmail() {
+        return invoiceEmail;
+    }
+
+    public void setInvoiceEmail(String invoiceEmail) {
+        this.invoiceEmail = invoiceEmail;
+    }
+
+    public String getTaxCode() {
+        return taxCode;
+    }
+
+    public void setTaxCode(String taxCode) {
+        this.taxCode = taxCode;
     }
 }

@@ -1,15 +1,10 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Size;
 
-import java.math.BigDecimal;
 import java.time.Instant;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "payments")
 public class Payment {
@@ -18,32 +13,71 @@ public class Payment {
     @Column(name = "paymentid", nullable = false)
     private Integer id;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "walletid", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "walletid")
     private Wallet walletid;
+
+    @Size(max = 50)
+    @Column(name = "method", length = 50)
+    private String method;
+
+    @Size(max = 20)
+    @Column(name = "paymentstatus", length = 20)
+    private String paymentstatus;
+
+    @Column(name = "paidat")
+    private Instant paidat;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orderid")
     private Order orderid;
 
-    @NotNull
-    @Column(name = "amount", nullable = false)
-    private BigDecimal amount;
+    public Order getOrderid() {
+        return orderid;
+    }
 
-    @Column(name = "method", length = Integer.MAX_VALUE)
-    private String method;
+    public void setOrderid(Order orderid) {
+        this.orderid = orderid;
+    }
 
-    @Column(name = "paymentstatus", length = Integer.MAX_VALUE)
-    private String paymentstatus;
+    public Integer getId() {
+        return id;
+    }
 
-    @Column(name = "transaction_id", length = Integer.MAX_VALUE)
-    private String transactionId;
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    @Column(name = "gateway", length = Integer.MAX_VALUE)
-    private String gateway;
+    public Wallet getWalletid() {
+        return walletid;
+    }
 
-    @Column(name = "paidat")
-    private Instant paidat;
+    public void setWalletid(Wallet walletid) {
+        this.walletid = walletid;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public String getPaymentstatus() {
+        return paymentstatus;
+    }
+
+    public void setPaymentstatus(String paymentstatus) {
+        this.paymentstatus = paymentstatus;
+    }
+
+    public Instant getPaidat() {
+        return paidat;
+    }
+
+    public void setPaidat(Instant paidat) {
+        this.paidat = paidat;
+    }
 
 }

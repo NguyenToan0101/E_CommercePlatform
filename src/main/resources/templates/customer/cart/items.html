@@ -47,7 +47,6 @@
       line-height: 1.6;
     }
 
-    /* Toast Notification Styles */
     .toast-container {
       position: fixed;
       top: 100px;
@@ -71,7 +70,7 @@
       max-width: 400px;
       transform: translateX(100%);
       opacity: 0;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.1s ease; /* Giảm thời gian animation */
     }
 
     .toast.show {
@@ -125,7 +124,7 @@
       cursor: pointer;
       padding: 4px;
       border-radius: 4px;
-      transition: all 0.2s ease;
+      transition: all 0.1s ease; /* Giảm thời gian transition */
     }
 
     .toast-close:hover {
@@ -133,18 +132,17 @@
       color: var(--primary-black);
     }
 
-    /* Header matching product-detail.html */
     .header {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(10px); /* Giảm blur để tăng tốc */
       border-bottom: 1px solid var(--border-gray);
       z-index: 1000;
       padding: 16px 0;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.1s ease; /* Giảm thời gian transition */
     }
 
     .header-content {
@@ -159,7 +157,7 @@
 
     .logo-container {
       display: inline-block;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.1s ease; /* Giảm thời gian transition */
       justify-self: start;
     }
 
@@ -194,8 +192,8 @@
       border: 2px solid var(--border-gray);
       border-radius: 50px;
       overflow: hidden;
-      box-shadow: 0 4px 20px var(--shadow-light);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px var(--shadow-light); /* Giảm độ phức tạp shadow */
+      transition: all 0.1s ease; /* Giảm thời gian transition */
     }
 
     .search-input {
@@ -215,14 +213,13 @@
       border: none;
       padding: 12px 20px;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.1s ease; /* Giảm thời gian transition */
       display: flex;
       align-items: center;
       justify-content: center;
       min-width: 50px;
     }
 
-    /* Cart Icon Styles */
     .cart-container {
       position: relative;
       justify-self: center;
@@ -238,8 +235,8 @@
       border: 2px solid var(--border-gray);
       border-radius: 50%;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-      box-shadow: 0 4px 20px var(--shadow-light);
+      transition: all 0.1s ease; /* Giảm thời gian transition */
+      box-shadow: 0 2px 8px var(--shadow-light); /* Giảm độ phức tạp shadow */
       text-decoration: none;
       color: var(--gradient-mid);
     }
@@ -248,14 +245,14 @@
       background: var(--gradient-mid);
       color: var(--white);
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px var(--shadow-medium);
+      box-shadow: 0 4px 12px var(--shadow-medium);
       border-color: var(--gradient-mid);
     }
 
     .cart-icon svg {
       width: 20px;
       height: 20px;
-      transition: all 0.3s ease;
+      transition: all 0.1s ease; /* Giảm thời gian transition */
     }
 
     .cart-badge {
@@ -275,7 +272,6 @@
       border: 2px solid var(--white);
     }
 
-    /* Customer Info Dropdown */
     .customer-info {
       position: relative;
       justify-self: end;
@@ -289,14 +285,14 @@
       background: var(--white);
       padding: 8px 16px;
       border-radius: 50px;
-      box-shadow: 0 4px 20px var(--shadow-light);
+      box-shadow: 0 2px 8px var(--shadow-light); /* Giảm độ phức tạp shadow */
       border: 1px solid var(--border-gray);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.1s ease; /* Giảm thời gian transition */
       position: relative;
     }
 
     .dropdown:hover {
-      box-shadow: 0 8px 30px var(--shadow-medium);
+      box-shadow: 0 4px 12px var(--shadow-medium);
       transform: translateY(-1px);
       border-color: var(--accent-gray);
     }
@@ -315,7 +311,7 @@
       border-radius: 50%;
       border: 2px solid var(--border-gray);
       object-fit: cover;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.1s ease; /* Giảm thời gian transition */
       background: var(--light-gray);
     }
 
@@ -328,7 +324,7 @@
       width: 16px;
       height: 16px;
       color: var(--text-gray);
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.1s ease; /* Giảm thời gian transition */
     }
 
     .dropdown:hover .dropdown-arrow {
@@ -344,10 +340,10 @@
       background: var(--white);
       min-width: 200px;
       border-radius: 16px;
-      box-shadow: 0 16px 48px var(--shadow-medium);
+      box-shadow: 0 8px 24px var(--shadow-medium); /* Giảm độ phức tạp shadow */
       border: 1px solid var(--border-gray);
       overflow: hidden;
-      animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      animation: slideDown 0.1s ease; /* Giảm thời gian animation */
       z-index: 1001;
     }
 
@@ -385,7 +381,7 @@
       gap: 12px;
       font-size: 14px;
       font-weight: 500;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.1s ease; /* Giảm thời gian transition */
       border-left: 3px solid transparent;
     }
 
@@ -404,7 +400,7 @@
       width: 16px;
       height: 16px;
       color: var(--text-gray);
-      transition: color 0.3s ease;
+      transition: color 0.1s ease; /* Giảm thời gian transition */
     }
 
     .dropdown-content a:hover .icon {
@@ -418,7 +414,6 @@
       visibility: visible;
     }
 
-    /* Login Button */
     .login-btn {
       display: flex;
       align-items: center;
@@ -430,7 +425,7 @@
       text-decoration: none;
       font-size: 14px;
       font-weight: 500;
-      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.1s ease; /* Giảm thời gian transition */
       border: 2px solid var(--gradient-mid);
       justify-self: end;
     }
@@ -439,7 +434,7 @@
       background: var(--white);
       color: var(--gradient-mid);
       transform: translateY(-1px);
-      box-shadow: 0 8px 30px var(--shadow-medium);
+      box-shadow: 0 4px 12px var(--shadow-medium);
     }
 
     .login-btn svg {
@@ -447,14 +442,12 @@
       height: 16px;
     }
 
-    /* Main Content */
     .main-content {
       padding: 120px 40px 40px;
       max-width: 1400px;
       margin: 0 auto;
     }
 
-    /* Shopee-style Cart Layout */
     .cart-layout {
       display: grid;
       grid-template-columns: 1fr 350px;
@@ -466,15 +459,14 @@
       background: var(--white);
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 2px 8px var(--shadow-light);
+      box-shadow: 0 2px 8px var(--shadow-light); /* Giảm độ phức tạp shadow */
     }
 
-    /* Cart Header with Select All */
     .cart-header {
       background: var(--white);
       padding: 20px;
       border-bottom: 1px solid var(--border-gray);
-      display: flex;
+      display: contents;
       align-items: center;
       gap: 15px;
     }
@@ -501,7 +493,7 @@
     .cart-header-labels {
       display: grid;
       grid-template-columns: 40px 2fr 1fr 1fr 1fr 80px;
-      gap: 20px;
+      gap: 60px;
       align-items: center;
       margin-left: auto;
       font-size: 14px;
@@ -509,7 +501,6 @@
       font-weight: 500;
     }
 
-    /* Cart Items */
     .cart-items {
       background: var(--white);
     }
@@ -521,7 +512,7 @@
       grid-template-columns: 40px 2fr 1fr 1fr 1fr 80px;
       gap: 20px;
       align-items: center;
-      transition: all 0.3s ease;
+      transition: all 0.1s ease; /* Giảm thời gian transition */
     }
 
     .cart-item:hover {
@@ -536,6 +527,7 @@
       opacity: 0.5;
       transform: scale(0.98);
       pointer-events: none;
+      transition: all 0.1s ease; /* Giảm thời gian transition */
     }
 
     .item-checkbox {
@@ -543,9 +535,11 @@
       height: 18px;
       accent-color: var(--shopee-orange);
       cursor: pointer;
+      grid-column: 1 / 2;
     }
 
     .item-info {
+      grid-column: 2 / 3;
       display: flex;
       gap: 15px;
       align-items: center;
@@ -571,11 +565,10 @@
       line-height: 1.3;
     }
 
-    /* Product name link style */
     .product-name-link {
       text-decoration: none;
       color: var(--primary-black);
-      transition: color 0.2s ease;
+      transition: color 0.1s ease; /* Giảm thời gian transition */
       display: block;
     }
 
@@ -585,9 +578,10 @@
     }
 
     .product-variants {
+      grid-column: 3 / 4;
       display: flex;
       gap: 10px;
-      margin-bottom: 8px;
+      align-items: center;
     }
 
     .variant-tag {
@@ -598,14 +592,8 @@
       font-size: 12px;
     }
 
-    .unit-price {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--primary-black);
-      text-align: center;
-    }
-
     .quantity-controls {
+      grid-column: 4 / 5;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -613,7 +601,7 @@
       border-radius: 4px;
       background: var(--white);
       width: fit-content;
-      margin: 0 auto;
+      margin: 0;
     }
 
     .quantity-btn {
@@ -627,7 +615,7 @@
       justify-content: center;
       font-size: 16px;
       color: var(--text-gray);
-      transition: all 0.3s ease;
+      transition: all 0.1s ease; /* Giảm thời gian transition */
     }
 
     .quantity-btn:hover {
@@ -650,6 +638,7 @@
     }
 
     .item-total {
+      grid-column: 5 / 6;
       font-size: 16px;
       font-weight: 600;
       color: var(--shopee-orange);
@@ -657,6 +646,7 @@
     }
 
     .item-actions {
+      grid-column: 6 / 7;
       display: flex;
       justify-content: center;
     }
@@ -668,7 +658,7 @@
       cursor: pointer;
       padding: 8px;
       border-radius: 4px;
-      transition: all 0.3s ease;
+      transition: all 0.1s ease; /* Giảm thời gian transition */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -684,14 +674,13 @@
       cursor: not-allowed;
     }
 
-    /* Continue Shopping Button */
     .continue-shopping-section {
       background: var(--white);
       border-radius: 8px;
       padding: 20px;
       margin-top: 20px;
       text-align: center;
-      box-shadow: 0 2px 8px var(--shadow-light);
+      box-shadow: 0 2px 8px var(--shadow-light); /* Giảm độ phức tạp shadow */
     }
 
     .continue-shopping {
@@ -701,7 +690,7 @@
       border-radius: 8px;
       text-decoration: none;
       font-weight: 500;
-      transition: all 0.3s ease;
+      transition: all 0.1s ease; /* Giảm thời gian transition */
       display: inline-block;
     }
 
@@ -710,15 +699,14 @@
       transform: translateY(-1px);
     }
 
-    /* Sticky Cart Summary */
     .cart-summary {
       background: var(--white);
       border-radius: 8px;
       padding: 20px;
-      box-shadow: 0 2px 8px var(--shadow-light);
+      box-shadow: 0 2px 8px var(--shadow-light); /* Giảm độ phức tạp shadow */
       position: sticky;
       top: 140px;
-      display: none; /* Hidden by default */
+      display: none;
     }
 
     .cart-summary.show {
@@ -782,13 +770,13 @@
       font-weight: 600;
       margin-top: 20px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.1s ease; /* Giảm thời gian transition */
     }
 
     .checkout-btn:hover {
       background: #d73211;
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(238, 77, 45, 0.3);
+      box-shadow: 0 2px 8px rgba(238, 77, 45, 0.3); /* Giảm độ phức tạp shadow */
     }
 
     .checkout-btn:disabled {
@@ -803,7 +791,7 @@
       padding: 80px 40px;
       background: var(--white);
       border-radius: 8px;
-      box-shadow: 0 2px 8px var(--shadow-light);
+      box-shadow: 0 2px 8px var(--shadow-light); /* Giảm độ phức tạp shadow */
     }
 
     .empty-cart h3 {
@@ -838,7 +826,6 @@
       color: var(--error-red);
     }
 
-    /* Responsive Design */
     @media (max-width: 1024px) {
       .cart-layout {
         grid-template-columns: 1fr;
@@ -885,18 +872,28 @@
         margin-top: 10px;
       }
 
-      .unit-price,
-      .quantity-controls,
-      .item-total,
-      .item-actions {
+      .product-variants {
+        grid-column: 1 / -1;
+        margin-top: 10px;
+      }
+
+      .quantity-controls {
         grid-column: 1 / -1;
         margin-top: 10px;
         text-align: left;
         justify-content: flex-start;
       }
 
-      .quantity-controls {
-        margin: 10px 0;
+      .item-total {
+        grid-column: 1 / -1;
+        margin-top: 10px;
+        text-align: left;
+      }
+
+      .item-actions {
+        grid-column: 1 / -1;
+        margin-top: 10px;
+        justify-content: flex-start;
       }
 
       .toast-container {
@@ -1021,7 +1018,7 @@
         <div class="cart-header-labels">
           <span></span>
           <span>Sản phẩm</span>
-          <span>Đơn giá</span>
+          <span>Biến thể</span>
           <span>Số lượng</span>
           <span>Thành tiền</span>
           <span>Thao tác</span>
@@ -1037,32 +1034,28 @@
 
           <!-- Product Info -->
           <div class="item-info">
-            <!-- Product image with link to detail page -->
             <a th:href="@{/detailproduct(id=${item.productId})}" title="Xem chi tiết sản phẩm">
               <img th:src="${item.imageUrl != null ? item.imageUrl : '/images/default-product.jpg'}"
                    alt="Product Image" class="product-image">
             </a>
             <div class="product-details">
-              <!-- Product name with link to detail page -->
               <a th:href="@{/detailproduct(id=${item.productId})}" class="product-name-link">
                 <div class="product-name" th:text="${item.productName}">Product Name</div>
               </a>
-              <div class="product-variants">
-                <span class="variant-tag" th:if="${item.color}" th:text="'Màu: ' + ${item.color}">Màu: Đỏ</span>
-                <span class="variant-tag" th:if="${item.dimension}" th:text="'Size: ' + ${item.dimension}">Size: M</span>
-              </div>
             </div>
           </div>
 
-          <!-- Unit Price -->
-          <div class="unit-price" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'">Price</div>
+          <!-- Variants -->
+          <div class="product-variants">
+            <span class="variant-tag" th:if="${item.color}" th:text="'Màu: ' + ${item.color}">Màu: Đỏ</span>
+            <span class="variant-tag" th:if="${item.dimension}" th:text="'Size: ' + ${item.dimension}">Size: M</span>
+          </div>
 
           <!-- Quantity Controls -->
           <div class="quantity-controls">
             <input type="hidden" class="cart-item-id" th:value="${item.cartItemId}">
             <input type="hidden" class="product-id" th:value="${item.productId}">
             <input type="hidden" class="inventory-id" th:value="${item.inventoryId}">
-
             <button type="button" class="quantity-btn" onclick="decreaseQuantity(this)">-</button>
             <input type="number" th:value="${item.quantity}" min="1" class="quantity-input"
                    onchange="updateQuantityDebounced(this)" th:data-original-quantity="${item.quantity}">
@@ -1111,7 +1104,7 @@
       </div>
 
       <!-- Updated Checkout Form -->
-      <form id="checkout-form" action="/checkout" method="POST">
+      <form id="checkout-form" action="/checkout/preview" method="GET">
         <!-- Hidden inputs for selected cart item IDs will be added here by JavaScript -->
         <button type="submit" class="checkout-btn" id="checkout-btn" disabled>
           Mua hàng (<span id="checkout-count">0</span>)
@@ -1153,29 +1146,25 @@
 
     toastContainer.appendChild(toast);
 
-    // Show toast
-    setTimeout(() => toast.classList.add('show'), 100);
+    setTimeout(() => toast.classList.add('show'), 50); // Giảm thời gian delay
 
-    // Auto remove after 5 seconds
-    setTimeout(() => closeToast(toast.querySelector('.toast-close')), 5000);
+    setTimeout(() => closeToast(toast.querySelector('.toast-close')), 3000); // Giảm thời gian hiển thị toast
   }
 
   function closeToast(button) {
     const toast = button.closest('.toast');
     toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
+    setTimeout(() => toast.remove(), 100); // Giảm thời gian remove
   }
 
-  // Debounce function for quantity updates
   let quantityUpdateTimeout;
   function updateQuantityDebounced(input) {
     clearTimeout(quantityUpdateTimeout);
     quantityUpdateTimeout = setTimeout(() => {
       updateCartQuantity(input);
-    }, 800);
+    }, 300); // Giảm thời gian debounce xuống 300ms
   }
 
-  // Update cart quantity via AJAX - No toast notifications
   async function updateCartQuantity(input) {
     const cartItem = input.closest('.cart-item');
     const cartItemId = cartItem.querySelector('.cart-item-id').value;
@@ -1190,11 +1179,10 @@
     }
 
     if (quantity === originalQuantity) {
-      return; // No change
+      return;
     }
 
     try {
-      // Disable input during update
       input.disabled = true;
 
       const formData = new FormData();
@@ -1209,43 +1197,24 @@
       });
 
       if (response.ok) {
-        // Update the original quantity
-        input.dataset.originalQuantity = quantity;
-
-        // Update item total display
-        const unitPrice = parseFloat(cartItem.querySelector('.unit-price').textContent.replace(/[^\d]/g, ''));
-        const newTotal = unitPrice * quantity;
-        cartItem.querySelector('.item-total').textContent = formatPrice(newTotal) + ' ₫';
-
-        // Update checkbox data
-        const checkbox = cartItem.querySelector('.item-checkbox');
-        checkbox.dataset.quantity = quantity;
-
-        // Update cart badge
-        updateCartBadge();
-
-        // Update summary
-        updateSummary();
+        // Reload nhanh với forced refresh
+        location.reload(true);
       } else {
-        // Revert to original quantity on error
         input.value = originalQuantity;
       }
     } catch (error) {
-      // Revert to original quantity on error
       input.value = originalQuantity;
     } finally {
       input.disabled = false;
     }
   }
 
-  // Remove cart item via AJAX - With toast notification
   async function removeCartItem(button) {
     const cartItemId = button.dataset.cartItemId;
     const productName = button.dataset.productName;
     const cartItem = button.closest('.cart-item');
 
     try {
-      // Add removing class for visual feedback
       cartItem.classList.add('removing');
       button.disabled = true;
 
@@ -1258,35 +1227,27 @@
       });
 
       if (response.ok) {
-        // Remove item from DOM with animation
         cartItem.style.transform = 'translateX(-100%)';
         cartItem.style.opacity = '0';
+        cartItem.style.transition = 'all 0.1s ease'; // Giảm thời gian transition
 
         setTimeout(() => {
           cartItem.remove();
-
-          // Update cart badge
           updateCartBadge();
-
-          // Update summary
           updateSummary();
-
-          // Check if cart is empty
           const remainingItems = document.querySelectorAll('.cart-item');
           if (remainingItems.length === 0) {
-            location.reload(); // Reload to show empty cart message
+            location.reload(true);
           }
-        }, 300);
+        }, 100); // Giảm thời gian delay
 
         showToast('success', 'Xóa thành công', `"${productName}" đã được xóa khỏi giỏ hàng`);
       } else {
-        // Remove removing class on error
         cartItem.classList.remove('removing');
         button.disabled = false;
         showToast('error', 'Xóa thất bại', 'Không thể xóa sản phẩm khỏi giỏ hàng');
       }
     } catch (error) {
-      // Remove removing class on error
       cartItem.classList.remove('removing');
       button.disabled = false;
       showToast('error', 'Lỗi kết nối', 'Vui lòng thử lại sau');
@@ -1324,17 +1285,14 @@
     const selectAllCheckbox = document.getElementById('select-all');
     const allCheckboxes = document.querySelectorAll('.item-checkbox');
 
-    // Update select all checkbox state
     selectAllCheckbox.checked = selectedCheckboxes.length === allCheckboxes.length && allCheckboxes.length > 0;
     selectAllCheckbox.indeterminate = selectedCheckboxes.length > 0 && selectedCheckboxes.length < allCheckboxes.length;
 
     if (selectedCheckboxes.length === 0) {
-      // Hide summary if no items selected
       summary.classList.remove('show');
       return;
     }
 
-    // Show summary
     summary.classList.add('show');
 
     let totalQuantity = 0;
@@ -1347,30 +1305,24 @@
       totalPrice += price * quantity;
     });
 
-    // Update summary display
     document.getElementById('selected-count').textContent = totalQuantity + ' sản phẩm';
     document.getElementById('subtotal').textContent = formatPrice(totalPrice) + ' ₫';
     document.getElementById('total').textContent = formatPrice(totalPrice) + ' ₫';
     document.getElementById('checkout-count').textContent = selectedCheckboxes.length;
 
-    // Enable/disable checkout button
     const checkoutBtn = document.getElementById('checkout-btn');
     checkoutBtn.disabled = selectedCheckboxes.length === 0;
 
-    // Update checkout form with selected cart item IDs
     updateCheckoutForm();
   }
 
-  // New function to update checkout form with selected cart item IDs
   function updateCheckoutForm() {
     const checkoutForm = document.getElementById('checkout-form');
     const selectedCheckboxes = document.querySelectorAll('.item-checkbox:checked');
 
-    // Remove existing hidden inputs
     const existingInputs = checkoutForm.querySelectorAll('input[name="cartItemIds"]');
     existingInputs.forEach(input => input.remove());
 
-    // Add hidden inputs for each selected cart item ID
     selectedCheckboxes.forEach(checkbox => {
       const cartItemId = checkbox.dataset.itemId;
       const hiddenInput = document.createElement('input');
@@ -1393,7 +1345,6 @@
     return new Intl.NumberFormat('vi-VN').format(price);
   }
 
-  // Enhanced dropdown behavior
   const dropdown = document.getElementById('customerDropdown');
   const dropdownContent = document.getElementById('dropdownContent');
 
@@ -1415,7 +1366,7 @@
         isDropdownOpen = false;
         dropdown.setAttribute('aria-expanded', 'false');
         dropdownContent.setAttribute('aria-hidden', 'true');
-      }, 300);
+      }, 100); // Giảm thời gian delay
     }
 
     dropdown.addEventListener('mouseenter', showDropdown);
@@ -1425,7 +1376,6 @@
     });
     dropdownContent.addEventListener('mouseleave', hideDropdown);
 
-    // Keyboard navigation
     dropdown.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
@@ -1437,20 +1387,17 @@
       }
     });
 
-    // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
       if (!dropdown.contains(e.target) && !dropdownContent.contains(e.target)) {
         hideDropdown();
       }
     });
 
-    // Initialize ARIA attributes
     dropdown.setAttribute('aria-expanded', 'false');
     dropdown.setAttribute('aria-haspopup', 'true');
     dropdownContent.setAttribute('aria-hidden', 'true');
   }
 
-  // Initialize summary on page load
   document.addEventListener('DOMContentLoaded', function() {
     updateSummary();
   });

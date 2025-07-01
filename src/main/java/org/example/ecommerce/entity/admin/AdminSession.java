@@ -1,13 +1,11 @@
 package org.example.ecommerce.entity.admin;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "admin_sessions")
-@Data
 public class AdminSession {
 
     @Id

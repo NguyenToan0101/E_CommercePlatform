@@ -1,13 +1,11 @@
 package org.example.ecommerce.entity.admin;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
-@Data
 public class Role {
 
     @Id

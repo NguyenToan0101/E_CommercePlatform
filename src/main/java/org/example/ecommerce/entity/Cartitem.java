@@ -29,4 +29,43 @@ public class Cartitem {
     @JoinColumn(name = "inventoryid")
     private Inventory inventoryid;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Cart getCartid() {
+        return cartid;
+    }
+
+    public void setCartid(Cart cartid) {
+        this.cartid = cartid;
+    }
+
+    public Product getProductid() {
+        return productid;
+    }
+
+    public void setProductid(Product productid) {
+        this.productid = productid;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Inventory getInventoryid() {
+        return inventoryid;
+    }
+
+    public void setInventoryid(Inventory inventoryid) {
+        this.inventoryid = inventoryid;
+    }
 }
