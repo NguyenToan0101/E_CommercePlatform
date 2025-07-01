@@ -3,7 +3,6 @@ package org.example.ecommerce.service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ import java.nio.file.Path;
 import java.util.UUID;
 
 @Service
-@Slf4j
+
 public class UploadImageFileImpl implements UploadImageFile {
     @Autowired
     private Cloudinary cloudinary;
@@ -26,11 +25,10 @@ public class UploadImageFileImpl implements UploadImageFile {
     public String uploadImage(MultipartFile file) throws IOException{
         assert file.getOriginalFilename() != null;
         String publicValue = generatePublicValue(file.getOriginalFilename());
-        log.info("publicValue is: {}", publicValue);
+
         String extension = getFileName(file.getOriginalFilename())[1];
-        log.info("extension is: {}", extension);
+
         File fileUpload = convert(file);
-        log.info("fileUpload is: {}", fileUpload);
         cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap("public_id", publicValue));
         cleanDisk(fileUpload);
         return  cloudinary.url().generate(StringUtils.join(publicValue, ".", extension));
@@ -47,11 +45,11 @@ public class UploadImageFileImpl implements UploadImageFile {
 
     private void cleanDisk(File file) {
         try {
-            log.info("file.toPath(): {}", file.toPath());
+
             Path filePath = file.toPath();
             Files.delete(filePath);
         } catch (IOException e) {
-            log.error("Error");
+
         }
     }
 

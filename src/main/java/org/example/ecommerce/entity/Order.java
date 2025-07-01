@@ -8,11 +8,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -51,16 +48,83 @@ public class Order {
     @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
 
-    @OneToMany(mappedBy = "orderid")
-    private Set<Complaint> complaints = new LinkedHashSet<>();
+    public Integer getId() {
+        return id;
+    }
 
-    @OneToMany(mappedBy = "orderid")
-    private Set<Orderitem> orderitems = new LinkedHashSet<>();
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    @OneToMany(mappedBy = "orderid")
-    private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
+    public Customer getCustomerid() {
+        return customerid;
+    }
 
-    @OneToMany(mappedBy = "orderid")
-    private Set<Payment> payments = new LinkedHashSet<>();
+    public void setCustomerid(Customer customerid) {
+        this.customerid = customerid;
+    }
 
+    public Instant getOrderdate() {
+        return orderdate;
+    }
+
+    public void setOrderdate(Instant orderdate) {
+        this.orderdate = orderdate;
+    }
+
+    public BigDecimal getTotalamount() {
+        return totalamount;
+    }
+
+    public void setTotalamount(BigDecimal totalamount) {
+        this.totalamount = totalamount;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

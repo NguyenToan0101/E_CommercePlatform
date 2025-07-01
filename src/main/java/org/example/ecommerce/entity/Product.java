@@ -1,11 +1,12 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import org.hibernate.annotations.Nationalized;
-
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -14,10 +15,10 @@ import java.util.List;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "products")
-@Data
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,9 +29,9 @@ public class Product {
     @JoinColumn(name = "shopid")
     private Shop shopid;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "categoryid")
-//    private Category categoryid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryid")
+    private Category categoryid;
 
     @Size(max = 100)
     @Nationalized
@@ -38,7 +39,6 @@ public class Product {
     private String name;
 
     @Nationalized
-//    @Lob
     @Column(name = "description")
     private String description;
 
@@ -52,13 +52,6 @@ public class Product {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryid")
-    private Category categoryid;
-
-
-
 
     @OneToMany(mappedBy = "productid")
     private Set<Cartitem> cartitems = new LinkedHashSet<>();

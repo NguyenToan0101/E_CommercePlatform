@@ -5,19 +5,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
-
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
-@Entity
-@Table(name = "categories")
 @Getter
 @Setter
+@Entity
+@Table(name = "categories")
 @ToString(exclude = {"parent", "children", "promotions"})
+
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +31,7 @@ public class Category {
     @Column(name = "categoryname", length = 100)
     private String categoryname;
 
-    @Nationalized
-    @Column(name = "image")
+    @Column(name = "image", length = Integer.MAX_VALUE)
     private String image;
 
     @ManyToOne()
@@ -43,9 +45,10 @@ public class Category {
     @ManyToMany(mappedBy = "categories")
     private List<Promotion> promotions;
 
-    public Category() {
+    public Category() {}
 
-    }
+    @OneToMany(mappedBy = "categoryid")
+    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
 
     public Category(Integer id, String categoryname) {
         this.id = id;

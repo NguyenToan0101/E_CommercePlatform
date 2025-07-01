@@ -7,8 +7,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "reviews")
 public class Review {
@@ -22,8 +20,8 @@ public class Review {
     private Product productid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customerid")
-    private Customer customerid;
+    @JoinColumn(name = "orderid")
+    private Order orderid;
 
     @Column(name = "rating")
     private Integer rating;
@@ -42,4 +40,67 @@ public class Review {
     @Column(name = "is_hidden")
     private Boolean isHidden;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Product getProductid() {
+        return productid;
+    }
+
+    public void setProductid(Product productid) {
+        this.productid = productid;
+    }
+
+    public Order getOrderid() {
+        return orderid;
+    }
+
+    public void setOrderid(Order orderid) {
+        this.orderid = orderid;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
+    public String getImagereviews() {
+        return imagereviews;
+    }
+
+    public void setImagereviews(String imagereviews) {
+        this.imagereviews = imagereviews;
+    }
+
+    public Instant getCreatedat() {
+        return createdat;
+    }
+
+    public void setCreatedat(Instant createdat) {
+        this.createdat = createdat;
+    }
+
+    public Boolean getHidden() {
+        return isHidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        isHidden = hidden;
+    }
 }

@@ -38,10 +38,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductDetail getProductDetail(Integer productId) {
         Product product = productRepo.findById(productId).orElse(null);
         Shop shop = shopRepo.findById(product.getShopid().getId()).orElse(null);
-        List<Inventory> inventories = inventoryRepo.findInventoryByProductid(product);
-        List<Productimage> images = imageRepo.findProductimageById(productId);
-        List<Review> reviews = reviewRepo.findByProductid_Id(productId);
-        List<Wishlist> wishlists = wishlistRepo.findByProductid_Id(productId);
-        return new ProductDetail(product, shop, inventories, images, reviews, wishlists);
+        List<Inventory> inventories = inventoryRepo.findAllByProductid(product);
+        List<Productimage> images = imageRepo.findAllByProductid(product);
+        List<Review> reviews = reviewRepo.findAllByProductidOrderByCreatedatDesc(product);
+        List<Wishlist> wishlists = wishlistRepo.findAllByProductid(product);
+        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, inventoryRepo.findFirstByProductidOrderByPriceAsc(product).getPrice());
     }
 }

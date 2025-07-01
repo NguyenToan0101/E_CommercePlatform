@@ -51,105 +51,104 @@ public class RegistrationController {
 
 
 
-    @PostMapping("/submit")
-    @Transactional
-    public ResponseEntity<?> getRegistration(@RequestBody ShopRegistrationDTO registrationDTO, HttpSession session) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        if (customer == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
-        }
-
-        try {
-            // Refresh customer từ database để tránh stale state
-            Customer managedCustomer = customerRepository.findById(customer.getId()).orElse(null);
-            if (managedCustomer == null) {
-                return ResponseEntity.badRequest().body("Customer not found");
-            }
-
-            // Tạo hoặc cập nhật Seller entity
-            Seller seller = managedCustomer.getSeller();
-
-
-            if (seller == null) {
-                // Kiểm tra xem seller đã tồn tại trong DB chưa
-                Optional<Seller> existingSeller = sellerRepo.findById(managedCustomer.getId());
-                if (existingSeller.isPresent()) {
-                    seller = existingSeller.get();
-                } else {
-                    seller = new Seller();
-                    seller.setId(managedCustomer.getId());
-
-                }
-                seller.setCustomer(managedCustomer);
-                managedCustomer.setSeller(seller);
-            }
-
-            // Cập nhật thông tin seller
-            seller.setIdnumber(registrationDTO.getIdNumber());
-
-            // Xử lý file upload
-            if (registrationDTO.getFrontIdImage() != null && !registrationDTO.getFrontIdImage().trim().isEmpty()) {
-                seller.setFrontidimage(registrationDTO.getFrontIdImage());
-            }
-            if (registrationDTO.getBackIdImage() != null && !registrationDTO.getBackIdImage().trim().isEmpty()) {
-                seller.setBackidimage(registrationDTO.getBackIdImage());
-            }
-
-            // Tạo hoặc cập nhật Shop entity
-            Shop shop = seller.getShop();
-
-
-            if (shop == null) {
-                // Kiểm tra xem shop đã tồn tại trong DB chưa
-                Optional<Shop> existingShop = shopRepo.findById(seller.getId());
-                if (existingShop.isPresent()) {
-                    shop = existingShop.get();
-                } else {
-                    shop = new Shop();
-                    shop.setId(seller.getId());
-
-                }
-                shop.setSeller( seller);
-                seller.setShop(shop);
-            }
-
-            // Cập nhật thông tin shop
-            shop.setShopname(registrationDTO.getShopName());
-            shop.setManagename(registrationDTO.getOwnerName());
-            shop.setPhone(registrationDTO.getPhone());
-            shop.setFulladdress(registrationDTO.getAddress().getFullAddress());
-            shop.setExpress(registrationDTO.getExpress());
-            shop.setFast(registrationDTO.getFast());
-            shop.setEconomy(registrationDTO.getEconomy());
-            shop.setLockerdelivery(registrationDTO.getLockerDelivery());
-            shop.setBulkyitems(registrationDTO.getBulkyItems());
-            shop.setBusinesstype(registrationDTO.getBusinessType());
-            shop.setBusinessaddress(registrationDTO.getBusinessAddress());
-            shop.setInvoiceemail(registrationDTO.getInvoiceEmail());
-            shop.setTaxcode(registrationDTO.getTaxCode());
-            shop.setStatus(Shop.Status.PENDING_APPROVAL.toString());
-
-            // Lưu theo thứ tự: Customer -> Seller -> Shop
-            managedCustomer = customerRepository.save(managedCustomer);
-
-            // Flush để đảm bảo data được persist
-//            em.flush();
-
-            // Update session với managed entity
-            session.setAttribute("customer", managedCustomer);
-
-
-            return ResponseEntity.ok("Registration successful");
-
-        } catch (OptimisticLockException | StaleObjectStateException e) {
-            logger.error("Concurrent modification detected", e);
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Data was modified by another user. Please refresh and try again.");
-        } catch (Exception e) {
-            logger.error("Registration failed", e);
-            return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/submit")
+//    @Transactional
+//    public ResponseEntity<?> getRegistration(@RequestBody ShopRegistrationDTO registrationDTO, HttpSession session) {
+//        Customer customer = (Customer) session.getAttribute("customer");
+//        if (customer == null) {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+//        }
+//
+//        try {
+//            // Refresh customer từ database để tránh stale state
+//            Customer managedCustomer = customerRepository.findById(customer.getId()).orElse(null);
+//            if (managedCustomer == null) {
+//                return ResponseEntity.badRequest().body("Customer not found");
+//            }
+//
+//            // Tạo hoặc cập nhật Seller entity
+//            Seller seller = managedCustomer.getSeller();
+//
+//
+//            if (seller == null) {
+//                // Kiểm tra xem seller đã tồn tại trong DB chưa
+//                Optional<Seller> existingSeller = sellerRepo.findById(managedCustomer.getId());
+//                if (existingSeller.isPresent()) {
+//                    seller = existingSeller.get();
+//                } else {
+//                    seller = new Seller();
+//                    seller.setId(managedCustomer.getId());
+//
+//                }
+//                seller.setCustomer(managedCustomer);
+//                managedCustomer.setSeller(seller);
+//            }
+//
+//            // Cập nhật thông tin seller
+//            seller.setIdNumber(registrationDTO.getIdNumber());
+//
+//            // Xử lý file upload
+//            if (registrationDTO.getFrontIdImage() != null && !registrationDTO.getFrontIdImage().trim().isEmpty()) {
+//                seller.setFrontIdImage(registrationDTO.getFrontIdImage());
+//            }
+//            if (registrationDTO.getBackIdImage() != null && !registrationDTO.getBackIdImage().trim().isEmpty()) {
+//                seller.setBackIdImage(registrationDTO.getBackIdImage());
+//            }
+//
+//            // Tạo hoặc cập nhật Shop entity
+//            Shop shop = seller.getShop();
+//
+//
+//            if (shop == null) {
+//                // Kiểm tra xem shop đã tồn tại trong DB chưa
+//                Optional<Shop> existingShop = shopRepo.findById(seller.getId());
+//                if (existingShop.isPresent()) {
+//                    shop = existingShop.get();
+//                } else {
+//                    shop = new Shop();
+//                    shop.setId(seller.getId());
+//
+//                }
+//                shop.setSellerid(seller);
+//                seller.setShop(shop);
+//            }
+//
+//            // Cập nhật thông tin shop
+//            shop.setShopname(registrationDTO.getShopName());
+//            shop.setManageName(registrationDTO.getOwnerName());
+//            shop.setPhone(registrationDTO.getPhone());
+//            shop.setFulladdress(registrationDTO.getAddress().getFullAddress());
+//            shop.setExpress(registrationDTO.getExpress());
+//            shop.setFast(registrationDTO.getFast());
+//            shop.setEconomy(registrationDTO.getEconomy());
+//            shop.setLockerDelivery(registrationDTO.getLockerDelivery());
+//            shop.setBulkyItems(registrationDTO.getBulkyItems());
+//            shop.setBusinessType(registrationDTO.getBusinessType());
+//            shop.setBusinessAddress(registrationDTO.getBusinessAddress());
+//            shop.setInvoiceEmail(registrationDTO.getInvoiceEmail());
+//            shop.setTaxCode(registrationDTO.getTaxCode());
+//            shop.setStatus(Shop.Status.PENDING_APPROVAL.toString());
+//
+//            // Lưu theo thứ tự: Customer -> Seller -> Shop
+//            managedCustomer = customerRepository.save(managedCustomer);
+//
+//            // Flush để đảm bảo data được persist
+////            em.flush();
+//
+//            // Update session với managed entity
+//            session.setAttribute("customer", managedCustomer);
+//
+//            return ResponseEntity.ok("Registration successful");
+//
+//        } catch (OptimisticLockException | StaleObjectStateException e) {
+//            logger.error("Concurrent modification detected", e);
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body("Data was modified by another user. Please refresh and try again.");
+//        } catch (Exception e) {
+//            logger.error("Registration failed", e);
+//            return ResponseEntity.badRequest().body("Registration failed: " + e.getMessage());
+//        }
+//    }
 
 
 

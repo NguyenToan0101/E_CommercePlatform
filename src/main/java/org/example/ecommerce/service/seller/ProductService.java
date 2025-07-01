@@ -87,7 +87,6 @@ public class ProductService {
 
         existingProduct.setName(updatedProduct.getName());
         existingProduct.setDescription(updatedProduct.getDescription());
-        existingProduct.setPrice(updatedProduct.getPrice());
         existingProduct.setStatus(updatedProduct.getStatus());
         existingProduct.setCreatedat(Instant.now());
 
