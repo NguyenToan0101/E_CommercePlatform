@@ -51,7 +51,9 @@ public class CustomerProductServiceImpl implements CustomerProductService {
                 String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
                 String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                String shopaddress = fullAddress.substring(fullAddress.lastIndexOf("Tỉnh") + 1).trim();
+                String keyword = "Tỉnh";
+                int index = fullAddress.indexOf(keyword);
+                String shopaddress = (index != -1) ? fullAddress.substring(index + keyword.length()).trim() : fullAddress;
 
                 List<Integer> rates = reviewRepository.findRateById(p.getId());
                 float rate = 0f;
