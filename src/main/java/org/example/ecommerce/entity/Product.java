@@ -2,15 +2,21 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Nationalized;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "products")
 public class Product {
@@ -27,14 +33,20 @@ public class Product {
     @JoinColumn(name = "categoryid")
     private Category categoryid;
 
-    @NotNull
-    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
+    @Size(max = 100)
+    @Nationalized
+    @Column(name = "name", length = 100)
     private String name;
 
-    @Column(name = "description", length = Integer.MAX_VALUE)
+    @Nationalized
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "status", length = Integer.MAX_VALUE)
+    @Column(name = "price", precision = 18, scale = 2)
+    private BigDecimal price;
+
+    @Size(max = 20)
+    @Column(name = "status", length = 20)
     private String status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
@@ -62,115 +74,4 @@ public class Product {
     @OneToMany(mappedBy = "productid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Shop getShopid() {
-        return shopid;
-    }
-
-    public void setShopid(Shop shopid) {
-        this.shopid = shopid;
-    }
-
-    public Category getCategoryid() {
-        return categoryid;
-    }
-
-    public void setCategoryid(Category categoryid) {
-        this.categoryid = categoryid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
-
-    public Set<Cartitem> getCartitems() {
-        return cartitems;
-    }
-
-    public void setCartitems(Set<Cartitem> cartitems) {
-        this.cartitems = cartitems;
-    }
-
-    public Set<Inventory> getInventories() {
-        return inventories;
-    }
-
-    public void setInventories(Set<Inventory> inventories) {
-        this.inventories = inventories;
-    }
-
-    public Set<Orderitem> getOrderitems() {
-        return orderitems;
-    }
-
-    public void setOrderitems(Set<Orderitem> orderitems) {
-        this.orderitems = orderitems;
-    }
-
-    public Set<Productimage> getProductimages() {
-        return productimages;
-    }
-
-    public void setProductimages(Set<Productimage> productimages) {
-        this.productimages = productimages;
-    }
-
-    public Set<PromotionTarget> getPromotionTargets() {
-        return promotionTargets;
-    }
-
-    public void setPromotionTargets(Set<PromotionTarget> promotionTargets) {
-        this.promotionTargets = promotionTargets;
-    }
-
-    public Set<Review> getReviews() {
-        return reviews;
-    }
-
-    public void setReviews(Set<Review> reviews) {
-        this.reviews = reviews;
-    }
-
-    public Set<Wishlist> getWishlists() {
-        return wishlists;
-    }
-
-    public void setWishlists(Set<Wishlist> wishlists) {
-        this.wishlists = wishlists;
-    }
 }

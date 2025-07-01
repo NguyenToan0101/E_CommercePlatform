@@ -4,13 +4,16 @@ import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Nationalized;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "shop")
+@Data
 public class Shop {
 
     @Id
-    @Column(name = "shopid", nullable = false)
+    @Column(name = "shopid")
     private Integer id;
 
     @OneToOne()
@@ -77,7 +80,7 @@ public class Shop {
     @Column(name = "businesstype", nullable = false, unique = true)
     private String businessType;
 
-    @Size(max = 255)
+
     @Nationalized
     @Column(name = "businessaddress", nullable = false, unique = true)
     private String businessAddress;
@@ -86,10 +89,16 @@ public class Shop {
     @Size(max = 100)
     @Column(name = "invoiceemail", nullable = false, unique = true)
     private String invoiceEmail;
-
     @Size(max = 20)
     @Column(name = "taxcode", nullable = false, unique = true)
     private String taxCode;
+    @OneToMany(mappedBy = "shopid")
+    private Set<Product> products = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "shopid")
+    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
+
+
 
     public Shop(Integer id,String status) {
         this.id = id;
@@ -104,173 +113,5 @@ public class Shop {
         PENDING_APPROVAL,
         ACTIVE,
         LOCK
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Seller getSellerid() {
-        return sellerid;
-    }
-
-    public void setSellerid(Seller sellerid) {
-        this.sellerid = sellerid;
-    }
-
-    public Integer getVersion() {
-        return version;
-    }
-
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    public String getShopname() {
-        return shopname;
-    }
-
-    public void setShopname(String shopname) {
-        this.shopname = shopname;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Category getMaincategoryid() {
-        return maincategoryid;
-    }
-
-    public void setMaincategoryid(Category maincategoryid) {
-        this.maincategoryid = maincategoryid;
-    }
-
-    public String getFulladdress() {
-        return fulladdress;
-    }
-
-    public void setFulladdress(String fulladdress) {
-        this.fulladdress = fulladdress;
-    }
-
-    public LocalDateTime getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(LocalDateTime createdat) {
-        this.createdat = createdat;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getImageshop() {
-        return imageshop;
-    }
-
-    public void setImageshop(String imageshop) {
-        this.imageshop = imageshop;
-    }
-
-    public String getManageName() {
-        return manageName;
-    }
-
-    public void setManageName(String manageName) {
-        this.manageName = manageName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public Boolean getExpress() {
-        return express;
-    }
-
-    public void setExpress(Boolean express) {
-        this.express = express;
-    }
-
-    public Boolean getFast() {
-        return fast;
-    }
-
-    public void setFast(Boolean fast) {
-        this.fast = fast;
-    }
-
-    public Boolean getEconomy() {
-        return economy;
-    }
-
-    public void setEconomy(Boolean economy) {
-        this.economy = economy;
-    }
-
-    public Boolean getLockerDelivery() {
-        return lockerDelivery;
-    }
-
-    public void setLockerDelivery(Boolean lockerDelivery) {
-        this.lockerDelivery = lockerDelivery;
-    }
-
-    public Boolean getBulkyItems() {
-        return bulkyItems;
-    }
-
-    public void setBulkyItems(Boolean bulkyItems) {
-        this.bulkyItems = bulkyItems;
-    }
-
-    public String getBusinessType() {
-        return businessType;
-    }
-
-    public void setBusinessType(String businessType) {
-        this.businessType = businessType;
-    }
-
-    public String getBusinessAddress() {
-        return businessAddress;
-    }
-
-    public void setBusinessAddress(String businessAddress) {
-        this.businessAddress = businessAddress;
-    }
-
-    public String getInvoiceEmail() {
-        return invoiceEmail;
-    }
-
-    public void setInvoiceEmail(String invoiceEmail) {
-        this.invoiceEmail = invoiceEmail;
-    }
-
-    public String getTaxCode() {
-        return taxCode;
-    }
-
-    public void setTaxCode(String taxCode) {
-        this.taxCode = taxCode;
     }
 }

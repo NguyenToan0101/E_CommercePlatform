@@ -1,73 +1,79 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.Data;
+import org.hibernate.annotations.Nationalized;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "promotions")
+@Data
 public class Promotion {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "promotionid", nullable = false)
+    @Column(name = "promotionid")
     private Integer id;
 
-    @NotNull
-    @Column(name = "code", nullable = false, length = Integer.MAX_VALUE)
+    @Column(nullable = false, unique = true)
     private String code;
-
-    @Column(name = "description", length = Integer.MAX_VALUE)
+    @Nationalized
     private String description;
 
-    @NotNull
-    @Column(name = "startdate", nullable = false)
-    private LocalDate startdate;
+    @Column(nullable = false)
+    private LocalDateTime startdate;
 
-    @NotNull
-    @Column(name = "enddate", nullable = false)
-    private LocalDate enddate;
+    @Column(nullable = false)
+    private LocalDateTime enddate;
 
-    @ColumnDefault("false")
-    @Column(name = "isglobal")
-    private Boolean isglobal;
 
-    @Column(name = "name", length = Integer.MAX_VALUE)
+    @Nationalized
     private String name;
-
-    @Column(name = "type", length = Integer.MAX_VALUE)
+    @Nationalized
     private String type;
 
-    @Column(name = "quantity")
-    private Long quantity;
 
-    @Column(name = "min_order_amount")
-    private BigDecimal minOrderAmount;
+    @Column(name = "min_order_value")
+    private Integer minOrderValue;
 
-    @Column(name = "max_discount_amount")
-    private BigDecimal maxDiscountAmount;
-
-    @Column(name = "usage")
-    private Integer usage;
-
+    @Column(name = "max_discount")
+    private Integer maxDiscount;
+    @Column(name = "usage_limit")
+    private Integer usageLimit;
+    @Column(name = "usage_count")
+    private Integer usageCount;
     @Column(name = "per_user_limit")
     private Integer perUserLimit;
+    private Double value;
+    private Double revenue;
+    private String status;
+    private Integer orders;
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JoinTable(
+            name = "promotion_category",
+            joinColumns = @JoinColumn(name = "promotionid"),
+            inverseJoinColumns = @JoinColumn(name = "categoryid")
+    )
+    private List<Category> categories;
 
-    @Column(name = "value")
-    private BigDecimal value;
+    public Promotion() {
+    }
 
-    @Column(name = "effective")
-    private BigDecimal effective;
+    public enum Type{
+        PERCENTAGE,
+        SHIPPING,
+        FIXED
+    }
 
-    @OneToMany(mappedBy = "promotionid")
-    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
-
+    public enum Status{
+       ACTIVE,
+        SCHEDULED,
+        EXPIRED,
+        PAUSED
+    }
 }
+

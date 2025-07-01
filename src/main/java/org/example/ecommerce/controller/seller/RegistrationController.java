@@ -6,7 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
-import org.example.ecommerce.dto.ShopRegistrationDTO;
+import org.example.ecommerce.common.dto.ShopRegistrationDTO;
 import org.example.ecommerce.entity.Customer;
 import org.example.ecommerce.entity.Seller;
 import org.example.ecommerce.entity.Shop;
@@ -22,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
