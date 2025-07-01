@@ -6,11 +6,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.OptimisticLockException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
-import org.example.ecommerce.dto.ShopRegistrationDTO;
+import org.example.ecommerce.common.dto.ShopRegistrationDTO;
 import org.example.ecommerce.entity.Customer;
 import org.example.ecommerce.entity.Seller;
 import org.example.ecommerce.entity.Shop;
-import org.example.ecommerce.repository.UserRepository;
+import org.example.ecommerce.repository.CustomerRepository;
 import org.example.ecommerce.repository.seller.SellerRepo;
 import org.example.ecommerce.repository.seller.ShopRepo;
 import org.example.ecommerce.service.seller.RegistrationService;
@@ -22,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,14 +32,14 @@ import org.slf4j.LoggerFactory;
 public class RegistrationController {
     protected RegistrationService registrationService;
     protected  SellerService sellerService;
-    private final UserRepository customerRepository;
+    private final CustomerRepository customerRepository;
     protected ShopService shopService;
     protected  SellerRepo sellerRepo;
     protected ShopRepo shopRepo;
     private Logger logger = LoggerFactory.getLogger(RegistrationController.class);
     private EntityManager em;
 
-    public RegistrationController(RegistrationService registrationService, SellerService sellerService, UserRepository customerRepository, ShopService shopService, SellerRepo sellerRepo, ShopRepo shopRepo) {
+    public RegistrationController(RegistrationService registrationService, SellerService sellerService, CustomerRepository customerRepository, ShopService shopService, SellerRepo sellerRepo, ShopRepo shopRepo) {
         this.registrationService = registrationService;
         this.sellerService = sellerService;
 

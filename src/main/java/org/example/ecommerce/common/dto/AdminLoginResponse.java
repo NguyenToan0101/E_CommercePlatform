@@ -1,4 +1,4 @@
-package org.example.ecommerce.dto;
+package org.example.ecommerce.common.dto;
 
 import lombok.Data;
 

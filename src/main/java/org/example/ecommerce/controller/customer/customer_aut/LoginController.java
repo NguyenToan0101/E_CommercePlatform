@@ -37,13 +37,21 @@ public class LoginController {
         if(adminService.isAdmin(email,password)){
             return "redirect:/adminHome";
         }
-        Customer customer = customerService.login(email, password);
+        Customer customer = customerService.findByEmail(email);
         if (customer != null) {
-
-            session.setAttribute("customer", customer);
-            session.setAttribute("role", customer.getRole());
-            return "redirect:/home";
-        }else{
+            if (!customer.isStatus() || customer.isLocked()) {
+                model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa");
+                return "login";
+            }
+            if (org.springframework.security.crypto.bcrypt.BCrypt.checkpw(password, customer.getPassword())) {
+                session.setAttribute("customer", customer);
+                session.setAttribute("role", customer.getRole());
+                return "redirect:/home";
+            } else {
+                model.addAttribute("errorMessage", "email hoặc mật khẩu không đúng");
+                return "login";
+            }
+        } else {
             model.addAttribute("errorMessage", "email hoặc mật khẩu không đúng");
             return "login";
         }

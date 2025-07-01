@@ -7,6 +7,7 @@ import org.hibernate.annotations.Nationalized;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "customer")
@@ -67,12 +68,19 @@ public class Customer {
     @Column(name = "role", length = 20)
     private String role;
 
-    @Column(name = "status")
-    private Boolean status;
+
+    @Column(nullable = false)
+    private boolean status;
 
     @Column(name = "createdat")
     private Instant createdat;
 
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
+    @Column(name = "is_locked")
+    private boolean isLocked;
 
 
     public Seller getSeller() {
@@ -171,12 +179,36 @@ public class Customer {
         this.role = role;
     }
 
-    public Boolean getStatus() {
+    public Integer getVersion() {
+        return version;
+    }
+
+    public void setVersion(Integer version) {
+        this.version = version;
+    }
+
+    public boolean isStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(boolean status) {
         this.status = status;
+    }
+
+    public LocalDateTime getLockedUntil() {
+        return lockedUntil;
+    }
+
+    public void setLockedUntil(LocalDateTime lockedUntil) {
+        this.lockedUntil = lockedUntil;
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
+    public void setLocked(boolean locked) {
+        isLocked = locked;
     }
 
     public Instant getCreatedat() {
@@ -186,5 +218,7 @@ public class Customer {
     public void setCreatedat(Instant createdat) {
         this.createdat = createdat;
     }
+
+
 
 }
