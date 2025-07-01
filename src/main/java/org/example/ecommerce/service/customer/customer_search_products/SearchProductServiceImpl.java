@@ -42,7 +42,7 @@ public class SearchProductServiceImpl implements SearchProductService {
         List<Product> products = productRepository.findAll();
 
         for (Product p : products) {
-            if (p.getStatus().equals("active") && p.getCategoryid() != null && p.getCategoryid().getId().equals(categoryId) && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
+            if (p.getStatus().equals("available") && p.getCategoryid() != null && p.getCategoryid().getId().equals(categoryId)) {
 
                 int totalSold = inventoryRepository.findAllByProductid(p)
                         .stream()
@@ -67,7 +67,7 @@ public class SearchProductServiceImpl implements SearchProductService {
 
                 String categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
 
-                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName
+                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName
                 ));
             }
         }
@@ -79,7 +79,7 @@ public class SearchProductServiceImpl implements SearchProductService {
         List<Product> products = productRepository.findByNameContainingIgnoreCase(keyword);
         List<ProductView> views = new ArrayList<>();
         for (Product p : products) {
-            if (p.getStatus().equals("active")){
+            if (p.getStatus().equals("available")){
                 int totalSold = inventoryRepository.findAllByProductid(p)
                         .stream()
                         .mapToInt(i -> i.getSolditems())
@@ -106,7 +106,7 @@ public class SearchProductServiceImpl implements SearchProductService {
                     categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
                 }
 
-                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
             }
         }
         return views;

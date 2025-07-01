@@ -38,11 +38,14 @@ public class CustomerProductServiceImpl implements CustomerProductService {
         List<Product> products = productRepository.findAll();
         List<ProductView> views = new ArrayList<>();
         for (Product p : products) {
-            if (p.getStatus().equals("available") && inventoryRepository.findAllByProductid(p).size()>0) {
-                int totalSold = inventoryRepository.findAllByProductid(p)
-                        .stream()
-                        .mapToInt(Inventory::getSolditems)
+            if (p.getStatus().equals("available")) {
+                List<Inventory> inventories = inventoryRepository.findAllByProductid(p);
+                int totalSold = (inventories == null || inventories.isEmpty())
+                        ? 0
+                        : inventories.stream()
+                        .mapToInt(inv -> inv.getSolditems() != null ? inv.getSolditems() : 0)
                         .sum();
+
 
                 List<Productimage> imgs = productimageRepository.findAllByProductid(p);
                 String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
@@ -67,7 +70,7 @@ public class CustomerProductServiceImpl implements CustomerProductService {
                     categoryName= categoryRepository.findById(categoryId).get().getCategoryname();
                 }
 
-                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
             }
         }
         return views;

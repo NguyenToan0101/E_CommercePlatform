@@ -96,7 +96,7 @@ public class WishlistServiceImpl implements WishlistService {
                     }
 
                     views.add(new ProductView(
-                            p.getId(), p.getName(), p.getPrice(), totalSold,
+                            p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold,
                             imageUrl, shopaddress, rate, categoryId, categoryName
                     ));
                 }

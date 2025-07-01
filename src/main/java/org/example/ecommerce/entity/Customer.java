@@ -2,11 +2,15 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "customer")
@@ -45,8 +49,8 @@ public class Customer {
     @Column(name = "role", length = Integer.MAX_VALUE)
     private String role;
 
-    @Column(name = "status", length = Integer.MAX_VALUE)
-    private String status;
+    @Column(name = "status")
+    private Boolean status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
@@ -57,6 +61,30 @@ public class Customer {
 
     @Column(name = "version")
     private Long version;
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Cart> carts = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Complaint> complaints = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Conversation> conversations = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Order> orders = new LinkedHashSet<>();
+
+    @OneToOne(mappedBy = "customer")
+    private Seller seller;
+
+    @OneToOne(mappedBy = "customerid")
+    private Wallet wallet;
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -138,11 +166,11 @@ public class Customer {
         this.role = role;
     }
 
-    public String getStatus() {
+    public Boolean getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -168,5 +196,69 @@ public class Customer {
 
     public void setVersion(Long version) {
         this.version = version;
+    }
+
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public Set<Complaint> getComplaints() {
+        return complaints;
+    }
+
+    public void setComplaints(Set<Complaint> complaints) {
+        this.complaints = complaints;
+    }
+
+    public Set<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(Set<Conversation> conversations) {
+        this.conversations = conversations;
+    }
+
+    public Set<Ordernotification> getOrdernotifications() {
+        return ordernotifications;
+    }
+
+    public void setOrdernotifications(Set<Ordernotification> ordernotifications) {
+        this.ordernotifications = ordernotifications;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    public Set<Wishlist> getWishlists() {
+        return wishlists;
+    }
+
+    public void setWishlists(Set<Wishlist> wishlists) {
+        this.wishlists = wishlists;
     }
 }

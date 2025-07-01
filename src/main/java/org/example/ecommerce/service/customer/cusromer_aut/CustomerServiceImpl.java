@@ -51,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.setRole("Customer");
-        customer.setStatus("active");
+        customer.setStatus(true);
         customer.setCreatedat(instant);
 
         String token = UUID.randomUUID().toString();

@@ -42,6 +42,6 @@ public class ProductServiceImpl implements ProductService {
         List<Productimage> images = imageRepo.findAllByProductid(product);
         List<Review> reviews = reviewRepo.findAllByProductidOrderByCreatedatDesc(product);
         List<Wishlist> wishlists = wishlistRepo.findAllByProductid(product);
-        return new ProductDetail(product, shop, inventories, images, reviews, wishlists);
+        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, inventoryRepo.findFirstByProductidOrderByPriceAsc(product).getPrice());
     }
 }

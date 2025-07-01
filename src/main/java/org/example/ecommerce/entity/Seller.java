@@ -33,8 +33,20 @@ public class Seller {
     @Column(name = "backidimage")
     private String backIdImage;
 
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sellerid", nullable = false)
+    private Customer customer1;
 
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sellerid", nullable = false)
+    private Customer customer2;
 
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sellerid", nullable = false)
+    private Customer customer3;
 
 
     public Seller() {

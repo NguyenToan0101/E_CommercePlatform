@@ -1,10 +1,14 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+
 
 @Entity
 @Table(name = "orders")
@@ -43,12 +47,6 @@ public class Order {
 
     @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
-
-    @OneToMany(mappedBy = "orderid")
-    private Set<Orderitem> orderitems = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "orderid")
-    private Set<Payment> payments = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -128,21 +126,5 @@ public class Order {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Set<Orderitem> getOrderitems() {
-        return orderitems;
-    }
-
-    public void setOrderitems(Set<Orderitem> orderitems) {
-        this.orderitems = orderitems;
-    }
-
-    public Set<Payment> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(Set<Payment> payments) {
-        this.payments = payments;
     }
 }

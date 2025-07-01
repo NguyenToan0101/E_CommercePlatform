@@ -28,4 +28,35 @@ public class Cart {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Customer getCustomerid() {
+        return customerid;
+    }
+
+    public void setCustomerid(Customer customerid) {
+        this.customerid = customerid;
+    }
+
+    public Instant getCreatedat() {
+        return createdat;
+    }
+
+    public void setCreatedat(Instant createdat) {
+        this.createdat = createdat;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

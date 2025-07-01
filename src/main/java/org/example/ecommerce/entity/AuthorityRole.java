@@ -1,6 +1,8 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import org.example.ecommerce.entity.admin.Authority;
+import org.example.ecommerce.entity.admin.Role;
 
 @Entity
 @Table(name = "authority_roles")

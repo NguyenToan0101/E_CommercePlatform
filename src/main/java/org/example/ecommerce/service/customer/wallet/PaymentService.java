@@ -58,7 +58,7 @@ public class PaymentService {
         BigDecimal totalAmountAllOrders = BigDecimal.ZERO;
         for (List<Cartitem> items : itemsByShop.values()) {
             for (Cartitem ci : items) {
-                BigDecimal price = ci.getProductid().getPrice();
+                BigDecimal price = ci.getInventoryid().getPrice();
                 BigDecimal itemTotal = price.multiply(BigDecimal.valueOf(ci.getQuantity()));
                 totalAmountAllOrders = totalAmountAllOrders.add(itemTotal);
             }
@@ -83,7 +83,7 @@ public class PaymentService {
 
             BigDecimal totalAmount = BigDecimal.ZERO;
             for (Cartitem ci : items) {
-                BigDecimal price = ci.getProductid().getPrice();
+                BigDecimal price = ci.getInventoryid().getPrice();
                 BigDecimal itemTotal = price.multiply(BigDecimal.valueOf(ci.getQuantity()));
                 totalAmount = totalAmount.add(itemTotal);
             }
@@ -104,7 +104,7 @@ public class PaymentService {
                 oi.setProductid(ci.getProductid());
                 oi.setInventoryid(ci.getInventoryid());
                 oi.setQuantity(ci.getQuantity());
-                oi.setUnitprice(ci.getProductid().getPrice());
+                oi.setUnitprice(ci.getInventoryid().getPrice());
                 orderItemsRepository.save(oi);
 
                 Customer seller = ci.getProductid().getShopid().getSellerid().getCustomer();
@@ -115,7 +115,7 @@ public class PaymentService {
                     sellerWallet.setBalance(BigDecimal.ZERO);
                     walletRepository.save(sellerWallet);
                 }
-                BigDecimal sellerAmount = ci.getProductid().getPrice().multiply(BigDecimal.valueOf(ci.getQuantity()));
+                BigDecimal sellerAmount = ci.getInventoryid().getPrice().multiply(BigDecimal.valueOf(ci.getQuantity()));
                 sellerWallet.setBalance(sellerWallet.getBalance().add(sellerAmount));
                 walletRepository.save(sellerWallet);
 
@@ -157,7 +157,7 @@ public class PaymentService {
             return "Sản phẩm không đủ hàng trong kho";
         }
 
-        BigDecimal price = product.getPrice();
+        BigDecimal price = inventoryRepository.findFirstByProductidOrderByPriceAsc(product).getPrice();
         BigDecimal totalAmount = price.multiply(BigDecimal.valueOf(quantity));
 
         if (wallet.getBalance().compareTo(totalAmount) < 0) {
@@ -232,7 +232,7 @@ public class PaymentService {
             dto.setImageUrl(imageUrl);
 
             dto.setQuantity(ci.getQuantity());
-            dto.setPrice(ci.getProductid().getPrice());
+            dto.setPrice(ci.getInventoryid().getPrice());
 
             Inventory inventory = ci.getInventoryid();
             dto.setColor(inventory.getColor());
@@ -258,7 +258,7 @@ public class PaymentService {
 
             dto.setQuantity(quantity);
             dto.setInventoryId(inventoryId);
-            dto.setPrice(product.getPrice());
+            dto.setPrice((inventoryRepository.findFirstByProductidOrderByPriceAsc(product).getPrice()));
 
             dto.setColor(inventory.getColor());
             dto.setDimension(inventory.getDimension());
