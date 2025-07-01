@@ -16,7 +16,7 @@ public class Seller {
     @Column(name = "sellerid", nullable = false)
     private Integer id;
     @OneToOne(cascade = CascadeType.ALL,mappedBy = "sellerid")
-
+    @Nationalized
     private Shop shop;
     @OneToOne()
     @JoinColumn(name = "sellerid")

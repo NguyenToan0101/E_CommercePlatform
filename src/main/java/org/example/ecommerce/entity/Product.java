@@ -2,13 +2,17 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "products")
+@Data
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,9 +23,9 @@ public class Product {
     @JoinColumn(name = "shopid")
     private Shop shopid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryid")
-    private Category categoryid;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "categoryid")
+//    private Category categoryid;
 
     @Size(max = 100)
     @Nationalized
@@ -43,68 +47,13 @@ public class Product {
     @Column(name = "createdat")
     private Instant createdat;
 
-    public Integer getId() {
-        return id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryid")
+    private Category categoryid;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "productid",cascade = CascadeType.ALL)
+    private List<PromotionTarget> promotionTargets = new ArrayList<>();
 
-    public Shop getShopid() {
-        return shopid;
-    }
 
-    public void setShopid(Shop shopid) {
-        this.shopid = shopid;
-    }
-
-    public Category getCategoryid() {
-        return categoryid;
-    }
-
-    public void setCategoryid(Category categoryid) {
-        this.categoryid = categoryid;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
 
 }

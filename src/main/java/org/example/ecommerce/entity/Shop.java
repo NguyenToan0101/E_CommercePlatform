@@ -4,6 +4,8 @@ import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Nationalized;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "shop")
@@ -78,7 +80,7 @@ public class Shop {
     @Column(name = "businesstype", nullable = false, unique = true)
     private String businessType;
 
-    @Size(max = 255)
+   
     @Nationalized
     @Column(name = "businessaddress", nullable = false, unique = true)
     private String businessAddress;
@@ -91,6 +93,8 @@ public class Shop {
     @Size(max = 20)
     @Column(name = "taxcode", nullable = false, unique = true)
     private String taxCode;
+    @OneToMany(mappedBy = "shopid" ,cascade = CascadeType.ALL)
+    private List<PromotionTarget> promotionTargets = new ArrayList<>();
 
     public Shop(Integer id,String status) {
         this.id = id;

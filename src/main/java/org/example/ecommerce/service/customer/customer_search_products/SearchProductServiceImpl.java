@@ -42,7 +42,8 @@ public class SearchProductServiceImpl implements SearchProductService {
         List<Product> products = productRepository.findAll();
 
         for (Product p : products) {
-            if (p.getStatus().equals("active") && p.getCategoryid() != null && p.getCategoryid().getId().equals(categoryId) && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
+//            if (p.getStatus().equals("active") && p.getCategoryid() != null && p.getCategoryid().getId().equals(categoryId) && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
+            if (p.getStatus().equals("active")  && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
 
                 int totalSold = inventoryRepository.findInventoryById(p.getId())
                         .stream()
@@ -99,14 +100,15 @@ public class SearchProductServiceImpl implements SearchProductService {
                     rate = Math.round((sum / rates.size()) * 10f) / 10f;
                 }
 
-                Integer categoryId = null;
-                String categoryName = null;
-                if (p.getCategoryid() != null) {
-                    categoryId = p.getCategoryid().getId();
-                    categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
-                }
+//                Integer categoryId = null;
+//                String categoryName = null;
+//                if (p.getCategoryid() != null) {
+//                    categoryId = p.getCategoryid().getId();
+//                    categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
+//                }
 
-                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+//                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate));
             }
         }
         return views;

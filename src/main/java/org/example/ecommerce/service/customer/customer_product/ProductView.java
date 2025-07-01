@@ -25,6 +25,16 @@ public class ProductView {
         this.categoryname = categoryname;
     }
 
+    public ProductView(Integer id, String name, BigDecimal price, int totalSold, String imageUrl, String shopaddress, float rate) {
+        this.productId = id;
+        this.name = name;
+        this.price = price;
+        this.totalSold = totalSold;
+        this.imageUrl = imageUrl;
+        this.shopaddress = shopaddress;
+        this.rate = rate;
+    }
+
     public Integer getProductId() {
         return productId;
     }

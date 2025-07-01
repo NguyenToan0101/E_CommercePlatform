@@ -60,14 +60,15 @@ public class CustomerProductServiceImpl implements CustomerProductService {
                     rate = Math.round((sum / rates.size()) * 10f) / 10f;
                 }
 
-                Integer categoryId = null;
-                String categoryName = null;
-                if (p.getCategoryid() != null) {
-                    categoryId = p.getCategoryid().getId();
-                    categoryName= categoryRepository.findById(categoryId).get().getCategoryname();
-                }
+//                Integer categoryId = null;
+//                String categoryName = null;
+//                if (p.getCategoryid() != null) {
+//                    categoryId = p.getCategoryid().getId();
+//                    categoryName= categoryRepository.findById(categoryId).get().getCategoryname();
+//                }
 
-                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate));
+//                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
             }
         }
         return views;

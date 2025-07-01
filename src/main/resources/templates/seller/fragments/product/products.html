@@ -59,16 +59,16 @@
             </tr>
 
             <!-- Biến thể -->
-            <tr th:each="variant : ${product.inventoryList}" th:id="'variants-of-' + ${product.id}" class="variant-row" style="display:none;">
-                <td colspan="5">
-                    <div class="variant-item">
-                        <strong>Màu:</strong> <span th:text="${variant.color}">Màu</span> |
-                        <strong>Kích thước:</strong> <span th:text="${variant.dimension}">Kích thước</span> |
-                        <strong>Số lượng:</strong> <span th:text="${variant.quantity}">0</span> |
-                        <strong>Đã bán:</strong> <span th:text="${variant.solditems}">0</span>
-                    </div>
-                </td>
-            </tr>
+<!--            <tr th:each="variant : ${product.inventoryList}" th:id="'variants-of-' + ${product.id}" class="variant-row" style="display:none;">-->
+<!--                <td colspan="5">-->
+<!--                    <div class="variant-item">-->
+<!--                        <strong>Màu:</strong> <span th:text="${variant.color}">Màu</span> |-->
+<!--                        <strong>Kích thước:</strong> <span th:text="${variant.dimension}">Kích thước</span> |-->
+<!--                        <strong>Số lượng:</strong> <span th:text="${variant.quantity}">0</span> |-->
+<!--                        <strong>Đã bán:</strong> <span th:text="${variant.solditems}">0</span>-->
+<!--                    </div>-->
+<!--                </td>-->
+<!--            </tr>-->
             </tbody>
         </table>
     </div>

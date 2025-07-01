@@ -1,16 +1,13 @@
 package org.example.ecommerce.controller.admin;
 
-import org.example.ecommerce.dto.AdminLoginRequest;
-import org.example.ecommerce.dto.AdminLoginResponse;
-import org.example.ecommerce.model.User;
-import org.example.ecommerce.service.UserService;
+import org.example.ecommerce.common.dto.AdminLoginRequest;
+
 import org.example.ecommerce.service.admin.AdminService;
 
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +21,7 @@ public class AuthController {
     private String frontendAdminUrl;
 
 
-    public AuthController(UserService userService, AdminService adminService) {
+    public AuthController( AdminService adminService) {
         this.adminService = adminService;
     }
 
