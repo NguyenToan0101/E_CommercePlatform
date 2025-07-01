@@ -38,8 +38,8 @@ public class CustomerProductServiceImpl implements CustomerProductService {
         List<Product> products = productRepository.findAll();
         List<ProductView> views = new ArrayList<>();
         for (Product p : products) {
-            if (p.getStatus().equals("active") && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
-                int totalSold = inventoryRepository.findInventoryById(p.getId())
+            if (p.getStatus().equalsIgnoreCase("available") && inventoryRepository.findInventoriesById(p.getId()).getQuantity()>0) {
+                int totalSold = inventoryRepository.findInventoryByProductid(p)
                         .stream()
                         .mapToInt(Inventory::getSolditems)
                         .sum();

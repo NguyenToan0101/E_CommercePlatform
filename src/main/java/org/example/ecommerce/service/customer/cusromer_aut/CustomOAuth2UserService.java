@@ -1,7 +1,6 @@
 package org.example.ecommerce.service.customer.cusromer_aut;
 
 import org.example.ecommerce.entity.Customer;
-import org.example.ecommerce.entity.Seller;
 import org.example.ecommerce.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             customer.setLastname("");
             customer.setPhone("**********");
             customer.setRole("Customer");
-            customer.setStatus(true);
+            customer.setStatus("Active");
             customer.setCreatedat(Instant.now());
 //            customer.setSeller(new Seller(customer.getId()));
             customerRepository.save(customer);

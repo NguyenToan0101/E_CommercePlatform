@@ -1,14 +1,19 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "carts")
 public class Cart {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ColumnDefault("nextval('carts_cartid_seq')")
     @Column(name = "cartid", nullable = false)
     private Integer id;
 
@@ -16,31 +21,11 @@ public class Cart {
     @JoinColumn(name = "customerid")
     private Customer customerid;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Customer getCustomerid() {
-        return customerid;
-    }
-
-    public void setCustomerid(Customer customerid) {
-        this.customerid = customerid;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
 }

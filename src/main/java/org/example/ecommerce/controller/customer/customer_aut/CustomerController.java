@@ -1,3 +1,4 @@
+
 package org.example.ecommerce.controller.customer.customer_aut;
 
 import org.example.ecommerce.entity.Customer;
@@ -198,7 +199,7 @@ public class CustomerController {
 
         customerService.updateProfile(customer1);
         session.setAttribute("customer", customer1);
-            return "redirect:/customers/profile";
+        return "redirect:/customers/profile";
     }
 
 }

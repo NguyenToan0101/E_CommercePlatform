@@ -1,11 +1,18 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -18,54 +25,42 @@ public class Order {
     @JoinColumn(name = "customerid")
     private Customer customerid;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "orderdate")
     private Instant orderdate;
 
-    @Column(name = "totalamount", precision = 18, scale = 2)
+    @NotNull
+    @Column(name = "totalamount", nullable = false)
     private BigDecimal totalamount;
 
-    @Size(max = 20)
-    @Column(name = "status", length = 20)
+    @Column(name = "status", length = Integer.MAX_VALUE)
     private String status;
 
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "payment_status", length = Integer.MAX_VALUE)
+    private String paymentStatus;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
-    public Customer getCustomerid() {
-        return customerid;
-    }
+    @Column(name = "fullname", length = Integer.MAX_VALUE)
+    private String fullname;
 
-    public void setCustomerid(Customer customerid) {
-        this.customerid = customerid;
-    }
+    @Column(name = "phone", length = Integer.MAX_VALUE)
+    private String phone;
 
-    public Instant getOrderdate() {
-        return orderdate;
-    }
+    @Column(name = "address", length = Integer.MAX_VALUE)
+    private String address;
 
-    public void setOrderdate(Instant orderdate) {
-        this.orderdate = orderdate;
-    }
+    @OneToMany(mappedBy = "orderid")
+    private Set<Complaint> complaints = new LinkedHashSet<>();
 
-    public BigDecimal getTotalamount() {
-        return totalamount;
-    }
+    @OneToMany(mappedBy = "orderid")
+    private Set<Orderitem> orderitems = new LinkedHashSet<>();
 
-    public void setTotalamount(BigDecimal totalamount) {
-        this.totalamount = totalamount;
-    }
+    @OneToMany(mappedBy = "orderid")
+    private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    @OneToMany(mappedBy = "orderid")
+    private Set<Payment> payments = new LinkedHashSet<>();
 
 }
