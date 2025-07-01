@@ -4,8 +4,8 @@ import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Nationalized;
 import lombok.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "shop")
@@ -13,7 +13,7 @@ import java.util.List;
 public class Shop {
 
     @Id
-    @Column(name = "shopid", nullable = false)
+    @Column(name = "shopid")
     private Integer id;
 
     @OneToOne()
@@ -80,7 +80,7 @@ public class Shop {
     @Column(name = "businesstype", nullable = false, unique = true)
     private String businessType;
 
-   
+
     @Nationalized
     @Column(name = "businessaddress", nullable = false, unique = true)
     private String businessAddress;
@@ -89,12 +89,16 @@ public class Shop {
     @Size(max = 100)
     @Column(name = "invoiceemail", nullable = false, unique = true)
     private String invoiceEmail;
-
     @Size(max = 20)
     @Column(name = "taxcode", nullable = false, unique = true)
     private String taxCode;
-    @OneToMany(mappedBy = "shopid" ,cascade = CascadeType.ALL)
-    private List<PromotionTarget> promotionTargets = new ArrayList<>();
+    @OneToMany(mappedBy = "shopid")
+    private Set<Product> products = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "shopid")
+    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
+
+
 
     public Shop(Integer id,String status) {
         this.id = id;

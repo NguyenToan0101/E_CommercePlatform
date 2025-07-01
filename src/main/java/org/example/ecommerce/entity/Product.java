@@ -5,10 +5,15 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "products")
@@ -44,6 +49,7 @@ public class Product {
     @Column(name = "status", length = 20)
     private String status;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
 
@@ -51,9 +57,28 @@ public class Product {
     @JoinColumn(name = "categoryid")
     private Category categoryid;
 
-    @OneToMany(mappedBy = "productid",cascade = CascadeType.ALL)
-    private List<PromotionTarget> promotionTargets = new ArrayList<>();
 
 
+
+    @OneToMany(mappedBy = "productid")
+    private Set<Cartitem> cartitems = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "productid")
+    private Set<Inventory> inventories = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "productid")
+    private Set<Orderitem> orderitems = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "productid")
+    private Set<Productimage> productimages = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "productid")
+    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "productid")
+    private Set<Review> reviews = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "productid")
+    private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
 }

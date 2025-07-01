@@ -4,20 +4,23 @@ import jakarta.persistence.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "sellers")
-@Data
+@Getter
+@Setter
 public class Seller {
     @Id
     @Column(name = "sellerid", nullable = false)
     private Integer id;
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "sellerid")
-    @Nationalized
-    private Shop shop;
+
     @OneToOne()
     @JoinColumn(name = "sellerid")
     @MapsId
@@ -34,8 +37,12 @@ public class Seller {
     private String backIdImage;
 
 
+    @OneToMany(mappedBy = "sellerid")
+    private Set<Conversation> conversations = new LinkedHashSet<>();
 
-
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "sellerid")
+    @Nationalized
+    private Shop shop;
 
     public Seller() {
     }

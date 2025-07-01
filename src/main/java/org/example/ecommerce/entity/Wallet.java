@@ -2,9 +2,17 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "wallets")
 public class Wallet {
@@ -18,33 +26,18 @@ public class Wallet {
     @JoinColumn(name = "customerid", nullable = false)
     private Customer customerid;
 
-
-    @Column(name = "balance", precision = 18, scale = 2)
+    @ColumnDefault("0.00")
+    @Column(name = "balance")
     private BigDecimal balance;
 
-    public Integer getId() {
-        return id;
-    }
+    @ColumnDefault("CURRENT_TIMESTAMP")
+    @Column(name = "last_updated")
+    private Instant lastUpdated;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @OneToMany(mappedBy = "walletid")
+    private Set<Payment> payments = new LinkedHashSet<>();
 
-    public Customer getCustomerid() {
-        return customerid;
-    }
-
-    public void setCustomerid(Customer customerid) {
-        this.customerid = customerid;
-    }
-
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BigDecimal balance) {
-        this.balance = balance;
-    }
+    @OneToMany(mappedBy = "walletid")
+    private Set<WalletHistory> walletHistories = new LinkedHashSet<>();
 
 }

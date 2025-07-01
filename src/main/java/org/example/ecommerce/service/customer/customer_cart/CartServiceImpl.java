@@ -85,7 +85,7 @@ public class CartServiceImpl implements CartService {
     }
 
     public void updateCartItem(int cartItemId, int quantity) {
-        Cartitem item = cartitemRepository.findById(cartItemId);
+        Cartitem item = cartitemRepository.findById(cartItemId).orElse(null);
         if (item != null) {
             item.setQuantity(quantity);
             cartitemRepository.save(item);
@@ -93,7 +93,7 @@ public class CartServiceImpl implements CartService {
     }
 
     public void removeCartItem(int cartItemId) {
-        Cartitem item = cartitemRepository.findById(cartItemId);
+        Cartitem item = cartitemRepository.findById(cartItemId).orElse(null);
         if (item != null) {
             cartitemRepository.delete(item);
         }
