@@ -1455,32 +1455,12 @@
 
           <div class="product-meta">
             <div class="product-rating">
-              <div class="rating-stars">
-                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                </svg>
-                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                </svg>
-                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                </svg>
-                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                </svg>
-                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                </svg>
-              </div>
-              <span th:text="'(' + ${product.rate} + ')'">0</span>
+              <span th:text="'★' + ${product.rate}"></span>
             </div>
           </div>
 
           <div class="product-sold">
-            <svg class="sold-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M8 1L10.09 5.26L15 6L11 9.74L11.91 14.5L8 12.27L4.09 14.5L5 9.74L1 6L5.91 5.26L8 1Z" fill="currentColor"/>
-            </svg>
-            <span th:text="'Đã bán ' + ${product.totalSold}">Đã bán 0</span>
+            <span th:text="'Đã bán ' + ${product.solditems}">Đã bán 0</span>
           </div>
 
           <div class="product-address">
@@ -1719,7 +1699,6 @@
     allProducts = productCards.map(card => {
       const name = card.querySelector('.product-name').textContent;
       const priceText = card.querySelector('.product-price').textContent;
-      const price = priceText.replace(/[^\d]/g, '');
       const soldText = card.querySelector('.product-sold span').textContent;
       const totalSold = parseInt(soldText.replace(/[^\d]/g, '')) || 0;
       const imageElement = card.querySelector('.product-image');
@@ -1903,17 +1882,11 @@
 
                 <div class="product-meta">
                     <div class="product-rating">
-                        <div class="rating-stars">
-                            ${generateStars(product.rate)}
-                        </div>
-                        <span>(${product.rate})</span>
+                        <span>★ ${product.rate}</span>
                     </div>
                 </div>
 
                 <div class="product-sold">
-                    <svg class="sold-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M8 1L10.09 5.26L15 6L11 9.74L11.91 14.5L8 12.27L4.09 14.5L5 9.74L1 6L5.91 5.26L8 1Z" fill="currentColor"/>
-                    </svg>
                     <span>Đã bán ${product.totalSold}</span>
                 </div>
 

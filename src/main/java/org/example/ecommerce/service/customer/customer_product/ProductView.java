@@ -6,23 +6,31 @@ public class ProductView {
     private Integer productId;
     private String name;
     private BigDecimal price;
-    private int totalSold;
     private String imageUrl;
     private String shopaddress;
     private float rate;
     private Integer categoryid;
     private String categoryname;
+    private Integer solditems;
 
-    public ProductView(Integer productId, String name, BigDecimal price, int totalSold, String imageUrl, String shopaddress, float rate, Integer categoryid, String categoryname) {
+    public ProductView(Integer productId, String name, BigDecimal price, String imageUrl, String shopaddress, float rate, Integer categoryid, String categoryname, Integer solditems) {
         this.productId = productId;
         this.name = name;
         this.price = price;
-        this.totalSold = totalSold;
         this.imageUrl = imageUrl;
         this.shopaddress = shopaddress;
         this.rate = rate;
         this.categoryid = categoryid;
         this.categoryname = categoryname;
+        this.solditems = solditems;
+    }
+
+    public Integer getSolditems() {
+        return solditems;
+    }
+
+    public void setSolditems(Integer solditems) {
+        this.solditems = solditems;
     }
 
     public Integer getProductId() {
@@ -47,14 +55,6 @@ public class ProductView {
 
     public void setPrice(BigDecimal price) {
         this.price = price;
-    }
-
-    public int getTotalSold() {
-        return totalSold;
-    }
-
-    public void setTotalSold(int totalSold) {
-        this.totalSold = totalSold;
     }
 
     public String getImageUrl() {

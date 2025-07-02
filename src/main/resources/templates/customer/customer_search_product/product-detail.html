@@ -1280,13 +1280,13 @@
 
             <div class="product-meta">
                 <div class="meta-item">
-                    <span id="avg-star">★ 0.0</span>
+                    <span th:text="'★ '+ ${detail.rate}"></span>
                 </div>
                 <div class="meta-item">
-                    <span id="review-count">0 đánh giá</span>
+                    <span th:text="${detail.sumreview}+ ' đánh giá'"></span>
                 </div>
                 <div class="meta-item">
-                    <span id="sold-count">0 đã bán</span>
+                    <span th:text="${detail.solditems}+ ' đã bán'"></span>
                 </div>
 
                 <div class="wishlist-container">
@@ -1438,7 +1438,6 @@
         loadReviewData();
         setupVariantOptions();
         displayReviews();
-        calculateStats();
         initializeWishlistButton();
         updatePriceDisplay();
     });
@@ -1994,15 +1993,7 @@
         document.getElementById('main-image').src = src;
     }
 
-    function calculateStats() {
-        const totalRating = reviewData.reduce((sum, review) => sum + review.rating, 0);
-        const avgRating = reviewData.length ? (totalRating / reviewData.length).toFixed(1) : '0.0';
-        document.getElementById('avg-star').textContent = '★ ' + avgRating;
-        document.getElementById('review-count').textContent = reviewData.length + ' đánh giá';
 
-        const totalSold = inventoryData.reduce((sum, item) => sum + (item.sold || 0), 0);
-        document.getElementById('sold-count').textContent = totalSold + ' đã bán';
-    }
 
     function displayReviews() {
         const reviewsList = document.getElementById('reviews-list');

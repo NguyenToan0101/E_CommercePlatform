@@ -42,6 +42,16 @@ public class ProductServiceImpl implements ProductService {
         List<Productimage> images = imageRepo.findAllByProductid(product);
         List<Review> reviews = reviewRepo.findAllByProductidOrderByCreatedatDesc(product);
         List<Wishlist> wishlists = wishlistRepo.findAllByProductid(product);
-        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, inventoryRepo.findFirstByProductidOrderByPriceAsc(product).getPrice());
+
+        Float avgRating = reviewRepo.findAverageRatingByProductid(product);
+        float rate = (avgRating != null) ? avgRating : 0f;
+
+        Integer sumSold = inventoryRepo.findSumsolditemsByProductid(product);
+        int solditems = (sumSold != null) ? sumSold : 0;
+
+        Integer sumReview = reviewRepo.countByProductid(product);
+        int sumReviewRating = (sumReview != null) ? sumReview : 0;
+
+        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, inventoryRepo.findFirstByProductidOrderByPriceAsc(product).getPrice(), rate, solditems, sumReviewRating);
     }
 }

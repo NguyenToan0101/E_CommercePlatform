@@ -11,8 +11,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
-    @Query("SELECT r.rating FROM Review r WHERE r.productid.id = :productId")
-    List<Integer> findRateById(@Param("productId") Integer productId);
+    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.productid = :product")
+    Float findAverageRatingByProductid(@Param("product") Product product);
     boolean existsByProductidAndOrderid(Product product, Order order);
     List<Review> findAllByProductidOrderByCreatedatDesc(Product product);
+    Integer countByProductid(Product productid);
+
+
 }

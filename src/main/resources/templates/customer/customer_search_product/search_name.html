@@ -256,38 +256,6 @@
             font-weight: 800;
         }
 
-        .search-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .search-stats {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--primary-blue);
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-gray);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 0.25rem;
-        }
 
         .search-actions {
             display: flex;
@@ -751,7 +719,7 @@
 
         .product-image {
             width: 100%;
-            height: 200px;
+            height: 180px;
             object-fit: cover;
             transition: transform 0.3s ease;
         }
@@ -1033,10 +1001,6 @@
                 font-size: 1.25rem;
             }
 
-            .search-meta {
-                flex-direction: column;
-                align-items: flex-start;
-            }
         }
 
         @media (max-width: 480px) {
@@ -1326,45 +1290,6 @@
 
     <!-- Products Section -->
     <section class="products-section">
-        <!-- Search Results Header -->
-        <div class="search-results-header">
-            <div class="search-keyword">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
-                    <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
-                </svg>
-                Kết quả tìm kiếm cho: <span class="keyword" th:text="${searchKeyword}">từ khóa</span>
-            </div>
-
-            <div class="search-meta">
-                <div class="search-stats">
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalProducts" th:text="${#lists.size(products)}">0</span>
-                        <span class="stat-label">Sản phẩm</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="currentPage">1</span>
-                        <span class="stat-label">Trang hiện tại</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalPages">1</span>
-                        <span class="stat-label">Tổng trang</span>
-                    </div>
-                </div>
-
-                <div class="search-actions">
-                    <div class="sort-dropdown">
-                        <button class="sort-button" onclick="toggleSortDropdown()">
-                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M3 6H21M7 12H17M11 18H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                            </svg>
-                            Sắp xếp
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Loading State -->
         <div class="loading" id="loadingState">
             <div class="spinner"></div>
@@ -1410,31 +1335,13 @@
                     <div class="product-meta">
                         <div class="product-rating">
                             <div class="rating-stars">
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
                             </div>
-                            <span th:text="'(' + ${product.rate} + ')'">0</span>
+                            <span th:text="'★' + ${product.rate}">0</span>
                         </div>
                     </div>
 
                     <div class="product-sold">
-                        <svg class="sold-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M8 1L10.09 5.26L15 6L11 9.74L11.91 14.5L8 12.27L4.09 14.5L5 9.74L1 6L5.91 5.26L8 1Z" fill="currentColor"/>
-                        </svg>
-                        <span th:text="'Đã bán ' + ${product.totalSold}">Đã bán 0</span>
+                        <span th:text="'Đã bán ' + ${product.solditems}">Đã bán 0</span>
                     </div>
 
                     <div class="product-address">

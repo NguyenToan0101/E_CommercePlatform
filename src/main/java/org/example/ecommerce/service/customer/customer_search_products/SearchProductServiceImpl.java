@@ -44,30 +44,25 @@ public class SearchProductServiceImpl implements SearchProductService {
         for (Product p : products) {
             if (p.getStatus().equals("available") && p.getCategoryid() != null && p.getCategoryid().getId().equals(categoryId)) {
 
-                int totalSold = inventoryRepository.findAllByProductid(p)
-                        .stream()
-                        .mapToInt(Inventory::getSolditems)
-                        .sum();
-
                 List<Productimage> imgs = productimageRepository.findAllByProductid(p);
                 String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
                 String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
+                String keyword = "Tỉnh";
+                int index = fullAddress.indexOf(keyword);
+                String shopaddress = (index != -1) ? fullAddress.substring(index + keyword.length()).trim() : fullAddress;
 
-                List<Integer> rates = reviewRepository.findRateById(p.getId());
-                float rate = 0f;
-                if (!rates.isEmpty()) {
-                    float sum = 0f;
-                    for (int r : rates) {
-                        sum += r;
-                    }
-                    rate = Math.round((sum / rates.size()) * 10f) / 10f;
-                }
+
+                Float avgRating = reviewRepository.findAverageRatingByProductid(p);
+                float rate = (avgRating != null) ? avgRating : 0f;
+
+                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
+                int solditems = (sumSold != null) ? sumSold : 0;
+
 
                 String categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
 
-                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName
+                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), imageUrl, shopaddress, rate, categoryId, categoryName, solditems
                 ));
             }
         }
@@ -80,24 +75,23 @@ public class SearchProductServiceImpl implements SearchProductService {
         List<ProductView> views = new ArrayList<>();
         for (Product p : products) {
             if (p.getStatus().equals("available")){
-                int totalSold = inventoryRepository.findAllByProductid(p)
-                        .stream()
-                        .mapToInt(i -> i.getSolditems())
-                        .sum();
 
                 List<Productimage> imgs = productimageRepository.findAllByProductid(p);
                 String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
                 String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
+                String key = "Tỉnh";
+                int index = fullAddress.indexOf(key);
+                String shopaddress = (index != -1) ? fullAddress.substring(index + key.length()).trim() : fullAddress;
 
-                List<Integer> rates = reviewRepository.findRateById(p.getId());
-                float rate = 0f;
-                if (!rates.isEmpty()) {
-                    float sum = 0f;
-                    for (int r : rates) sum += r;
-                    rate = Math.round((sum / rates.size()) * 10f) / 10f;
-                }
+
+                Float avgRating = reviewRepository.findAverageRatingByProductid(p);
+                float rate = (avgRating != null) ? avgRating : 0f;
+
+                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
+                int solditems = (sumSold != null) ? sumSold : 0;
+
+
 
                 Integer categoryId = null;
                 String categoryName = null;
@@ -106,7 +100,7 @@ public class SearchProductServiceImpl implements SearchProductService {
                     categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
                 }
 
-                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), imageUrl, shopaddress, rate, categoryId, categoryName, solditems));
             }
         }
         return views;
