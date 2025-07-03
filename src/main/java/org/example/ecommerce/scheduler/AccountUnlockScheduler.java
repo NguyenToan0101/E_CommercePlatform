@@ -19,6 +19,7 @@ public class AccountUnlockScheduler {
             List<Customer> lockedUsers = customerRepository.findByIsLockedTrueAndLockedUntilBefore(LocalDateTime.now());
 
             for (Customer user : lockedUsers) {
+                user.setStatus(true);
                 user.setLocked(false);
                 user.setLockedUntil(null);
             }

@@ -1,7 +1,7 @@
     package org.example.ecommerce.controller.admin;
 
-    import org.example.ecommerce.common.dto.admin.userMagement.UserDTO;
-    import org.example.ecommerce.common.dto.admin.userMagement.LockRequest;
+    import org.example.ecommerce.common.dto.admin.userManagement.UserDTO;
+    import org.example.ecommerce.common.dto.admin.userManagement.LockRequest;
     import org.example.ecommerce.entity.Customer;
     import org.example.ecommerce.repository.CustomerRepository;
     import org.example.ecommerce.service.admin.AdminCustomerService;

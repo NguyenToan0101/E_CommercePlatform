@@ -1,4 +1,4 @@
-package org.example.ecommerce.common.dto.admin.userMagement;
+package org.example.ecommerce.common.dto.admin.userManagement;
 
 public class LockRequest {
     private Integer durationMinutes;
