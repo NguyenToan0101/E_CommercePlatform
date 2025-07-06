@@ -51,7 +51,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.setRole("Customer");
-        customer.setStatus("active");
+        customer.setStatus(true);
         customer.setCreatedat(instant);
 
         String token = UUID.randomUUID().toString();
@@ -81,7 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer login(String email, String password) {
         
         Customer customer = customerRepository.findByEmail(email);
-        if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.getStatus() == "active") {
+        if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.isStatus() == true) {
             return customer;
         }
         return null;

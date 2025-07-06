@@ -13,10 +13,9 @@ public class ProductView {
     private Integer categoryid;
     private String categoryname;
 
-    public ProductView(Integer productId, String name, BigDecimal price, int totalSold, String imageUrl, String shopaddress, float rate, Integer categoryid, String categoryname) {
+    public ProductView(Integer productId, String name, int totalSold, String imageUrl, String shopaddress, float rate, Integer categoryid, String categoryname) {
         this.productId = productId;
         this.name = name;
-        this.price = price;
         this.totalSold = totalSold;
         this.imageUrl = imageUrl;
         this.shopaddress = shopaddress;

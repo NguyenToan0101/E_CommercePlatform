@@ -67,7 +67,7 @@ public class SearchProductServiceImpl implements SearchProductService {
 
                 String categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
 
-                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName
+                views.add(new ProductView(p.getId(), p.getName(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName
                 ));
             }
         }
@@ -106,7 +106,7 @@ public class SearchProductServiceImpl implements SearchProductService {
                     categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
                 }
 
-                views.add(new ProductView(p.getId(), p.getName(), p.getPrice(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+                views.add(new ProductView(p.getId(), p.getName(), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
             }
         }
         return views;

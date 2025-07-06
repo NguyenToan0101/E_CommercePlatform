@@ -80,6 +80,7 @@ public class Shop {
     @Column(name = "taxcode")
     private String taxcode;
 
+    @Version
     @Column(name = "version")
     private Long version;
 

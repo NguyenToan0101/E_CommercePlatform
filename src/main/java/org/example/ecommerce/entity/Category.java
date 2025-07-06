@@ -1,5 +1,8 @@
 package org.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -27,18 +30,20 @@ public class Category {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parentid")
-    private Category parentid;
+    private Category parent;
 
-    @OneToMany(mappedBy = "parentid")
-    private Set<Category> categories = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "parent")
+    private Set<Category> children = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "categoryid")
     private Set<Product> products = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "categoryid")
+    @JsonIgnore
+    @OneToMany(mappedBy = "categoryid", fetch = FetchType.LAZY)
     private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "maincategoryid")
+    @JsonIgnore
+    @OneToMany(mappedBy = "maincategoryid", fetch = FetchType.LAZY)
     private Set<Shop> shops = new LinkedHashSet<>();
 
 }

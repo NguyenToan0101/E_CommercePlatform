@@ -51,7 +51,7 @@ public class Customer {
     private String role;
 
     @Column(name = "status", length = Integer.MAX_VALUE)
-    private String status;
+    private boolean status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")

@@ -44,7 +44,7 @@ public class PaymentService {
 
         BigDecimal totalAmount = BigDecimal.ZERO;
         for (Cartitem ci : selectedCartItems) {
-            BigDecimal price = ci.getProductid().getPrice();
+            BigDecimal price = ci.getInventoryid().getPrice();
             BigDecimal itemTotal = price.multiply(BigDecimal.valueOf(ci.getQuantity()));
             totalAmount = totalAmount.add(itemTotal);
         }
@@ -79,7 +79,7 @@ public class PaymentService {
             oi.setProductid(ci.getProductid());
             oi.setInventoryid(ci.getInventoryid());
             oi.setQuantity(ci.getQuantity());
-            oi.setUnitprice(ci.getProductid().getPrice());
+            oi.setUnitprice(ci.getInventoryid().getPrice());
             orderItemsRepository.save(oi);
 
 

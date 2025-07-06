@@ -409,72 +409,6 @@
       }
     }
 
-    /* Page Header */
-    .page-header {
-      background: var(--white);
-      border-radius: 24px;
-      padding: 40px;
-      box-shadow:
-              0 32px 64px var(--shadow-light),
-              0 16px 32px var(--shadow-medium),
-              0 0 0 1px var(--border-gray);
-      margin-bottom: 40px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .page-header::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 50%, var(--gradient-start) 100%);
-    }
-
-    .page-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 36px;
-      font-weight: 600;
-      color: var(--primary-black);
-      margin-bottom: 12px;
-      letter-spacing: -0.5px;
-    }
-
-    .page-subtitle {
-      font-size: 16px;
-      color: var(--text-gray);
-      margin-bottom: 24px;
-    }
-
-    .stats-row {
-      display: flex;
-      justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
-    }
-
-    .stat-item {
-      text-align: center;
-    }
-
-    .stat-number {
-      font-size: 24px;
-      font-weight: 700;
-      color: var(--primary-black);
-      display: block;
-    }
-
-    .stat-label {
-      font-size: 12px;
-      color: var(--text-gray);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-top: 4px;
-    }
-
     /* Banner Carousel for Best Sellers */
     .banner-section {
       margin-bottom: 40px;
@@ -1076,18 +1010,11 @@
         padding: 140px 20px 20px;
       }
 
-      .page-header {
-        padding: 30px 20px;
-        border-radius: 20px;
-      }
 
-      .page-title {
-        font-size: 28px;
-      }
 
-      .stats-row {
-        gap: 24px;
-      }
+
+
+
 
       .banner-container {
         height: 300px;
@@ -1204,14 +1131,8 @@
         gap: 8px;
       }
 
-      .page-header {
-        padding: 24px 16px;
-      }
 
-      .stats-row {
-        flex-direction: column;
-        gap: 16px;
-      }
+
 
       .banner-container {
         height: 250px;
@@ -1299,7 +1220,6 @@
     /* High contrast mode support */
     @media (prefers-contrast: high) {
       .product-card,
-      .page-header,
       .banner-container,
       .category-container,
       .search-form {
@@ -1386,6 +1306,22 @@
             </svg>
             Ví của tôi
           </a>
+
+          <a th:href="@{/orders}">
+            <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z" fill="currentColor"/>
+              <path d="M8 10C3.58172 10 0 13.5817 0 18H16C16 13.5817 12.4183 10 8 10Z" fill="currentColor"/>
+            </svg>
+            Xem trạng thái đơn hàng
+          </a>
+
+          <a th:href="@{/wishlist}">
+            <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z" fill="currentColor"/>
+              <path d="M8 10C3.58172 10 0 13.5817 0 18H16C16 13.5817 12.4183 10 8 10Z" fill="currentColor"/>
+            </svg>
+            Danh sách sản phẩm yêu thích
+          </a>
           <a th:href="@{/customers/change-password}">
             <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M4 7V5C4 2.79086 5.79086 1 8 1C10.2091 1 12 2.79086 12 5V7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -1422,26 +1358,6 @@
 
 <!-- Main Content -->
 <main class="main-content">
-  <!-- Page Header -->
-  <section class="page-header">
-    <h1 class="page-title">Danh sách sản phẩm</h1>
-    <p class="page-subtitle">Khám phá bộ sưu tập sản phẩm chất lượng cao của chúng tôi</p>
-    <div class="stats-row">
-      <div class="stat-item">
-        <span class="stat-number" th:text="${#lists.size(products)}">0</span>
-        <span class="stat-label">Sản phẩm</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number" id="totalSold">0</span>
-        <span class="stat-label">Đã bán</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-number" id="bestSellerCount">6</span>
-        <span class="stat-label">Bán chạy</span>
-      </div>
-    </div>
-  </section>
-
   <!-- Banner Carousel for Best Sellers -->
   <section class="banner-section">
     <div class="banner-container">
@@ -1688,7 +1604,7 @@
       document.getElementById('productsGrid').style.display = 'grid';
 
       initializeProducts();
-    }, 1500);
+    }, 300);
   });
 
   function setupSearch() {
@@ -1793,11 +1709,13 @@
   }
 
   function initializeProducts() {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('productsGrid').style.display = 'grid';
+
     const productCards = Array.from(document.querySelectorAll('.product-card'));
 
     if (productCards.length === 0) return;
 
-    // Extract product data
     allProducts = productCards.map(card => {
       const name = card.querySelector('.product-name').textContent;
       const priceText = card.querySelector('.product-price').textContent;
@@ -1827,25 +1745,17 @@
       };
     });
 
-    // Extract unique categories
     extractCategories();
-
-    // Sort by total sold (descending) and get top 6 for carousel
     bestSellers = [...allProducts]
             .sort((a, b) => b.totalSold - a.totalSold)
             .slice(0, 6);
 
-    // Calculate total sold
     const totalSold = allProducts.reduce((sum, product) => sum + product.totalSold, 0);
     const totalSoldElement = document.getElementById('totalSold');
     if (totalSoldElement) {
-      animateNumber(totalSoldElement, totalSold);
+      totalSoldElement.textContent = totalSold.toLocaleString('vi-VN'); // Bỏ animateNumber
     }
 
-    // Shuffle products for random display
-    allProducts = allProducts.sort(() => 0.5 - Math.random());
-
-    // Initialize pagination and display
     initializePagination();
     displayProducts();
     initializeCarousel();
@@ -1959,24 +1869,11 @@
     const productsGrid = document.getElementById('productsGrid');
     productsGrid.innerHTML = '';
 
-    productsToShow.forEach((product, index) => {
+    productsToShow.forEach(product => {
       const productCard = createProductCard(product);
-
-      // Add entrance animation
-      productCard.style.opacity = '0';
-      productCard.style.transform = 'translateY(20px)';
-
       productsGrid.appendChild(productCard);
-
-      // Staggered entrance animation
-      setTimeout(() => {
-        productCard.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-        productCard.style.opacity = '1';
-        productCard.style.transform = 'translateY(0)';
-      }, (index % 6) * 100 + 100);
     });
 
-    // Update pagination info
     updatePaginationInfo();
   }
 
