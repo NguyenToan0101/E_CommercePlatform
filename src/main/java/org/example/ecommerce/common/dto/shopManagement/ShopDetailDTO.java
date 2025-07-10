@@ -7,7 +7,7 @@ public class ShopDetailDTO {
     private String shopName;
     private String manageName;
     private String businessAddress;
-    private String createdAt;
+    private String createdAt;      // String vì bạn muốn format sẵn
     private String status;
     private String invoiceEmail;
     private String phone;
@@ -16,13 +16,15 @@ public class ShopDetailDTO {
     private String imageShop;
     private String taxCode;
     private String mainCategory;
+
+    // trạng thái khóa
     private Boolean locked;
     private LocalDateTime lockedUntil;
 
     // Từ bảng Customer
     private String customerEmail;
     private String gender;
-    private String dob;
+    private String dob;            // String vì bạn format sẵn
     private String address;
 
     // Từ bảng Seller
@@ -30,13 +32,12 @@ public class ShopDetailDTO {
     private String frontIdImage;
     private String backIdImage;
 
-    // ✅ Constructor chính xác 100% với JPQL
     public ShopDetailDTO(
             Integer shopId,
             String shopName,
             String manageName,
             String businessAddress,
-            String createdAt,       // Đã đổi từ LocalDateTime sang String
+            String createdAt,
             String status,
             String invoiceEmail,
             String phone,
@@ -47,11 +48,13 @@ public class ShopDetailDTO {
             String mainCategory,
             String customerEmail,
             String gender,
-            String dob,             // Đã đổi từ LocalDate sang String
+            String dob,
             String address,
             String idNumber,
             String frontIdImage,
-            String backIdImage
+            String backIdImage,
+            Boolean locked,
+            LocalDateTime lockedUntil
     ) {
         this.shopId = shopId;
         this.shopName = shopName;
@@ -73,165 +76,74 @@ public class ShopDetailDTO {
         this.idNumber = idNumber;
         this.frontIdImage = frontIdImage;
         this.backIdImage = backIdImage;
+        this.locked = locked;
+        this.lockedUntil = lockedUntil;
     }
 
-    public Integer getShopId() {
-        return shopId;
-    }
+    // --- getters & setters ---
+    public Integer getShopId() { return shopId; }
+    public void setShopId(Integer shopId) { this.shopId = shopId; }
 
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
-    }
+    public String getShopName() { return shopName; }
+    public void setShopName(String shopName) { this.shopName = shopName; }
 
-    public String getShopName() {
-        return shopName;
-    }
+    public String getManageName() { return manageName; }
+    public void setManageName(String manageName) { this.manageName = manageName; }
 
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
+    public String getBusinessAddress() { return businessAddress; }
+    public void setBusinessAddress(String businessAddress) { this.businessAddress = businessAddress; }
 
-    public String getManageName() {
-        return manageName;
-    }
+    public String getCreatedAt() { return createdAt; }
+    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
 
-    public void setManageName(String manageName) {
-        this.manageName = manageName;
-    }
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 
-    public String getBusinessAddress() {
-        return businessAddress;
-    }
+    public String getInvoiceEmail() { return invoiceEmail; }
+    public void setInvoiceEmail(String invoiceEmail) { this.invoiceEmail = invoiceEmail; }
 
-    public void setBusinessAddress(String businessAddress) {
-        this.businessAddress = businessAddress;
-    }
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 
-    public String getCreatedAt() {
-        return createdAt;
-    }
+    public String getBusinessType() { return businessType; }
+    public void setBusinessType(String businessType) { this.businessType = businessType; }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public String getStatus() {
-        return status;
-    }
+    public String getImageShop() { return imageShop; }
+    public void setImageShop(String imageShop) { this.imageShop = imageShop; }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    public String getTaxCode() { return taxCode; }
+    public void setTaxCode(String taxCode) { this.taxCode = taxCode; }
 
-    public String getInvoiceEmail() {
-        return invoiceEmail;
-    }
+    public String getMainCategory() { return mainCategory; }
+    public void setMainCategory(String mainCategory) { this.mainCategory = mainCategory; }
 
-    public void setInvoiceEmail(String invoiceEmail) {
-        this.invoiceEmail = invoiceEmail;
-    }
+    public String getCustomerEmail() { return customerEmail; }
+    public void setCustomerEmail(String customerEmail) { this.customerEmail = customerEmail; }
 
-    public String getPhone() {
-        return phone;
-    }
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
+    public String getDob() { return dob; }
+    public void setDob(String dob) { this.dob = dob; }
 
-    public String getBusinessType() {
-        return businessType;
-    }
+    public String getAddress() { return address; }
+    public void setAddress(String address) { this.address = address; }
 
-    public void setBusinessType(String businessType) {
-        this.businessType = businessType;
-    }
+    public String getIdNumber() { return idNumber; }
+    public void setIdNumber(String idNumber) { this.idNumber = idNumber; }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getFrontIdImage() { return frontIdImage; }
+    public void setFrontIdImage(String frontIdImage) { this.frontIdImage = frontIdImage; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public String getBackIdImage() { return backIdImage; }
+    public void setBackIdImage(String backIdImage) { this.backIdImage = backIdImage; }
 
-    public String getImageShop() {
-        return imageShop;
-    }
+    public Boolean getLocked() { return locked; }
+    public void setLocked(Boolean locked) { this.locked = locked; }
 
-    public void setImageShop(String imageShop) {
-        this.imageShop = imageShop;
-    }
-
-    public String getTaxCode() {
-        return taxCode;
-    }
-
-    public void setTaxCode(String taxCode) {
-        this.taxCode = taxCode;
-    }
-
-    public String getMainCategory() {
-        return mainCategory;
-    }
-
-    public void setMainCategory(String mainCategory) {
-        this.mainCategory = mainCategory;
-    }
-
-    public String getCustomerEmail() {
-        return customerEmail;
-    }
-
-    public void setCustomerEmail(String customerEmail) {
-        this.customerEmail = customerEmail;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public String getDob() {
-        return dob;
-    }
-
-    public void setDob(String dob) {
-        this.dob = dob;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getIdNumber() {
-        return idNumber;
-    }
-
-    public void setIdNumber(String idNumber) {
-        this.idNumber = idNumber;
-    }
-
-    public String getFrontIdImage() {
-        return frontIdImage;
-    }
-
-    public void setFrontIdImage(String frontIdImage) {
-        this.frontIdImage = frontIdImage;
-    }
-
-    public String getBackIdImage() {
-        return backIdImage;
-    }
-
-    public void setBackIdImage(String backIdImage) {
-        this.backIdImage = backIdImage;
-    }
+    public LocalDateTime getLockedUntil() { return lockedUntil; }
+    public void setLockedUntil(LocalDateTime lockedUntil) { this.lockedUntil = lockedUntil; }
 }

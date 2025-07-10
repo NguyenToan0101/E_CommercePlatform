@@ -1,5 +1,6 @@
 package org.example.ecommerce.service.admin;
 
+import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.example.ecommerce.common.dto.shopManagement.ShopDTO;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.example.ecommerce.entity.Shop.Status;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -42,23 +45,23 @@ public class AdminShopService {
             );
         }
 
-        // gán string representation của enum
         shop.setStatus(Status.ACTIVE.name());
         shopRepository.save(shop);
+
+        // --- gửi mail thông báo đã duyệt shop ---
+        try {
+            emailService.sendSellerApprovedEmail(shop.getInvoiceEmail());
+        } catch (MessagingException e) {
+            // log lỗi nếu cần nhưng không throw tiếp
+            e.getMessage();
+        }
     }
 
 
-    //Khoa
-    @Transactional
-    public void lockShop(Integer shopId) {
-        Shop shop = shopRepository.findById(shopId)
-                .orElseThrow(() -> new EntityNotFoundException("Shop not found: " + shopId));
 
-        shop.setStatus(Status.LOCK.name());
-        shopRepository.save(shop);
-    }
 
-    //tu choi shop
+
+
     @Transactional
     public void rejectShop(Integer shopId) {
         Shop shop = shopRepository.findById(shopId)
@@ -72,25 +75,57 @@ public class AdminShopService {
 
         shop.setStatus(Shop.Status.REJECTED.name());
         shopRepository.save(shop);
+
+        // gửi mail thông báo bị từ chối
+        try {
+            emailService.sendSellerRejectedEmail(shop.getInvoiceEmail());
+        } catch (MessagingException e) {
+            e.getMessage();
+        }
     }
 
-    //mo khoa
+
+    //Lock
+    @Transactional
+    public void lockShop(Integer shopId, int durationMinutes) {
+        Shop shop = shopRepository.findById(shopId)
+                .orElseThrow(() -> new EntityNotFoundException("Shop not found: " + shopId));
+
+        LocalDateTime until = LocalDateTime.now().plusMinutes(durationMinutes);
+        shop.setLocked(true);
+        shop.setLockedUntil(until);
+        shop.setStatus(Status.LOCK.name());
+        shopRepository.save(shop);
+
+        // gửi mail, bọc trong try/catch để không làm rollback giao dịch chính
+        try {
+            emailService.sendShopLockedEmail(
+                    shop.getInvoiceEmail(),
+                    until.format(DateTimeFormatter.ofPattern("HH:mm 'ngày' dd/MM/yyyy"))
+            );
+        } catch (MessagingException e) {
+            // log ra cho biết gửi mail thất bại
+            e.getMessage();
+        }
+    }
+
+    //Unlock
     @Transactional
     public void unlockShop(Integer shopId) {
         Shop shop = shopRepository.findById(shopId)
                 .orElseThrow(() -> new EntityNotFoundException("Shop not found: " + shopId));
-
-        if (!Boolean.TRUE.equals(shop.getLocked())) {
-            throw new IllegalStateException("Shop #" + shopId + " không ở trạng thái locked");
-        }
-
         shop.setLocked(false);
         shop.setLockedUntil(null);
-        shop.setStatus(Shop.Status.ACTIVE.name());
+        shop.setStatus(Status.ACTIVE.name());
         shopRepository.save(shop);
 
-        // nếu muốn gửi email
-//        emailService.sendAccountUnlockedEmail(shop.getInvoiceEmail());
+        // gửi mail trong try/catch
+        try {
+            emailService.sendShopUnlockedEmail(shop.getInvoiceEmail());
+        } catch (MessagingException e) {
+            e.getMessage();
+        }
     }
+
 
 }

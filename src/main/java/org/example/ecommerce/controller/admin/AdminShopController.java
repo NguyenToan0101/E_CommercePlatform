@@ -56,57 +56,29 @@ public class AdminShopController {
         return ResponseEntity.noContent().build();
     }
 
-    // Khóa shop
-    @PostMapping("/{shopId} /lock")
-    public ResponseEntity<?> lockShop(
-            @PathVariable Integer shopId,
-            @RequestBody LockRequest request
-    ) {
-        Optional<Shop> shopOpt = shopRepository.findById(shopId);
-        if (shopOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        if (request == null || request.getDurationMinutes() == null || request.getDurationMinutes() <= 0) {
-            return ResponseEntity.badRequest().body("durationMinutes is required and must be > 0");
-        }
 
-        Shop shop = shopOpt.get();
-        LocalDateTime until = LocalDateTime.now().plusMinutes(request.getDurationMinutes());
-        shop.setLockedUntil(until);
-        shop.setLocked(true);
-        shop.setStatus("LOCK"); // Đặt trạng thái là bị khóa
-        shopRepository.save(shop);
-        // Gửi email thông báo khóa shop
-        try {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'ngày' dd/MM/yyyy");
-            String untilStr = until.format(formatter);
-            emailService.sendShopLockedEmail(shop.getShopname(), untilStr);
-        } catch (MessagingException e) {
-            // Có thể log lỗi gửi email nếu cần
-        }
-        return ResponseEntity.ok().build();
+    // DTO để nhận body { "durationMinutes": 123 }
+    public static class LockRequest {
+        private Integer durationMinutes;
+        public Integer getDurationMinutes() { return durationMinutes; }
+        public void setDurationMinutes(Integer durationMinutes) { this.durationMinutes = durationMinutes; }
+    }
+
+    // Khóa shop
+    @PostMapping("/{shopId}/lock")
+    public ResponseEntity<Void> lockShop(
+            @PathVariable Integer shopId,
+            @RequestBody LockRequest req
+    ) {
+        adminShopService.lockShop(shopId, req.getDurationMinutes());
+        return ResponseEntity.noContent().build();
     }
 
     // Mở khóa shop
     @PutMapping("/{shopId}/unlock")
-    public ResponseEntity<?> unlockShop(@PathVariable Integer shopId) {
-        Optional<Shop> shopOpt = shopRepository.findById(shopId);
-        if (shopOpt.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Shop shop = shopOpt.get();
-        shop.setLockedUntil(null);
-        shop.setLocked(false);
-        shop.setStatus("ACTIVE");
-        shopRepository.save(shop);
-        // Gửi email thông báo mở khóa shop
-        try {
-            emailService.sendShopUnlockedEmail(shop.getShopname());
-        } catch (MessagingException e) {
-            // Có thể log lỗi gửi email nếu cần
-        }
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> unlockShop(@PathVariable Integer shopId) {
+        adminShopService.unlockShop(shopId);
+        return ResponseEntity.noContent().build();
     }
 
 

@@ -107,6 +107,35 @@ public class EmailService {
         mailSender.send(message);
     }
 
+    @Async
+    public void sendSellerApprovedEmail(String recipientEmail) throws MessagingException {
+        String subject = "Đăng ký bán hàng của bạn đã được duyệt";
+        String content = "Xin chúc mừng! Tài khoản người bán của bạn đã được duyệt. Bạn có thể đăng nhập và bắt đầu bán hàng ngay bây giờ.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+        helper.setTo(recipientEmail);
+        helper.setSubject(subject);
+        helper.setText(content, false);
+
+        mailSender.send(message);
+    }
+
+    @Async
+    public void sendSellerRejectedEmail(String recipientEmail) throws MessagingException {
+        String subject = "Đăng ký bán hàng của bạn đã bị từ chối";
+        String content = "Rất tiếc! Đăng ký người bán của bạn không đạt yêu cầu. Vui lòng liên hệ bộ phận hỗ trợ để biết thêm chi tiết.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+        helper.setTo(recipientEmail);
+        helper.setSubject(subject);
+        helper.setText(content, false);
+
+        mailSender.send(message);
+    }
+
+
 
 
 

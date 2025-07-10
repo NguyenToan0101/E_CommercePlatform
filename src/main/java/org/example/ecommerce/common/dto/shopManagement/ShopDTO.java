@@ -20,7 +20,7 @@ public class ShopDTO {
 
     public ShopDTO(Integer shopId, String shopName, String ownerName,
                    String businessAddress, String status, String invoiceEmail,
-                   String phone, String businessType, LocalDateTime createdAt) {
+                   String phone, String businessType, LocalDateTime createdAt, Boolean locked, LocalDateTime lockedUntil) {
         this.shopId = shopId;
         this.shopName = shopName;
         this.manageName = ownerName;
@@ -30,6 +30,8 @@ public class ShopDTO {
         this.phone = phone;
         this.businessType = businessType;
         this.createdAt = createdAt;
+        this.locked = locked;
+        this.lockedUntil =lockedUntil;
     }
 
 }

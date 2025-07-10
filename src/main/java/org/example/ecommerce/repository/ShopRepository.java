@@ -23,11 +23,14 @@ public interface ShopRepository extends JpaRepository<Shop, Integer> {
         s.invoiceEmail,
         s.phone,
         s.businessType,
-        s.createdat
+        s.createdat,
+        s.locked,
+        s.lockedUntil
     )
     FROM Shop s
-""")
+    """)
     List<ShopDTO> getAllShopsAsDTO();
+
 
     @Query("""
 SELECT new org.example.ecommerce.common.dto.shopManagement.ShopDetailDTO(
@@ -50,7 +53,9 @@ SELECT new org.example.ecommerce.common.dto.shopManagement.ShopDetailDTO(
     cu.address,
     se.idNumber,
     se.frontIdImage,
-    se.backIdImage
+    se.backIdImage,
+    s.locked,
+    s.lockedUntil
 )
 FROM Shop s
 JOIN s.sellerid se
