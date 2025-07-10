@@ -1,4 +1,5 @@
 package org.example.ecommerce.entity;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Nationalized;
@@ -18,8 +19,10 @@ public class Shop {
     @JoinColumn(name = "shopid", nullable = false, unique = true)
     @MapsId
     private Seller sellerid;
+
     @Version
     private Integer version;
+
     @Nationalized
     @Column(name = "shopname", nullable = false, unique = true, length = 100)
     private String shopname;
@@ -40,21 +43,17 @@ public class Shop {
     @Column(name = "createdat", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     private LocalDateTime createdat = LocalDateTime.now();
 
-
     @Column(name = "status")
     private String status;
-
 
     @Nationalized
     @Column(name = "imageshop")
     private String imageshop;
 
-
     @Nationalized
     @Column(name = "managename", nullable = false)
     private String manageName;
 
-   
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
@@ -72,7 +71,6 @@ public class Shop {
 
     @Column(name = "bulkyitems")
     private Boolean bulkyItems;
-
 
     @Nationalized
     @Column(name = "businesstype", nullable = false, unique = true)
@@ -92,19 +90,26 @@ public class Shop {
     @Column(name = "taxcode", nullable = false, unique = true)
     private String taxCode;
 
-    public Shop(Integer id,String status) {
+    // New fields added for lock functionality
+    @Column(name = "locked", nullable = false)
+    private Boolean locked = false; // default to false
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
+    public Shop(Integer id, String status) {
         this.id = id;
         this.status = status;
     }
 
     public Shop() {
-
     }
 
-    public enum Status{
+    public enum Status {
         PENDING_APPROVAL,
         ACTIVE,
-        LOCK
+        LOCK,
+        REJECTED
     }
 
     public Integer getId() {
@@ -273,5 +278,21 @@ public class Shop {
 
     public void setTaxCode(@Size(max = 20) String taxCode) {
         this.taxCode = taxCode;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
+    }
+
+    public LocalDateTime getLockedUntil() {
+        return lockedUntil;
+    }
+
+    public void setLockedUntil(LocalDateTime lockedUntil) {
+        this.lockedUntil = lockedUntil;
     }
 }

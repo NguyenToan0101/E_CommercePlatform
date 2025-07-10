@@ -1,6 +1,8 @@
 package org.example.ecommerce.service.seller;
 
 import jakarta.persistence.EntityNotFoundException;
+import org.example.ecommerce.common.dto.shopManagement.ShopDetailDTO;
+import org.example.ecommerce.repository.ShopRepository;
 import org.example.ecommerce.repository.seller.SellerRepo;
 import org.example.ecommerce.repository.seller.ShopRepo;
 import org.springframework.stereotype.Service;

@@ -78,4 +78,36 @@ public class EmailService {
 
         mailSender.send(message);
     }
+
+    @Async
+    public void sendShopLockedEmail(String recipientEmail, String untilTime) throws MessagingException {
+        String subject = "Shop của bạn đã bị khóa";
+        String content = "Shop của bạn đã bị khóa do vi phạm chính sách của nền tảng đến " + untilTime + ". Nếu có bất kì thắc mắc/khiếu nại nào vui lòng reply email này.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+        helper.setTo(recipientEmail);
+        helper.setSubject(subject);
+        helper.setText(content, false);
+
+        mailSender.send(message);
+    }
+
+    @Async
+    public void sendShopUnlockedEmail(String recipientEmail) throws MessagingException {
+        String subject = "Shop của bạn đã được mở khóa";
+        String content = "Shop của bạn đã được mở khóa thành công. Chúc bạn có trải nghiệm tốt khi sử dụng nền tảng!";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+        helper.setTo(recipientEmail);
+        helper.setSubject(subject);
+        helper.setText(content, false);
+
+        mailSender.send(message);
+    }
+
+
+
+
 }
