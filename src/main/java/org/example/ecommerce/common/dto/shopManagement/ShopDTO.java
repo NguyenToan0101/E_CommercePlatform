@@ -14,7 +14,7 @@ public class ShopDTO {
     private String invoiceEmail;
     private String phone;
     private String businessType;
-    private LocalDateTime createdAt; // hoặc LocalDateTime, format ở tầng service
+    private LocalDateTime createdAt;
     private Boolean locked;
     private LocalDateTime lockedUntil;
 
