@@ -48,16 +48,12 @@ public class AdminShopService {
         shop.setStatus(Status.ACTIVE.name());
         shopRepository.save(shop);
 
-        // --- gửi mail thông báo đã duyệt shop ---
         try {
             emailService.sendSellerApprovedEmail(shop.getInvoiceEmail());
         } catch (MessagingException e) {
-            // log lỗi nếu cần nhưng không throw tiếp
             e.getMessage();
         }
     }
-
-
 
 
 
@@ -76,7 +72,6 @@ public class AdminShopService {
         shop.setStatus(Shop.Status.REJECTED.name());
         shopRepository.save(shop);
 
-        // gửi mail thông báo bị từ chối
         try {
             emailService.sendSellerRejectedEmail(shop.getInvoiceEmail());
         } catch (MessagingException e) {
@@ -97,7 +92,6 @@ public class AdminShopService {
         shop.setStatus(Status.LOCK.name());
         shopRepository.save(shop);
 
-        // gửi mail, bọc trong try/catch để không làm rollback giao dịch chính
         try {
             emailService.sendShopLockedEmail(
                     shop.getInvoiceEmail(),
@@ -119,7 +113,6 @@ public class AdminShopService {
         shop.setStatus(Status.ACTIVE.name());
         shopRepository.save(shop);
 
-        // gửi mail trong try/catch
         try {
             emailService.sendShopUnlockedEmail(shop.getInvoiceEmail());
         } catch (MessagingException e) {

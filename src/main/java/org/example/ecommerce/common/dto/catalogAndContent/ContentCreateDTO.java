@@ -4,7 +4,7 @@ public record ContentCreateDTO(
         String title,
         String slug,
         String type,
-        String body,
+        String content,
         String status,
         Integer adminId
 ){}

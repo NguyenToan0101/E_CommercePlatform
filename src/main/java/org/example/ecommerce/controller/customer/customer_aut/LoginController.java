@@ -39,7 +39,7 @@ public class LoginController {
         }
         Customer customer = customerService.findByEmail(email);
         if (customer != null) {
-            if (!customer.isStatus() || customer.isLocked()) {
+            if (customer.isLocked()) {
                 model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa");
                 return "login";
             }

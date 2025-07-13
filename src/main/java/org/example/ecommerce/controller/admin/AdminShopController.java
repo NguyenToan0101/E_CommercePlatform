@@ -57,7 +57,7 @@ public class AdminShopController {
     }
 
 
-    // DTO để nhận body { "durationMinutes": 123 }
+    // DTO để nhận content { "durationMinutes": 123 }
     public static class LockRequest {
         private Integer durationMinutes;
         public Integer getDurationMinutes() { return durationMinutes; }
