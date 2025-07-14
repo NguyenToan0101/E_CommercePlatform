@@ -50,6 +50,14 @@ public class Admin {
     @OneToMany(mappedBy = "updatedBy")
     private List<ContentManagement> updatedContents;
 
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "admin_permissions",
+            joinColumns = @JoinColumn(name = "adminid")
+    )
+    @Column(name = "tab_id")
+    private Set<String> allowedTabs = new HashSet<>();
     // Getters and setters
 }
 
