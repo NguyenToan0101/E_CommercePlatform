@@ -1,36 +1,35 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
-<head th:replace="seller/fragments/head :: head"></head>
+<head th:replace="seller/fragments/head :: head">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+</head>
+
 <body>
 <div class="dashboard-container">
+    <!-- Sidebar -->
     <div th:replace="seller/fragments/sidebar :: sidebar"></div>
-    <main class="main-content product-create-page">
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
         <div th:replace="seller/fragments/header :: header"></div>
-        <div class="form-container">
+
+        <div class="dashboard-container">
             <div class="page-header">
-                <div class="page-header-content">
-                    <div class="page-header-icon">
-                        <i class="fas fa-boxes"></i>
-                    </div>
-                    <div class="page-header-text">
-                        <h2 th:text="${product.id} != null ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới'">
-                            Thêm sản phẩm mới
-                        </h2>
-                        <p th:text="${product.id} != null ? 'Cập nhật thông tin sản phẩm của bạn' : 'Tạo sản phẩm mới cho cửa hàng'">
-                            Tạo sản phẩm mới cho cửa hàng
-                        </p>
-                    </div>
-                </div>
-                <a th:href="@{/seller/products}" class="btn-back">
-                    <i class="fas fa-arrow-left"></i>
-                    Quay lại danh sách
+                <h2 th:text="${product.id} != null ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới'"></h2>
+                <a th:href="@{/seller/products}" class="btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Quay lại danh sách
                 </a>
             </div>
+
             <form th:action="${product.id != null} ? @{/seller/products/edit/{id}(id=${product.id})} : @{/seller/products/save}"
                   method="post"
                   enctype="multipart/form-data"
                   th:object="${product}">
-                <input type="hidden" th:field="*{status}" />
+
                 <div class="form-group">
                     <label>Thông tin cơ bản:</label>
                     <div style="margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #f6f6f6">
@@ -68,11 +67,11 @@
                             <label for="category">Ngành hàng:</label>
                             <div class="category-selector">
                                 <div class="category-display" onclick="openCategoryModal()">
-                                    <span id="selected-category-text"
-                                          th:class="${product.categoryid != null} ? '' : 'placeholder'"
-                                          th:text="${product.categoryid != null} ? ${product.categoryid.categoryname} : '-- Chọn ngành hàng --'">
-                                        -- Chọn ngành hàng --
-                                    </span>
+                                <span id="selected-category-text"
+                                      th:class="${product.categoryid != null} ? '' : 'placeholder'"
+                                      th:text="${product.categoryid != null} ? ${product.categoryid.categoryname} : '-- Chọn ngành hàng --'">
+                                    -- Chọn ngành hàng --
+                                </span>
                                     <i class="fas fa-chevron-down"></i>
                                 </div>
                                 <input type="hidden" id="category" th:field="*{categoryid.id}" required>
@@ -91,42 +90,35 @@
                 <div class="form-group">
                     <label>Thông tin bán hàng:</label>
                     <div style="margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #f6f6f6">
-                        <!-- XÓA checkbox Thêm nhóm phân loại và khối single-inventory-section -->
-                        <!-- Luôn hiển thị phần nhập biến thể -->
-                        <div id="variant-section" class="variant-section">
+                        <div class="form-group">
+                            <label><input type="checkbox" id="toggleVariant"> Thêm nhóm phân loại</label>
+                        </div>
+
+                        <div id="single-inventory-section" class="form-group">
+                            <label>Giá:</label>
+                            <input type="number" th:field="*{inventories[0].price}" placeholder="Nhập giá" min="0.01" step="0.01" required>
+                            <div class="invalid-feedback">Giá phải lớn hơn 0</div>
+                            <label>Kho hàng:</label>
+                            <input type="number" th:field="*{inventories[0].quantity}" placeholder="Số lượng" min="0" required>
+                            <div class="invalid-feedback">Số lượng không được âm hoặc để trống</div>
+                        </div>
+
+                        <div id="variant-section" class="variant-section" style="display: none">
                             <div class="variant-input-group">
                                 <label>Kích thước:</label>
                                 <div id="size-inputs">
-                                    <th:block th:if="${sizeSet != null and #lists.size(sizeSet) > 0}">
-                                        <th:block th:each="size : ${sizeSet}">
-                                            <div class="variant-input-wrapper">
-                                                <input type="text" name="sizes[]" th:value="${size}" oninput="addNewInput(this, 'size')">
-                                            </div>
-                                        </th:block>
-                                    </th:block>
-                                    <th:block th:unless="${sizeSet != null and #lists.size(sizeSet) > 0}">
-                                        <div class="variant-input-wrapper">
-                                            <input type="text" name="sizes[]" placeholder="VD: M" oninput="addNewInput(this, 'size')">
-                                        </div>
-                                    </th:block>
+                                    <div class="variant-input-wrapper">
+                                        <input type="text" name="sizes[]" placeholder="VD: M" oninput="addNewInput(this, 'size')">
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="variant-input-group">
                                 <label>Màu sắc:</label>
                                 <div id="color-inputs">
-                                    <th:block th:if="${colorSet != null and #lists.size(colorSet) > 0}">
-                                        <th:block th:each="color : ${colorSet}">
-                                            <div class="variant-input-wrapper">
-                                                <input type="text" name="colors[]" th:value="${color}" oninput="addNewInput(this, 'color')">
-                                            </div>
-                                        </th:block>
-                                    </th:block>
-                                    <th:block th:unless="${colorSet != null and #lists.size(colorSet) > 0}">
-                                        <div class="variant-input-wrapper">
-                                            <input type="text" name="colors[]" placeholder="VD: Đỏ" oninput="addNewInput(this, 'color')">
-                                        </div>
-                                    </th:block>
+                                    <div class="variant-input-wrapper">
+                                        <input type="text" name="colors[]" placeholder="VD: Đỏ" oninput="addNewInput(this, 'color')">
+                                    </div>
                                 </div>
                             </div>
 
@@ -139,75 +131,13 @@
                                         <th>Size</th>
                                         <th>Giá</th>
                                         <th>Kho hàng</th>
-                                        <th class="shipping-col" style="display:none;">* Cân nặng (Sau khi đóng gói)</th>
-                                        <th class="shipping-col" style="display:none;">Kích thước đóng gói (cm)</th>
                                     </tr>
                                     </thead>
                                     <tbody id="variant-tbody">
-                                    <th:block th:if="${product.inventories != null}">
-                                        <tr th:each="inv, idx : ${product.inventories}">
-                                            <td class="color-cell">
-                                                <div class="color-image-upload">
-                                                    <div th:if="${inv.image != null}">
-                                                        <img th:src="${inv.image}" style="width:100%;height:100%;object-fit:cover;">
-                                                    </div>
-                                                    <div th:if="${inv.image == null}">
-                                                        <div class="plus-icon">+</div>
-                                                    </div>
-                                                </div>
-                                                <span style="color:red;font-size:12px;" th:text="${inv.image}"></span>
-                                                <input type="file" th:name="'inventoryImages'" style="display:none;">
-                                                <div class="color-name" th:text="${inv.color}"></div>
-                                            </td>
-                                            <td th:text="${inv.dimension}"></td>
-                                            <td>
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].price'" th:value="${inv.price}" placeholder="Giá" min="0.01" step="0.01" required class="variant-input" />
-                                            </td>
-                                            <td>
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].quantity'" th:value="${inv.quantity}" placeholder="Số lượng" min="0" required class="variant-input" />
-                                            </td>
-                                            <td>
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].weight'" th:value="${inv.weight}" placeholder="Cân nặng" min="0" required style="width:70px;"> gr
-                                            </td>
-                                            <td>
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].length'" th:value="${inv.length}" placeholder="Dài" min="0" required style="width:50px;"> cm
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].width'" th:value="${inv.width}" placeholder="Rộng" min="0" required style="width:50px;"> cm
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].height'" th:value="${inv.height}" placeholder="Cao" min="0" required style="width:50px;"> cm
-                                            </td>
-                                        </tr>
-                                    </th:block>
-                                    <!-- Nếu không có biến thể, JS sẽ render động như cũ -->
+                                    <!-- generated rows here -->
                                     </tbody>
                                 </table>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>Vận chuyển:</label>
-                    <div style="margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #f6f6f6">
-                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                            <label style="margin-right: 10px; font-weight: normal;">
-                                <input type="checkbox" id="toggleShippingVariant" th:field="*{useVariantShipping}" th:checked="${product.useVariantShipping == true}"> Thiết lập cân nặng & kích thước cho từng phân loại
-                            </label>
-                        </div>
-                        <div id="product-shipping-section">
-                            <div class="form-group">
-                                <label for="weight">* Cân nặng (Sau khi đóng gói)</label>
-                                <input type="number" id="weight" th:field="*{weight}" placeholder="Nhập cân nặng" min="0" required> gr
-                            </div>
-                            <div class="form-group">
-                                <label>Kích thước đóng gói (cm)</label>
-                                <div style="display: flex; gap: 10px;">
-                                    <input type="number" th:field="*{length}" placeholder="Dài" min="0" required style="width: 80px;"> cm
-                                    <input type="number" th:field="*{width}" placeholder="Rộng" min="0" required style="width: 80px;"> cm
-                                    <input type="number" th:field="*{height}" placeholder="Cao" min="0" required style="width: 80px;"> cm
-                                </div>
-                            </div>
-                        </div>
-                        <div id="inventory-shipping-section" style="display: none;">
-                            <div style="color: #888; font-size: 14px;">(Cân nặng & kích thước sẽ nhập ở từng phân loại bên dưới)</div>
                         </div>
                     </div>
                 </div>
@@ -218,35 +148,36 @@
                 </button>
             </form>
         </div>
-    </main>
-</div>
 
-<!-- Category Selection Modal -->
-<div id="category-modal" class="category-modal">
-    <div class="category-modal-content">
-        <div class="category-modal-header">
-            <h3>Chọn ngành hàng</h3>
-            <button class="close-btn" onclick="closeCategoryModal()">&times;</button>
-        </div>
-        <div class="category-modal-body">
-            <div class="category-panel" id="level-1-panel">
-                <div class="loading" id="level-1-loading">
-                    <i class="fas fa-spinner fa-spin"></i> Đang tải...
+    </main>
+
+    <!-- Category Selection Modal -->
+    <div id="category-modal" class="category-modal">
+        <div class="category-modal-content">
+            <div class="category-modal-header">
+                <h3>Chọn ngành hàng</h3>
+                <button class="close-btn" onclick="closeCategoryModal()">&times;</button>
+            </div>
+            <div class="category-modal-body">
+                <div class="category-panel" id="level-1-panel">
+                    <div class="loading" id="level-1-loading">
+                        <i class="fas fa-spinner fa-spin"></i> Đang tải...
+                    </div>
+                </div>
+                <div class="category-panel" id="level-2-panel" style="display: none;">
+                    <div class="loading" id="level-2-loading">
+                        <i class="fas fa-spinner fa-spin"></i> Đang tải...
+                    </div>
                 </div>
             </div>
-            <div class="category-panel" id="level-2-panel" style="display: none;">
-                <div class="loading" id="level-2-loading">
-                    <i class="fas fa-spinner fa-spin"></i> Đang tải...
+            <div class="category-modal-footer">
+                <div class="breadcrumb" id="breadcrumb">
+                    <span>Đã chọn:</span>
                 </div>
+                <button class="confirm-btn" id="confirm-btn" onclick="confirmCategorySelection()" disabled>
+                    Xác nhận
+                </button>
             </div>
-        </div>
-        <div class="category-modal-footer">
-            <div class="breadcrumb" id="breadcrumb">
-                <span>Đã chọn:</span>
-            </div>
-            <button class="confirm-btn" id="confirm-btn" onclick="confirmCategorySelection()" disabled>
-                Xác nhận
-            </button>
         </div>
     </div>
 </div>
@@ -254,13 +185,35 @@
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 <script th:inline="javascript">
     ClassicEditor.create(document.querySelector('#description'), {
-        toolbar: ['heading', '|', 'bold', 'italic', 'underline', '|', 'undo', 'redo']
-    }).then(editor => {
-        // Xóa chữ 'Rich Text Editor' nếu có
-        if (editor.getData().trim() === 'Rich Text Editor') {
-            editor.setData('');
-        }
+        toolbar: ['heading', '|', 'bold', 'italic', 'underline', '|', 'bulletedList', 'numberedList', '|', 'undo', 'redo']
     }).catch(error => console.error(error));
+
+    const toggleVariant = document.getElementById("toggleVariant");
+    const variantSection = document.getElementById("variant-section");
+    const singleInventory = document.getElementById("single-inventory-section");
+
+    toggleVariant.addEventListener("change", function () {
+        variantSection.style.display = this.checked ? "block" : "none";
+        singleInventory.style.display = this.checked ? "none" : "block";
+        updateRequiredInputs();
+    });
+
+    function updateRequiredInputs() {
+        const priceInput = singleInventory.querySelector('input[id="inventories-0-price"]') || singleInventory.querySelector('input[name="inventories[0].price"]');
+        const quantityInput = singleInventory.querySelector('input[id="inventories-0-quantity"]') || singleInventory.querySelector('input[name="inventories[0].quantity"]');
+
+        if (toggleVariant.checked) {
+            priceInput && priceInput.removeAttribute('name');
+            quantityInput && quantityInput.removeAttribute('name');
+            priceInput && priceInput.removeAttribute('required');
+            quantityInput && quantityInput.removeAttribute('required');
+        } else {
+            priceInput && priceInput.setAttribute('name', 'inventories[0].price');
+            quantityInput && quantityInput.setAttribute('name', 'inventories[0].quantity');
+            priceInput && priceInput.setAttribute('required', 'required');
+            quantityInput && quantityInput.setAttribute('required', 'required');
+        }
+    }
 
     function addNewInput(inputElem, type) {
         const wrapper = inputElem.closest(".variant-input-wrapper");
@@ -292,37 +245,16 @@
     }
 
     let variantColorImages = new Map();
-    /*[# th:each="inv : ${product.inventories}" ]*/
-        /*[# th:if="${inv.image != null}" ]*/
-            variantColorImages.set('[[${inv.color}]]', '[[${inv.image}]]');
-        /*[/]*/
-    /*[/]*/
 
     function renderVariantTable() {
         const sizes = Array.from(document.querySelectorAll("input[name='sizes[]']")).map(i => i.value.trim()).filter(i => i);
         const colors = Array.from(document.querySelectorAll("input[name='colors[]']")).map(i => i.value.trim()).filter(i => i);
         const tbody = document.getElementById("variant-tbody");
-
-        // Lưu lại giá trị đã nhập của các trường inventory
-        const inventoryValues = {};
-        tbody.querySelectorAll('tr').forEach((row, idx) => {
-            inventoryValues[idx] = {
-                price: row.querySelector(`input[name='inventories[${idx}].price']`)?.value || '',
-                quantity: row.querySelector(`input[name='inventories[${idx}].quantity']`)?.value || '',
-                weight: row.querySelector(`input[name='inventories[${idx}].weight']`)?.value || '',
-                length: row.querySelector(`input[name='inventories[${idx}].length']`)?.value || '',
-                width: row.querySelector(`input[name='inventories[${idx}].width']`)?.value || '',
-                height: row.querySelector(`input[name='inventories[${idx}].height']`)?.value || ''
-            };
-        });
-
         tbody.innerHTML = "";
 
         if (sizes.length === 0 || colors.length === 0) {
             return;
         }
-
-        const useVariantShipping = document.getElementById('toggleShippingVariant').checked;
 
         let idx = 0;
         colors.forEach(color => {
@@ -333,21 +265,10 @@
                 const colorCell = document.createElement("td");
                 colorCell.className = "color-cell";
                 if (sizeIndex === 0) {
-                    let imageUploadHtml = '';
-                    if (existingImage) {
-                        imageUploadHtml = `
-                            <div class="color-image-upload" onclick="document.getElementById('color-upload-${color}-${idx}').click()">
-                                <img src="${existingImage}" style="width:100%;height:100%;object-fit:cover;">
-                            </div>
-                        `;
-                    } else {
-                        imageUploadHtml = `
-                            <div class="color-image-upload" onclick="document.getElementById('color-upload-${color}-${idx}').click()">
-                                <div class="plus-icon">+</div>
-                            </div>
-                        `;
-                    }
-                    imageUploadHtml += `
+                    const imageUploadHtml = `
+                        <div class="color-image-upload" onclick="document.getElementById('color-upload-${color}-${idx}').click()">
+                            <div class="plus-icon">+</div>
+                        </div>
                         <input type="file" id="color-upload-${color}-${idx}" name="inventoryImages" accept="image/*" style="display:none" onchange="handleVariantColorUploadPreview(this, '${color}', ${idx})">
                         <div class="color-name">${color}</div>
                     `;
@@ -365,55 +286,20 @@
 
                 const priceCell = document.createElement("td");
                 priceCell.innerHTML = `
-                <input type=\"number\" name=\"inventories[${idx}].price\" placeholder=\"Giá\" min=\"0.01\" step=\"0.01\" required class=\"variant-input\">` +
-                `<input type=\"hidden\" name=\"inventories[${idx}].dimension\" value=\"${size}\">` +
-                `<input type=\"hidden\" name=\"inventories[${idx}].color\" value=\"${color}\">` +
-                (existingImage ? `<input type=\"hidden\" name=\"inventories[${idx}].image\" value=\"${existingImage}\">` : '');
+                <input type="number" name="inventories[${idx}].price" placeholder="Giá" min="0.01" step="0.01" required class="variant-input">
+                <input type="hidden" name="inventories[${idx}].dimension" value="${size}">
+                <input type="hidden" name="inventories[${idx}].color" value="${color}">
+                ${existingImage ? `<input type="hidden" name="inventories[${idx}].colorImage" value="${existingImage}">` : ''}
+            `;
                 row.appendChild(priceCell);
 
                 const stockCell = document.createElement("td");
-                stockCell.innerHTML = `<input type=\"number\" name=\"inventories[${idx}].quantity\" placeholder=\"Số lượng\" min=\"0\" required class=\"variant-input\">`;
+                stockCell.innerHTML = `<input type="number" name="inventories[${idx}].quantity" placeholder="Số lượng" min="0" required class="variant-input">`;
                 row.appendChild(stockCell);
 
-                // Shipping fields (weight, length, width, height) chỉ hiển thị nếu useVariantShipping=true
-                if (useVariantShipping) {
-                    const shippingWeightCell = document.createElement("td");
-                    shippingWeightCell.className = "shipping-col";
-                    shippingWeightCell.innerHTML = `<input type='number' name='inventories[${idx}].weight' placeholder='Cân nặng' min='0' required style='width:70px;'> gr`;
-                    row.appendChild(shippingWeightCell);
-
-                    const shippingSizeCell = document.createElement("td");
-                    shippingSizeCell.className = "shipping-col";
-                    shippingSizeCell.innerHTML = `
-                        <input type='number' name='inventories[${idx}].length' placeholder='Dài' min='0' required style='width:50px;'> cm
-                        <input type='number' name='inventories[${idx}].width' placeholder='Rộng' min='0' required style='width:50px;'> cm
-                        <input type='number' name='inventories[${idx}].height' placeholder='Cao' min='0' required style='width:50px;'> cm
-                    `;
-                    row.appendChild(shippingSizeCell);
-                }
-
                 tbody.appendChild(row);
-
-                // Gán lại giá trị đã nhập nếu có
-                const values = inventoryValues[idx] || {};
-                row.querySelector(`input[name='inventories[${idx}].price']`)?.setAttribute('value', values.price);
-                row.querySelector(`input[name='inventories[${idx}].quantity']`)?.setAttribute('value', values.quantity);
-                row.querySelector(`input[name='inventories[${idx}].weight']`)?.setAttribute('value', values.weight);
-                row.querySelector(`input[name='inventories[${idx}].length']`)?.setAttribute('value', values.length);
-                row.querySelector(`input[name='inventories[${idx}].width']`)?.setAttribute('value', values.width);
-                row.querySelector(`input[name='inventories[${idx}].height']`)?.setAttribute('value', values.height);
-
                 idx++;
             });
-        });
-
-        // Hiển thị/ẩn cột vận chuyển theo trạng thái useVariantShipping
-        document.querySelectorAll('.shipping-col').forEach(col => {
-            col.style.display = useVariantShipping ? '' : 'none';
-        });
-        // Hiển thị/ẩn tiêu đề cột
-        document.querySelectorAll('.variant-table th.shipping-col').forEach(col => {
-            col.style.display = useVariantShipping ? '' : 'none';
         });
     }
 
@@ -445,7 +331,7 @@
             return false;
         }
 
-        if (document.getElementById('toggleShippingVariant').checked) {
+        if (toggleVariant.checked) {
             const variantRows = document.querySelectorAll('#variant-tbody tr');
             if (variantRows.length === 0) {
                 alert('Bạn phải thêm ít nhất một phân loại hàng!');
@@ -462,6 +348,14 @@
 
             if (!valid) {
                 alert('Vui lòng nhập đầy đủ giá và kho cho từng phân loại!');
+                e.preventDefault();
+                return false;
+            }
+        } else {
+            const price = document.querySelector('input[name="inventories[0].price"]');
+            const quantity = document.querySelector('input[name="inventories[0].quantity"]');
+            if (!price.value || !quantity.value) {
+                alert('Vui lòng nhập giá và kho!');
                 e.preventDefault();
                 return false;
             }
@@ -660,30 +554,18 @@
         fileInput.files = dt.files;
     }
 
-    // Ẩn/hiện phần nhập vận chuyển tổng khi tích/bỏ checkbox useVariantShipping
-    function updateShippingSectionDisplay() {
-        const useVariantShipping = document.getElementById('toggleShippingVariant').checked;
-        const productShippingSection = document.getElementById('product-shipping-section');
-        productShippingSection.style.display = useVariantShipping ? 'none' : '';
-
-        // Bỏ required khi ẩn, thêm required khi hiện
-        productShippingSection.querySelectorAll('input').forEach(input => {
-            if (useVariantShipping) {
-                input.removeAttribute('required');
-            } else {
-                input.setAttribute('required', 'required');
-            }
-        });
-    }
-    document.getElementById('toggleShippingVariant').addEventListener('change', function() {
-        updateShippingSectionDisplay();
-        renderVariantTable();
-    });
     document.addEventListener('DOMContentLoaded', function() {
-        renderVariantTable();
-        updateShippingSectionDisplay();
+        updateRequiredInputs();
+        const selectedCategoryId = document.getElementById('category').value;
+        if (selectedCategoryId) {
+            document.getElementById('selected-category-text').classList.remove('placeholder');
+        }
+        initializeCategoryCache();
     });
 </script>
+<div th:replace="seller/fragments/footer :: footer"></div>
+
+
+
 </body>
 </html>
-    

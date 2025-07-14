@@ -25,20 +25,10 @@
                     <span>Đơn hàng</span>
                 </a>
             </li>
-            <li class="nav-item" th:classappend="${activePage == 'inventory'} ? 'active'">
-                <a th:href="@{/seller/inventory}">
-                    <i class="fas fa-warehouse"></i>
-                    <span>Tồn kho</span>
-                </a>
-            </li>
-            <li class="nav-item" th:classappend="${activePage == 'customers'} ? 'active'">
-                <a th:href="@{/seller/customers}">
-                    <i class="fas fa-users"></i>
-                    <span>Khách hàng</span>
-                </a>
-            </li>
+
+
             <li class="nav-item" th:classappend="${activePage == 'messages'} ? 'active'">
-                <a th:href="@{/seller/messages}">
+                <a th:href="@{/seller/chat}">
                     <i class="fas fa-envelope"></i>
                     <span>Tin nhắn</span>
                 </a>
@@ -61,12 +51,7 @@
                     <span>Tài chính</span>
                 </a>
             </li>
-            <li class="nav-item" th:classappend="${activePage == 'settings'} ? 'active'">
-                <a th:href="@{/seller/settings}">
-                    <i class="fas fa-cog"></i>
-                    <span>Cài đặt</span>
-                </a>
-            </li>
+
         </ul>
     </nav>
 </aside>
