@@ -8,13 +8,14 @@ public class PromotionTopDTO {
     private String name;
     private int orders;
     private BigDecimal revenue;
-    private float conversion;
-
-    public PromotionTopDTO(String name, int orders, BigDecimal revenue, float conversion) {
+    private Double conversion;
+    private Double ROI;
+    public PromotionTopDTO(String name, int orders, BigDecimal revenue, Double conversion,Double ROI) {
         this.name = name;
         this.orders = orders;
         this.revenue = revenue;
         this.conversion = conversion;
+        this.ROI = ROI;
     }
 }
 

@@ -1,27 +1,44 @@
 package org.example.ecommerce.common.mapper;
 
-import org.example.ecommerce.common.dto.CategoryDTO;
+
+import org.example.ecommerce.common.dto.category_content.CategoryManagementDTO;
+import org.example.ecommerce.common.dto.category_content.ParentCategoryDTO;
+import org.example.ecommerce.config.SpringContext;
 import org.example.ecommerce.entity.Category;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
+import org.example.ecommerce.repository.CategoryRepository;
+import org.mapstruct.*;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
-    @Mappings({
-            @Mapping(source = "id", target = "value"),
-            @Mapping(source = "categoryname", target = "label")
-    })
-    CategoryDTO toCategoryDTO(Category category);
 
-    @Mappings({
-            @Mapping(source = "value", target = "id"),
-            @Mapping(source = "label", target = "categoryname")
-    })
-    Category toCategory(CategoryDTO dto);
+    @Mapping(source = "parent.id", target = "parentId")
+    @Mapping(source = "create_at", target = "createAt")
+    CategoryManagementDTO toDTO(Category category);
 
-    List<CategoryDTO> toCategoryDTO(List<Category> categories);
-    List<Category> toCategoryList(List<CategoryDTO> categories);
+    List<CategoryManagementDTO> toDTOs(List<Category> categories);
+    List<Category> toCategories(List<CategoryManagementDTO> categories);
+
+    @Mapping(source = "parentId", target = "parent.id")
+    @Mapping(source = "createAt", target = "create_at")
+    Category toEntity(CategoryManagementDTO dto);
+    @AfterMapping
+    default void afterMapping(@MappingTarget CategoryManagementDTO dto, Category category) {
+        if (category.getParent() != null) {
+            dto.setLevel(1);
+        } else {
+            dto.setLevel(0);
+        }
+
+        // Gọi repository để đếm sản phẩm
+        dto.setProductsCount(getCategoryRepository().countByCategoryId(category.getId()));
+    }
+
+    // 👇 Hàm helper để lấy CategoryRepository (vì không inject trực tiếp vào interface được)
+    default CategoryRepository getCategoryRepository() {
+        return SpringContext.getBean(CategoryRepository.class);
+    }
+
+    List<ParentCategoryDTO> toParentDTOs(List<Category> categories);
 }

@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.websocket.Session;
 import org.example.ecommerce.entity.*;
 
-import org.example.ecommerce.service.seller.CategoryService;
+import org.example.ecommerce.service.CategoryService;
 import org.example.ecommerce.service.seller.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

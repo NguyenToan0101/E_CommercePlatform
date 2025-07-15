@@ -16,4 +16,19 @@ public class GlobalExceptionHandler {
         errorBody.put("message", e.getMessage());
         return ResponseEntity.badRequest().body(errorBody);
     }
+
+
+
+
+
+
+
+
+    @ExceptionHandler(CategoryException.class)
+    public ResponseEntity<?> handleException(CategoryException e) {
+        Map<String, String> errorBody = new HashMap<>();
+        errorBody.put("message", e.getMessage());
+        return ResponseEntity.badRequest().body(errorBody);
+    }
+
 }

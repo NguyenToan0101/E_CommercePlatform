@@ -1,6 +1,7 @@
 package org.example.ecommerce.entity.admin;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "admin")
+@Data
 public class Admin {
 
     @Id

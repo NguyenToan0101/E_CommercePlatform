@@ -74,4 +74,11 @@ public class Product {
     @OneToMany(mappedBy = "productid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
+
+    private Integer weight;
+    private Integer length;
+    private Integer height;
+    private Integer width;
+
+    private Boolean use_variant_shipping;
 }

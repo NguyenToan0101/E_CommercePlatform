@@ -3,6 +3,7 @@ package org.example.ecommerce.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +12,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "inventory")
+@Data
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,67 +44,10 @@ public class Inventory {
     @Column(name = "price")
     private BigDecimal price;
 
-    public Integer getId() {
-        return id;
-    }
+    private Integer weight;
+    private Integer length;
+    private Integer height;
+    private Integer width;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
-    public Product getProductid() {
-        return productid;
-    }
-
-    public void setProductid(Product productid) {
-        this.productid = productid;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Integer getSolditems() {
-        return solditems;
-    }
-
-    public void setSolditems(Integer solditems) {
-        this.solditems = solditems;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getDimension() {
-        return dimension;
-    }
-
-    public void setDimension(String dimension) {
-        this.dimension = dimension;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
 }
