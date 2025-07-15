@@ -1,6 +1,6 @@
 package org.example.ecommerce.common.mapper;
 
-import org.example.ecommerce.common.dto.CategoryDTO;
+import org.example.ecommerce.common.dto.promotion.CategoryDTO;
 import org.example.ecommerce.entity.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

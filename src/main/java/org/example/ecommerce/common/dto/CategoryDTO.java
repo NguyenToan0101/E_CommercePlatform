@@ -1,34 +1,12 @@
 package org.example.ecommerce.common.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-import java.util.List;
-
-@Setter
-@Getter
+@Data
 public class CategoryDTO {
-    private Integer value;
-    private String label;
-
-    public CategoryDTO() {
-    }
-
-    public CategoryDTO(Integer value, String label) {
-        this.value = value;
-        this.label = label;
-    }
-
-    //    private String image;
-//    private List<CategoryDTO> children;
-
-
-    @Override
-    public String toString() {
-        return "CategoryDTO{" +
-                "categoryid=" + value +
-                ", categoryname='" + label + '\'' +
-                '}';
-    }
+    private Integer id;
+    private String categoryname;
+    private String image;
+    private Integer parentId;
+    private String parentName;
 }
-

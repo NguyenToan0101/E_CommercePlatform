@@ -19,13 +19,13 @@ public class AdminService {
        return adminRepo.findAll();
 
     }
-//    public boolean isAdmin(String email, String password) {
-//        for (Admin admin : getAdmin()) {
-//            if(email.equalsIgnoreCase(admin.getEmail())&&admin.getPassword().equals(password)){
-//                return true;
-//            }
-//
-//        }
-//        return false;
-//    }
+    public boolean isAdmin(String email, String password) {
+        for (Admin admin : getAdmin()) {
+            if(email.equalsIgnoreCase(admin.getEmail())&&admin.getPassword().equals(password)){
+                return true;
+            }
+
+        }
+        return false;
+    }
 }

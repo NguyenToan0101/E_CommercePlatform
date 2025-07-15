@@ -1,13 +1,14 @@
 package org.example.ecommerce.entity.admin;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
+@Data
 @Entity
 @Table(name = "admin")
 public class Admin {
