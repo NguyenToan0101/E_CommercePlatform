@@ -1,13 +1,8 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.Nationalized;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -17,31 +12,31 @@ import java.util.Set;
 @Getter
 @Setter
 public class Seller {
+
     @Id
     @Column(name = "sellerid", nullable = false)
     private Integer id;
 
-    @OneToOne()
-    @JoinColumn(name = "sellerid")
-    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sellerid", referencedColumnName = "customerid", insertable = false, updatable = false)
     private Customer customer;
-    @Version
-    private Integer version;
-    @Size(max = 20)
-    @Nationalized
-    @Column(name = "idnumber", nullable = false, length = 20)
-    private String idNumber;
-    @Column(name = "frontidimage")
-    private String frontIdImage; // base64 hoặc URL
-    @Column(name = "backidimage")
-    private String backIdImage;
 
+    @Column(name = "idnumber")
+    private String idnumber;
+
+    @Column(name = "frontidimage")
+    private String frontidimage;
+
+    @Column(name = "backidimage")
+    private String backidimage;
+
+    @Column(name = "version")
+    private Long version;
 
     @OneToMany(mappedBy = "sellerid")
     private Set<Conversation> conversations = new LinkedHashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "sellerid")
-    @Nationalized
+    @OneToOne(mappedBy = "sellerid", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private Shop shop;
 
     public Seller() {

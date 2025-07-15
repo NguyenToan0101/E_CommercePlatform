@@ -1,22 +1,25 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+
+
 import java.util.ArrayList;
-import java.util.List;
 import java.util.LinkedHashSet;
+
+import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "products")
 public class Product {
@@ -31,33 +34,47 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryid")
+    @NotNull(message = "Vui lòng chọn ngành hàng")
     private Category categoryid;
 
-    @Size(max = 100)
-    @Nationalized
-    @Column(name = "name", length = 100)
+    @NotNull
+    @NotEmpty(message = "Tên sản phẩm không được để trống")
+    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
     private String name;
 
-    @Nationalized
-    @Column(name = "description")
+    @NotEmpty(message = "Mô tả không được để trống")
+    @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
-
     @Column(name = "price", precision = 18, scale = 2)
     private BigDecimal price;
-
-    @Size(max = 20)
-    @Column(name = "status", length = 20)
+    @Column(name = "status", length = Integer.MAX_VALUE)
     private String status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
 
+    @Column(name = "weight")
+    private Integer weight;
+
+    @Column(name = "length")
+    private Integer length;
+
+    @Column(name = "width")
+    private Integer width;
+
+    @Column(name = "height")
+    private Integer height;
+
+    @Column(name = "use_variant_shipping")
+    private Boolean useVariantShipping = false;
+
     @OneToMany(mappedBy = "productid")
     private Set<Cartitem> cartitems = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "productid")
-    private Set<Inventory> inventories = new LinkedHashSet<>();
+    @Valid
+    @OneToMany(mappedBy = "productid", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Inventory> inventories = new ArrayList<>();
 
     @OneToMany(mappedBy = "productid")
     private Set<Orderitem> orderitems = new LinkedHashSet<>();
@@ -74,11 +91,4 @@ public class Product {
     @OneToMany(mappedBy = "productid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
-
-    private Integer weight;
-    private Integer length;
-    private Integer height;
-    private Integer width;
-
-    private Boolean use_variant_shipping;
 }

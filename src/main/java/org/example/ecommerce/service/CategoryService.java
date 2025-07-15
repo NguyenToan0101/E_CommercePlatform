@@ -2,6 +2,7 @@ package org.example.ecommerce.service;
 
 
 import jakarta.transaction.Transactional;
+import org.example.ecommerce.common.dto.CategoryDTO;
 import org.example.ecommerce.common.dto.category_content.CategoryManagementDTO;
 import org.example.ecommerce.common.dto.category_content.ParentCategoryDTO;
 import org.example.ecommerce.common.exception.CategoryException;
@@ -23,33 +24,32 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-
 @Service
 public class CategoryService {
 
-    private final CategoryRepository categoryRepo;
+    private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
     private final UploadImageFileImpl uploadImageFile;
 
 
-    public CategoryService(CategoryRepository categoryRepo, CategoryMapper categoryMapper, UploadImageFileImpl uploadImageFile) {
-        this.categoryRepo = categoryRepo;
+    public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper, UploadImageFileImpl uploadImageFile) {
+        this.categoryRepository = categoryRepository;
         this.categoryMapper = categoryMapper;
         this.uploadImageFile = uploadImageFile;
     }
 
     public List<Category> getAllCategories() {
-        List<Category> categories = categoryRepo.findAll();
+        List<Category> categories = categoryRepository.findAll();
         if (categories == null) return List.of();
         return categories.stream().filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     public Category getById(Integer id) {
-        return categoryRepo.findById(id).orElse(null);
+        return categoryRepository.findById(id).orElse(null);
     }
 
     public void save(Category category) {
-        categoryRepo.save(category);
+        categoryRepository.save(category);
     }
 
     //    @Cacheable("categories")
@@ -62,7 +62,7 @@ public class CategoryService {
 
 
     public List<ParentCategoryDTO> getAllParentCategories() {
-        List<Category> categories = categoryRepo.findAll();
+        List<Category> categories = categoryRepository.findAll();
         // lọc ra category không có cha (hoặc tùy bạn muốn giới hạn)
         List<Category> parents = categories.stream()
                 .filter(c -> c.getParent() == null) // Hoặc c.getStatus().equals("ACTIVE") nếu muốn
@@ -72,7 +72,7 @@ public class CategoryService {
 
     public Page<CategoryManagementDTO> getCategory(int page, int size) {
         Pageable pageable = PageRequest.of(page, size,Sort.by(Sort.Direction.ASC, "id"));
-        Page<Category> categories = categoryRepo.findAll(pageable);
+        Page<Category> categories = categoryRepository.findAll(pageable);
         List<CategoryManagementDTO> categoryManagementDTOS = categoryMapper.toDTOs(categories.getContent());
         return new PageImpl<>(categoryManagementDTOS, pageable, categories.getTotalElements());
 
@@ -103,7 +103,7 @@ public class CategoryService {
 
         category.setCreate_at(LocalDateTime.now());
         System.out.println("Test--------" + category);
-        categoryRepo.save(category);
+        categoryRepository.save(category);
     }
 
     private MultipartFile base64ToMultipart(String base64Full) {
@@ -120,11 +120,11 @@ public class CategoryService {
     }
 
     public void updateStatus(Integer id, String status) {
-        categoryRepo.findById(id).ifPresent(category -> {
+        categoryRepository.findById(id).ifPresent(category -> {
 
 
             category.setStatus(status);
-            categoryRepo.save(category);
+            categoryRepository.save(category);
 
 
         });
@@ -132,7 +132,69 @@ public class CategoryService {
 
 
     public void delete(Integer id) {
-        categoryRepo.deleteById(id);
+        categoryRepository.deleteById(id);
+    }
+
+    //Phong
+    @Cacheable("rootCategories")
+    public List<Category> getRootCategories() {
+        return categoryRepository.findByParentIsNullWithChildren();
+    }
+
+
+    @Cacheable(value = "childCategories", key = "#parentId")
+    public List<Category> getChildCategories(Integer parentId) {
+        if (parentId == null) {
+            return getRootCategories();
+        }
+        return categoryRepository.findByParentIdWithChildren(parentId);
+    }
+
+
+    public Category getCategoryWithParentPath(Integer id) {
+        return categoryRepository.findByIdWithParent(id).orElse(null);
+    }
+
+
+    public CategoryDTO convertToDTO(Category category) {
+        if (category == null) return null;
+
+        CategoryDTO dto = new CategoryDTO();
+        dto.setId(category.getId());
+        dto.setCategoryname(category.getCategoryname());
+        dto.setImage(category.getImage());
+
+
+        if (category.getParent() != null) {
+            try {
+                dto.setParentId(category.getParent().getId());
+                dto.setParentName(category.getParent().getCategoryname());
+            } catch (Exception e) {
+            }
+        }
+
+        return dto;
+    }
+
+    public List<CategoryDTO> convertToDTOList(List<Category> categories) {
+        return categories.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+    @Cacheable("allCategories")
+    public List<CategoryDTO> getAllCategoriesForFrontend() {
+        List<Category> allCategories = categoryRepository.findAllWithParent();
+        return convertToDTOList(allCategories);
+    }
+    public boolean isCategoryOrSubcategory(Integer parentId, Integer childCategoryId) {
+        Category parent = categoryRepository.findById(parentId).orElse(null);
+        Category child = categoryRepository.findById(childCategoryId).orElse(null);
+        if (parent == null || child == null) return false;
+        while (child != null) {
+            if (child.getId().equals(parent.getId())) return true;
+            child = child.getParent();
+        }
+        return false;
     }
 
 }
