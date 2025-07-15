@@ -43,12 +43,15 @@ public class Shop {
     @Column(name = "createdat", nullable = false, columnDefinition = "timestamp default CURRENT_TIMESTAMP")
     private LocalDateTime createdat = LocalDateTime.now();
 
+
     @Column(name = "status")
     private String status;
+
 
     @Nationalized
     @Column(name = "imageshop")
     private String imageshop;
+
 
     @Nationalized
     @Column(name = "managename", nullable = false)
@@ -71,6 +74,7 @@ public class Shop {
 
     @Column(name = "bulkyitems")
     private Boolean bulkyItems;
+
 
     @Nationalized
     @Column(name = "businesstype", nullable = false, unique = true)

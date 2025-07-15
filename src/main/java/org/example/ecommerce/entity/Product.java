@@ -1,12 +1,25 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import lombok.Data;
+
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 
+
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
+import java.util.List;
+import java.util.Set;
+
+@Data
 @Entity
 @Table(name = "products")
 public class Product {
@@ -21,90 +34,61 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoryid")
+    @NotNull(message = "Vui lòng chọn ngành hàng")
     private Category categoryid;
 
-    @Size(max = 100)
-    @Nationalized
-    @Column(name = "name", length = 100)
+    @NotNull
+    @NotEmpty(message = "Tên sản phẩm không được để trống")
+    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
     private String name;
 
-    @Nationalized
-//    @Lob
-    @Column(name = "description")
+    @NotEmpty(message = "Mô tả không được để trống")
+    @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
-
     @Column(name = "price", precision = 18, scale = 2)
     private BigDecimal price;
-
-    @Size(max = 20)
-    @Column(name = "status", length = 20)
+    @Column(name = "status", length = Integer.MAX_VALUE)
     private String status;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
 
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "weight")
+    private Integer weight;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Column(name = "length")
+    private Integer length;
 
-    public Shop getShopid() {
-        return shopid;
-    }
+    @Column(name = "width")
+    private Integer width;
 
-    public void setShopid(Shop shopid) {
-        this.shopid = shopid;
-    }
+    @Column(name = "height")
+    private Integer height;
 
-    public Category getCategoryid() {
-        return categoryid;
-    }
+    @Column(name = "use_variant_shipping")
+    private Boolean useVariantShipping = false;
 
-    public void setCategoryid(Category categoryid) {
-        this.categoryid = categoryid;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Cartitem> cartitems = new LinkedHashSet<>();
 
-    public String getName() {
-        return name;
-    }
+    @Valid
+    @OneToMany(mappedBy = "productid", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Inventory> inventories = new ArrayList<>();
 
-    public void setName(String name) {
-        this.name = name;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Orderitem> orderitems = new LinkedHashSet<>();
 
-    public String getDescription() {
-        return description;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Productimage> productimages = new LinkedHashSet<>();
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
 
-    public BigDecimal getPrice() {
-        return price;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Review> reviews = new LinkedHashSet<>();
 
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
+    @OneToMany(mappedBy = "productid")
+    private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
 }

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="seller/fragments/head :: head">
+    <meta charset="UTF-8">
+    <title>Danh sách sản phẩm</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0; top: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.4);
+}
+.modal-content {
+  background: #fff;
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 24px 32px;
+  border-radius: 8px;
+  width: 420px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.2);
+}
+.close {
+  position: absolute; right: 16px; top: 12px;
+  font-size: 24px; cursor: pointer;
+}
+.alert-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+.alert-table th, .alert-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+.alert-table th {
+  background: #f7f7f7;
+}
+.modal-actions {
+  text-align: right;
+}
+.btn-save {
+  background: #ee4d2d;
+  color: #fff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+.modal-actions button {
+  background: #f2f2f2;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+</style>
+
+</head>
+
+<body>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div th:replace="seller/fragments/sidebar :: sidebar"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div th:replace="seller/fragments/header :: header"></div>
+
+        <!-- Products Page -->
+        <div class="products-page">
+            <!-- Page Header -->
+            <div class="page-header-section">
+                <div class="header-left">
+                    <h1 class="page-title">
+                        <i class="fas fa-box-open"></i>
+                        Tất cả sản phẩm
+                    </h1>
+                    <p class="page-subtitle">Quản lý danh sách sản phẩm của bạn</p>
+                </div>
+
+                <div class="header-actions">
+                    <a href="/seller/products/create" class="btn-add-new">
+                        <i class="fas fa-plus"></i>
+                        <span>Thêm sản phẩm</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="tab-navigation">
+                <div class="tab-container">
+                    <div class="tab-list">
+                        <a th:href="@{/seller/products(keyword=${keyword}, categoryId=${selectedCategory})}" class="tab-item"
+                           th:classappend="${selectedStatus == null || selectedStatus.isEmpty()} ? 'active' : ''">
+                            <span>Tất cả</span>
+                            <span class="tab-count" th:text="'(' + ${countAll} + ')'">(0)</span>
+                        </a>
+                        <a th:href="@{/seller/products(status='active', keyword=${keyword}, categoryId=${selectedCategory})}" class="tab-item"
+                           th:classappend="${selectedStatus == 'active'} ? 'active' : ''">
+                            <span>Đang hoạt động</span>
+                            <span class="tab-count" th:text="'(' + ${countAvailable} + ')'">(0)</span>
+                        </a>
+                        <a th:href="@{/seller/products(status='violation', keyword=${keyword}, categoryId=${selectedCategory})}" class="tab-item"
+                           th:classappend="${selectedStatus == 'violation'} ? 'active' : ''">
+                            <span>Vi phạm</span>
+                            <span class="tab-count" th:text="'(' + ${countViolation} + ')'">(0)</span>
+                        </a>
+                        <a th:href="@{/seller/products(status='pending', keyword=${keyword}, categoryId=${selectedCategory})}" class="tab-item"
+                           th:classappend="${selectedStatus == 'pending'} ? 'active' : ''">
+                            <span>Chờ duyệt</span>
+                            <span class="tab-count" th:text="'(' + ${countPending} + ')'">(0)</span>
+                        </a>
+                        <a th:href="@{/seller/products(status='draft', keyword=${keyword}, categoryId=${selectedCategory})}" class="tab-item"
+                           th:classappend="${selectedStatus == 'draft'} ? 'active' : ''">
+                            <span>Chưa đăng</span>
+                            <span class="tab-count" th:text="'(' + ${countInactive} + ')'">(0)</span>
+                        </a>
+                    </div>
+                </div>
+                <!-- Enhanced Search Bar -->
+                <div class="enhanced-search-wrapper">
+                    <form th:action="@{/seller/products}" method="get" class="search-container">
+                        <input type="hidden" name="status" th:value="${selectedStatus}">
+                        <div class="search-input-wrapper">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" name="keyword"
+                                   placeholder="Tìm Tên sản phẩm, SKU sản phẩm..."
+                                   th:value="${keyword}" class="enhanced-search-input" />
+                        </div>
+                        <div class="category-dropdown-wrapper">
+                            <select name="category" class="enhanced-category-filter" onchange="this.form.submit()">
+                                <option value="">Ngành hàng sản phẩm</option>
+                                <option th:each="cat : ${categories}"
+                                        th:value="${cat.id}"
+                                        th:text="${cat.categoryname}"
+                                        th:selected="${selectedCategory != null and selectedCategory == cat.id}">
+                                </option>
+                            </select>
+                            <i class="fas fa-edit category-edit-icon"></i>
+                        </div>
+                        <button type="submit" class="btn-add-new" style="white-space: nowrap;">Tìm kiếm</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Products Table -->
+            <div class="products-table-wrapper">
+                <div class="table-header">
+                    <div class="table-header-left">
+                        <span class="total-count">
+                            Tổng cộng: <strong th:text="${products != null ? #lists.size(products) : 0}">0</strong> sản phẩm
+                        </span>
+                        <span class="selected-count" id="selectedCount">
+                            Đã chọn: <strong>0</strong> sản phẩm
+                        </span>
+                        <div class="bulk-actions" id="bulkActions">
+                            <form id="bulkShowForm" th:action="@{/seller/products/show}" method="post" style="display:inline;">
+                                <button type="button" class="bulk-btn show" id="bulkShowBtn" onclick="submitBulkAction('show')" style="display:none;">Hiển thị</button>
+                            </form>
+                            <form id="bulkHideForm" th:action="@{/seller/products/hide}" method="post" style="display:inline;">
+                                <button type="button" class="bulk-btn hide" id="bulkHideBtn" onclick="submitBulkAction('hide')" style="display:none;">Ẩn</button>
+                            </form>
+                            <button type="button" class="bulk-btn stock-alert" id="bulkStockAlertBtn" style="display:none; margin-left:8px; background:#f7b731; color:#fff;" onclick="openStockAlertModal()">
+                                Nhắc nhở Tồn kho
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-header-right">
+                        <select class="per-page-select" onchange="changePerPage(this.value)">
+                            <option value="12" th:selected="${perPage == 12}">12/trang</option>
+                            <option value="24" th:selected="${perPage == 24}">24/trang</option>
+                            <option value="48" th:selected="${perPage == 48}">48/trang</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="products-table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" id="selectAll" class="product-checkbox" onchange="toggleSelectAll()">
+                            </th>
+                            <th class="col-image">Hình ảnh</th>
+                            <th class="col-name">Tên sản phẩm</th>
+                            <th class="col-category">Ngành hàng</th>
+                            <th class="col-price">Giá bán</th>
+                            <th class="col-sales">Doanh số</th>
+                            <th class="col-revenue">Doanh thu</th>
+                            <th class="col-stock">Kho Hàng</th>
+                            <th class="col-actions">Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th:block th:each="product : ${products}">
+                            <!-- Main Product Row -->
+                            <tr class="product-main-row" th:data-product-id="${product.productId}">
+                                <td>
+                                    <input type="checkbox" class="product-checkbox product-select"
+                                           th:value="${product.productId}" th:attr="data-status=${product.productStatus}" onchange="updateSelection()">
+                                </td>
+                                <td class="col-image">
+                                    <div class="product-image-container">
+                                        <img th:if="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+                                             th:src="${product.imageUrl}"
+                                             alt="Hình ảnh sản phẩm"
+                                             class="product-image" />
+                                        <div th:if="${product.imageUrl == null or product.imageUrl.isEmpty()}" class="no-image">
+                                            <i class="fas fa-image"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="col-name">
+                                    <h3 class="product-name" th:text="${product.productName}">Tên sản phẩm</h3>
+                                </td>
+                                <td class="col-category">
+                                    <span class="category-badge" th:text="${product.categoryName}">Danh mục</span>
+                                </td>
+                                <td class="col-price">
+                                    <span class="current-price" th:text="${product.priceRange}">Giá</span>
+                                </td>
+                                <td class="col-sales">
+                                    <span class="sold-quantity" th:text="${product.totalSoldQuantity} + ' đã bán'">0 đã bán</span>
+                                </td>
+                                <td class="col-revenue">
+                                    <span class="revenue-amount" th:text="${#numbers.formatDecimal(product.totalRevenue, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                                </td>
+                                <td class="col-stock">
+                                    <span class="stock-number" th:text="${#numbers.formatDecimal(product.totalStockQuantity, 0, 'POINT', 0, 'COMMA')}">0</span>
+                                </td>
+                                <td class="col-actions">
+                                    <div class="action-buttons-text">
+                                        <a class="action-text update" th:href="@{/seller/products/edit/{id}(id=${product.productId})}">Cập nhật</a>
+                                        <br>
+                                        <div class="dropdown-action" style="display:inline-block; position:relative;">
+                                            <button type="button" class="action-text more" onclick="toggleDropdown(this)">Xem thêm</button>
+                                            <div class="dropdown-menu-action" style="display:none; position:absolute; left:0; top:100%; background:#fff; border:1px solid #ccc; z-index:10; min-width:140px;">
+                                                <form th:if="${product.productStatus == 'INACTIVE'}" th:action="@{/seller/products/show}" method="post" style="margin:0;">
+                                                    <input type="hidden" name="ids" th:value="${product.productId}" />
+                                                    <button type="submit" class="dropdown-item-action" style="width:100%; text-align:left; background:none; border:none; padding:8px 12px;">Hiển thị</button>
+                                                </form>
+                                                <form th:if="${product.productStatus != 'INACTIVE'}" th:action="@{/seller/products/hide}" method="post" style="margin:0;">
+                                                    <input type="hidden" name="ids" th:value="${product.productId}" />
+                                                    <button type="submit" class="dropdown-item-action" style="width:100%; text-align:left; background:none; border:none; padding:8px 12px;">Ẩn</button>
+                                                </form>
+
+                                                <!-- Nút mở modal riêng cho từng sản phẩm -->
+                                                <button type="button"
+                                                        class="dropdown-item-action"
+                                                        style="width:100%; text-align:left; background:none; border:none; padding:8px 12px;"
+                                                        th:attr="onclick=|document.getElementById('stockAlertModal_' + ${product.productId}).style.display='block'|">
+                                                    Nhắc nhở Tồn kho
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <!-- Variant Rows - Always Visible -->
+                            <tr th:each="variant : ${product.inventorySales}" class="variant-row">
+                                <td></td>
+                                <td></td>
+                                <td class="variant-name" th:text="${variant.color} + '.' + ${variant.dimension}">M.Đen</td>
+                                <td></td>
+                                <td>
+                                    <span th:text="${#numbers.formatDecimal(variant.price, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                                </td>
+                                <td>
+                                    <span th:text="${#numbers.formatDecimal(variant.soldQuantity, 0, 'POINT', 0, 'COMMA')}">0</span>
+                                </td>
+                                <td>
+                                    <span th:text="${#numbers.formatDecimal(variant.revenue, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
+                                </td>
+                                <td>
+                                    <span th:text="${#numbers.formatDecimal(variant.stockQuantity, 0, 'POINT', 0, 'COMMA')}">0</span>
+                                </td>
+                            </tr>
+                        </th:block>
+
+                        <tr th:if="${products == null or #lists.isEmpty(products)}">
+                            <td colspan="9" class="empty-state">
+                                <div class="empty-content">
+                                    <i class="fas fa-box-open"></i>
+                                    <h3>Chưa có sản phẩm nào</h3>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination-wrapper" th:if="${totalPages > 1}">
+                <div class="pagination">
+                    <a th:href="@{/seller/products(page=${currentPage - 1}, size=${perPage}, keyword=${keyword}, category=${selectedCategory})}"
+                       class="pagination-btn" th:classappend="${currentPage == 1} ? 'disabled' : ''">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+
+                    <span th:each="pageNum : ${#numbers.sequence(1, totalPages)}" th:if="${pageNum <= 10}">
+                        <a th:href="@{/seller/products(page=${pageNum}, size=${perPage}, keyword=${keyword}, category=${selectedCategory})}"
+                           class="pagination-btn" th:classappend="${pageNum == currentPage} ? 'active' : ''"
+                           th:text="${pageNum}">1</a>
+                    </span>
+
+                    <a th:href="@{/seller/products(page=${currentPage + 1}, size=${perPage}, keyword=${keyword}, category=${selectedCategory})}"
+                       class="pagination-btn" th:classappend="${currentPage == totalPages} ? 'disabled' : ''">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal tổng hợp cảnh báo tồn kho (render bằng Thymeleaf, không dùng JS động) -->
+<div id="stockAlertModal" class="modal" th:if="${showStockAlertModal}" style="display:block; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:1000;">
+  <div class="modal-content" style="background:#fff; margin:40px auto; padding:20px; border-radius:8px; width:90%; max-width:700px; position:relative; max-height:80vh; overflow:auto;">
+    <span class="close" style="position:absolute; right:10px; top:10px; cursor:pointer; font-size:24px;" onclick="window.location.href='@{/seller/products}'">&times;</span>
+    <h3 style="margin-bottom:16px;">Nhắc nhở Tồn kho</h3>
+    <form th:action="@{/seller/products/stock-alert}" method="post">
+      <table style="width:100%">
+        <thead>
+          <tr>
+            <th style="min-width:120px;">Tên sản phẩm</th>
+            <th style="min-width:120px;">Biến thể</th>
+            <th style="min-width:120px;">Hạn mức tồn kho cần lưu ý</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="product : ${selectedProducts}">
+            <td th:text="${product.productName}" th:rowspan="${#lists.size(product.inventorySales)}"></td>
+            <td colspan="2">
+              <table style="width:100%">
+                <tr th:each="inv : ${product.inventorySales}">
+                  <td th:text="${inv.color} + ' / ' + ${inv.dimension}"></td>
+                  <td>
+                    <input type="hidden" name="inventoryId" th:value="${inv.inventoryId}" />
+                    <input type="number" name="alertQuantity" min="1" style="width:80px" th:value="${session.stockAlertMap != null ? session.stockAlertMap[inv.inventoryId] : ''}" placeholder="Nhập số lượng cảnh báo" />
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="text-align:right; margin-top:10px;">
+        <button type="button" onclick="window.location.href='@{/seller/products}'" style="margin-right:8px;">Hủy</button>
+        <button type="submit" style="background:#ee4d2d; color:#fff; border:none; padding:6px 18px; border-radius:4px;">Lưu</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Hiển thị cảnh báo ở cột kho hàng -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Selection functions
+        window.toggleSelectAll = function() {
+            const selectAll = document.getElementById('selectAll');
+            const checkboxes = document.querySelectorAll('.product-select');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+
+            updateSelection();
+        };
+
+        window.updateSelection = function() {
+            const checkboxes = document.querySelectorAll('.product-select');
+            const selectedCheckboxes = document.querySelectorAll('.product-select:checked');
+            const selectAll = document.getElementById('selectAll');
+            const selectedCount = document.getElementById('selectedCount');
+            const bulkActions = document.getElementById('bulkActions');
+            const bulkShowBtn = document.getElementById('bulkShowBtn');
+            const bulkHideBtn = document.getElementById('bulkHideBtn');
+            const bulkStockAlertBtn = document.getElementById('bulkStockAlertBtn');
+
+            // Update select all checkbox
+            if (selectAll) {
+                selectAll.checked = selectedCheckboxes.length === checkboxes.length;
+                selectAll.indeterminate = selectedCheckboxes.length > 0 && selectedCheckboxes.length < checkboxes.length;
+            }
+
+            // Update selected count and show/hide bulk actions
+            if (selectedCheckboxes.length > 0) {
+                selectedCount.style.display = 'inline';
+                selectedCount.querySelector('strong').textContent = selectedCheckboxes.length;
+                bulkActions.classList.add('show');
+
+                // Kiểm tra trạng thái sản phẩm được chọn
+                let allInactive = true;
+                let allActive = true;
+                selectedCheckboxes.forEach(cb => {
+                    if (cb.getAttribute('data-status') === 'INACTIVE') {
+                        allActive = false;
+                    } else {
+                        allInactive = false;
+                    }
+                });
+                if (allInactive) {
+                    bulkShowBtn.style.display = '';
+                    bulkHideBtn.style.display = 'none';
+                } else if (allActive) {
+                    bulkShowBtn.style.display = 'none';
+                    bulkHideBtn.style.display = '';
+                } else {
+                    bulkShowBtn.style.display = '';
+                    bulkHideBtn.style.display = '';
+                }
+                bulkStockAlertBtn.style.display = '';
+            } else {
+                selectedCount.style.display = 'none';
+                    bulkActions.classList.remove('show');
+                bulkShowBtn.style.display = 'none';
+                bulkHideBtn.style.display = 'none';
+                bulkStockAlertBtn.style.display = 'none';
+            }
+        };
+
+
+        window.submitBulkAction = function(action) {
+            const selectedCheckboxes = document.querySelectorAll('.product-select:checked');
+            if (selectedCheckboxes.length === 0) {
+                alert('Vui lòng chọn ít nhất một sản phẩm');
+                return;
+            }
+            const form = action === 'show' ? document.getElementById('bulkShowForm') : document.getElementById('bulkHideForm');
+            // Xóa input cũ
+            form.querySelectorAll('input[name="ids"]').forEach(e => e.remove());
+            // Thêm input mới
+            selectedCheckboxes.forEach(cb => {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'ids';
+                input.value = cb.value;
+                form.appendChild(input);
+            });
+            form.submit();
+        };
+
+        // Change per page
+        window.changePerPage = function(perPage) {
+            const url = new URL(window.location);
+            url.searchParams.set('size', perPage);
+            url.searchParams.set('page', '1');
+            window.location.href = url.toString();
+        };
+
+        window.toggleDropdown = function(btn) {
+            var menu = btn.nextElementSibling;
+            var isShown = menu.style.display === 'block';
+            document.querySelectorAll('.dropdown-menu-action').forEach(function(m) { m.style.display = 'none'; });
+            menu.style.display = isShown ? 'none' : 'block';
+            document.addEventListener('click', function handler(e) {
+                if (!btn.parentNode.contains(e.target)) {
+                    menu.style.display = 'none';
+                    document.removeEventListener('click', handler);
+                }
+            });
+        };
+
+        // Mở modal tổng hợp
+        window.openStockAlertModal = function() {
+            const selectedCheckboxes = document.querySelectorAll('.product-select:checked');
+            if (selectedCheckboxes.length === 0) {
+                alert('Vui lòng chọn ít nhất một sản phẩm');
+                return;
+            }
+            // Lấy dữ liệu sản phẩm từ biến Thymeleaf
+            const products = /*[[${products}]]*/ [];
+            const selectedIds = Array.from(selectedCheckboxes).map(cb => parseInt(cb.value));
+            const selectedProducts = products.filter(p => selectedIds.includes(p.productId));
+            // Render bảng trong modal
+            const tbody = document.querySelector('#stockAlertTable tbody');
+            tbody.innerHTML = '';
+            selectedProducts.forEach(product => {
+                if (product.inventorySales && product.inventorySales.length > 0) {
+                    product.inventorySales.forEach(inv => {
+                        const tr = document.createElement('tr');
+                        const tdName = document.createElement('td');
+                        tdName.textContent = product.productName;
+                        const tdVariant = document.createElement('td');
+                        tdVariant.textContent = (inv.color || '') + ' / ' + (inv.dimension || '');
+                        const tdAlert = document.createElement('td');
+                        tdAlert.innerHTML = `<input type="hidden" name="inventoryId" value="${inv.inventoryId}" />
+                            <input type="number" name="alertQuantity" min="1" style="width:80px" value="" placeholder="Nhập số lượng cảnh báo" />`;
+                        tr.appendChild(tdName);
+                        tr.appendChild(tdVariant);
+                        tr.appendChild(tdAlert);
+                        tbody.appendChild(tr);
+                    });
+                }
+            });
+            document.getElementById('stockAlertModal').style.display = 'block';
+        };
+
+        window.closeStockAlertModal = function() {
+            document.getElementById('stockAlertModal').style.display = 'none';
+        };
+    });
+</script>
+
+</body>f
+</html>

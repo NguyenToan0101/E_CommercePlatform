@@ -2,6 +2,7 @@ package org.example.ecommerce.repository;
 
 import org.example.ecommerce.common.dto.admin.userManagement.UserDTO;
 import org.example.ecommerce.entity.Customer;
+import org.example.ecommerce.entity.Inventory;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,7 +15,9 @@ import java.util.List;
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
     boolean existsByEmail(String email);
+
     boolean existsByPhone(String phone);
+
     Customer findByEmail(String email);
 
     @EntityGraph(attributePaths = {"seller", "seller.shop"})
@@ -60,4 +63,6 @@ LEFT JOIN s.shop sh
     List<UserDTO> getAllUserDTOs();
 
 
+    @Query("SELECT count(c.id) FROM Customer c")
+    Integer countCustomer();
 }

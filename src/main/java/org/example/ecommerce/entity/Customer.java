@@ -2,12 +2,16 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "customer")
@@ -17,64 +21,57 @@ public class Customer {
     @Column(name = "customerid", nullable = false)
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customer")
-    private Seller seller;
-
-    @Version
-    private Integer version;
-
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "firstname", length = 50)
+    @Column(name = "firstname", length = Integer.MAX_VALUE)
     private String firstname;
 
-    @Size(max = 50)
-    @Nationalized
-    @Column(name = "lastname", length = 50)
+    @Column(name = "lastname", length = Integer.MAX_VALUE)
     private String lastname;
 
-    @Column(name = "image")
-    private byte[] image;
-
-    @Size(max = 100)
     @NotNull
-    @Nationalized
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", nullable = false, length = Integer.MAX_VALUE)
     private String email;
 
-    @Size(max = 20)
     @NotNull
-    @Nationalized
-    @Column(name = "phone", nullable = false, length = 20)
+    @Column(name = "phone", nullable = false, length = Integer.MAX_VALUE)
     private String phone;
 
-    @Column(name = "gender")
-    private Character gender;
+    @Column(name = "gender", length = Integer.MAX_VALUE)
+    private String gender;
 
     @Column(name = "dateofbirth")
     private LocalDate dateofbirth;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "address")
+    @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "password")
+    @Column(name = "password", length = Integer.MAX_VALUE)
     private String password;
 
-    @Size(max = 20)
-    @Column(name = "role", length = 20)
+    @Column(name = "role", length = Integer.MAX_VALUE)
     private String role;
 
 
     @Column(nullable = false)
     private boolean status;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
 
+    @Column(name = "image")
+    private byte[] image;
+
+    @Column(name = "version")
+    private Integer version;
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Cart> carts = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Complaint> complaints = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Conversation> conversations = new LinkedHashSet<>();
 
     @Column(name = "locked_until")
     private LocalDateTime lockedUntil;
@@ -82,14 +79,20 @@ public class Customer {
     @Column(name = "is_locked")
     private boolean isLocked;
 
+    @OneToMany(mappedBy = "customerid")
+    private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
 
-    public Seller getSeller() {
-        return seller;
-    }
+    @OneToMany(mappedBy = "customerid")
+    private Set<Order> orders = new LinkedHashSet<>();
 
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
+    @OneToOne(mappedBy = "customer")
+    private Seller seller;
+
+    @OneToOne(mappedBy = "customerid")
+    private Wallet wallet;
+
+    @OneToMany(mappedBy = "customerid")
+    private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
     public Integer getId() {
         return id;
@@ -139,11 +142,11 @@ public class Customer {
         this.phone = phone;
     }
 
-    public Character getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Character gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -191,7 +194,7 @@ public class Customer {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -221,4 +224,67 @@ public class Customer {
 
 
 
+    public Set<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(Set<Cart> carts) {
+        this.carts = carts;
+    }
+
+    public Set<Complaint> getComplaints() {
+        return complaints;
+    }
+
+    public void setComplaints(Set<Complaint> complaints) {
+        this.complaints = complaints;
+    }
+
+    public Set<Conversation> getConversations() {
+        return conversations;
+    }
+
+    public void setConversations(Set<Conversation> conversations) {
+        this.conversations = conversations;
+    }
+
+    public Set<Ordernotification> getOrdernotifications() {
+        return ordernotifications;
+    }
+
+    public void setOrdernotifications(Set<Ordernotification> ordernotifications) {
+        this.ordernotifications = ordernotifications;
+    }
+
+    public Set<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Set<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Seller getSeller() {
+        return seller;
+    }
+
+    public void setSeller(Seller seller) {
+        this.seller = seller;
+    }
+
+    public Wallet getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
+
+    public Set<Wishlist> getWishlists() {
+        return wishlists;
+    }
+
+    public void setWishlists(Set<Wishlist> wishlists) {
+        this.wishlists = wishlists;
+    }
 }

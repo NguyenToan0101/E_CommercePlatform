@@ -6,9 +6,26 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
+
 import java.math.BigDecimal;
 
 public interface OrdersRepository extends JpaRepository<Order, Integer> {
+    List<Order> findAllByCustomeridOrderByOrderdateDesc(Customer customer);
+
+
+
+
+        @Query("SELECT o FROM Order o WHERE " +
+                "(:search IS NULL OR LOWER(o.fullname) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                "OR LOWER(o.phone) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                "OR CAST(o.id AS string) LIKE CONCAT('%', :search, '%')) " +
+                "AND (:status IS NULL OR o.status = :status)")
+        List<Order> searchByKeywordAndStatus(@Param("search") String search,
+                                             @Param("status") String status);
+
+
 
     int countByCustomerid(Customer customer);
 

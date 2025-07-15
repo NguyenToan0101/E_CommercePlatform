@@ -1,94 +1,82 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "inventory")
+@Data
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventoryid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productid")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "productid", nullable = false)
     private Product productid;
 
-    @Column(name = "quantity")
+    @NotNull(message = "Số lượng không được để trống")
+    @Min(value = 0, message = "Số lượng không được âm")
+    @Column(name = "quantity", nullable = false)
     private Integer quantity;
-
-    @Column(name = "lowstockthreshold")
-    private Integer lowstockthreshold;
 
     @Column(name = "solditems")
     private Integer solditems;
 
     @Size(max = 100)
-    @Nationalized
-    @Column(name = "color", length = 100)
+    @NotEmpty(message = "Màu sắc không được để trống")
+    @Column(name = "color", nullable = false, length = 100)
     private String color;
 
     @Size(max = 100)
-    @Nationalized
-    @Column(name = "dimension", length = 100)
+    @NotEmpty(message = "Kích thước không được để trống")
+    @Column(name = "dimension", nullable = false, length = 100)
     private String dimension;
 
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @NotNull(message = "Giá không được để trống")
+    @DecimalMin(value = "0.0", inclusive = false, message = "Giá phải lớn hơn 0")
+    @Column(name = "price")
+    private BigDecimal price;
 
-    public Product getProductid() {
-        return productid;
-    }
 
-    public void setProductid(Product productid) {
-        this.productid = productid;
-    }
 
-    public Integer getQuantity() {
-        return quantity;
-    }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
+    @Column(name = "image")
+    // @NotEmpty(message = "Ảnh không được để trống") // Đã bỏ validate này để tránh lỗi khi upload file
+    private String image;
 
-    public Integer getLowstockthreshold() {
-        return lowstockthreshold;
-    }
+    @Column(name = "weight")
+    private Integer weight;
 
-    public void setLowstockthreshold(Integer lowstockthreshold) {
-        this.lowstockthreshold = lowstockthreshold;
-    }
+    @Column(name = "length")
+    private Integer length;
 
-    public Integer getSolditems() {
-        return solditems;
-    }
+    @Column(name = "width")
+    private Integer width;
 
-    public void setSolditems(Integer solditems) {
-        this.solditems = solditems;
-    }
+    @Column(name = "height")
+    private Integer height;
 
-    public String getColor() {
-        return color;
-    }
+    @OneToMany(mappedBy = "inventoryid")
+    private Set<Cartitem> cartitems = new LinkedHashSet<>();
 
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getDimension() {
-        return dimension;
-    }
-
-    public void setDimension(String dimension) {
-        this.dimension = dimension;
-    }
+    @OneToMany(mappedBy = "inventoryid")
+    private Set<Orderitem> orderitems = new LinkedHashSet<>();
 
 }

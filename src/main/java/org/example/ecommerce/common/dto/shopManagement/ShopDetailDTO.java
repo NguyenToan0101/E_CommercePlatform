@@ -7,7 +7,7 @@ public class ShopDetailDTO {
     private String shopName;
     private String manageName;
     private String businessAddress;
-    private String createdAt;      // String vì bạn muốn format sẵn
+    private String createdAt;
     private String status;
     private String invoiceEmail;
     private String phone;
@@ -24,7 +24,7 @@ public class ShopDetailDTO {
     // Từ bảng Customer
     private String customerEmail;
     private String gender;
-    private String dob;            // String vì bạn format sẵn
+    private String dob;
     private String address;
 
     // Từ bảng Seller

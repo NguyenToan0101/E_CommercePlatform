@@ -41,12 +41,12 @@ public class CartServiceImpl implements CartService {
             dto.setCartItemId(item.getId());
             dto.setProductId(item.getProductid().getId());
             dto.setProductName(item.getProductid().getName());
-            dto.setPrice(item.getProductid().getPrice());
+            dto.setPrice(item.getInventoryid().getPrice());
             dto.setQuantity(item.getQuantity());
             dto.setColor(item.getInventoryid().getColor());
             dto.setDimension(item.getInventoryid().getDimension());
 
-            List<Productimage> images =productimageRepository.findProductimageById(item.getProductid().getId()) ;
+            List<Productimage> images =productimageRepository.findAllByProductid(item.getProductid()) ;
             if (images != null && images.size() > 0) {
                 dto.setImageUrl(images.get(0).getImageurl());
             } else {
@@ -85,7 +85,7 @@ public class CartServiceImpl implements CartService {
     }
 
     public void updateCartItem(int cartItemId, int quantity) {
-        Cartitem item = cartitemRepository.findById(cartItemId);
+        Cartitem item = cartitemRepository.findById(cartItemId).orElse(null);
         if (item != null) {
             item.setQuantity(quantity);
             cartitemRepository.save(item);
@@ -93,7 +93,7 @@ public class CartServiceImpl implements CartService {
     }
 
     public void removeCartItem(int cartItemId) {
-        Cartitem item = cartitemRepository.findById(cartItemId);
+        Cartitem item = cartitemRepository.findById(cartItemId).orElse(null);
         if (item != null) {
             cartitemRepository.delete(item);
         }

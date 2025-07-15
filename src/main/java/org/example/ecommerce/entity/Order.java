@@ -1,10 +1,14 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+
 
 @Entity
 @Table(name = "orders")
@@ -18,15 +22,31 @@ public class Order {
     @JoinColumn(name = "customerid")
     private Customer customerid;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "orderdate")
     private Instant orderdate;
 
-    @Column(name = "totalamount", precision = 18, scale = 2)
+    @NotNull
+    @Column(name = "totalamount", nullable = false)
     private BigDecimal totalamount;
 
-    @Size(max = 20)
-    @Column(name = "status", length = 20)
+    @Column(name = "status", length = Integer.MAX_VALUE)
     private String status;
+
+    @Column(name = "payment_status", length = Integer.MAX_VALUE)
+    private String paymentStatus;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
+    @Column(name = "fullname", length = Integer.MAX_VALUE)
+    private String fullname;
+
+    @Column(name = "phone", length = Integer.MAX_VALUE)
+    private String phone;
+
+    @Column(name = "address", length = Integer.MAX_VALUE)
+    private String address;
 
     public Integer getId() {
         return id;
@@ -68,4 +88,43 @@ public class Order {
         this.status = status;
     }
 
+    public String getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(String paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 }

@@ -24,7 +24,6 @@ public class LoginController {
     @Autowired
     private CustomerService customerService;
     private final AdminService adminService;
-
     public LoginController(AdminService adminService) {
         this.adminService = adminService;
     }
@@ -38,6 +37,7 @@ public class LoginController {
             return "redirect:/adminHome";
         }
         Customer customer = customerService.findByEmail(email);
+
         if (customer != null) {
             if (customer.isLocked()) {
                 model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa");

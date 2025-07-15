@@ -3,7 +3,6 @@ package org.example.ecommerce.common.dto;
 
 import lombok.Data;
 
-
 @Data
 public class ShopRegistrationDTO {
 //    private String id;
@@ -30,7 +29,6 @@ public class ShopRegistrationDTO {
     private String idNumber;
     private String frontIdImage; // base64 string
     private String backIdImage;  // base64 string
-
 
 @Data
     public static class Address {

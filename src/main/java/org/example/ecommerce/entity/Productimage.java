@@ -1,8 +1,10 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+
 
 @Entity
 @Table(name = "productimages")
@@ -16,9 +18,8 @@ public class Productimage {
     @JoinColumn(name = "productid")
     private Product productid;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "imageurl")
+    @NotNull
+    @Column(name = "imageurl", nullable = false, length = Integer.MAX_VALUE)
     private String imageurl;
 
     public Integer getId() {
@@ -44,5 +45,4 @@ public class Productimage {
     public void setImageurl(String imageurl) {
         this.imageurl = imageurl;
     }
-
 }

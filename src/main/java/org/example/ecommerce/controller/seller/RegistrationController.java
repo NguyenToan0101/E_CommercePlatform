@@ -85,14 +85,14 @@ public class RegistrationController {
             }
 
             // Cập nhật thông tin seller
-            seller.setIdNumber(registrationDTO.getIdNumber());
+            seller.setIdnumber(registrationDTO.getIdNumber());
 
             // Xử lý file upload
             if (registrationDTO.getFrontIdImage() != null && !registrationDTO.getFrontIdImage().trim().isEmpty()) {
-                seller.setFrontIdImage(registrationDTO.getFrontIdImage());
+                seller.setFrontidimage(registrationDTO.getFrontIdImage());
             }
             if (registrationDTO.getBackIdImage() != null && !registrationDTO.getBackIdImage().trim().isEmpty()) {
-                seller.setBackIdImage(registrationDTO.getBackIdImage());
+                seller.setBackidimage(registrationDTO.getBackIdImage());
             }
 
             // Tạo hoặc cập nhật Shop entity

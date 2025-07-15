@@ -2,6 +2,7 @@ package org.example.ecommerce.service.customer.customer_search_products;
 
 import org.example.ecommerce.entity.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ProductDetail {
@@ -11,14 +12,16 @@ public class ProductDetail {
     private List<Productimage> images;
     private List<Review> reviews;
     private List<Wishlist> wishlists;
+    private BigDecimal price;
 
-    public ProductDetail(Product product, Shop shop, List<Inventory> inventories, List<Productimage> images, List<Review> reviews, List<Wishlist> wishlists) {
+    public ProductDetail(Product product, Shop shop, List<Inventory> inventories, List<Productimage> images, List<Review> reviews, List<Wishlist> wishlists, BigDecimal price) {
         this.product = product;
         this.shop = shop;
         this.inventories = inventories;
         this.images = images;
         this.reviews = reviews;
         this.wishlists = wishlists;
+        this.price = price;
     }
 
     public Product getProduct() {
@@ -67,5 +70,13 @@ public class ProductDetail {
 
     public void setWishlists(List<Wishlist> wishlists) {
         this.wishlists = wishlists;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 }

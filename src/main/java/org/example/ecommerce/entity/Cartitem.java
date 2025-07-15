@@ -1,7 +1,11 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "cartitems")
 public class Cartitem {
@@ -9,10 +13,6 @@ public class Cartitem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cartitemid", nullable = false)
     private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "inventoryid")
-    private Inventory inventoryid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cartid")
@@ -25,20 +25,16 @@ public class Cartitem {
     @Column(name = "quantity")
     private Integer quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "inventoryid")
+    private Inventory inventoryid;
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Inventory getInventoryid() {
-        return inventoryid;
-    }
-
-    public void setInventoryid(Inventory inventoryid) {
-        this.inventoryid = inventoryid;
     }
 
     public Cart getCartid() {
@@ -65,4 +61,11 @@ public class Cartitem {
         this.quantity = quantity;
     }
 
+    public Inventory getInventoryid() {
+        return inventoryid;
+    }
+
+    public void setInventoryid(Inventory inventoryid) {
+        this.inventoryid = inventoryid;
+    }
 }

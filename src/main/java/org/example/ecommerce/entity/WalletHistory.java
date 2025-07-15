@@ -2,9 +2,13 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+
 
 @Entity
 @Table(name = "wallet_history")
@@ -19,13 +23,14 @@ public class WalletHistory {
     @JoinColumn(name = "walletid", nullable = false)
     private Wallet walletid;
 
-    @Column(name = "amount", precision = 18, scale = 2)
+    @NotNull
+    @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
-    @Lob
-    @Column(name = "status")
+    @Column(name = "status", length = Integer.MAX_VALUE)
     private String status;
 
+    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
     private Instant createdAt;
 
@@ -68,5 +73,4 @@ public class WalletHistory {
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
     }
-
 }

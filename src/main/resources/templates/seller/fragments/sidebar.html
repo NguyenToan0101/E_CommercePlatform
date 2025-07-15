@@ -1,52 +1,57 @@
-    <aside class="sidebar" th:fragment="sidebar">
-        <div class="sidebar-header">
-            <div class="logo">
-                <i class="fas fa-cube"></i>
-                <span>Seller Center</span>
-            </div>
+<aside class="sidebar" th:fragment="sidebar">
+    <div class="sidebar-header">
+        <div class="logo">
+            <i class="fas fa-cube"></i>
+            <span>Trung Tâm Người Bán</span>
         </div>
-        <nav class="sidebar-nav">
-            <ul>
-                <li class="nav-item active" data-page="dashboard">
+    </div>
+    <nav class="sidebar-nav">
+        <ul>
+            <li class="nav-item" th:classappend="${activePage == 'dashboard'} ? 'active'">
+                <a th:href="@{/seller/dashboard}">
                     <i class="fas fa-home"></i>
-                    <span>Dashboard</span>
-                </li>
-                <li class="nav-item" data-page="products">
+                    <span>Bảng điều khiển</span>
+                </a>
+            </li>
+            <li class="nav-item" th:classappend="${activePage == 'products'} ? 'active'">
+                <a th:href="@{/seller/products}">
                     <i class="fas fa-box"></i>
-                    <span>Products</span>
-                </li>
-                <li class="nav-item" data-page="orders">
+                    <span>Sản phẩm</span>
+                </a>
+            </li>
+            <li class="nav-item" th:classappend="${activePage == 'orders'} ? 'active'">
+                <a th:href="@{/seller/orders}">
                     <i class="fas fa-shopping-cart"></i>
-                    <span>Orders</span>
-                </li>
-                <li class="nav-item" data-page="inventory">
-                    <i class="fas fa-warehouse"></i>
-                    <span>Inventory</span>
-                </li>
-                <li class="nav-item" data-page="customers">
-                    <i class="fas fa-users"></i>
-                    <span>Customers</span>
-                </li>
-                <li class="nav-item" data-page="messages">
+                    <span>Đơn hàng</span>
+                </a>
+            </li>
+
+
+            <li class="nav-item" th:classappend="${activePage == 'messages'} ? 'active'">
+                <a th:href="@{/seller/chat}">
                     <i class="fas fa-envelope"></i>
-                    <span>Messages</span>
-                </li>
-                <li class="nav-item" data-page="marketing">
+                    <span>Tin nhắn</span>
+                </a>
+            </li>
+            <li class="nav-item" th:classappend="${activePage == 'marketing'} ? 'active'">
+                <a th:href="@{/seller/marketing}">
                     <i class="fas fa-bullhorn"></i>
-                    <span>Marketing</span>
-                </li>
-                <li class="nav-item" data-page="analytics">
+                    <span>Tiếp thị</span>
+                </a>
+            </li>
+            <li class="nav-item" th:classappend="${activePage == 'analytics'} ? 'active'">
+                <a th:href="@{/seller/analytics}">
                     <i class="fas fa-chart-line"></i>
-                    <span>Analytics</span>
-                </li>
-                <li class="nav-item" data-page="finance">
+                    <span>Phân tích</span>
+                </a>
+            </li>
+            <li class="nav-item" th:classappend="${activePage == 'finance'} ? 'active'">
+                <a th:href="@{/seller/finance}">
                     <i class="fas fa-dollar-sign"></i>
-                    <span>Finance</span>
-                </li>
-                <li class="nav-item" data-page="settings">
-                    <i class="fas fa-cog"></i>
-                    <span>Settings</span>
-                </li>
-            </ul>
-        </nav>
-    </aside>
+                    <span>Tài chính</span>
+                </a>
+            </li>
+
+        </ul>
+    </nav>
+</aside>

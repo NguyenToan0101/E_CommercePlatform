@@ -67,10 +67,10 @@ public class HomeController {
             if (customer.getSeller() == null) {
                 return "redirect:/initSellerData";
             }
-        Shop shop = customer.getSeller().getShop();
-        if (shop.getStatus() == null) {
-            return "redirect:/registrationSeller";
-        }
+            Shop shop = customer.getSeller().getShop();
+            if (shop.getStatus() == null) {
+                return "redirect:/registrationSeller";
+            }
 
             return switch (shop.getStatus()) {
                 case "PENDING_APPROVAL" -> {
@@ -87,7 +87,7 @@ public class HomeController {
                 default -> "redirect:/registrationSeller";
             };
 
-    }catch (Exception e){
+        }catch (Exception e){
             return "redirect:/home";
         }
     }
@@ -99,30 +99,30 @@ public class HomeController {
             return "redirect:/login";
         }
 
-            if (customer.getSeller() == null) {
-                Optional<Seller> sellerOpt = sellerRepository.findById(customer.getId());
-                Seller seller = sellerOpt.orElseGet(() -> {
-                    Seller s = new Seller();
-                    s.setId(customer.getId());
-                    s.setCustomer(customer);
-                    return s;
-                });
+        if (customer.getSeller() == null) {
+            Optional<Seller> sellerOpt = sellerRepository.findById(customer.getId());
+            Seller seller = sellerOpt.orElseGet(() -> {
+                Seller s = new Seller();
+                s.setId(customer.getId());
+                s.setCustomer(customer);
+                return s;
+            });
 
-                Optional<Shop> shopOpt = shopRepository.findById(customer.getId());
-                Shop shop = shopOpt.orElseGet(() -> {
-                    Shop sh = new Shop();
-                    sh.setId(customer.getId());
-                    sh.setSellerid(seller);
-                    return sh;
-                });
+            Optional<Shop> shopOpt = shopRepository.findById(customer.getId());
+            Shop shop = shopOpt.orElseGet(() -> {
+                Shop sh = new Shop();
+                sh.setId(customer.getId());
+                sh.setSellerid(seller);
+                return sh;
+            });
 
-                seller.setShop(shop);
-                customer.setSeller(seller);
-                customerRepository.save(customer);
-                session.setAttribute("customer", customer);
-            }
+            seller.setShop(shop);
+            customer.setSeller(seller);
+            customerRepository.save(customer);
+            session.setAttribute("customer", customer);
+        }
 
-            return "redirect:/sellerChannel";
+        return "redirect:/sellerChannel";
 
     }
 
