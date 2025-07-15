@@ -1398,7 +1398,7 @@
 
 <div id="inventory-data" style="display:none;" th:each="inv : ${detail.inventories}">
     <span class="inventory-item"
-          th:attr="data-id=${inv.id}, data-color=${inv.color}, data-size=${inv.dimension}, data-quantity=${inv.quantity}, data-sold=${inv.solditems}, data-price=${inv.price}">
+          th:attr="data-id=${inv.id}, data-color=${inv.color}, data-size=${inv.dimension}, data-quantity=${inv.quantity}, data-sold=${inv.solditems}, data-price=${inv.price}, data-image=${inv.image}">
     </span>
 </div>
 
@@ -1465,7 +1465,8 @@
             size: item.getAttribute('data-size'),
             quantity: parseInt(item.getAttribute('data-quantity')),
             sold: parseInt(item.getAttribute('data-sold')),
-            price: parseFloat(item.getAttribute('data-price'))
+            price: parseFloat(item.getAttribute('data-price')),
+            image: item.getAttribute('data-image')
         }));
     }
 
@@ -1581,53 +1582,49 @@
 
     function updateStockDisplay() {
         const stockInfo = document.getElementById('stock-info');
-
         const needsColorSelection = hasColors && !selectedColor;
         const needsSizeSelection = hasSizes && !selectedSize;
-
         if (needsColorSelection || needsSizeSelection) {
             const totalQuantity = inventoryData.reduce((sum, item) => sum + item.quantity, 0);
             stockInfo.textContent = `Tổng còn lại: ${totalQuantity} sản phẩm`;
-
             if (inventoryData.length > 0) {
                 document.getElementById('quantity').max = Math.min(...inventoryData.map(item => item.quantity));
             }
             selectedInventoryId = null;
+            resetMainImageToDefault();
         } else {
             let filteredInventory = inventoryData;
-
             if (hasColors && selectedColor) {
                 filteredInventory = filteredInventory.filter(item => item.color === selectedColor);
             }
-
             if (hasSizes && selectedSize) {
                 filteredInventory = filteredInventory.filter(item => item.size === selectedSize);
             }
-
             if (filteredInventory.length === 1) {
                 const variant = filteredInventory[0];
+                selectedInventoryId = variant.id;
+                // Luôn tìm inventory theo id và hiển thị ảnh inventory nếu có
+                const selectedInv = inventoryData.find(item => item.id === selectedInventoryId);
+                if (selectedInv && selectedInv.image && selectedInv.image !== 'null' && selectedInv.image.trim() !== '') {
+                    changeMainImage(selectedInv.image);
+                } else {
+                    resetMainImageToDefault();
+                }
                 const colorText = hasColors ? selectedColor : '';
                 const sizeText = hasSizes ? selectedSize : '';
                 const variantText = [colorText, sizeText].filter(Boolean).join(' - ');
-
                 stockInfo.textContent = `Còn lại${variantText ? ` (${variantText})` : ''}: ${variant.quantity} sản phẩm`;
                 document.getElementById('quantity').max = variant.quantity;
-                selectedInventoryId = variant.id;
             } else if (filteredInventory.length > 1) {
                 const totalQuantity = filteredInventory.reduce((sum, item) => sum + item.quantity, 0);
                 const selectionText = hasColors && selectedColor ? selectedColor :
                     hasSizes && selectedSize ? selectedSize : '';
-
                 stockInfo.textContent = `Còn lại${selectionText ? ` (${selectionText})` : ''}: ${totalQuantity} sản phẩm`;
                 document.getElementById('quantity').max = Math.max(...filteredInventory.map(item => item.quantity));
                 selectedInventoryId = null;
-            } else {
-                stockInfo.textContent = `Không có sản phẩm với tiêu chí này`;
-                document.getElementById('quantity').max = 0;
-                selectedInventoryId = null;
+                resetMainImageToDefault();
             }
         }
-
         updatePriceDisplay();
     }
 
@@ -1993,7 +1990,13 @@
         document.getElementById('main-image').src = src;
     }
 
-
+    // Hàm trả về ảnh tổng thể đầu tiên
+    function resetMainImageToDefault() {
+        const defaultImg = document.querySelector('.thumbnail-row img');
+        if (defaultImg) {
+            document.getElementById('main-image').src = defaultImg.src;
+        }
+    }
 
     function displayReviews() {
         const reviewsList = document.getElementById('reviews-list');
@@ -2134,6 +2137,11 @@
 
     if (customerId) {
         updateCartBadge();
+    }
+
+    // Thay đổi ảnh chính cho gallery inventory
+    function changeMainImageInventory(src) {
+        document.getElementById('main-image-inventory').src = src;
     }
 </script>
 </body>

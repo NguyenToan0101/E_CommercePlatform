@@ -8,7 +8,11 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "inventory")
 public class Inventory {
@@ -42,67 +46,25 @@ public class Inventory {
     @Column(name = "price")
     private BigDecimal price;
 
-    public Integer getId() {
-        return id;
-    }
+    @Column(name = "image", length = Integer.MAX_VALUE)
+    private String image;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Column(name = "weight")
+    private BigDecimal weight;
 
-    public Product getProductid() {
-        return productid;
-    }
+    @Column(name = "length")
+    private Integer length;
 
-    public void setProductid(Product productid) {
-        this.productid = productid;
-    }
+    @Column(name = "width")
+    private Integer width;
 
-    public Integer getQuantity() {
-        return quantity;
-    }
+    @Column(name = "height")
+    private Integer height;
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
+    @OneToMany(mappedBy = "inventoryid")
+    private Set<Cartitem> cartitems = new LinkedHashSet<>();
 
-    public Integer getSolditems() {
-        return solditems;
-    }
+    @OneToMany(mappedBy = "inventoryid")
+    private Set<Orderitem> orderitems = new LinkedHashSet<>();
 
-    public void setSolditems(Integer solditems) {
-        this.solditems = solditems;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getDimension() {
-        return dimension;
-    }
-
-    public void setDimension(String dimension) {
-        this.dimension = dimension;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
 }

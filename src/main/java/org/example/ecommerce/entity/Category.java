@@ -1,9 +1,16 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.Nationalized;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
+@Getter
+@Setter
 @Entity
 @Table(name = "categories")
 public class Category {
@@ -12,27 +19,30 @@ public class Category {
     @Column(name = "categoryid", nullable = false)
     private Integer id;
 
-    @Size(max = 100)
-    @Nationalized
-    @Column(name = "categoryname", length = 100)
+    @NotNull
+    @Column(name = "categoryname", nullable = false, length = Integer.MAX_VALUE)
     private String categoryname;
 
+    @Column(name = "image", length = Integer.MAX_VALUE)
+    private String image;
 
-    public Integer getId() {
-        return id;
-    }
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parentid")
+    private Category parentid;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    @Column(name = "status", length = Integer.MAX_VALUE)
+    private String status;
 
-    public String getCategoryname() {
-        return categoryname;
-    }
+    @Column(name = "create_at")
+    private Instant createAt;
 
-    public void setCategoryname(String categoryname) {
-        this.categoryname = categoryname;
-    }
+    @OneToMany(mappedBy = "parentid")
+    private Set<Category> categories = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "categoryid")
+    private Set<Product> products = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "maincategoryid")
+    private Set<Shop> shops = new LinkedHashSet<>();
 
 }

@@ -708,51 +708,6 @@
       color: var(--gradient-start);
     }
 
-    /* Category Pagination */
-    .category-pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
-
-    .category-page-btn {
-      background: rgba(255, 255, 255, 0.2);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      color: var(--white);
-      padding: 8px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 14px;
-      font-weight: 500;
-      min-width: 40px;
-      text-align: center;
-    }
-
-    .category-page-btn:hover {
-      background: rgba(255, 255, 255, 0.3);
-      border-color: var(--white);
-    }
-
-    .category-page-btn.active {
-      background: var(--white);
-      color: var(--gradient-start);
-      border-color: var(--white);
-    }
-
-    .category-page-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .category-page-info {
-      color: rgba(255, 255, 255, 0.8);
-      font-size: 12px;
-      margin: 0 10px;
-    }
-
     /* Enhanced Products Grid - 6 per row */
     .products-grid {
       display: grid;
@@ -1395,27 +1350,11 @@
   <section class="category-section">
     <h2 class="section-title">Danh mục sản phẩm</h2>
     <div class="category-container">
-      <div class="category-grid" id="categoryGrid">
-        <!-- Categories will be populated by JavaScript -->
-      </div>
-
-      <!-- Category Pagination -->
-      <div class="category-pagination" id="categoryPagination" style="display: none;">
-        <button class="category-page-btn" id="prevCategoryBtn" onclick="changeCategoryPage(-1)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-
-        <div id="categoryPageNumbers"></div>
-
-        <button class="category-page-btn" id="nextCategoryBtn" onclick="changeCategoryPage(1)">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M9 18L15 12L9 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </button>
-
-        <div class="category-page-info" id="categoryPageInfo"></div>
+      <div class="category-grid">
+        <div class="category-item" th:each="cat : ${categories}" th:onclick="|window.location.href='/search_category?categoryId=' + ${cat.id}|">
+          <img th:src="@{${cat.image}}" alt="Ảnh danh mục" class="category-image" style="width:80px;height:80px;object-fit:cover;margin-bottom:8px;"/>
+          <div class="category-name" th:text="${cat.categoryname}"></div>
+        </div>
       </div>
     </div>
   </section>

@@ -1,5 +1,6 @@
 package org.example.ecommerce.service.customer.customer_product;
 
+import org.example.ecommerce.entity.Category;
 import org.example.ecommerce.entity.Inventory;
 import org.example.ecommerce.entity.Product;
 import org.example.ecommerce.entity.Productimage;
@@ -67,6 +68,10 @@ public class CustomerProductServiceImpl implements CustomerProductService {
             }
         }
         return views;
+    }
+
+    public List<Category> getCategories() {
+        return categoryRepository.findRootCategories();
     }
 
 }

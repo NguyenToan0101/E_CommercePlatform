@@ -32,6 +32,7 @@ public class HomeController {
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) {
             model.addAttribute("products", productService.getProductViews());
+            model.addAttribute("categories", productService.getCategories());
             return "customer/customer_aut/home";
         }
 
@@ -43,6 +44,8 @@ public class HomeController {
         model.addAttribute("customer", customer);
 
         model.addAttribute("products", productService.getProductViews());
+
+        model.addAttribute("categories", productService.getCategories());
 
         return "customer/customer_aut/home";
     }
