@@ -5,10 +5,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+
 import java.util.List;
 import java.util.Optional;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
+
+    @Query("SELECT COUNT(p.id) FROM Product p WHERE p.categoryid.id = :categoryId")
+    int countByCategoryId(@Param("categoryId") Integer categoryId);
+
     List<Category> findAll();
 
     @Query("SELECT c FROM Category c LEFT JOIN FETCH c.children WHERE c.parent IS NULL")

@@ -1,17 +1,21 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+
 import org.hibernate.annotations.ColumnDefault;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+
 import java.util.List;
 import java.util.Set;
 
@@ -41,7 +45,8 @@ public class Product {
     @NotEmpty(message = "Mô tả không được để trống")
     @Column(name = "description", length = Integer.MAX_VALUE)
     private String description;
-
+    @Column(name = "price", precision = 18, scale = 2)
+    private BigDecimal price;
     @Column(name = "status", length = Integer.MAX_VALUE)
     private String status;
 
@@ -85,6 +90,5 @@ public class Product {
 
     @OneToMany(mappedBy = "productid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
-
 
 }

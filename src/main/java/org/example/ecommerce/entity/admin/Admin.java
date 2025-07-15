@@ -11,6 +11,7 @@ import java.util.Set;
 @Data
 @Entity
 @Table(name = "admin")
+
 public class Admin {
 
     @Id

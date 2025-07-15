@@ -1,7 +1,9 @@
 package org.example.ecommerce.common.dto;
 
 
+import lombok.Data;
 
+@Data
 public class ShopRegistrationDTO {
 //    private String id;
     // Shop info
@@ -28,7 +30,7 @@ public class ShopRegistrationDTO {
     private String frontIdImage; // base64 string
     private String backIdImage;  // base64 string
 
-
+@Data
     public static class Address {
         private String province;
         private String district;
