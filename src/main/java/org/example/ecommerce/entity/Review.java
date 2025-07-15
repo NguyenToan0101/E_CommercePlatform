@@ -6,12 +6,17 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "reviews")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ColumnDefault("nextval('reviews_reviewid_seq'")
     @Column(name = "reviewid", nullable = false)
     private Integer id;
 
@@ -29,9 +34,6 @@ public class Review {
     @Column(name = "comment", length = Integer.MAX_VALUE)
     private String comment;
 
-    @Column(name = "imagereviews", length = Integer.MAX_VALUE)
-    private String imagereviews;
-
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
@@ -40,67 +42,7 @@ public class Review {
     @Column(name = "is_hidden")
     private Boolean isHidden;
 
-    public Integer getId() {
-        return id;
-    }
+    @OneToMany(mappedBy = "reviewid")
+    private Set<ReviewsImage> reviewsImages = new LinkedHashSet<>();
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Product getProductid() {
-        return productid;
-    }
-
-    public void setProductid(Product productid) {
-        this.productid = productid;
-    }
-
-    public Order getOrderid() {
-        return orderid;
-    }
-
-    public void setOrderid(Order orderid) {
-        this.orderid = orderid;
-    }
-
-    public Integer getRating() {
-        return rating;
-    }
-
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getImagereviews() {
-        return imagereviews;
-    }
-
-    public void setImagereviews(String imagereviews) {
-        this.imagereviews = imagereviews;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
-
-    public Boolean getHidden() {
-        return isHidden;
-    }
-
-    public void setHidden(Boolean hidden) {
-        isHidden = hidden;
-    }
 }

@@ -1,6 +1,6 @@
 package org.example.ecommerce.controller.customer.wallet;
 
-import org.example.ecommerce.common.dto.CategoryDTO;
+import org.example.ecommerce.common.dto.promotion.CategoryDTO;
 import org.example.ecommerce.common.dto.promotion.PromotionDTO;
 import org.example.ecommerce.common.dto.shipping.AddressDTO;
 
@@ -212,7 +212,7 @@ public Map<String, Object> getPreviewData(
     shippingRequest.setProvinceTo(addressDTOs.getProvinceName());
     shippingRequest.setDistrictTo(addressDTOs.getDistrictName());
     shippingRequest.setCategoryName(product.getCategoryid().getCategoryname());
-    if(product.getUse_variant_shipping()){
+    if(product.getUseVariantShipping()){
 
 
         shippingRequest.setWeight(inventoryPayment.getWeight());
