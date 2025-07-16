@@ -48,6 +48,16 @@ public class Seller {
     @JoinColumn(name = "sellerid", nullable = false)
     private Customer customer3;
 
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sellerid", nullable = false)
+    private Customer customer4;
+
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sellerid", nullable = false)
+    private Customer customer5;
+
 
     public Seller() {
     }

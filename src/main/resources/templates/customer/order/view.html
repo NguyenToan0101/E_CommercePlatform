@@ -645,7 +645,7 @@
                         <span class="price item-total" th:attr="data-quantity=${item.quantity}, data-unit-price=${item.unitPrice}">0 đ</span>
                     </td>
                     <td>
-                        <a th:if="${order.status == 'Success'}"
+                        <a th:if="${order.status == 'Đã nhận'}"
                            th:href="@{/review(productId=${item.productId}, orderId=${order.id})}"
                            class="review-btn">
                             <i class="fas fa-star"></i>

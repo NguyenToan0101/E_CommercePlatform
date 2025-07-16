@@ -909,8 +909,8 @@
         <div class="customer-info" th:if="${customer}">
             <div class="dropdown" id="customerDropdown" tabindex="0">
                 <span class="customer-name" th:text="${customer.firstname + ' ' + customer.lastname}"></span>
-                <img th:if="${base64Image != null}"
-                     th:src="'data:image/jpeg;base64,' + ${base64Image}"
+                <img th:if="${customer.image != null and customer.image != ''}"
+                     th:src="@{${customer.image}}"
                      alt="Avatar" class="avatar" />
 
                 <svg class="dropdown-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
