@@ -206,7 +206,7 @@
         <details open>
             <summary>Chính sách</summary>
             <ul>
-                <li th:each="p : ${policies}" th:if="${p.type == 'policy'}">
+                <li th:each="p : ${policies}" th:if="${p.type == 'policy' and p.status == 'published'}">
                     <a th:href="'#' + ${p.slug}" th:text="${p.title}" class="policy-link"></a>
                     <span class="updated-date" th:if="${p.formattedUpdatedAt != null}">
                         Cập nhật: <span th:text="${p.formattedUpdatedAt}"></span>
@@ -218,7 +218,7 @@
         <details>
             <summary>Hướng dẫn</summary>
             <ul>
-                <li th:each="p : ${policies}" th:if="${p.type == 'guide'}">
+                <li th:each="p : ${policies}" th:if="${p.type == 'guide' and p.status == 'published'}">
                     <a th:href="'#' + ${p.slug}" th:text="${p.title}" class="policy-link"></a>
                     <span class="updated-date" th:if="${p.formattedUpdatedAt != null}">
                         Cập nhật: <span th:text="${p.formattedUpdatedAt}"></span>
@@ -230,7 +230,7 @@
         <details>
             <summary>Tin Tức</summary>
             <ul>
-                <li th:each="p : ${policies}" th:if="${p.type == 'news'}">
+                <li th:each="p : ${policies}" th:if="${p.type == 'news' and p.status == 'published'}">
                     <a th:href="'#' + ${p.slug}" th:text="${p.title}" class="policy-link"></a>
                     <span class="updated-date" th:if="${p.formattedUpdatedAt != null}">
                         Cập nhật: <span th:text="${p.formattedUpdatedAt}"></span>
@@ -242,7 +242,7 @@
 
     <!-- Main Content -->
     <main class="policy-content">
-        <section th:each="p,iter : ${policies}" th:id="${p.slug}" th:classappend="${iter.index == 0} ? '' : 'hidden'">
+        <section th:each="p,iter : ${policies}" th:if="${p.status == 'published'}" th:id="${p.slug}" th:classappend="${iter.index == 0} ? '' : 'hidden'">
             <h2 th:text="${p.title}"></h2>
             <div th:utext="${p.content}"></div>
             <div class="updated-date-container" th:if="${p.formattedUpdatedAt != null}">
