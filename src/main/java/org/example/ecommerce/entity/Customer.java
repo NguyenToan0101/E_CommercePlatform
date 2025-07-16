@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
@@ -67,7 +68,7 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")
     private Set<Cart> carts = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "customerid")
+    @OneToMany(mappedBy = "customer")
     private Set<Complaint> complaints = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "customerid")
@@ -232,13 +233,6 @@ public class Customer {
         this.carts = carts;
     }
 
-    public Set<Complaint> getComplaints() {
-        return complaints;
-    }
-
-    public void setComplaints(Set<Complaint> complaints) {
-        this.complaints = complaints;
-    }
 
     public Set<Conversation> getConversations() {
         return conversations;
