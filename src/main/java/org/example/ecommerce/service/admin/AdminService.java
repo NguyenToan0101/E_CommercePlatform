@@ -99,6 +99,11 @@ public class AdminService {
         return toDto(admin);
     }
 
+    public AdminDTO findById(Integer id) {
+        Admin admin = adminRepo.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Admin không tồn tại: " + id));
+        return toDto(admin);
+    }
 
 
 }
