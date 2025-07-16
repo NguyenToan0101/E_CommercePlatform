@@ -31,7 +31,7 @@
         @Autowired
         private EmailService emailService;
 
-        @GetMapping("/users") // ← đúng path rồi
+        @GetMapping("/users")
         public List<UserDTO> getAllUsers() {
             return adminCustomerService.getAllCustomers();
         }

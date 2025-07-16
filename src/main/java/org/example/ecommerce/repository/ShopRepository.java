@@ -5,12 +5,16 @@ import org.example.ecommerce.common.dto.shopManagement.ShopDetailDTO;
 import org.example.ecommerce.entity.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
+@EnableJpaRepositories
 public interface ShopRepository extends JpaRepository<Shop, Integer> {
 
     @Query("""
@@ -38,7 +42,7 @@ SELECT new org.example.ecommerce.common.dto.shopManagement.ShopDetailDTO(
     s.shopname,
     s.manageName,
     s.businessAddress,
-    CAST(s.createdat AS java.lang.String),
+    s.createdat,
     s.status,
     s.invoiceEmail,
     s.phone,
@@ -48,12 +52,12 @@ SELECT new org.example.ecommerce.common.dto.shopManagement.ShopDetailDTO(
     s.taxCode,
     c.categoryname,
     cu.email,
-    CAST(cu.gender AS java.lang.String),
-    CAST(cu.dateofbirth AS java.lang.String),
+    cu.gender,
+    cu.dateofbirth,
     cu.address,
-    se.idNumber,
-    se.frontIdImage,
-    se.backIdImage,
+    se.idnumber,
+    se.frontidimage,
+    se.backidimage,
     s.locked,
     s.lockedUntil
 )

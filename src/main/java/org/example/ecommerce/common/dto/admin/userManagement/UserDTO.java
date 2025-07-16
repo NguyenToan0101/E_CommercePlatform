@@ -2,6 +2,7 @@ package org.example.ecommerce.common.dto.admin.userManagement;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 
 public class UserDTO {
     private Integer customerid;
@@ -14,7 +15,7 @@ public class UserDTO {
     private Long totalOrders;
     private BigDecimal totalSpending;
     private String gender;
-    private String dateOfBirth;
+    private LocalDate dateOfBirth;
     private String address;
     private String idNumber;
     private String shopName;
@@ -34,7 +35,7 @@ public class UserDTO {
     // ✅ Constructor khớp hoàn toàn với JPQL projection
     public UserDTO(Integer customerid, String fullName, String email, String phone, String role, Boolean status,
                    Instant joinedDate, Long totalOrders, BigDecimal totalSpending,
-                   String gender, String dateOfBirth, String address,
+                   String gender, LocalDate dateOfBirth, String address,
                    String idNumber, String shopName, String fullAddress,
                    String businessType, String taxCode, String shopPhone,
                    String invoiceEmail, String manageName, String statusShop,
@@ -148,11 +149,11 @@ public class UserDTO {
         this.gender = gender;
     }
 
-    public String getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

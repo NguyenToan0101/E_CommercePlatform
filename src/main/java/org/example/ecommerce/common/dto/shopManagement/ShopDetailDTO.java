@@ -1,13 +1,14 @@
 package org.example.ecommerce.common.dto.shopManagement;
 
 import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class ShopDetailDTO {
     private Integer shopId;
     private String shopName;
     private String manageName;
     private String businessAddress;
-    private String createdAt;
+    private LocalDateTime createdAt;
     private String status;
     private String invoiceEmail;
     private String phone;
@@ -24,7 +25,7 @@ public class ShopDetailDTO {
     // Từ bảng Customer
     private String customerEmail;
     private String gender;
-    private String dob;
+    private LocalDate dob;
     private String address;
 
     // Từ bảng Seller
@@ -37,7 +38,7 @@ public class ShopDetailDTO {
             String shopName,
             String manageName,
             String businessAddress,
-            String createdAt,
+            LocalDateTime createdAt,
             String status,
             String invoiceEmail,
             String phone,
@@ -48,7 +49,7 @@ public class ShopDetailDTO {
             String mainCategory,
             String customerEmail,
             String gender,
-            String dob,
+            LocalDate dob,
             String address,
             String idNumber,
             String frontIdImage,
@@ -93,8 +94,8 @@ public class ShopDetailDTO {
     public String getBusinessAddress() { return businessAddress; }
     public void setBusinessAddress(String businessAddress) { this.businessAddress = businessAddress; }
 
-    public String getCreatedAt() { return createdAt; }
-    public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
@@ -126,8 +127,8 @@ public class ShopDetailDTO {
     public String getGender() { return gender; }
     public void setGender(String gender) { this.gender = gender; }
 
-    public String getDob() { return dob; }
-    public void setDob(String dob) { this.dob = dob; }
+    public LocalDate getDob() { return dob; }
+    public void setDob(LocalDate dob) { this.dob = dob; }
 
     public String getAddress() { return address; }
     public void setAddress(String address) { this.address = address; }

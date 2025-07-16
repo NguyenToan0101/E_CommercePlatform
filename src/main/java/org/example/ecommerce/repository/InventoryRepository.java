@@ -15,4 +15,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
 
     @Query("SELECT SUM(i.solditems) FROM Inventory i WHERE i.productid = :productid")
     Integer findSumsolditemsByProductid(@Param("productid") Product productid);
+
+
+
 }

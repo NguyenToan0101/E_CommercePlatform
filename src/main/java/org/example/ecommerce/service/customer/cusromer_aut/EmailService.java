@@ -136,6 +136,61 @@ public class EmailService {
     }
 
 
+    //quản lí sản phẩm
+    @Async
+    public void sendProductApprovedEmail(String recipientEmail, String productName) throws MessagingException {
+        String subject = "Sản phẩm của bạn đã được duyệt";
+        String content = "Sản phẩm \"" + productName + "\" của bạn đã được duyệt và sẽ hiển thị trên cửa hàng ngay lập tức.";
+        sendSimpleTextEmail(recipientEmail, subject, content);
+    }
+
+    @Async
+    public void sendProductRejectedEmail(String recipientEmail, String productName) throws MessagingException {
+        String subject = "Sản phẩm của bạn đã bị từ chối";
+        String content = "Rất tiếc! Sản phẩm \"" + productName + "\" của bạn đã bị từ chối. Vui lòng kiểm tra lại và gửi lại.";
+        sendSimpleTextEmail(recipientEmail, subject, content);
+    }
+
+    @Async
+    public void sendProductLockedEmail(String recipientEmail, String productName, String untilTime) throws MessagingException {
+        String subject = "Sản phẩm của bạn đã bị khóa";
+        String content = "Sản phẩm \"" + productName + "\" của bạn đã bị khóa đến " + untilTime + ".";
+        sendSimpleTextEmail(recipientEmail, subject, content);
+    }
+
+    @Async
+    public void sendProductUnlockedEmail(String recipientEmail, String productName) throws MessagingException {
+        String subject = "Sản phẩm của bạn đã được mở khóa";
+        String content = "Sản phẩm \"" + productName + "\" của bạn đã được mở khóa thành công.";
+        sendSimpleTextEmail(recipientEmail, subject, content);
+    }
+
+    // helper dùng chung
+    private void sendSimpleTextEmail(String to, String subject, String content) throws MessagingException {
+        MimeMessage msg = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(msg, true, "utf-8");
+        helper.setTo(to);
+        helper.setSubject(subject);
+        helper.setText(content, false);
+        mailSender.send(msg);
+    }
+
+    //xóa
+    @Async
+    public void sendProductDeletedEmail(String recipientEmail, String productName) throws MessagingException {
+        String subject = "Sản phẩm “" + productName + "” đã bị xóa";
+        String content = "Sản phẩm “" + productName + "” của bạn đã bị xóa khỏi hệ thống. "
+                + "Nếu có bất kỳ thắc mắc nào, vui lòng liên hệ bộ phận hỗ trợ.";
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message, true, "utf-8");
+        helper.setTo(recipientEmail);
+        helper.setSubject(subject);
+        helper.setText(content, false);
+        mailSender.send(message);
+    }
+
+
+
 
 
 

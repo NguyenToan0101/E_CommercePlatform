@@ -69,6 +69,9 @@ public class Product {
     @Column(name = "use_variant_shipping")
     private Boolean useVariantShipping = false;
 
+    @Column(name = "locked_until")
+    private Instant lockedUntil;
+
     @OneToMany(mappedBy = "productid")
     private Set<Cartitem> cartitems = new LinkedHashSet<>();
 
