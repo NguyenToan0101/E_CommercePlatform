@@ -95,7 +95,7 @@ public class PaymentService {
             order.setFullname(fullname);
             order.setPhone(phone);
             order.setAddress(address);
-            order.setStatus("Pending");
+            order.setStatus("Chờ xác nhận");
             ordersRepository.save(order);
 
             for (Cartitem ci : items) {
@@ -171,7 +171,7 @@ public class PaymentService {
         order.setFullname(fullname);
         order.setPhone(phone);
         order.setAddress(address);
-        order.setStatus("Pending");
+        order.setStatus("Chờ xác nhận");
         ordersRepository.save(order);
 
         wallet.setBalance(wallet.getBalance().subtract(totalAmount));

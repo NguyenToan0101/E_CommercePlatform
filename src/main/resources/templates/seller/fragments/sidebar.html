@@ -6,52 +6,106 @@
         </div>
     </div>
     <nav class="sidebar-nav">
-        <ul>
-            <li class="nav-item" th:classappend="${activePage == 'dashboard'} ? 'active'">
-                <a th:href="@{/seller/dashboard}">
-                    <i class="fas fa-home"></i>
-                    <span>Bảng điều khiển</span>
-                </a>
-            </li>
-            <li class="nav-item" th:classappend="${activePage == 'products'} ? 'active'">
-                <a th:href="@{/seller/products}">
-                    <i class="fas fa-box"></i>
-                    <span>Sản phẩm</span>
-                </a>
-            </li>
-            <li class="nav-item" th:classappend="${activePage == 'orders'} ? 'active'">
-                <a th:href="@{/seller/orders}">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span>Đơn hàng</span>
-                </a>
-            </li>
+        <ul class="sidebar-menu">
 
-
-            <li class="nav-item" th:classappend="${activePage == 'messages'} ? 'active'">
-                <a th:href="@{/seller/chat}">
-                    <i class="fas fa-envelope"></i>
-                    <span>Tin nhắn</span>
-                </a>
+            <!-- Dữ Liệu -->
+            <li class="sidebar-section">
+                <div class="sidebar-section-header" onclick="toggleSidebarSection(this)">
+                    <span>Dữ Liệu</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="sidebar-submenu" style="display:block;">
+                    <li class="nav-item"><a href="#">Dữ Liệu</a></li>
+                </ul>
             </li>
-            <li class="nav-item" th:classappend="${activePage == 'marketing'} ? 'active'">
-                <a th:href="@{/seller/marketing}">
-                    <i class="fas fa-bullhorn"></i>
-                    <span>Tiếp thị</span>
-                </a>
+            <!-- Quản Lý Đơn Hàng -->
+            <li class="sidebar-section">
+                <div class="sidebar-section-header" onclick="toggleSidebarSection(this)">
+                    <span>Quản Lý Đơn Hàng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="sidebar-submenu" style="display:block;">
+                    <li class="nav-item" th:classappend="${activePage == 'orders-all'} ? 'active'">
+                        <a th:href="@{/seller/orders}">Tất cả đơn hàng</a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item" th:classappend="${activePage == 'analytics'} ? 'active'">
-                <a th:href="@{/seller/analytics}">
-                    <i class="fas fa-chart-line"></i>
-                    <span>Phân tích</span>
-                </a>
+            <!-- Quản Lý Sản Phẩm -->
+            <li class="sidebar-section">
+                <div class="sidebar-section-header" onclick="toggleSidebarSection(this)">
+                    <span>Quản Lý Sản Phẩm</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="sidebar-submenu" style="display:block;">
+                    <li class="nav-item" th:classappend="${activePage == 'products-all'} ? 'active'">
+                        <a th:href="@{/seller/products}">Tất Cả Sản Phẩm</a>
+                    </li>
+                    <li class="nav-item" th:classappend="${activePage == 'products-add'} ? 'active'">
+                        <a th:href="@{/seller/products/create}">Thêm Sản Phẩm</a>
+                    </li>
+                </ul>
             </li>
-            <li class="nav-item" th:classappend="${activePage == 'finance'} ? 'active'">
-                <a th:href="@{/seller/finance}">
-                    <i class="fas fa-dollar-sign"></i>
-                    <span>Tài chính</span>
-                </a>
+            <!-- Kênh Marketing -->
+            <li class="sidebar-section">
+                <div class="sidebar-section-header" onclick="toggleSidebarSection(this)">
+                    <span>Kênh Marketing</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="sidebar-submenu" style="display:block;">
+                    <li class="nav-item"><a href="#">Khuyến Mãi của Shop</a></li>
+                    <li class="nav-item"><a href="#">Flash Sale Của Shop</a></li>
+                    <li class="nav-item"><a href="#">Mã Giảm Giá Của Shop</a></li>
+                </ul>
             </li>
-
+            <!-- Chăm sóc khách hàng -->
+            <li class="sidebar-section">
+                <div class="sidebar-section-header" onclick="toggleSidebarSection(this)">
+                    <span>Chăm sóc khách hàng</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="sidebar-submenu" style="display:block;">
+                    <li class="nav-item"><a href="#">Quản lý Chat</a></li>
+                    <li class="nav-item"><a href="#">Quản lý Đánh Giá</a></li>
+                </ul>
+            </li>
+            <!-- Tài Chính -->
+            <li class="sidebar-section">
+                <div class="sidebar-section-header" onclick="toggleSidebarSection(this)">
+                    <span>Tài Chính</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="sidebar-submenu" style="display:block;">
+                    <li class="nav-item"><a href="#">Doanh Thu</a></li>
+                    <li class="nav-item"><a href="#">Số dư TK Musa</a></li>
+<!--                    <li class="nav-item"><a href="#">Tài Khoản Ngân Hàng</a></li>-->
+                </ul>
+            </li>
+            <!-- Quản Lý Shop -->
+            <li class="sidebar-section">
+                <div class="sidebar-section-header" onclick="toggleSidebarSection(this)">
+                    <span>Quản Lý Shop</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <ul class="sidebar-submenu" style="display:block;">
+                    <li class="nav-item"><a href="#">Hồ Sơ Shop</a></li>
+<!--                    <li class="nav-item"><a href="#">Trang Trí Shop</a></li>-->
+<!--                    <li class="nav-item"><a href="#">Thiết Lập Shop</a></li>-->
+                </ul>
+            </li>
         </ul>
     </nav>
+    <script>
+        function toggleSidebarSection(header) {
+            var submenu = header.nextElementSibling;
+            if (submenu.style.display === 'block') {
+                submenu.style.display = 'none';
+                header.querySelector('i').classList.remove('fa-chevron-down');
+                header.querySelector('i').classList.add('fa-chevron-up');
+            } else {
+                submenu.style.display = 'block';
+                header.querySelector('i').classList.remove('fa-chevron-up');
+                header.querySelector('i').classList.add('fa-chevron-down');
+            }
+        }
+    </script>
 </aside>
