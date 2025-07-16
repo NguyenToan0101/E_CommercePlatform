@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -1788,6 +1788,8 @@
 
         document.getElementById('checkout-inventory').value = selectedInventoryId;
         document.getElementById('checkout-quantity').value = quantity;
+        localStorage.setItem("inventory", selectedInventoryId);
+        localStorage.setItem("quantity", quantity);
 
         document.getElementById('checkout-form').submit();
     }

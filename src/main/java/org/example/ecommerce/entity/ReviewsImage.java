@@ -17,6 +17,7 @@ import java.time.Instant;
 public class ReviewsImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ColumnDefault("nextval('reviews_image_imageid_seq'")
     @Column(name = "imageid", nullable = false)
     private Integer id;
 

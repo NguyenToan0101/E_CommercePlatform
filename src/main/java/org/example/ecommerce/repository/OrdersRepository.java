@@ -16,4 +16,17 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
 
     @Query("SELECT o.status, COUNT(o) FROM Order o JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId GROUP BY o.status")
     List<Object[]> countOrdersByStatusForShop(@Param("shopId") Integer shopId);
+
+
+
+
+        @Query("SELECT o FROM Order o WHERE " +
+                "(:search IS NULL OR LOWER(o.fullname) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                "OR LOWER(o.phone) LIKE LOWER(CONCAT('%', :search, '%')) " +
+                "OR CAST(o.id AS string) LIKE CONCAT('%', :search, '%')) " +
+                "AND (:status IS NULL OR o.status = :status)")
+        List<Order> searchByKeywordAndStatus(@Param("search") String search,
+                                             @Param("status") String status);
+
+
 }

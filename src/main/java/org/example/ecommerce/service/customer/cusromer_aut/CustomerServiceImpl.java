@@ -81,7 +81,7 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer login(String email, String password) {
         
         Customer customer = customerRepository.findByEmail(email);
-        if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.getStatus().equals("active")) {
+        if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.getStatus().equals(true)) {
             return customer;
         }
         return null;

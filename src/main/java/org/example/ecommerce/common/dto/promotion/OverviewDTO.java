@@ -15,7 +15,7 @@ public class OverviewDTO {
     private float revenuePercentage;
     private int order;
     private float orderPercentage;
-    private float conversionRate;
+    private Double conversionRate;
     private float conversionRatePercentage;
     private int newUser;
     private int newUserPercentage;
@@ -27,7 +27,7 @@ public class OverviewDTO {
     //Top KM
     private ArrayList<PromotionTopDTO> topPromotionsData;
 
-    public OverviewDTO(BigDecimal revenue, float revenuePercentage, int order, float orderPercentage, float conversionRate, float conversionRatePercentage, int newUser, int newUserPercentage, ArrayList<PromotionMonthlyDTO> promotionEffectivenessData, ArrayList<PromotionTypeDTO> promotionTypeData, ArrayList<PromotionTopDTO> topPromotionsData) {
+    public OverviewDTO(BigDecimal revenue, float revenuePercentage, int order, float orderPercentage, Double conversionRate, float conversionRatePercentage, int newUser, int newUserPercentage, ArrayList<PromotionMonthlyDTO> promotionEffectivenessData, ArrayList<PromotionTypeDTO> promotionTypeData, ArrayList<PromotionTopDTO> topPromotionsData) {
         this.revenue = revenue;
         this.revenuePercentage = revenuePercentage;
         this.order = order;

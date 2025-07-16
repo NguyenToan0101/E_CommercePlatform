@@ -5,7 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+
 import java.util.List;
 
 
@@ -19,15 +19,15 @@ public class Promotion {
     @Column(name = "promotionid")
     private Integer id;
 
-    @Column(nullable = false, unique = true)
+    @Column( unique = true)
     private String code;
     @Nationalized
     private String description;
 
-    @Column(nullable = false)
+
     private LocalDateTime startdate;
 
-    @Column(nullable = false)
+
     private LocalDateTime enddate;
 
 
@@ -70,7 +70,7 @@ public class Promotion {
     }
 
     public enum Status{
-       ACTIVE,
+        ACTIVE,
         SCHEDULED,
         EXPIRED,
         PAUSED

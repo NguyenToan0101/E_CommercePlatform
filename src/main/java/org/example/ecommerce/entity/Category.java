@@ -1,3 +1,5 @@
+
+
 package org.example.ecommerce.entity;
 
 
@@ -5,22 +7,22 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.annotations.Nationalized;
 
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
 
-@Getter
-@Setter
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
+@Getter
+@Setter
 @ToString(exclude = {"parent", "children", "promotions"})
-
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +33,8 @@ public class Category {
     @Column(name = "categoryname", length = 100)
     private String categoryname;
 
-    @Column(name = "image", length = Integer.MAX_VALUE)
+    @Nationalized
+    @Column(name = "image")
     private String image;
 
     @ManyToOne()
@@ -42,16 +45,22 @@ public class Category {
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("parent")
     private List<Category> children ;
+
+    private String status;
+    private LocalDateTime create_at;
     @ManyToMany(mappedBy = "categories")
     private List<Promotion> promotions;
 
-    public Category() {}
+    public Category() {
 
-    @OneToMany(mappedBy = "categoryid")
-    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
+    }
 
     public Category(Integer id, String categoryname) {
         this.id = id;
         this.categoryname = categoryname;
+    }
+    public enum Status{
+        ACTIVE,
+        INACTIVE
     }
 }

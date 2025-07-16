@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -14,10 +15,9 @@ import java.time.Instant;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "inventory")
+@Data
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +53,9 @@ public class Inventory {
     @DecimalMin(value = "0.0", inclusive = false, message = "Giá phải lớn hơn 0")
     @Column(name = "price")
     private BigDecimal price;
+
+
+
 
     @Column(name = "image")
     // @NotEmpty(message = "Ảnh không được để trống") // Đã bỏ validate này để tránh lỗi khi upload file

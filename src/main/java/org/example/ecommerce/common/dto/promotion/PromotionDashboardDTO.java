@@ -7,6 +7,5 @@ import java.util.List;
 public class PromotionDashboardDTO {
     private OverviewDTO overview;
     private List<PromotionDTO> promotions;
-    private AnalysisDTO analytics;
-    private List<TemplateDTO> templates;
+
 }

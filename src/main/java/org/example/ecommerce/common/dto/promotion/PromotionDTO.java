@@ -1,7 +1,7 @@
 package org.example.ecommerce.common.dto.promotion;
 
 import lombok.Data;
-import org.example.ecommerce.common.dto.CategoryDTO;
+import org.example.ecommerce.common.dto.promotion.CategoryDTO;
 import org.example.ecommerce.entity.Category;
 
 import java.time.LocalDateTime;
