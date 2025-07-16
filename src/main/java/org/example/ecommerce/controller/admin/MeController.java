@@ -24,7 +24,7 @@ public class MeController {
 
     @GetMapping("/me")
     public ResponseEntity<AdminDTO> getCurrentAdmin(Authentication auth) {
-        AdminDTO dto = adminService.findById(2);
+        AdminDTO dto = adminService.findById(1);
         return ResponseEntity.ok(dto);
     }
 }
