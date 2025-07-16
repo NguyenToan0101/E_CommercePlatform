@@ -1491,27 +1491,41 @@ body {
     text-decoration: none;
 }
 
-.seller-order-status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4em;
-    padding: 0.45em 1.1em;
-    border-radius: 16px;
-    font-size: 1em;
-    font-weight: 700;
-    text-transform: capitalize;
-    background: #f3f4f6;
-    color: #1e3a8a;
-    box-shadow: 0 1px 4px rgba(30,58,138,0.07);
-    letter-spacing: 0.01em;
-}
-.seller-status-cho_xac_nhan { background: #e0e7ff; color: #4f8cff; }
-.seller-status-da_xac_nhan { background: #e0f7fa; color: #10b981; }
-.seller-status-cho_lay_hang { background: #fffbe6; color: #b59f3b; }
-.seller-status-dang_giao { background: #fef9c3; color: #fbbf24; }
-.seller-status-da_giao { background: #f0fdf4; color: #34d399; }
-.seller-status-da_huy { background: #ffeaea; color: #c62828; }
-.seller-status-yeu_cau_tra_hang_hoan_tien { background: #ede7f6; color: #5e35b1; }
+/* CSS cho trang Seller Wallet */
+.seller-wallet-container { padding: 24px; background: #fff; border-radius: 18px; box-shadow: 0 4px 24px rgba(80, 80, 180, 0.08); }
+.seller-wallet-header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 24px; border-bottom: 1.5px solid #ececec; }
+.seller-wallet-header-info { display: flex; align-items: center; }
+.seller-wallet-balance { font-size: 2.2rem; font-weight: 700; color: #3a3a6a; }
+.seller-wallet-balance-label { font-size: 1rem; color: #888; }
+.seller-wallet-header-action { display: flex; gap: 12px; }
+.seller-wallet-btn { background: linear-gradient(90deg, #6a82fb 0%, #fc5c7d 100%); color: #fff; border: none; border-radius: 8px; padding: 10px 22px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: box-shadow 0.2s; box-shadow: 0 2px 8px rgba(80, 80, 180, 0.08); }
+.seller-wallet-btn:hover { box-shadow: 0 4px 16px rgba(80, 80, 180, 0.16); }
+.seller-wallet-cards { display: flex; gap: 24px; margin: 32px 0 24px 0; flex-wrap: wrap; }
+.seller-wallet-card { flex: 1 1 200px; min-width: 200px; background: linear-gradient(120deg, #f6d365 0%, #fda085 100%); color: #3a3a6a; border-radius: 14px; padding: 24px 20px 18px 20px; box-shadow: 0 2px 12px rgba(253, 160, 133, 0.08); display: flex; flex-direction: column; align-items: flex-start; position: relative; }
+.seller-wallet-card:nth-child(2) { background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%); }
+.seller-wallet-card-label { font-size: 1rem; color: #555; margin-bottom: 8px; }
+.seller-wallet-card-value { font-size: 1.5rem; font-weight: 700; }
+.seller-wallet-form-section { margin: 32px 0 24px 0; background: #f7faff; border-radius: 14px; padding: 24px 18px 18px 18px; box-shadow: 0 2px 8px rgba(80, 80, 180, 0.04); max-width: 420px; }
+.seller-wallet-form-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 16px; color: #3a3a6a; }
+.seller-wallet-form { display: flex; flex-direction: column; gap: 14px; }
+.seller-wallet-form input[type="number"] { padding: 10px; border-radius: 7px; border: 1.5px solid #d1d5db; font-size: 1rem; }
+.seller-wallet-form input[type="number"]:focus { outline: none; border-color: #6a82fb; }
+.seller-wallet-form button { background: linear-gradient(90deg, #6a82fb 0%, #fc5c7d 100%); color: #fff; border: none; border-radius: 8px; padding: 10px 0; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 8px; }
+.seller-wallet-form button:hover { opacity: 0.92; }
+.seller-wallet-history-section { margin: 32px 0 0 0; }
+.seller-wallet-history-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.seller-wallet-history-title { font-size: 1.2rem; font-weight: 600; color: #3a3a6a; }
+.seller-wallet-history-filter { display: flex; gap: 10px; }
+.seller-wallet-history-filter input[type="date"] { padding: 7px 10px; border-radius: 7px; border: 1.5px solid #d1d5db; font-size: 1rem; }
+.seller-wallet-history-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(80, 80, 180, 0.04); }
+.seller-wallet-history-table th, .seller-wallet-history-table td { padding: 12px 10px; text-align: left; }
+.seller-wallet-history-table th { background: #f6f8fb; color: #6a82fb; font-weight: 700; border-bottom: 2px solid #ececec; }
+.seller-wallet-history-table tr:not(:last-child) { border-bottom: 1px solid #ececec; }
+.seller-wallet-history-table td { color: #3a3a6a; }
+.seller-wallet-history-type-income { color: #27ae60; font-weight: 600; }
+.seller-wallet-history-type-expense { color: #e74c3c; font-weight: 600; }
+@media (max-width: 900px) { .seller-wallet-cards { flex-direction: column; gap: 16px; } .seller-wallet-header { flex-direction: column; align-items: flex-start; gap: 18px; } }
+@media (max-width: 600px) { .seller-wallet-container { padding: 8px; } .seller-wallet-header { padding-bottom: 12px; } .seller-wallet-card { padding: 16px 10px 12px 10px; } .seller-wallet-form-section { padding: 12px 6px 10px 6px; } .seller-wallet-history-section { margin-top: 18px; } }
 
 
 /* Order page styles */
@@ -1926,5 +1940,196 @@ body { background: #f7fafd; font-family: 'Inter', Arial, sans-serif; margin: 0; 
     .seller-page-header .header-icon {
         font-size: 2rem;
     }
+}
+
+/* Banner thử nghiệm */
+.seller-wallet-withdraw-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #fffbe6;
+  border: 1.5px solid #ffe58f;
+  border-radius: 12px;
+  padding: 14px 22px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(255,215,0,0.04);
+}
+.seller-wallet-withdraw-banner-icon {
+  font-size: 1.5rem;
+  color: #faad14;
+}
+.seller-wallet-withdraw-banner-text {
+  font-size: 1.08rem;
+  color: #b37b00;
+  font-weight: 600;
+}
+
+/* Header lớn */
+.seller-wallet-withdraw-header {
+  display: flex;
+  align-items: flex-start;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(80,120,255,0.07);
+  padding: 28px 32px 18px 32px;
+  margin-bottom: 28px;
+}
+.seller-wallet-withdraw-header-icon {
+  font-size: 2.5rem;
+  color: #4f8cff;
+  margin-right: 18px;
+}
+.seller-wallet-withdraw-header-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #183a7a;
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+}
+.seller-wallet-withdraw-header-desc {
+  font-size: 1.08rem;
+  color: #6b7280;
+}
+
+/* Số dư */
+.seller-wallet-withdraw-balance {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #3a3a6a;
+  margin-bottom: 18px;
+}
+.seller-wallet-withdraw-balance span {
+  color: #2563eb;
+}
+
+/* Form rút tiền */
+.seller-wallet-withdraw-form-section {
+  background: #f7faff;
+  border-radius: 14px;
+  padding: 28px 22px 22px 22px;
+  box-shadow: 0 2px 8px rgba(80, 80, 180, 0.04);
+  max-width: 100%;
+  margin-bottom: 18px;
+}
+.seller-wallet-withdraw-form-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #3a3a6a;
+}
+.seller-wallet-withdraw-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.seller-wallet-withdraw-form input[type="number"] {
+  padding: 10px;
+  border-radius: 7px;
+  border: 1.5px solid #d1d5db;
+  font-size: 1rem;
+}
+.seller-wallet-withdraw-form input[type="number"]:focus {
+  outline: none;
+  border-color: #6a82fb;
+}
+.seller-wallet-withdraw-form button {
+  background: linear-gradient(90deg, #6a82fb 0%, #fc5c7d 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 0;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: box-shadow 0.18s, opacity 0.18s;
+}
+.seller-wallet-withdraw-form button:hover {
+  opacity: 0.92;
+  box-shadow: 0 2px 8px rgba(80, 80, 180, 0.10);
+}
+.seller-wallet-withdraw-error {
+  color: #e74c3c;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.seller-wallet-withdraw-success {
+  color: #27ae60;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* Link quay lại */
+.seller-wallet-withdraw-back {
+  margin-top: 22px;
+}
+.seller-wallet-withdraw-back a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: underline;
+  font-size: 1.05rem;
+  transition: color 0.18s;
+}
+.seller-wallet-withdraw-back a:hover {
+  color: #1d4ed8;
+}
+.seller-wallet-withdraw-back-icon {
+  font-size: 1.1rem;
+  margin-right: 2px;
+}
+
+@media (max-width: 900px) {
+  .seller-wallet-withdraw-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 18px 10px 10px 10px;
+  }
+  .seller-wallet-withdraw-header-icon {
+    margin-bottom: 8px;
+    margin-right: 0;
+  }
+  .seller-wallet-withdraw-form-section {
+    padding: 14px 6px 10px 6px;
+  }
+}
+
+.seller-wallet-pagination {
+  display: flex;
+  justify-content: center;
+  margin: 22px 0 0 0;
+}
+.seller-wallet-pagination ul {
+  display: flex;
+  gap: 6px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.seller-wallet-pagination li {
+  display: inline-block;
+}
+.seller-wallet-pagination a {
+  display: inline-block;
+  min-width: 36px;
+  padding: 7px 13px;
+  border-radius: 7px;
+  background: #f3f6fd;
+  color: #2563eb;
+  font-weight: 600;
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.18s, color 0.18s;
+  border: 1.5px solid transparent;
+}
+.seller-wallet-pagination a:hover,
+.seller-wallet-pagination a.active {
+  background: linear-gradient(90deg, #6a82fb 0%, #fc5c7d 100%);
+  color: #fff;
+  border: 1.5px solid #6a82fb;
+  text-decoration: none;
+}
+.seller-wallet-pagination a.active {
+  cursor: default;
+  pointer-events: none;
 }
 

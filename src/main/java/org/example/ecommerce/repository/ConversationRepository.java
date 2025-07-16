@@ -12,4 +12,10 @@ public interface ConversationRepository extends JpaRepository<Conversation, Inte
 
     @Query("SELECT c FROM Conversation c WHERE c.customerid.id = :customerId AND (LOWER(c.sellerid.shop.shopname) LIKE LOWER(CONCAT('%', :keyword, '%')))")
     List<Conversation> searchConversationsForCustomer(@Param("customerId") Integer customerId, @Param("keyword") String keyword);
-} 
+
+    List<Conversation> findByCustomerid_IdAndSellerid_Id(Integer customeridId, Integer selleridId);
+
+    List<Conversation> findBySellerid_Id(Integer selleridId);
+
+    List<Conversation> findByCustomerid_Id(Integer customeridId);
+}

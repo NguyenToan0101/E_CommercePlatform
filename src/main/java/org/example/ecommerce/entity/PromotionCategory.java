@@ -27,5 +27,4 @@ public class PromotionCategory {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "categoryid", nullable = false)
     private Category categoryid;
-
 }
