@@ -1247,13 +1247,7 @@
         <span>Your Logo</span>
       </div>
     </a>
-    <a th:href="@{/sellerChannel}">
-      <!--            <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-      <!--              <path d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z" fill="currentColor"/>-->
-      <!--              <path d="M8 10C3.58172 10 0 13.5817 0 18H16C16 13.5817 12.4183 10 8 10Z" fill="currentColor"/>-->
-      <!--            </svg>-->
-      Đăng kí seller
-    </a>
+
     <!-- Search Bar -->
     <div class="search-container">
       <form class="search-form" action="/search_name" method="GET">
@@ -1330,6 +1324,22 @@
               <circle cx="8" cy="11" r="1" fill="currentColor"/>
             </svg>
             Đổi mật khẩu
+          </a>
+
+          <a th:href="@{/seller}">
+                        <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z" fill="currentColor"/>
+                          <path d="M8 10C3.58172 10 0 13.5817 0 18H16C16 13.5817 12.4183 10 8 10Z" fill="currentColor"/>
+                        </svg>
+            Kênh Người Bán
+          </a>
+
+          <a th:href="@{/customers/chat}">
+                        <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z" fill="currentColor"/>
+                          <path d="M8 10C3.58172 10 0 13.5817 0 18H16C16 13.5817 12.4183 10 8 10Z" fill="currentColor"/>
+                        </svg>
+            Nhắn tin với người bán
           </a>
           <a th:href="@{/logout}">
             <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">

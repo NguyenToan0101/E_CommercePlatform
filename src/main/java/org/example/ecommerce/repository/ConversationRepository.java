@@ -4,18 +4,34 @@ import org.example.ecommerce.entity.Conversation;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
+import java.util.Optional;
 
+@Repository
 public interface ConversationRepository extends JpaRepository<Conversation, Integer> {
-    @Query("SELECT c FROM Conversation c WHERE c.sellerid.id = :sellerId AND (LOWER(c.customerid.firstname) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(c.customerid.lastname) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    List<Conversation> searchConversationsForSeller(@Param("sellerId") Integer sellerId, @Param("keyword") String keyword);
-
-    @Query("SELECT c FROM Conversation c WHERE c.customerid.id = :customerId AND (LOWER(c.sellerid.shop.shopname) LIKE LOWER(CONCAT('%', :keyword, '%')))")
-    List<Conversation> searchConversationsForCustomer(@Param("customerId") Integer customerId, @Param("keyword") String keyword);
-
-    List<Conversation> findByCustomerid_IdAndSellerid_Id(Integer customeridId, Integer selleridId);
-
-    List<Conversation> findBySellerid_Id(Integer selleridId);
-
-    List<Conversation> findByCustomerid_Id(Integer customeridId);
+    
+    // Tìm conversation giữa customer và seller
+    @Query("SELECT c FROM Conversation c WHERE c.customerid.id = :customerId AND c.sellerid.id = :sellerId")
+    Optional<Conversation> findByCustomerIdAndSellerId(@Param("customerId") Integer customerId, 
+                                                      @Param("sellerId") Integer sellerId);
+    
+    // Lấy tất cả conversation của customer
+    @Query("SELECT c FROM Conversation c WHERE c.customerid.id = :customerId ORDER BY c.lastmessageat DESC")
+    List<Conversation> findByCustomerId(@Param("customerId") Integer customerId);
+    
+    // Lấy tất cả conversation của seller
+    @Query("SELECT c FROM Conversation c WHERE c.sellerid.id = :sellerId ORDER BY c.lastmessageat DESC")
+    List<Conversation> findBySellerId(@Param("sellerId") Integer sellerId);
+    
+    // Tìm conversation theo tên shop (cho customer)
+    @Query("SELECT c FROM Conversation c WHERE c.customerid.id = :customerId AND c.sellerid.shop.shopname LIKE %:shopName% ORDER BY c.lastmessageat DESC")
+    List<Conversation> findByCustomerIdAndShopNameContaining(@Param("customerId") Integer customerId, 
+                                                            @Param("shopName") String shopName);
+    
+    // Tìm conversation theo email customer (cho seller)
+    @Query("SELECT c FROM Conversation c WHERE c.sellerid.id = :sellerId AND c.customerid.email LIKE %:customerEmail% ORDER BY c.lastmessageat DESC")
+    List<Conversation> findBySellerIdAndCustomerEmailContaining(@Param("sellerId") Integer sellerId, 
+                                                               @Param("customerEmail") String customerEmail);
 }

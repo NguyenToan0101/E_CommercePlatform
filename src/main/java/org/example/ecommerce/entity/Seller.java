@@ -1,5 +1,6 @@
 package org.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,6 +20,7 @@ public class Seller {
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "sellerid", referencedColumnName = "customerid", insertable = false, updatable = false)
+    @JsonIgnore
     private Customer customer;
 
     @Column(name = "idnumber")

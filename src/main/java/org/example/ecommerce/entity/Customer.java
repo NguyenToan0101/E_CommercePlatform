@@ -1,5 +1,6 @@
 package org.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -65,8 +66,8 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")
     private Set<Cart> carts = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "customerid")
-    private Set<Complaint> complaints = new LinkedHashSet<>();
+//    @OneToMany(mappedBy = "customerid")
+//    private Set<Complaint> complaints = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "customerid")
     private Set<Conversation> conversations = new LinkedHashSet<>();
@@ -78,6 +79,7 @@ public class Customer {
     private Set<Order> orders = new LinkedHashSet<>();
 
     @OneToOne(mappedBy = "customer")
+    @JsonIgnore
     private Seller seller;
 
     @OneToOne(mappedBy = "customerid")
@@ -206,17 +208,17 @@ public class Customer {
         this.carts = carts;
     }
 
-    public Set<Complaint> getComplaints() {
-        return complaints;
-    }
-
-    public void setComplaints(Set<Complaint> complaints) {
-        this.complaints = complaints;
-    }
-
-    public Set<Conversation> getConversations() {
-        return conversations;
-    }
+//    public Set<Complaint> getComplaints() {
+//        return complaints;
+//    }
+//
+//    public void setComplaints(Set<Complaint> complaints) {
+//        this.complaints = complaints;
+//    }
+//
+//    public Set<Conversation> getConversations() {
+//        return conversations;
+//    }
 
     public void setConversations(Set<Conversation> conversations) {
         this.conversations = conversations;

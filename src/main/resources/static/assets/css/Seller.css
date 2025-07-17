@@ -1897,48 +1897,53 @@ body { background: #f7fafd; font-family: 'Inter', Arial, sans-serif; margin: 0; 
 .seller-page-header {
     display: flex;
     align-items: center;
-    gap: 1.2rem;
     background: #fff;
-    border-radius: 18px;
-    box-shadow: 0 2px 12px rgba(30,58,138,0.07);
-    padding: 2rem 2.5rem 1.5rem 2.5rem;
-    margin-bottom: 2.5rem;
-    margin-top: 0.5rem;
+    border-radius: 20px;
+    box-shadow: 0 2px 16px 0 rgba(30,58,138,0.07);
+    padding: 32px 48px 32px 36px;
+    margin-bottom: 32px;
+    margin-top: 16px;
+    gap: 32px;
+    min-height: 110px;
 }
 .seller-page-header .header-icon {
-    font-size: 2.6rem;
-    color: #4f8cff;
-    flex-shrink: 0;
+    font-size: 48px;
+    color: #5fa8ff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 64px;
 }
 .seller-page-header .header-title-group {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    justify-content: center;
 }
 .seller-page-header .header-title {
     font-size: 2.1rem;
     font-weight: 800;
     color: #1e3a8a;
-    margin: 0;
+    margin-bottom: 6px;
 }
 .seller-page-header .header-subtitle {
-    color: #6b7280;
-    margin: 0;
-    font-size: 1.1rem;
+    font-size: 1.08rem;
+    color: #64748b;
     font-weight: 400;
+    margin-top: 2px;
 }
 @media (max-width: 900px) {
     .seller-page-header {
         flex-direction: column;
         align-items: flex-start;
-        padding: 1.2rem 0.7rem 1.2rem 0.7rem;
-        gap: 0.7rem;
-    }
-    .seller-page-header .header-title {
-        font-size: 1.4rem;
+        padding: 24px 12px;
+        gap: 16px;
     }
     .seller-page-header .header-icon {
-        font-size: 2rem;
+        font-size: 36px;
+        min-width: 36px;
+    }
+    .seller-page-header .header-title {
+        font-size: 1.3rem;
     }
 }
 
@@ -2131,5 +2136,187 @@ body { background: #f7fafd; font-family: 'Inter', Arial, sans-serif; margin: 0; 
 .seller-wallet-pagination a.active {
   cursor: default;
   pointer-events: none;
+}
+
+/* ==== SELLER CHAT MODULE (KHÔNG XUNG ĐỘT) ==== */
+.seller-chat-container {
+    display: flex;
+    max-width: 1000px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    min-height: 500px;
+    position: relative;
+    z-index: 10;
+}
+.seller-chat-sidebar {
+    width: 320px;
+    border-right: 1px solid #e9ecef;
+    padding: 0;
+    background: #f6f7fb;
+    border-radius: 12px 0 0 12px;
+    flex-shrink: 0;
+}
+.seller-chat-sidebar-header {
+    padding: 20px 16px 12px 16px;
+    border-bottom: 1px solid #e9ecef;
+    background: #f6f7fb;
+}
+.seller-chat-sidebar-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1976d2;
+}
+.seller-chat-search-box {
+    padding: 12px 16px;
+}
+.seller-chat-search-box input {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: 1px solid #dee2e6;
+    font-size: 14px;
+    background: #fff;
+    color: #495057;
+}
+.seller-chat-conversations-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.seller-chat-conversation-item {
+    padding: 14px 18px;
+    cursor: pointer;
+    border-left: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+.seller-chat-conversation-item.active, .seller-chat-conversation-item:hover {
+    background: #e3f2fd;
+    border-left: 3px solid #1976d2;
+}
+.seller-chat-conversation-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #1976d2;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 15px;
+    margin-right: 12px;
+}
+.seller-chat-main-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0 12px 12px 0;
+    background: #fafbfc;
+}
+.seller-chat-header {
+    padding: 18px 24px;
+    border-bottom: 1px solid #e9ecef;
+    background: #f6f7fb;
+    font-size: 17px;
+    font-weight: 600;
+    color: #1976d2;
+}
+.seller-chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px 24px;
+    background: #fafbfc;
+    max-height: 600px;
+    min-height: 180px;
+}
+.seller-chat-msg-me {
+    display: flex;
+    justify-content: flex-end;
+}
+.seller-chat-msg-customer {
+    display: flex;
+    justify-content: flex-start;
+}
+.seller-chat-msg-content {
+    max-width: 60%;
+    padding: 10px 18px;
+    border-radius: 18px;
+    margin: 2px 0;
+    word-break: break-word;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    font-size: 15px;
+    transition: background 0.2s;
+    display: inline-block;
+}
+.seller-chat-msg-me .seller-chat-msg-content {
+    background: linear-gradient(135deg, #1976d2 80%, #42a5f5 100%);
+    color: #fff;
+    border: none;
+}
+.seller-chat-msg-customer .seller-chat-msg-content {
+    background: #fff;
+    color: #333;
+    border: 1px solid #e3e3e3;
+}
+.seller-chat-msg-divider {
+    text-align: center !important;
+    color: #888;
+    font-size: 13px;
+    margin: 16px 0 8px 0;
+    font-weight: 500;
+    width: 100%;
+    clear: both;
+    display: block;
+}
+.seller-chat-input {
+    display: flex;
+    gap: 8px;
+    padding: 18px 24px;
+    border-top: 1px solid #e9ecef;
+    background: #fff;
+}
+.seller-chat-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1.5px solid #bdbdbd;
+    transition: border 0.2s;
+}
+.seller-chat-input input:focus {
+    border: 1.5px solid #1976d2;
+    outline: none;
+}
+.seller-chat-input button {
+    padding: 10px 24px;
+    border-radius: 20px;
+    border: none;
+    background: linear-gradient(135deg, #1976d2 80%, #42a5f5 100%);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(25,118,210,0.08);
+    transition: background 0.2s;
+    cursor: pointer;
+}
+.seller-chat-input button:hover {
+    background: #1565c0;
+}
+.seller-chat-empty-chat {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-size: 18px;
+}
+@media (max-width: 600px) {
+    .seller-chat-container { flex-direction: column; min-height: 100vh; }
+    .seller-chat-sidebar { width: 100%; border-radius: 12px 12px 0 0; }
+    .seller-chat-main-area { border-radius: 0 0 12px 12px; }
+    .seller-chat-msg-content { max-width: 90%; font-size: 14px; }
 }
 

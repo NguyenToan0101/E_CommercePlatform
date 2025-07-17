@@ -1335,6 +1335,14 @@
                     </button>
                     <button class="btn btn-cart" onclick="redirectToLogin()" th:unless="${customer}">Đăng nhập để mua hàng</button>
 
+                    <!-- Nút Chat với shop -->
+                    <form id="chatWithShopForm" th:action="@{/customer/chat/start}" method="post" style="display:inline;">
+                        <input type="hidden" name="shopId" th:value="${detail.shop.id}" />
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-comments"></i> Chat với shop
+                        </button>
+                    </form>
+
                     <form id="checkout-form" action="/checkout/preview_realtime" method="GET" style="display: inline;">
                         <input type="hidden" name="inventory" id="checkout-inventory" value="">
                         <input type="hidden" name="quantity" id="checkout-quantity" value="">
