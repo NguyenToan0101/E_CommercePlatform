@@ -18,12 +18,12 @@ public class CategoryDTO {
     }
 
     //    private String image;
-//    private List<CategoryDTO> children;
+//    private List<MainCategoryDTO> children;
 
 
     @Override
     public String toString() {
-        return "CategoryDTO{" +
+        return "MainCategoryDTO{" +
                 "categoryid=" + value +
                 ", categoryname='" + label + '\'' +
                 '}';

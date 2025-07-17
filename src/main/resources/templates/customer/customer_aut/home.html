@@ -62,14 +62,14 @@
     }
 
     .header-content {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 40px;
-      display: grid;
-      grid-template-columns: 200px 1fr 200px;
-      gap: 20px;
-      align-items: center;
-    }
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    gap: 20px;
+    align-items: center;
+}
 
     .logo-container {
       display: inline-block;
@@ -407,6 +407,72 @@
         opacity: 1;
         transform: translateY(0);
       }
+    }
+
+    /* Page Header */
+    .page-header {
+      background: var(--white);
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow:
+              0 32px 64px var(--shadow-light),
+              0 16px 32px var(--shadow-medium),
+              0 0 0 1px var(--border-gray);
+      margin-bottom: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page-header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 50%, var(--gradient-start) 100%);
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--primary-black);
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .page-subtitle {
+      font-size: 16px;
+      color: var(--text-gray);
+      margin-bottom: 24px;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--primary-black);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-gray);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
     }
 
     /* Banner Carousel for Best Sellers */
@@ -1131,8 +1197,14 @@
         gap: 8px;
       }
 
+      .page-header {
+        padding: 24px 16px;
+      }
 
-
+      .stats-row {
+        flex-direction: column;
+        gap: 16px;
+      }
 
       .banner-container {
         height: 250px;
@@ -1220,6 +1292,7 @@
     /* High contrast mode support */
     @media (prefers-contrast: high) {
       .product-card,
+      .page-header,
       .banner-container,
       .category-container,
       .search-form {
@@ -1247,13 +1320,14 @@
         <span>Your Logo</span>
       </div>
     </a>
-    <a th:href="@{/sellerChannel}">
-      <!--            <svg class="icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">-->
-      <!--              <path d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z" fill="currentColor"/>-->
-      <!--              <path d="M8 10C3.58172 10 0 13.5817 0 18H16C16 13.5817 12.4183 10 8 10Z" fill="currentColor"/>-->
-      <!--            </svg>-->
-      Đăng kí seller
-    </a>
+
+    <nav class="header-nav">
+      <a href="/sellerChannel" class="nav-link">Go to Seller</a>
+      <a href="/policies" class="nav-link nav-link--highlight">
+        Chính sách &amp; Hướng dẫn
+      </a>
+    </nav>
+
     <!-- Search Bar -->
     <div class="search-container">
       <form class="search-form" action="/search_name" method="GET">
@@ -1605,7 +1679,7 @@
       document.getElementById('productsGrid').style.display = 'grid';
 
       initializeProducts();
-    }, 300);
+    }, 1500);
   });
 
   function setupSearch() {
@@ -1717,6 +1791,7 @@
 
     if (productCards.length === 0) return;
 
+    // Extract product data
     allProducts = productCards.map(card => {
       const name = card.querySelector('.product-name').textContent;
       const priceText = card.querySelector('.product-price').textContent;

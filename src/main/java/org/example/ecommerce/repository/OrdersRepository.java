@@ -9,6 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.math.BigDecimal;
 import java.util.List;
 
+
+import java.math.BigDecimal;
+
 public interface OrdersRepository extends JpaRepository<Order, Integer> {
     List<Order> findAllByCustomeridOrderByOrderdateDesc(Customer customer);
 
@@ -44,4 +47,9 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
     Integer countDifferenceOrderByAddress();
 
 
+
+    int countByCustomerid(Customer customer);
+
+    @Query("SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o WHERE o.customerid = :customer")
+    BigDecimal sumTotalAmountByCustomerid(Customer customer);
 }

@@ -9,4 +9,5 @@ public class CategoryDTO {
     private String image;
     private Integer parentId;
     private String parentName;
+
 }
