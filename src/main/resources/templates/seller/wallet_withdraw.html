@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="seller/fragments/head :: head">
+    <meta charset="UTF-8">
+    <title>Rút tiền khỏi ví Musa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/assets/css/Seller.css}">
+</head>
+<body class="seller-wallet-page">
+<div class="main-layout">
+    <div th:replace="~{seller/fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div th:replace="~{seller/fragments/header :: header}"></div>
+        <div class="seller-wallet-container">
+            <!-- Banner thử nghiệm -->
+            <div class="seller-wallet-withdraw-banner">
+                <span class="seller-wallet-withdraw-banner-icon">&#9888;</span>
+                <span class="seller-wallet-withdraw-banner-text">Chức năng rút tiền chỉ là mô phỏng thử nghiệm. Tính năng rút tiền thực sẽ được hoàn thiện trong tương lai.</span>
+            </div>
+            <!-- Header lớn -->
+            <div class="seller-wallet-withdraw-header">
+                <div class="seller-wallet-withdraw-header-icon">
+                    <svg width="38" height="38" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="38" height="38" rx="8" fill="#eaf1ff"/><path d="M10 15.5V13.8A2.8 2.8 0 0 1 12.8 11h12.4A2.8 2.8 0 0 1 28 13.8v10.4A2.8 2.8 0 0 1 25.2 27H12.8A2.8 2.8 0 0 1 10 24.2V22" stroke="#4f8cff" stroke-width="2"/><rect x="17" y="19" width="4" height="4" rx="2" fill="#4f8cff"/></svg>
+                </div>
+                <div>
+                    <div class="seller-wallet-withdraw-header-title">Rút tiền khỏi ví Musa</div>
+                    <div class="seller-wallet-withdraw-header-desc">Thực hiện rút tiền khỏi ví của bạn một cách an toàn và nhanh chóng</div>
+                </div>
+            </div>
+            <!-- Số dư hiện tại -->
+            <div class="seller-wallet-withdraw-balance">Số dư ví Musa: <span th:text="${#numbers.formatDecimal(balance, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</span></div>
+            <!-- Form rút tiền -->
+            <div class="seller-wallet-withdraw-form-section" id="withdraw-form">
+                <div class="seller-wallet-withdraw-form-title">Nhập số tiền muốn rút</div>
+                <form class="seller-wallet-withdraw-form" th:action="@{/seller/wallet/withdraw}" method="post">
+                    <input type="number" name="amount" min="10000" step="1000" placeholder="Nhập số tiền muốn rút (tối thiểu 10.000₫)" required>
+                    <button type="submit">Rút tiền</button>
+                </form>
+                <div th:if="${withdrawError}" class="seller-wallet-withdraw-error">[[${withdrawError}]]</div>
+                <div th:if="${withdrawSuccess}" class="seller-wallet-withdraw-success">[[${withdrawSuccess}]]</div>
+            </div>
+            <div class="seller-wallet-withdraw-back">
+                <a th:href="@{/seller/wallet}"><span class="seller-wallet-withdraw-back-icon">&larr;</span> Quay lại trang ví Musa</a>
+            </div>
+        </div>
+        <div th:replace="~{seller/fragments/footer :: footer}"></div>
+    </div>
+</div>
+</body>
+</html> 
