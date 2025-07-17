@@ -4,14 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RealTimeActivityDTO {
     private String time;
-    private int users;
-    private int orders;
-    private long revenue;
+    private long users;
+    private long orders;
+    private BigDecimal revenue;
 
 
 }
