@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -51,7 +52,7 @@ public class Order {
     @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
 
-    @OneToMany(mappedBy = "orderid")
+    @OneToMany(mappedBy = "orderId")
     private Set<Complaint> complaints = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "orderid")

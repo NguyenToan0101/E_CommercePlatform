@@ -2,7 +2,7 @@ package org.example.ecommerce.controller.seller.order;
 
 import org.example.ecommerce.entity.Customer;
 import org.example.ecommerce.entity.Shop;
-import org.example.ecommerce.entity.Complaint;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.example.ecommerce.entity.Order;
 import org.example.ecommerce.entity.Orderitem;
 import org.example.ecommerce.service.seller.order.OrderSellerService;
