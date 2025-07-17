@@ -263,8 +263,7 @@ public class PaymentService {
             CartPreviewDTO dto = new CartPreviewDTO();
             dto.setId(ci.getId());
             dto.setProductName(ci.getProductid().getName());
-            List<Productimage> images = productimageRepository.findAllByProductid(ci.getProductid());
-            String imageUrl = images.isEmpty() ? null : images.get(0).getImageurl();
+            String imageUrl = ci.getInventoryid().getImage();
             dto.setImageUrl(imageUrl);
 
             dto.setQuantity(ci.getQuantity());
@@ -288,8 +287,7 @@ public class PaymentService {
             dto.setId(null);
             dto.setProductName(product.getName());
 
-            List<Productimage> images = productimageRepository.findAllByProductid(product);
-            String imageUrl = images.isEmpty() ? null : images.get(0).getImageurl();
+            String imageUrl = inventory.getImage();
             dto.setImageUrl(imageUrl);
 
             dto.setQuantity(quantity);

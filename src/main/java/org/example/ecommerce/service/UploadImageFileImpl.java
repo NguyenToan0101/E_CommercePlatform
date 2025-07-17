@@ -14,6 +14,8 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 
@@ -25,13 +27,24 @@ public class UploadImageFileImpl implements UploadImageFile {
     public String uploadImage(MultipartFile file) throws IOException{
         assert file.getOriginalFilename() != null;
         String publicValue = generatePublicValue(file.getOriginalFilename());
-
         String extension = getFileName(file.getOriginalFilename())[1];
 
         File fileUpload = convert(file);
-        cloudinary.uploader().upload(fileUpload, ObjectUtils.asMap("public_id", publicValue));
+
+        String contentType = file.getContentType();
+        Map<String, Object> uploadParams = new HashMap<>();
+        uploadParams.put("public_id", publicValue);
+
+        if (contentType != null && contentType.startsWith("video/")) {
+            uploadParams.put("resource_type", "video");
+        } else if (contentType != null && !contentType.startsWith("image/")) {
+            uploadParams.put("resource_type", "auto");
+        }
+
+        Map uploadResult = cloudinary.uploader().upload(fileUpload, uploadParams);
         cleanDisk(fileUpload);
-        return  cloudinary.url().generate(StringUtils.join(publicValue, ".", extension));
+        // Lấy URL trả về từ Cloudinary (chuẩn cho cả ảnh và video)
+        return (String) uploadResult.get("secure_url");
     }
 
     private File convert(MultipartFile file) throws IOException {

@@ -145,19 +145,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void updateProfile(Customer updatedCustomer) {
-        // lấy customer_aut từ DB
         Customer customer = customerRepository.findById(updatedCustomer.getId()).orElse(null);
         if (customer != null) {
             customer.setFirstname(updatedCustomer.getFirstname());
             customer.setLastname(updatedCustomer.getLastname());
-            if (updatedCustomer.getImage() != null && updatedCustomer.getImage().length > 0) {
+            if (updatedCustomer.getImage() != null) {
                 customer.setImage(updatedCustomer.getImage());
             }
             customer.setPhone(updatedCustomer.getPhone());
             customer.setAddress(updatedCustomer.getAddress());
             customer.setDateofbirth(updatedCustomer.getDateofbirth());
             customer.setGender(updatedCustomer.getGender());
-
             customerRepository.save(customer);
         }
     }

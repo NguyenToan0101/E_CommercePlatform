@@ -66,43 +66,35 @@ public class WishlistServiceImpl implements WishlistService {
             Product p = w.getProductid();
 
             if ("available".equals(p.getStatus())) {
+                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
+                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
-                if (inventoryRepository.findAllByProductid(p).size()>0) {
+                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
+                String keyword = "Tỉnh";
+                int index = fullAddress.indexOf(keyword);
+                String shopaddress = (index != -1) ? fullAddress.substring(index + keyword.length()).trim() : fullAddress;
 
-                    int totalSold = inventoryRepository.findAllByProductid(p)
-                            .stream()
-                            .mapToInt(Inventory::getSolditems)
-                            .sum();
 
-                    List<Productimage> imgs = productimageRepository.findAllByProductid(p);
-                    String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
+                Float avgRating = reviewRepository.findAverageRatingByProductid(p);
+                float rate = (avgRating != null) ? avgRating : 0f;
 
-                    String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                    String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
+                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
+                int solditems = (sumSold != null) ? sumSold : 0;
 
-                    List<Integer> rates = reviewRepository.findRateById(p.getId());
-                    float rate = 0f;
-                    if (!rates.isEmpty()) {
-                        float sum = 0f;
-                        for (int r : rates) sum += r;
-                        rate = Math.round((sum / rates.size()) * 10f) / 10f;
-                    }
 
-                    Integer categoryId = null;
-                    String categoryName = null;
-                    if (p.getCategoryid() != null) {
-                        categoryId = p.getCategoryid().getId();
-                        categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
-                    }
-
-                    views.add(new ProductView(
-                            p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold,
-                            imageUrl, shopaddress, rate, categoryId, categoryName
-                    ));
+                Integer categoryId = null;
+                String categoryName = null;
+                if (p.getCategoryid() != null) {
+                    categoryId = p.getCategoryid().getId();
+                    categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
                 }
+
+                views.add(new ProductView(
+                        p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()),
+                        imageUrl, shopaddress, rate, categoryId, categoryName, solditems
+                ));
             }
         }
         return views;
     }
-
 }

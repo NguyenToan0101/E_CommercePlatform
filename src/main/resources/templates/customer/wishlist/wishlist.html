@@ -430,38 +430,6 @@
             50% { transform: scale(1.1); }
         }
 
-        .page-subtitle {
-            font-size: 16px;
-            color: var(--text-gray);
-            margin-bottom: 24px;
-        }
-
-        .stats-row {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            flex-wrap: wrap;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--primary-black);
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 4px;
-        }
-
         /* Empty State */
         .empty-state {
             background: var(--white);
@@ -670,11 +638,6 @@
             gap: 4px;
         }
 
-        .stars {
-            display: flex;
-            gap: 1px;
-        }
-
         .star {
             color: #ffc107;
             font-size: 0.7rem;
@@ -820,10 +783,6 @@
                 gap: 10px;
             }
 
-            .stats-row {
-                gap: 24px;
-            }
-
             .wishlist-grid {
                 grid-template-columns: repeat(3, 1fr);
                 gap: 12px;
@@ -950,8 +909,8 @@
         <div class="customer-info" th:if="${customer}">
             <div class="dropdown" id="customerDropdown" tabindex="0">
                 <span class="customer-name" th:text="${customer.firstname + ' ' + customer.lastname}"></span>
-                <img th:if="${base64Image != null}"
-                     th:src="'data:image/jpeg;base64,' + ${base64Image}"
+                <img th:if="${customer.image != null and customer.image != ''}"
+                     th:src="@{${customer.image}}"
                      alt="Avatar" class="avatar" />
 
                 <svg class="dropdown-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1007,21 +966,6 @@
             <i class="fas fa-heart heart-icon"></i>
             Danh sách yêu thích
         </h1>
-        <p class="page-subtitle">Những sản phẩm bạn đã lưu để mua sau</p>
-        <div class="stats-row">
-            <div class="stat-item">
-                <span class="stat-number" th:text="${#lists.size(wishlistProducts)}">0</span>
-                <span class="stat-label">Sản phẩm yêu thích</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" id="totalValue">0</span>
-                <span class="stat-label">Tổng giá trị</span>
-            </div>
-            <div class="stat-item">
-                <span class="stat-number" id="currentPageInfo">1</span>
-                <span class="stat-label">Trang hiện tại</span>
-            </div>
-        </div>
     </section>
 
     <!-- Empty State -->
@@ -1072,7 +1016,7 @@
              th:data-name="${product.name}"
              th:data-price="${product.price}"
              th:data-rate="${product.rate}"
-             th:data-total-sold="${product.totalSold}"
+             th:data-total-sold="${product.solditems}"
              th:data-shop-address="${product.shopaddress}"
              th:data-image-url="${product.imageUrl}">
         </div>
@@ -1270,22 +1214,15 @@
                     <div class="meta-item">
                         <i class="fas fa-star meta-icon"></i>
                         <div class="rating-container">
-                            <div class="stars">
-                                ${generateStars(product.rate)}
-                            </div>
                             <span class="rating-value">${product.rate}</span>
-                            <span>/5</span>
                         </div>
                     </div>
 
                     <!-- Sales Count -->
                     <div class="meta-item">
                         <i class="fas fa-fire meta-icon"></i>
-                        <span>Đã bán:</span>
-                        <span class="sold-badge">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span>${product.totalSold}</span>
-                        </span>
+                        <span>Đã bán: </span>
+                        <span>${product.totalSold}</span>
                     </div>
 
                     <!-- Location -->
@@ -1298,21 +1235,6 @@
         `;
 
         return card;
-    }
-
-    function generateStars(rating) {
-        const fullStars = Math.floor(rating);
-        let starsHtml = '';
-
-        for (let i = 0; i < 5; i++) {
-            if (i < fullStars) {
-                starsHtml += '<i class="star fas fa-star"></i>';
-            } else {
-                starsHtml += '<i class="star far fa-star"></i>';
-            }
-        }
-
-        return starsHtml;
     }
 
     function updatePaginationControls(totalPages) {

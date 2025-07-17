@@ -768,25 +768,6 @@
             margin-bottom: 0.75rem;
         }
 
-        .product-rating {
-            display: flex;
-            align-items: center;
-            gap: 0.25rem;
-            font-size: 0.75rem;
-            color: var(--text-gray);
-        }
-
-        .product-rating .rating-stars {
-            display: flex;
-            gap: 0.125rem;
-        }
-
-        .product-rating .star {
-            width: 0.875rem;
-            height: 0.875rem;
-            color: #ffc107;
-        }
-
         .product-sold {
             font-size: 0.75rem;
             color: var(--text-gray);
@@ -1293,25 +1274,6 @@
 
     <!-- Products Section -->
     <section class="products-section">
-        <!-- Section Header -->
-        <div class="section-header">
-            <h1 class="section-title">Sản phẩm theo danh mục</h1>
-            <p class="section-subtitle">Khám phá các sản phẩm chất lượng trong danh mục này</p>
-            <div class="products-stats">
-                <div class="stat-item">
-                    <span class="stat-number" id="totalProducts" th:text="${#lists.size(products)}">0</span>
-                    <span class="stat-label">Sản phẩm</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="currentPage">1</span>
-                    <span class="stat-label">Trang hiện tại</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number" id="totalPages">1</span>
-                    <span class="stat-label">Tổng trang</span>
-                </div>
-            </div>
-        </div>
 
         <!-- Loading State -->
         <div class="loading" id="loadingState">
@@ -1356,25 +1318,7 @@
                     <div class="product-price" th:text="'₫' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₫0</div>
 
                     <div class="product-meta">
-                        <div class="product-rating">
-                            <div class="rating-stars">
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
-                                <svg class="star" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z"/>
-                                </svg>
-                            </div>
-                            <span th:text="'(' + ${product.rate} + ')'">0</span>
+                        <span th:text="'★' + ${product.rate}">0</span>
                         </div>
                     </div>
 
@@ -1382,7 +1326,7 @@
                         <svg class="sold-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8 1L10.09 5.26L15 6L11 9.74L11.91 14.5L8 12.27L4.09 14.5L5 9.74L1 6L5.91 5.26L8 1Z" fill="currentColor"/>
                         </svg>
-                        <span th:text="'Đã bán ' + ${product.totalSold}">Đã bán 0</span>
+                        <span th:text="'Đã bán ' + ${product.solditems}">Đã bán 0</span>
                     </div>
 
                     <div class="product-address">
@@ -1456,52 +1400,13 @@
             document.getElementById('loadingState').style.display = 'none';
             document.getElementById('productsGrid').style.display = 'grid';
 
-            initializeProducts();
+
             setupFilters();
             setupSearch();
             setupLocationFilter();
-        }, 1000);
+        });
     });
 
-    function initializeProducts() {
-        const productCards = Array.from(document.querySelectorAll('.product-card'));
-
-        if (productCards.length === 0) return;
-
-        // Extract product data
-        allProducts = productCards.map(card => {
-            const name = card.querySelector('.product-name').textContent;
-            const priceText = card.querySelector('.product-price').textContent;
-            const price = parseInt(priceText.replace(/[^\d]/g, '')) || 0;
-            const soldText = card.querySelector('.product-sold span').textContent;
-            const totalSold = parseInt(soldText.replace(/[^\d]/g, '')) || 0;
-            const imageElement = card.querySelector('.product-image');
-            const imageUrl = imageElement ? imageElement.src : null;
-            const productId = card.dataset.productId;
-            const rating = parseFloat(card.dataset.rating) || 0;
-            const location = card.dataset.location || '';
-
-            return {
-                id: productId,
-                name,
-                price,
-                priceText,
-                totalSold,
-                imageUrl,
-                rating,
-                location,
-                element: card,
-                searchableText: name.toLowerCase(), // For search functionality
-                searchableLocation: location.toLowerCase() // For location search
-            };
-        });
-
-        filteredProducts = [...allProducts];
-
-        // Initialize pagination and display
-        initializePagination();
-        displayProducts();
-    }
 
     function setupLocationFilter() {
         const locationContainer = document.getElementById('locationContainer');
@@ -1961,12 +1866,7 @@
                     <div class="product-price">${product.priceText}</div>
 
                     <div class="product-meta">
-                        <div class="product-rating">
-                            <div class="rating-stars">
-                                ${generateStars(product.rating)}
-                            </div>
-                            <span>(${product.rating})</span>
-                        </div>
+                       <span>★ ${product.rating}</span>
                     </div>
 
                     <div class="product-sold">
