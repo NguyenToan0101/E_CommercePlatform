@@ -10,12 +10,12 @@ import org.hibernate.annotations.OnDeleteAction;
 @Getter
 @Setter
 @Entity
-@Table(name = "promotion_targets")
-public class PromotionTarget {
+@Table(name = "promotion_category")
+public class PromotionCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -23,13 +23,8 @@ public class PromotionTarget {
     @JoinColumn(name = "promotionid", nullable = false)
     private Promotion promotionid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productid")
-    private Product productid;
-
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "shopid")
-    private Shop shopid;
-
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "categoryid", nullable = false)
+    private Category categoryid;
 }

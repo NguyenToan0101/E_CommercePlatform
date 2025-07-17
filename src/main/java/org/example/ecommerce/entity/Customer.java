@@ -119,7 +119,7 @@ public class Customer {
     }
 
     public String getPhone() {
-        return phone;
+        return (phone == null || phone.trim().isEmpty() || "null".equalsIgnoreCase(phone.trim())) ? null : phone;
     }
 
     public void setPhone(String phone) {
