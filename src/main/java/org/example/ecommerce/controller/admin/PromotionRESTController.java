@@ -68,8 +68,7 @@ public class PromotionRESTController {
                         )
 
                 );
-                System.out.println("ROI----"  + orderLogService.sumProfitAmountPromotionById(promotion.getId()).doubleValue() /
-                        orderLogService.sumDiscountAmountPromotionById(promotion.getId()).multiply(BigDecimal.valueOf(100)).doubleValue());
+
             }
 
         }

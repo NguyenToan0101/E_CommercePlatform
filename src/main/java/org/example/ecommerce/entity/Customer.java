@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -50,42 +52,42 @@ public class Customer {
     @Column(name = "role", length = Integer.MAX_VALUE)
     private String role;
 
-    @Column(name = "status")
-    private Boolean status;
+
+    @Column(nullable = false)
+    private boolean status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
     private Instant createdat;
 
-    @Column(name = "image", length = Integer.MAX_VALUE)
-    private String image;
+    @Column(name = "image")
+    private byte[] image;
 
     @Column(name = "version")
-    private Long version;
-
-    @Column(name = "locked_until")
-    private Instant lockedUntil;
-
-    @ColumnDefault("false")
-    @Column(name = "is_locked")
-    private Boolean isLocked;
+    private Integer version;
 
     @OneToMany(mappedBy = "customerid")
     private Set<Cart> carts = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "customerid")
+    @OneToMany(mappedBy = "customer")
     private Set<Complaint> complaints = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "customerid")
     private Set<Conversation> conversations = new LinkedHashSet<>();
 
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
+    @Column(name = "is_locked")
+    private boolean isLocked;
+
     @OneToMany(mappedBy = "customerid")
     private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "customerid")
+    @OneToMany(mappedBy = "customerid")  // mappedBy trùng với tên biến Customer trong Order
     private Set<Order> orders = new LinkedHashSet<>();
 
-    @OneToOne(mappedBy = "customer")
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customer")
     private Seller seller;
 
     @OneToOne(mappedBy = "customerid")
@@ -94,4 +96,4 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
-}
+   }

@@ -33,5 +33,8 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
     Optional<Category> findByCategoryname(String categoryname);
 
+    //loc danh muc chinh
+    List<Category> findByParentIsNull();
+
     List<Category> findByParent_Id(Integer parentId);
 }

@@ -4,9 +4,8 @@ import org.example.ecommerce.entity.Category;
 import org.example.ecommerce.entity.Customer;
 import org.example.ecommerce.entity.Seller;
 import org.example.ecommerce.entity.Shop;
-import org.example.ecommerce.repository.UserRepository;
+import org.example.ecommerce.repository.CustomerRepository;
 import org.example.ecommerce.repository.seller.ShopRepo;
-import org.example.ecommerce.service.customer.cusromer_aut.CustomerServiceImpl;
 import org.example.ecommerce.service.customer.customer_product.CustomerProductService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,11 +33,11 @@ public class HomeController {
     private CustomerProductService productService;
     @Value("${api.frontend.seller}")
     private String frontendSellerUrl;
-    private final UserRepository customerRepository;
+    private final CustomerRepository customerRepository;
     private final SellerRepo sellerRepository;
     private final ShopRepo shopRepository;
 
-    public HomeController(UserRepository customerRepository, SellerRepo sellerRepository, ShopRepo shopRepository) {
+    public HomeController(CustomerRepository customerRepository, SellerRepo sellerRepository, ShopRepo shopRepository) {
         this.customerRepository = customerRepository;
         this.sellerRepository = sellerRepository;
         this.shopRepository = shopRepository;

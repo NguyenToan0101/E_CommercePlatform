@@ -1,8 +1,8 @@
+
 package org.example.ecommerce.controller.customer.customer_aut;
 
 import org.example.ecommerce.entity.Customer;
 import org.example.ecommerce.service.customer.cusromer_aut.CustomerService;
-import org.example.ecommerce.service.UploadImageFile;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
 
 @Controller
 @RequestMapping("/customers")
@@ -19,14 +20,13 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    @Autowired
-    private UploadImageFile uploadImageFile;
-
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
         model.addAttribute("customer", new Customer());
         return "customer/customer_aut/register";
     }
+
+
 
     @PostMapping("/register")
     public String register(@ModelAttribute("customer") Customer customer,
@@ -35,8 +35,7 @@ public class CustomerController {
                            Model model) {
         try {
             if (!imageFile.isEmpty()) {
-                String url = uploadImageFile.uploadImage(imageFile);
-                customer.setImage(url);
+                customer.setImage(imageFile.getBytes());
             }
             String siteURL = request.getRequestURL().toString().replace(request.getServletPath(), "");
             customerService.register(customer, siteURL);
@@ -47,7 +46,6 @@ public class CustomerController {
             return "customer/customer_aut/register";
         }
     }
-
     @GetMapping("/verify")
     public String verifyCustomer(@RequestParam("token") String token, Model model) {
         if (customerService.verify(token)) {
@@ -59,15 +57,28 @@ public class CustomerController {
         }
     }
 
+
+
+
+
     @GetMapping("/profile")
     public String viewProfile(Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) {
             return "redirect:/login";
         }
+
+        if (customer.getImage() != null) {
+            String base64Image = Base64.getEncoder().encodeToString(customer.getImage());
+            model.addAttribute("base64Image", base64Image);
+        }
         model.addAttribute("customer", customer);
         return "customer/customer_aut/profile";
     }
+
+
+
+
 
     @GetMapping("/change-password")
     public String showChangePasswordForm(HttpSession session, Model model) {
@@ -98,6 +109,10 @@ public class CustomerController {
         model.addAttribute("successMessage", "Đổi mật khẩu thành công");
         return "customer/customer_aut/change-password";
     }
+
+
+
+
 
     @GetMapping("/forgot_password")
     public String showForgotPasswordForm() {
@@ -139,12 +154,20 @@ public class CustomerController {
         }
     }
 
+
+
+
+
     @GetMapping("/editprofile")
     public String showProfile(Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
         String email = customer.getEmail();
         if (email == null) {
             return "redirect:/login";
+        }
+        if (customer.getImage() != null) {
+            String base64Image = Base64.getEncoder().encodeToString(customer.getImage());
+            model.addAttribute("base64Image", base64Image);
         }
         model.addAttribute("customer", customerService.findByEmail(email));
         return "customer/customer_aut/profile_edit";
@@ -157,13 +180,14 @@ public class CustomerController {
                                 HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
         String email = customer.getEmail();
+
         Customer customer1 = customerService.findByEmail(email);
+
         customer1.setFirstname(formCustomer.getFirstname());
         customer1.setLastname(formCustomer.getLastname());
         try {
             if (imageFile != null && !imageFile.isEmpty()) {
-                String url = uploadImageFile.uploadImage(imageFile);
-                customer1.setImage(url);
+                customer1.setImage(imageFile.getBytes());
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -172,8 +196,19 @@ public class CustomerController {
         customer1.setGender(formCustomer.getGender());
         customer1.setDateofbirth(formCustomer.getDateofbirth());
         customer1.setAddress(formCustomer.getAddress());
+
         customerService.updateProfile(customer1);
         session.setAttribute("customer", customer1);
         return "redirect:/customers/profile";
+    }
+// phong
+    @GetMapping("/chat")
+    public String chatPage(Model model, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("customerId", customer.getId());
+        return "customer/chat";
     }
 }

@@ -1431,7 +1431,7 @@
                                 </div>
 
                                 <input type="radio" name="discount" class="mt-2" th:value="${promo.getId()}"
-                                       th:disabled="${price < promo.getMinOrderValue()}"
+                                       th:disabled="${price  < promo.getMinOrderValue()}"
                                 />
                             </label>
 

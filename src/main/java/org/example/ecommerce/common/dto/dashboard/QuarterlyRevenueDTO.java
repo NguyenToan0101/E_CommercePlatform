@@ -4,16 +4,24 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class QuarterlyRevenueDTO {
     private String quarter;
-    private long revenue;
+    private BigDecimal revenue;
     private double growth;
-    private int orders;
-    private int avgOrder;
+    private long orders;
+    private BigDecimal avgOrder;
 
 
+    public QuarterlyRevenueDTO(String quarter, BigDecimal revenue, long orders, BigDecimal avgOrder) {
+        this.quarter = quarter;
+        this.revenue = revenue;
+        this.orders = orders;
+        this.avgOrder = avgOrder;
+    }
 }
 

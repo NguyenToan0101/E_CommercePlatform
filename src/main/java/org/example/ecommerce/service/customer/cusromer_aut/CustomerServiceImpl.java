@@ -1,7 +1,7 @@
 package org.example.ecommerce.service.customer.cusromer_aut;
 
 import org.example.ecommerce.entity.Customer;
-import org.example.ecommerce.repository.UserRepository;
+import org.example.ecommerce.repository.CustomerRepository;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -25,9 +25,9 @@ public class CustomerServiceImpl implements CustomerService {
     Instant instant = localDateTime.atZone(zoneId).toInstant();
 
     @Autowired
-    private final UserRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-    public CustomerServiceImpl(UserRepository customerRepository, PasswordEncoder passwordEncoder) {
+    public CustomerServiceImpl(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -79,9 +79,11 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public Customer login(String email, String password) {
-        
         Customer customer = customerRepository.findByEmail(email);
-        if (customer != null && BCrypt.checkpw(password, customer.getPassword()) && customer.getStatus().equals(true)) {
+        if (customer != null
+                && BCrypt.checkpw(password, customer.getPassword())
+                && customer.isStatus()
+                && !customer.isLocked()) {
             return customer;
         }
         return null;
@@ -147,7 +149,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer != null) {
             customer.setFirstname(updatedCustomer.getFirstname());
             customer.setLastname(updatedCustomer.getLastname());
-            if (updatedCustomer.getImage() != null && !updatedCustomer.getImage().isEmpty()) {
+            if (updatedCustomer.getImage() != null) {
                 customer.setImage(updatedCustomer.getImage());
             }
             customer.setPhone(updatedCustomer.getPhone());
@@ -156,5 +158,10 @@ public class CustomerServiceImpl implements CustomerService {
             customer.setGender(updatedCustomer.getGender());
             customerRepository.save(customer);
         }
+    }
+
+
+    public void deleteUserById(Integer id) {
+        customerRepository.deleteById(id);
     }
 }

@@ -1,18 +1,21 @@
 package org.example.ecommerce.service.seller;
 
-import org.example.ecommerce.entity.Shop;
+import jakarta.persistence.EntityNotFoundException;
+import org.example.ecommerce.common.dto.shopManagement.ShopDetailDTO;
+import org.example.ecommerce.repository.ShopRepository;
 import org.example.ecommerce.repository.seller.SellerRepo;
 import org.example.ecommerce.repository.seller.ShopRepo;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Service
 public class ShopService {
     protected ShopRepo shopRepo;
+    @Autowired
+    private SellerRepo sellerRepo;
     public ShopService(ShopRepo shopRepo) {
         this.shopRepo = shopRepo;
     }
 
-    public Shop getShopById(int id) {
-        return shopRepo.findById(id).orElse(new Shop());
-    }
+
 }

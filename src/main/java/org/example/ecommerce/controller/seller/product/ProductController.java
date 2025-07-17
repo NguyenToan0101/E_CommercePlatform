@@ -41,8 +41,10 @@ public class ProductController {
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "size", defaultValue = "12") int size,
                                Model model, HttpSession session) {
+
         Customer customer = (Customer) session.getAttribute("customer");
-        if (customer == null) return "redirect:/login";
+        if (customer == null)
+            return "redirect:/login";
 
         Integer shopId = customer.getSeller().getShop().getId();
         String backendStatus = mapStatus(status);

@@ -1,4 +1,5 @@
 package org.example.ecommerce.entity;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Nationalized;
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "shop")
+@Data
 public class Shop {
 
     @Id
@@ -17,8 +19,10 @@ public class Shop {
     @JoinColumn(name = "shopid", nullable = false, unique = true)
     @MapsId
     private Seller sellerid;
+
     @Version
     private Integer version;
+
     @Nationalized
     @Column(name = "shopname", nullable = false, unique = true, length = 100)
     private String shopname;
@@ -91,7 +95,14 @@ public class Shop {
     @Column(name = "taxcode", nullable = false, unique = true)
     private String taxCode;
 
-    public Shop(Integer id,String status) {
+    // New fields added for lock functionality
+    @Column(name = "locked", nullable = false)
+    private Boolean locked = false; // default to false
+
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
+    public Shop(Integer id, String status) {
         this.id = id;
         this.status = status;
     }
@@ -100,10 +111,11 @@ public class Shop {
 
     }
 
-    public enum Status{
+    public enum Status {
         PENDING_APPROVAL,
         ACTIVE,
-        LOCK
+        LOCK,
+        REJECTED
     }
 
     public Integer getId() {
@@ -138,11 +150,11 @@ public class Shop {
         this.shopname = shopname;
     }
 
-    public String getDescription() {
+    public @Size(max = 500) String getDescription() {
         return description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(@Size(max = 500) String description) {
         this.description = description;
     }
 
@@ -250,27 +262,43 @@ public class Shop {
         this.businessType = businessType;
     }
 
-    public String getBusinessAddress() {
+    public @Size(max = 255) String getBusinessAddress() {
         return businessAddress;
     }
 
-    public void setBusinessAddress(String businessAddress) {
+    public void setBusinessAddress(@Size(max = 255) String businessAddress) {
         this.businessAddress = businessAddress;
     }
 
-    public String getInvoiceEmail() {
+    public @Email @Size(max = 100) String getInvoiceEmail() {
         return invoiceEmail;
     }
 
-    public void setInvoiceEmail(String invoiceEmail) {
+    public void setInvoiceEmail(@Email @Size(max = 100) String invoiceEmail) {
         this.invoiceEmail = invoiceEmail;
     }
 
-    public String getTaxCode() {
+    public @Size(max = 20) String getTaxCode() {
         return taxCode;
     }
 
-    public void setTaxCode(String taxCode) {
+    public void setTaxCode(@Size(max = 20) String taxCode) {
         this.taxCode = taxCode;
+    }
+
+    public Boolean getLocked() {
+        return locked;
+    }
+
+    public void setLocked(Boolean locked) {
+        this.locked = locked;
+    }
+
+    public LocalDateTime getLockedUntil() {
+        return lockedUntil;
+    }
+
+    public void setLockedUntil(LocalDateTime lockedUntil) {
+        this.lockedUntil = lockedUntil;
     }
 }
