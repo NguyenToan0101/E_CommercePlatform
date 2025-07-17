@@ -1,48 +1,64 @@
 package org.example.ecommerce.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import org.hibernate.annotations.Nationalized;
 
-import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
-@Getter
-@Setter
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
+@Getter
+@Setter
+@ToString(exclude = {"parent", "children", "promotions"})
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "categoryid", nullable = false)
     private Integer id;
 
-    @NotNull
-    @Column(name = "categoryname", nullable = false, length = Integer.MAX_VALUE)
+    @Nationalized
+    @Column(name = "categoryname", length = 100)
     private String categoryname;
 
-    @Column(name = "image", length = Integer.MAX_VALUE)
+    @Nationalized
+    @Column(name = "image")
     private String image;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "parentid")
-    private Category parentid;
+    @JsonIgnore
+    private Category parent;
 
-    @Column(name = "status", length = Integer.MAX_VALUE)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("parent")
+    private List<Category> children ;
+
     private String status;
+    private LocalDateTime create_at;
+    @ManyToMany(mappedBy = "categories")
+    private List<Promotion> promotions;
 
-    @Column(name = "create_at")
-    private Instant createAt;
+    public Category() {
 
-    @OneToMany(mappedBy = "parentid")
-    private Set<Category> categories = new LinkedHashSet<>();
+    }
 
-    @OneToMany(mappedBy = "categoryid")
-    private Set<Product> products = new LinkedHashSet<>();
-
-    @OneToMany(mappedBy = "maincategoryid")
-    private Set<Shop> shops = new LinkedHashSet<>();
-
+    public Category(Integer id, String categoryname) {
+        this.id = id;
+        this.categoryname = categoryname;
+    }
+    public enum Status{
+        ACTIVE,
+        INACTIVE
+    }
 }

@@ -2,14 +2,12 @@ package org.example.ecommerce.service.customer.wallet;
 
 import org.example.ecommerce.entity.*;
 import org.example.ecommerce.repository.*;
+import org.example.ecommerce.service.PromotionService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class PaymentService {
@@ -21,8 +19,9 @@ public class PaymentService {
     private final InventoryRepository inventoryRepository;
     private final WalletHistoryRepository walletHistoryRepository;
     private final ProductimageRepository productimageRepository;
+    private final PromotionService promotionService;
 
-    public PaymentService(WalletRepository walletRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, CartitemRepository cartItemsRepository, CartRepository cartsRepository, InventoryRepository inventoryRepository, WalletHistoryRepository walletHistoryRepository, ProductimageRepository productimageRepository) {
+    public PaymentService(WalletRepository walletRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, CartitemRepository cartItemsRepository, CartRepository cartsRepository, InventoryRepository inventoryRepository, WalletHistoryRepository walletHistoryRepository, ProductimageRepository productimageRepository, PromotionService promotionService) {
         this.walletRepository = walletRepository;
         this.ordersRepository = ordersRepository;
         this.orderItemsRepository = orderItemsRepository;
@@ -31,6 +30,7 @@ public class PaymentService {
         this.inventoryRepository = inventoryRepository;
         this.walletHistoryRepository = walletHistoryRepository;
         this.productimageRepository = productimageRepository;
+        this.promotionService = promotionService;
     }
 
     public String checkout(Customer customer, List<Integer> cartItemIds, String fullname, String phone, String address) {
@@ -95,7 +95,8 @@ public class PaymentService {
             order.setFullname(fullname);
             order.setPhone(phone);
             order.setAddress(address);
-            order.setStatus("Pending");
+            order.setStatus("Chờ lấy hàng");
+            order.setPaymentStatus("Đã thanh toán");
             ordersRepository.save(order);
 
             for (Cartitem ci : items) {
@@ -140,7 +141,7 @@ public class PaymentService {
     }
 
 
-    public String checkoutRealtime(Customer customer, Integer inventoryId, Integer quantity, String fullname, String phone, String address) {
+    public String checkoutRealtime(Integer freeship,Integer discount ,BigDecimal price ,Customer customer, Integer inventoryId, Integer quantity, String fullname, String phone, String address) {
         Wallet wallet = walletRepository.findByCustomerid(customer);
         if (wallet == null) {
             wallet = new Wallet();
@@ -157,7 +158,8 @@ public class PaymentService {
             return "Sản phẩm không đủ hàng trong kho";
         }
 
-        BigDecimal price = inventoryRepository.findFirstByProductidOrderByPriceAsc(product).getPrice();
+//        BigDecimal price = inventoryRepository.findFirstByProductidOrderByPriceAsc(product).getPrice();
+//        BigDecimal price = inventory.getPrice();
         BigDecimal totalAmount = price.multiply(BigDecimal.valueOf(quantity));
 
         if (wallet.getBalance().compareTo(totalAmount) < 0) {
@@ -171,7 +173,8 @@ public class PaymentService {
         order.setFullname(fullname);
         order.setPhone(phone);
         order.setAddress(address);
-        order.setStatus("Pending");
+        order.setStatus("Chờ lấy hàng");
+        order.setPaymentStatus("Đã thanh toán");
         ordersRepository.save(order);
 
         wallet.setBalance(wallet.getBalance().subtract(totalAmount));
@@ -184,13 +187,29 @@ public class PaymentService {
         history.setCreatedAt(Instant.now());
         walletHistoryRepository.save(history);
 
-        Orderitem oi = new Orderitem();
-        oi.setOrderid(order);
-        oi.setProductid(product);
-        oi.setInventoryid(inventory);
-        oi.setQuantity(quantity);
-        oi.setUnitprice(price);
-        orderItemsRepository.save(oi);
+        if (freeship != null) {
+            Orderitem oi1 = new Orderitem();
+            oi1.setOrderid(order);
+            oi1.setProductid(product);
+            oi1.setInventoryid(inventory);
+            oi1.setQuantity(quantity);
+            oi1.setUnitprice(price);
+            oi1.setPromotionid(freeship);
+            orderItemsRepository.save(oi1);
+        }
+
+        if (discount != null) {
+            Orderitem oi2 = new Orderitem();
+            oi2.setOrderid(order);
+            oi2.setProductid(product);
+            oi2.setInventoryid(inventory);
+            oi2.setQuantity(quantity);
+            oi2.setUnitprice(price);
+            oi2.setPromotionid(discount);
+            orderItemsRepository.save(oi2);
+        }
+
+
 
         Customer seller = product.getShopid().getSellerid().getCustomer();
         Wallet sellerWallet = walletRepository.findByCustomerid(seller);
@@ -212,7 +231,12 @@ public class PaymentService {
         walletHistoryRepository.save(sellerHistory);
 
         inventory.setQuantity(inventory.getQuantity() - quantity);
-        inventory.setSolditems((inventory.getSolditems() != null ? inventory.getSolditems() : 0) + quantity);
+        if(inventory.getSolditems() == null){
+            inventory.setSolditems(quantity );
+        }else {
+            inventory.setSolditems(inventory.getSolditems() + quantity);
+        }
+
         inventoryRepository.save(inventory);
 
         return "Thanh toán thành công";
@@ -256,7 +280,7 @@ public class PaymentService {
 
             dto.setQuantity(quantity);
             dto.setInventoryId(inventoryId);
-            dto.setPrice((inventoryRepository.findFirstByProductidOrderByPriceAsc(product).getPrice()));
+            dto.setPrice(inventory.getPrice());
 
             dto.setColor(inventory.getColor());
             dto.setDimension(inventory.getDimension());
@@ -264,5 +288,18 @@ public class PaymentService {
         }
         return null;
     }
+    public Product getProductById(Integer productId) {
+        return inventoryRepository.findById(productId).map(Inventory::getProductid).orElse(null);
+    }
+    public Inventory getInventoryById(Integer inventoryId) {
+        return inventoryRepository.findById(inventoryId).orElse(null);
+    }
+    public String getProvinceShopAddressById(Product product) {
+       String[] partAddress =  product.getShopid().getFulladdress().split("-");
+       return partAddress[partAddress.length - 1];
+    }
 
+    public Optional<Promotion> getPromotionById(Integer promotionId) {
+        return promotionService.getPromotionById(promotionId);
+    }
 }

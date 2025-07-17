@@ -18,4 +18,5 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     Integer countByProductid(Product productid);
 
 
+    List<Integer> findRateById(Integer id);
 }

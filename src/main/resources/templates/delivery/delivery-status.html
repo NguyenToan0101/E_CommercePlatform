@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musa Delivery - Cập nhật trạng thái giao hàng</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+            color: #334155;
+        }
+
+        /* Glass effect cho body */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                    radial-gradient(circle at 25% 25%, rgba(51, 65, 85, 0.03) 0%, transparent 50%),
+                    radial-gradient(circle at 75% 75%, rgba(51, 65, 85, 0.02) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
+            box-shadow:
+                    0 20px 40px rgba(51, 65, 85, 0.08),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            overflow: hidden;
+        }
+
+        .header {
+            background: rgba(51, 65, 85, 0.95);
+            backdrop-filter: blur(15px);
+            color: white;
+            padding: 48px 32px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.025em;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 32px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 32px 24px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow:
+                    0 8px 24px rgba(51, 65, 85, 0.06),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow:
+                    0 16px 40px rgba(51, 65, 85, 0.12),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .stat-card h3 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #334155;
+            margin-bottom: 8px;
+            letter-spacing: -0.025em;
+        }
+
+        .stat-card p {
+            color: #64748b;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .search-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 28px;
+            border-radius: 20px;
+            margin-bottom: 32px;
+            box-shadow:
+                    0 8px 24px rgba(51, 65, 85, 0.04),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .search-form {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 220px;
+            padding: 16px 20px;
+            border: 1.5px solid rgba(203, 213, 225, 0.6);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 400;
+            color: #334155;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: rgba(51, 65, 85, 0.4);
+            background: rgba(255, 255, 255, 1);
+            box-shadow:
+                    0 0 0 4px rgba(51, 65, 85, 0.08),
+                    0 4px 16px rgba(51, 65, 85, 0.08);
+        }
+
+        .search-input::placeholder {
+            color: #94a3b8;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            letter-spacing: -0.01em;
+        }
+
+        .btn-primary {
+            background: rgba(51, 65, 85, 0.95);
+            backdrop-filter: blur(10px);
+            color: white;
+            border: 1px solid rgba(51, 65, 85, 0.2);
+            box-shadow: 0 4px 16px rgba(51, 65, 85, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: rgba(51, 65, 85, 1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(51, 65, 85, 0.3);
+        }
+
+        .btn-success {
+            background: rgba(34, 197, 94, 0.9);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            box-shadow: 0 2px 8px rgba(34, 197, 94, 0.2);
+        }
+
+        .btn-success:hover {
+            background: rgba(34, 197, 94, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-warning {
+            background: rgba(245, 158, 11, 0.9);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 12px 20px;
+            font-size: 0.9rem;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2);
+        }
+
+        .btn-warning:hover {
+            background: rgba(245, 158, 11, 1);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+        }
+
+        /* Glass effect cho table container */
+        .table-container {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow:
+                    0 12px 32px rgba(51, 65, 85, 0.08),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            background: transparent;
+        }
+
+        .table th {
+            background: rgba(51, 65, 85, 0.95);
+            backdrop-filter: blur(15px);
+            color: white;
+            padding: 20px 16px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.025em;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        /* Glass effect cho table rows */
+        .table td {
+            padding: 18px 16px;
+            border-bottom: 1px solid rgba(203, 213, 225, 0.3);
+            vertical-align: middle;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        .table tbody tr:hover td {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Glass effect cho mã đơn */
+        .order-id {
+            background: rgba(51, 65, 85, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 8px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: #334155;
+            border: 1px solid rgba(51, 65, 85, 0.1);
+        }
+
+        /* Glass effect cho thông tin khách hàng */
+        .customer-info {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .customer-name {
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+            font-size: 1rem;
+        }
+
+        .customer-phone {
+            color: #64748b;
+            margin: 4px 0;
+            font-weight: 500;
+        }
+
+        .customer-address {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 400;
+        }
+
+        .status-badge {
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            display: inline-block;
+            min-width: 120px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.025em;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #92400e;
+            border-color: rgba(245, 158, 11, 0.2);
+        }
+
+        .status-picked {
+            background: rgba(59, 130, 246, 0.15);
+            color: #1e40af;
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .status-delivering {
+            background: rgba(139, 92, 246, 0.15);
+            color: #6b21a8;
+            border-color: rgba(139, 92, 246, 0.2);
+        }
+
+        .status-delivered {
+            background: rgba(34, 197, 94, 0.15);
+            color: #166534;
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .amount {
+            font-weight: 800;
+            color: #334155;
+            font-size: 1.1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .date {
+            color: #64748b;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .loading, .no-data {
+            text-align: center;
+            padding: 48px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .alert {
+            padding: 20px 24px;
+            margin-bottom: 28px;
+            border-radius: 16px;
+            font-weight: 500;
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .alert-success {
+            background: rgba(34, 197, 94, 0.1);
+            color: #166534;
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+
+        .alert-error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #991b1b;
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.25rem;
+            }
+
+            .search-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 800px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .content {
+                padding: 24px;
+            }
+
+            .customer-info {
+                padding: 12px;
+            }
+        }
+
+        /* Subtle animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stat-card, .search-section, .table-container {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .stat-card:nth-child(2) { animation-delay: 0.1s; }
+        .stat-card:nth-child(3) { animation-delay: 0.2s; }
+        .stat-card:nth-child(4) { animation-delay: 0.3s; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🚚 Musa Delivery</h1>
+        <p>Hệ thống quản lý giao hàng chuyên nghiệp</p>
+    </div>
+
+    <div class="content">
+        <!-- Thông báo -->
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <!-- Thống kê -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3 th:text="${totalOrders ?: 0}">0</h3>
+                <p>Tổng đơn hàng</p>
+            </div>
+            <div class="stat-card">
+                <h3 th:text="${pendingOrders ?: 0}">0</h3>
+                <p>Chờ lấy hàng</p>
+            </div>
+            <div class="stat-card">
+                <h3 th:text="${deliveringOrders ?: 0}">0</h3>
+                <p>Đang giao</p>
+            </div>
+            <div class="stat-card">
+                <h3 th:text="${deliveredOrders ?: 0}">0</h3>
+                <p>Đã giao</p>
+            </div>
+        </div>
+
+        <!-- Tìm kiếm -->
+        <div class="search-section">
+            <form class="search-form" method="get" th:action="@{/delivery/orders}">
+                <input type="text" name="search" class="search-input"
+                       placeholder="Tìm kiếm theo mã đơn, tên khách hàng, số điện thoại..."
+                       th:value="${param.search}">
+                <select name="status" class="search-input" style="flex: 0 0 220px;">
+                    <option value="">Tất cả trạng thái</option>
+                    <option value="Chờ lấy hàng" th:selected="${param.status == 'Chờ lấy hàng'}">Chờ lấy hàng</option>
+                    <option value="Đang giao hàng" th:selected="${param.status == 'Đang giao hàng'}">Đang giao hàng</option>
+                    <option value="Đã giao" th:selected="${param.status == 'Đã giao'}">Đã giao</option>
+                </select>
+                <button type="submit" class="btn btn-primary">🔍 Tìm kiếm</button>
+            </form>
+        </div>
+
+        <!-- Bảng đơn hàng -->
+        <div class="table-container">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Mã đơn</th>
+                    <th>Thông tin khách hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái thanh toán</th>
+                    <th>Trạng thái giao hàng</th>
+                    <th>Cập nhật lần cuối</th>
+                    <th>Thao tác</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:if="${#lists.isEmpty(orders)}">
+                    <td colspan="8" class="no-data">
+                        📦 Không có đơn hàng nào để hiển thị
+                    </td>
+                </tr>
+                <tr th:each="order : ${orders}">
+                    <td>
+                        <div class="order-id" th:text="'#' + ${order.id}"></div>
+                    </td>
+                    <td>
+                        <div class="customer-info">
+                            <div class="customer-name" th:text="${order.getCustomerid().getFirstname() }"></div>
+                            <div class="customer-phone" th:text="'📞 ' + ${order.getPhone()}"></div>
+                            <div class="customer-address" th:text="'📍 ' + ${order.getAddress()}"></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="date" th:text="${#temporals.format(order.orderdate, 'dd/MM/yyyy HH:mm')}"></div>
+                    </td>
+                    <td>
+                        <div class="amount" th:text="${#numbers.formatDecimal(order.totalamount, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></div>
+                    </td>
+                    <td>
+                                <span class="status-badge"
+                                      th:class="'status-badge ' + (${order.paymentStatus == 'Đã thanh toán'} ? 'status-delivered' : 'status-pending')"
+                                      th:text="${order.paymentStatus}"></span>
+                    </td>
+                    <td>
+                  <span th:class="${'status-badge ' +
+               (order.status == 'Chờ lấy hàng' ? 'status-pending' :
+                order.status == 'Đang giao hàng' ? 'status-delivering' :
+                order.status == 'Đã giao' ? 'status-delivered' : 'status-picked')}"
+                        th:text="${order.status}">
+</span>
+
+
+                    </td>
+                    <td>
+                        <div class="date" th:text="${order.updatedAt != null ? #temporals.format(order.updatedAt, 'dd/MM/yyyy HH:mm') : 'Chưa cập nhật'}"></div>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <!-- Nút "Đã lấy" - chuyển từ "Chờ lấy hàng" sang "Đang giao hàng" -->
+                            <form th:if="${order.status == 'Chờ lấy hàng'}"
+                                  method="post"
+                                  th:action="@{/delivery/orders/{id}/update-status(id=${order.id})}"
+                                  style="display: inline;">
+                                <input type="hidden" name="status" value="Đang giao hàng">
+                                <button type="submit" class="btn btn-warning"
+                                        onclick="return confirm('Xác nhận đã lấy hàng?')">
+                                    📦 Đã lấy
+                                </button>
+                            </form>
+
+                            <!-- Nút "Đã giao" - chuyển từ "Đang giao hàng" sang "Đã giao" -->
+                            <form th:if="${order.status == 'Đang giao hàng'}"
+                                  method="post"
+                                  th:action="@{/delivery/orders/{id}/update-status(id=${order.id})}"
+                                  style="display: inline;">
+                                <input type="hidden" name="status" value="Đã giao">
+                                <button type="submit" class="btn btn-success"
+                                        onclick="return confirm('Xác nhận đã giao hàng thành công?')">
+                                    ✅ Đã giao
+                                </button>
+                            </form>
+
+                            <!-- Hiển thị khi đã hoàn thành -->
+                            <span th:if="${order.status == 'Đã giao'}"
+                                  class="status-badge status-delivered">
+                                        🎉 Hoàn thành
+                                    </span>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Phân trang (nếu cần) -->
+<!--        <div th:if="${totalPages > 1}" style="margin-top: 32px; text-align: center;">-->
+<!--            <div style="display: inline-flex; gap: 12px; align-items: center;">-->
+<!--                <a th:if="${currentPage > 0}"-->
+<!--                   th:href="@{/delivery/orders(page=${currentPage - 1}, search=${param.search}, status=${param.status})}"-->
+<!--                   class="btn btn-primary">← Trước</a>-->
+
+<!--                <span style="padding: 0 24px; color: #64748b; font-weight: 500;">-->
+<!--                        Trang <span th:text="${currentPage + 1}"></span> / <span th:text="${totalPages}"></span>-->
+<!--                    </span>-->
+
+<!--                <a th:if="${currentPage < totalPages - 1}"-->
+<!--                   th:href="@{/delivery/orders(page=${currentPage + 1}, search=${param.search}, status=${param.status})}"-->
+<!--                   class="btn btn-primary">Sau →</a>-->
+<!--            </div>-->
+<!--        </div>-->
+    </div>
+</div>
+
+<script>
+    // Auto refresh trang mỗi 30 giây
+    setTimeout(function() {
+        location.reload();
+    }, 60000);
+
+    // Xác nhận trước khi cập nhật trạng thái
+    document.querySelectorAll('form[action*="update-status"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const status = this.querySelector('input[name="status"]').value;
+            const confirmMessage = status === 'Đang giao hàng' ?
+                'Xác nhận đã lấy hàng và bắt đầu giao?' :
+                'Xác nhận đã giao hàng thành công?';
+
+            if (!confirm(confirmMessage)) {
+                e.preventDefault();
+            }
+        });
+    });
+</script>
+</body>
+</html>

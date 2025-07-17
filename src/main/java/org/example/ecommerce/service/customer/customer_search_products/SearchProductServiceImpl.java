@@ -74,7 +74,7 @@ public class SearchProductServiceImpl implements SearchProductService {
     // Đệ quy lấy tất cả id category con
     private void collectCategoryAndChildren(Integer parentId, List<Integer> result) {
         result.add(parentId);
-        List<Category> children = categoryRepository.findByParentid_Id(parentId);
+        List<Category> children = categoryRepository.findByParent_Id(parentId);
         for (Category child : children) {
             collectCategoryAndChildren(child.getId(), result);
         }

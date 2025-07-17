@@ -16,6 +16,7 @@ import java.util.Set;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ColumnDefault("nextval('reviews_reviewid_seq'")
     @Column(name = "reviewid", nullable = false)
     private Integer id;
 

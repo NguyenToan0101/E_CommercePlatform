@@ -1,163 +1,213 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <title th:text="${product.id} != null ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới'"></title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            background-color: #f4f6f8;
-            color: #333;
-        }
-
-        .main-content {
-            padding: 40px 20px;
-        }
-
-        .dashboard-container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-        }
-
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .page-header h2 {
-            font-size: 24px;
-            margin: 0;
-            color: #2c3e50;
-        }
-
-        .btn-secondary {
-            background-color: #bdc3c7;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background-color 0.3s;
-        }
-
-        .btn-secondary:hover {
-            background-color: #95a5a6;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .form-group input[type="text"],
-        .form-group input[type="number"],
-        .form-group select,
-        .form-group textarea,
-        .form-group input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-
-        .form-group textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .btn-primary {
-            background-color: #3498db;
-            color: #fff;
-            padding: 12px 24px;
-            font-size: 16px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            background-color: #2980b9;
-        }
-
-        img.product-image-preview {
-            max-width: 100px;
-            margin: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-    </style>
-</head>
+<head th:replace="seller/fragments/head :: head"></head>
 <body>
-    <main class="main-content">
-    <div class="dashboard-container">
-        <div id="product-form-page" class="page">
+<div class="dashboard-container">
+    <div th:replace="seller/fragments/sidebar :: sidebar"></div>
+    <main class="main-content product-create-page">
+        <div th:replace="seller/fragments/header :: header"></div>
+        <div class="form-container">
             <div class="page-header">
-                <h2 th:text="${product.id} != null ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới'"></h2>
-                <a th:href="@{/seller/products}" class="btn-secondary">
-                    <i class="fas fa-arrow-left"></i> Quay lại danh sách
+                <div class="page-header-content">
+                    <div class="page-header-icon">
+                        <i class="fas fa-boxes"></i>
+                    </div>
+                    <div class="page-header-text">
+                        <h2 th:text="${product.id} != null ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới'">
+                            Thêm sản phẩm mới
+                        </h2>
+                        <p th:text="${product.id} != null ? 'Cập nhật thông tin sản phẩm của bạn' : 'Tạo sản phẩm mới cho cửa hàng'">
+                            Tạo sản phẩm mới cho cửa hàng
+                        </p>
+                    </div>
+                </div>
+                <a th:href="@{/seller/products}" class="btn-back">
+                    <i class="fas fa-arrow-left"></i>
+                    Quay lại danh sách
                 </a>
             </div>
-
             <form th:action="${product.id != null} ? @{/seller/products/edit/{id}(id=${product.id})} : @{/seller/products/save}"
                   method="post"
                   enctype="multipart/form-data"
                   th:object="${product}">
+                <input type="hidden" th:field="*{status}" />
+                <div class="form-group">
+                    <label>Thông tin cơ bản:</label>
+                    <div style="margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #f6f6f6">
+                        <div class="form-group">
+                            <label>Hình ảnh sản phẩm:</label>
+                            <div class="product-image-upload-container">
+                                <div class="product-image-upload-area" onclick="document.getElementById('imageFile').click()">
+                                    <div class="upload-placeholder" id="upload-placeholder">
+                                        <div class="plus-icon">+</div>
+                                        <div class="upload-text">Thêm hình ảnh</div>
+                                    </div>
+                                    <div class="uploaded-images" id="uploaded-images" style="display: none;">
+                                        <!-- Uploaded images will be displayed here -->
+                                    </div>
+                                </div>
+                                <input type="file" id="imageFile" name="images" accept="image/*" multiple style="display: none;" onchange="handleProductImageUpload(this)">
+                                <div th:if="${product.id != null and product.productimages != null}">
+                                    <p>Ảnh hiện tại:</p>
+                                    <div class="current-images">
+                                        <div th:each="img : ${product.productimages}" class="current-image-item">
+                                            <img th:src="@{${img.imageurl}}" class="product-image-preview"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="form-group">
+                            <label for="name">Tên sản phẩm:</label>
+                            <input type="text" id="name" th:field="*{name}" placeholder="Nhập tên sản phẩm" required minlength="1">
+                            <div class="invalid-feedback">Tên sản phẩm không được để trống</div>
+                        </div>
 
-            <div class="form-group">
-                    <label for="name">Tên sản phẩm:</label>
-                    <input type="text" id="name" th:field="*{name}" placeholder="Nhập tên sản phẩm" required>
-                </div>
+                        <div class="form-group">
+                            <label for="category">Ngành hàng:</label>
+                            <div class="category-selector">
+                                <div class="category-display" onclick="openCategoryModal()">
+                                    <span id="selected-category-text"
+                                          th:class="${product.categoryid != null} ? '' : 'placeholder'"
+                                          th:text="${product.categoryid != null} ? ${product.categoryid.categoryname} : '-- Chọn ngành hàng --'">
+                                        -- Chọn ngành hàng --
+                                    </span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                                <input type="hidden" id="category" th:field="*{categoryid.id}" required>
+                            </div>
+                            <div class="invalid-feedback">Vui lòng chọn ngành hàng</div>
+                        </div>
 
-                    <div class="form-group">
-                        <label for="category">Danh mục:</label>
-                        <select id="category" th:field="*{categoryid.id}" class="form-control" required>
-                            <option value=""  selected>-- Chọn danh mục --</option>
-                            <option th:each="cat : ${categories}"
-                                    th:value="${cat.id}"
-                                    th:text="${cat.categoryname}">
-                            </option>
-                        </select>
-
-                        <div th:if="${#fields.hasErrors('categoryid')}" th:errors="*{categoryid}" class="text-danger"></div>
+                        <div class="form-group">
+                            <label for="description">Mô tả sản phẩm:</label>
+                            <textarea id="description" th:field="*{description}" placeholder="Nhập mô tả sản phẩm..."></textarea>
+                            <div class="invalid-feedback">Mô tả không được để trống</div>
+                        </div>
                     </div>
-
-
-
-                <div class="form-group">
-                    <label for="price">Giá:</label>
-                    <input type="number" id="price" th:field="*{price}" placeholder="Nhập giá" step="0.01" required>
                 </div>
 
                 <div class="form-group">
-                    <label for="description">Mô tả:</label>
-                    <textarea id="description" th:field="*{description}" placeholder="Nhập mô tả sản phẩm..."></textarea>
+                    <label>Thông tin bán hàng:</label>
+                    <div style="margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #f6f6f6">
+                        <!-- XÓA checkbox Thêm nhóm phân loại và khối single-inventory-section -->
+                        <!-- Luôn hiển thị phần nhập biến thể -->
+                        <div id="variant-section" class="variant-section">
+                            <div class="variant-input-group">
+                                <label>Kích thước:</label>
+                                <div id="size-inputs">
+                                    <th:block th:if="${sizeSet != null and #lists.size(sizeSet) > 0}">
+                                        <th:block th:each="size : ${sizeSet}">
+                                            <div class="variant-input-wrapper">
+                                                <input type="text" name="sizes[]" th:value="${size}" oninput="addNewInput(this, 'size')">
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:unless="${sizeSet != null and #lists.size(sizeSet) > 0}">
+                                        <div class="variant-input-wrapper">
+                                            <input type="text" name="sizes[]" placeholder="VD: M" oninput="addNewInput(this, 'size')">
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+
+                            <div class="variant-input-group">
+                                <label>Màu sắc:</label>
+                                <div id="color-inputs">
+                                    <th:block th:if="${colorSet != null and #lists.size(colorSet) > 0}">
+                                        <th:block th:each="color : ${colorSet}">
+                                            <div class="variant-input-wrapper">
+                                                <input type="text" name="colors[]" th:value="${color}" oninput="addNewInput(this, 'color')">
+                                            </div>
+                                        </th:block>
+                                    </th:block>
+                                    <th:block th:unless="${colorSet != null and #lists.size(colorSet) > 0}">
+                                        <div class="variant-input-wrapper">
+                                            <input type="text" name="colors[]" placeholder="VD: Đỏ" oninput="addNewInput(this, 'color')">
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+
+                            <div class="variant-table-container">
+                                <div class="variant-table-title">Danh sách phân loại hàng</div>
+                                <table class="variant-table" id="variant-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="color-cell">Màu sắc</th>
+                                        <th>Size</th>
+                                        <th>Giá</th>
+                                        <th>Kho hàng</th>
+                                        <th class="shipping-col" style="display:none;">* Cân nặng (Sau khi đóng gói)</th>
+                                        <th class="shipping-col" style="display:none;">Kích thước đóng gói (cm)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="variant-tbody">
+                                    <th:block th:if="${product.inventories != null}">
+                                        <tr th:each="inv, idx : ${product.inventories}">
+                                            <td class="color-cell">
+                                                <div class="color-image-upload">
+                                                    <div th:if="${inv.image != null}">
+                                                        <img th:src="${inv.image}" style="width:100%;height:100%;object-fit:cover;">
+                                                    </div>
+                                                    <div th:if="${inv.image == null}">
+                                                        <div class="plus-icon">+</div>
+                                                    </div>
+                                                </div>
+                                                <span style="color:red;font-size:12px;" th:text="${inv.image}"></span>
+                                                <input type="file" th:name="'inventoryImages'" style="display:none;">
+                                                <div class="color-name" th:text="${inv.color}"></div>
+                                            </td>
+                                            <td th:text="${inv.dimension}"></td>
+                                            <td>
+                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].price'" th:value="${inv.price}" placeholder="Giá" min="0.01" step="0.01" required class="variant-input" />
+                                            </td>
+                                            <td>
+                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].quantity'" th:value="${inv.quantity}" placeholder="Số lượng" min="0" required class="variant-input" />
+                                            </td>
+                                            <td>
+                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].weight'" th:value="${inv.weight}" placeholder="Cân nặng" min="0" required style="width:70px;"> gr
+                                            </td>
+                                            <td>
+                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].length'" th:value="${inv.length}" placeholder="Dài" min="0" required style="width:50px;"> cm
+                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].width'" th:value="${inv.width}" placeholder="Rộng" min="0" required style="width:50px;"> cm
+                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].height'" th:value="${inv.height}" placeholder="Cao" min="0" required style="width:50px;"> cm
+                                            </td>
+                                        </tr>
+                                    </th:block>
+                                    <!-- Nếu không có biến thể, JS sẽ render động như cũ -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="imageFile">Hình ảnh:</label>
-                    <input type="file" id="imageFile" name="images" accept="image/*" multiple>
-                    <div th:if="${product.id != null and product.productimages != null}">
-                        <p>Ảnh hiện tại:</p>
-                        <div th:each="img : ${product.productimages}">
-                            <img th:src="${img.imageurl}" class="product-image-preview"/>
-                            <span th:text="${img.imageurl}"></span>
+                    <label>Vận chuyển:</label>
+                    <div style="margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #f6f6f6">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <label style="margin-right: 10px; font-weight: normal;">
+                                <input type="checkbox" id="toggleShippingVariant" th:field="*{useVariantShipping}" th:checked="${product.useVariantShipping == true}"> Thiết lập cân nặng & kích thước cho từng phân loại
+                            </label>
+                        </div>
+                        <div id="product-shipping-section">
+                            <div class="form-group">
+                                <label for="weight">* Cân nặng (Sau khi đóng gói)</label>
+                                <input type="number" id="weight" th:field="*{weight}" placeholder="Nhập cân nặng" min="0" required> gr
+                            </div>
+                            <div class="form-group">
+                                <label>Kích thước đóng gói (cm)</label>
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="number" th:field="*{length}" placeholder="Dài" min="0" required style="width: 80px;"> cm
+                                    <input type="number" th:field="*{width}" placeholder="Rộng" min="0" required style="width: 80px;"> cm
+                                    <input type="number" th:field="*{height}" placeholder="Cao" min="0" required style="width: 80px;"> cm
+                                </div>
+                            </div>
+                        </div>
+                        <div id="inventory-shipping-section" style="display: none;">
+                            <div style="color: #888; font-size: 14px;">(Cân nặng & kích thước sẽ nhập ở từng phân loại bên dưới)</div>
                         </div>
                     </div>
                 </div>
@@ -168,13 +218,472 @@
                 </button>
             </form>
         </div>
-    </div>
-</main>
+    </main>
+</div>
 
-<!-- CKEditor -->
-<script src="https://cdn.ckeditor.com/4.21.0/standard/ckeditor.js"></script>
-<script>
-    CKEDITOR.replace('description');
+<!-- Category Selection Modal -->
+<div id="category-modal" class="category-modal">
+    <div class="category-modal-content">
+        <div class="category-modal-header">
+            <h3>Chọn ngành hàng</h3>
+            <button class="close-btn" onclick="closeCategoryModal()">&times;</button>
+        </div>
+        <div class="category-modal-body">
+            <div class="category-panel" id="level-1-panel">
+                <div class="loading" id="level-1-loading">
+                    <i class="fas fa-spinner fa-spin"></i> Đang tải...
+                </div>
+            </div>
+            <div class="category-panel" id="level-2-panel" style="display: none;">
+                <div class="loading" id="level-2-loading">
+                    <i class="fas fa-spinner fa-spin"></i> Đang tải...
+                </div>
+            </div>
+        </div>
+        <div class="category-modal-footer">
+            <div class="breadcrumb" id="breadcrumb">
+                <span>Đã chọn:</span>
+            </div>
+            <button class="confirm-btn" id="confirm-btn" onclick="confirmCategorySelection()" disabled>
+                Xác nhận
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
+<script th:inline="javascript">
+    ClassicEditor.create(document.querySelector('#description'), {
+        toolbar: ['heading', '|', 'bold', 'italic', 'underline', '|', 'undo', 'redo']
+    }).then(editor => {
+        // Xóa chữ 'Rich Text Editor' nếu có
+        if (editor.getData().trim() === 'Rich Text Editor') {
+            editor.setData('');
+        }
+    }).catch(error => console.error(error));
+
+    function addNewInput(inputElem, type) {
+        const wrapper = inputElem.closest(".variant-input-wrapper");
+        if (inputElem.value.trim() !== "" && wrapper.nextElementSibling == null) {
+            const container = document.getElementById(type === 'size' ? 'size-inputs' : 'color-inputs');
+            const newWrapper = document.createElement("div");
+            newWrapper.className = "variant-input-wrapper";
+
+            const newInput = document.createElement("input");
+            newInput.type = "text";
+            newInput.placeholder = type === 'size' ? "VD: M" : "VD: Đỏ";
+            newInput.name = type === 'size' ? "sizes[]" : "colors[]";
+            newInput.oninput = () => addNewInput(newInput, type);
+
+            const removeBtn = document.createElement("button");
+            removeBtn.type = "button";
+            removeBtn.className = "variant-remove-btn";
+            removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+            removeBtn.onclick = () => {
+                newWrapper.remove();
+                renderVariantTable();
+            };
+
+            newWrapper.appendChild(newInput);
+            newWrapper.appendChild(removeBtn);
+            container.appendChild(newWrapper);
+        }
+        renderVariantTable();
+    }
+
+    let variantColorImages = new Map();
+    /*[# th:each="inv : ${product.inventories}" ]*/
+        /*[# th:if="${inv.image != null}" ]*/
+            variantColorImages.set('[[${inv.color}]]', '[[${inv.image}]]');
+        /*[/]*/
+    /*[/]*/
+
+    function renderVariantTable() {
+        const sizes = Array.from(document.querySelectorAll("input[name='sizes[]']")).map(i => i.value.trim()).filter(i => i);
+        const colors = Array.from(document.querySelectorAll("input[name='colors[]']")).map(i => i.value.trim()).filter(i => i);
+        const tbody = document.getElementById("variant-tbody");
+
+        // Lưu lại giá trị đã nhập của các trường inventory
+        const inventoryValues = {};
+        tbody.querySelectorAll('tr').forEach((row, idx) => {
+            inventoryValues[idx] = {
+                price: row.querySelector(`input[name='inventories[${idx}].price']`)?.value || '',
+                quantity: row.querySelector(`input[name='inventories[${idx}].quantity']`)?.value || '',
+                weight: row.querySelector(`input[name='inventories[${idx}].weight']`)?.value || '',
+                length: row.querySelector(`input[name='inventories[${idx}].length']`)?.value || '',
+                width: row.querySelector(`input[name='inventories[${idx}].width']`)?.value || '',
+                height: row.querySelector(`input[name='inventories[${idx}].height']`)?.value || ''
+            };
+        });
+
+        tbody.innerHTML = "";
+
+        if (sizes.length === 0 || colors.length === 0) {
+            return;
+        }
+
+        const useVariantShipping = document.getElementById('toggleShippingVariant').checked;
+
+        let idx = 0;
+        colors.forEach(color => {
+            const existingImage = variantColorImages.get(color);
+            sizes.forEach((size, sizeIndex) => {
+                const row = document.createElement("tr");
+
+                const colorCell = document.createElement("td");
+                colorCell.className = "color-cell";
+                if (sizeIndex === 0) {
+                    let imageUploadHtml = '';
+                    if (existingImage) {
+                        imageUploadHtml = `
+                            <div class="color-image-upload" onclick="document.getElementById('color-upload-${color}-${idx}').click()">
+                                <img src="${existingImage}" style="width:100%;height:100%;object-fit:cover;">
+                            </div>
+                        `;
+                    } else {
+                        imageUploadHtml = `
+                            <div class="color-image-upload" onclick="document.getElementById('color-upload-${color}-${idx}').click()">
+                                <div class="plus-icon">+</div>
+                            </div>
+                        `;
+                    }
+                    imageUploadHtml += `
+                        <input type="file" id="color-upload-${color}-${idx}" name="inventoryImages" accept="image/*" style="display:none" onchange="handleVariantColorUploadPreview(this, '${color}', ${idx})">
+                        <div class="color-name">${color}</div>
+                    `;
+                    colorCell.innerHTML = imageUploadHtml;
+                    colorCell.rowSpan = sizes.length;
+                }
+
+                if (sizeIndex === 0) {
+                    row.appendChild(colorCell);
+                }
+
+                const sizeCell = document.createElement("td");
+                sizeCell.textContent = size;
+                row.appendChild(sizeCell);
+
+                const priceCell = document.createElement("td");
+                priceCell.innerHTML = `
+                <input type=\"number\" name=\"inventories[${idx}].price\" placeholder=\"Giá\" min=\"0.01\" step=\"0.01\" required class=\"variant-input\">` +
+                `<input type=\"hidden\" name=\"inventories[${idx}].dimension\" value=\"${size}\">` +
+                `<input type=\"hidden\" name=\"inventories[${idx}].color\" value=\"${color}\">` +
+                (existingImage ? `<input type=\"hidden\" name=\"inventories[${idx}].image\" value=\"${existingImage}\">` : '');
+                row.appendChild(priceCell);
+
+                const stockCell = document.createElement("td");
+                stockCell.innerHTML = `<input type=\"number\" name=\"inventories[${idx}].quantity\" placeholder=\"Số lượng\" min=\"0\" required class=\"variant-input\">`;
+                row.appendChild(stockCell);
+
+                // Shipping fields (weight, length, width, height) chỉ hiển thị nếu useVariantShipping=true
+                if (useVariantShipping) {
+                    const shippingWeightCell = document.createElement("td");
+                    shippingWeightCell.className = "shipping-col";
+                    shippingWeightCell.innerHTML = `<input type='number' name='inventories[${idx}].weight' placeholder='Cân nặng' min='0' required style='width:70px;'> gr`;
+                    row.appendChild(shippingWeightCell);
+
+                    const shippingSizeCell = document.createElement("td");
+                    shippingSizeCell.className = "shipping-col";
+                    shippingSizeCell.innerHTML = `
+                        <input type='number' name='inventories[${idx}].length' placeholder='Dài' min='0' required style='width:50px;'> cm
+                        <input type='number' name='inventories[${idx}].width' placeholder='Rộng' min='0' required style='width:50px;'> cm
+                        <input type='number' name='inventories[${idx}].height' placeholder='Cao' min='0' required style='width:50px;'> cm
+                    `;
+                    row.appendChild(shippingSizeCell);
+                }
+
+                tbody.appendChild(row);
+
+                // Gán lại giá trị đã nhập nếu có
+                const values = inventoryValues[idx] || {};
+                row.querySelector(`input[name='inventories[${idx}].price']`)?.setAttribute('value', values.price);
+                row.querySelector(`input[name='inventories[${idx}].quantity']`)?.setAttribute('value', values.quantity);
+                row.querySelector(`input[name='inventories[${idx}].weight']`)?.setAttribute('value', values.weight);
+                row.querySelector(`input[name='inventories[${idx}].length']`)?.setAttribute('value', values.length);
+                row.querySelector(`input[name='inventories[${idx}].width']`)?.setAttribute('value', values.width);
+                row.querySelector(`input[name='inventories[${idx}].height']`)?.setAttribute('value', values.height);
+
+                idx++;
+            });
+        });
+
+        // Hiển thị/ẩn cột vận chuyển theo trạng thái useVariantShipping
+        document.querySelectorAll('.shipping-col').forEach(col => {
+            col.style.display = useVariantShipping ? '' : 'none';
+        });
+        // Hiển thị/ẩn tiêu đề cột
+        document.querySelectorAll('.variant-table th.shipping-col').forEach(col => {
+            col.style.display = useVariantShipping ? '' : 'none';
+        });
+    }
+
+    function handleVariantColorUploadPreview(input, color, idx) {
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const uploadDiv = input.previousElementSibling;
+                if (uploadDiv && uploadDiv.classList.contains('color-image-upload')) {
+                    uploadDiv.innerHTML = `<img src='${e.target.result}' alt='${color}' style='width:100%;height:100%;object-fit:cover;'>`;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Form validation
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const fileInputs = document.querySelectorAll('input[type="file"][name="inventoryImages"]');
+        let valid = true;
+        fileInputs.forEach(input => {
+            if (!input.files || input.files.length === 0) valid = false;
+        });
+
+        if (!valid) {
+            alert('Bạn phải chọn ảnh cho tất cả các phân loại!');
+            e.preventDefault();
+            return false;
+        }
+
+        if (document.getElementById('toggleShippingVariant').checked) {
+            const variantRows = document.querySelectorAll('#variant-tbody tr');
+            if (variantRows.length === 0) {
+                alert('Bạn phải thêm ít nhất một phân loại hàng!');
+                e.preventDefault();
+                return false;
+            }
+
+            let valid = true;
+            variantRows.forEach(row => {
+                const price = row.querySelector('input[name$=".price"]');
+                const quantity = row.querySelector('input[name$=".quantity"]');
+                if (!price.value || !quantity.value) valid = false;
+            });
+
+            if (!valid) {
+                alert('Vui lòng nhập đầy đủ giá và kho cho từng phân loại!');
+                e.preventDefault();
+                return false;
+            }
+        }
+    });
+
+    // Category Selection Logic
+    let selectedPath = [];
+    let categoryCache = new Map();
+    let rootCategories = /*[[${rootCategories}]]*/ [];
+
+    async function initializeCategoryCache() {
+        try {
+            const response = await fetch('/api/categories/all');
+            const allCategories = await response.json();
+            allCategories.forEach(category => {
+                categoryCache.set(category.id, category);
+            });
+            console.log('Category cache initialized with', allCategories.length, 'categories');
+        } catch (error) {
+            console.error('Error initializing category cache:', error);
+        }
+    }
+
+    function openCategoryModal() {
+        document.getElementById('category-modal').style.display = 'block';
+        renderCategoryLevel(1, rootCategories);
+    }
+
+    function closeCategoryModal() {
+        document.getElementById('category-modal').style.display = 'none';
+    }
+
+    function getChildCategoriesFromCache(parentId) {
+        const children = [];
+        categoryCache.forEach(category => {
+            if (category.parentId === parentId) {
+                children.push(category);
+            }
+        });
+        return children;
+    }
+
+    async function loadSubCategories(parentId, level) {
+        try {
+            let categories = getChildCategoriesFromCache(parentId);
+            if (categories.length === 0) {
+                const response = await fetch(`/api/categories/children/${parentId}`);
+                categories = await response.json();
+                categories.forEach(category => {
+                    categoryCache.set(category.id, category);
+                });
+            }
+            renderCategoryLevel(level, categories);
+            return categories;
+        } catch (error) {
+            console.error('Error loading subcategories:', error);
+            const loadingEl = document.getElementById(`level-${level}-loading`);
+            if (loadingEl) {
+                loadingEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Lỗi tải dữ liệu';
+            }
+            return [];
+        }
+    }
+
+    function renderCategoryLevel(level, categories) {
+        const panel = document.getElementById(`level-${level}-panel`);
+        const loading = document.getElementById(`level-${level}-loading`);
+        if (loading) loading.style.display = 'none';
+        panel.style.display = 'block';
+
+        const existingItems = panel.querySelectorAll('.category-item');
+        existingItems.forEach(item => item.remove());
+
+        categories.forEach(category => {
+            const item = document.createElement('div');
+            item.className = 'category-item';
+            item.innerHTML = `
+                <span>${category.categoryname}</span>
+                <i class="fas fa-chevron-right arrow"></i>
+            `;
+            item.onclick = (event) => selectCategory(category, level, event);
+            panel.appendChild(item);
+        });
+    }
+
+    async function selectCategory(category, level, event) {
+        const currentPanel = document.getElementById(`level-${level}-panel`);
+        currentPanel.querySelectorAll('.category-item').forEach(item => {
+            item.classList.remove('active');
+        });
+        event.currentTarget.classList.add('active');
+
+        selectedPath = selectedPath.slice(0, level - 1);
+        selectedPath.push({ id: category.id, name: category.categoryname });
+
+        for (let i = level + 1; i <= 3; i++) {
+            const panel = document.getElementById(`level-${i}-panel`);
+            if (panel) panel.style.display = 'none';
+        }
+
+        if (level < 3) {
+            const nextLevel = level + 1;
+            const nextLoading = document.getElementById(`level-${nextLevel}-loading`);
+            if (nextLoading) nextLoading.style.display = 'flex';
+            await loadSubCategories(category.id, nextLevel);
+        }
+
+        updateBreadcrumb();
+        document.getElementById('confirm-btn').disabled = false;
+    }
+
+    function updateBreadcrumb() {
+        const breadcrumb = document.getElementById('breadcrumb');
+        let html = '<span>Đã chọn:</span>';
+        selectedPath.forEach((item, index) => {
+            if (index > 0) html += ' <span class="breadcrumb-separator">></span> ';
+            else html += ' ';
+            html += `<span class="breadcrumb-item">${item.name}</span>`;
+        });
+        breadcrumb.innerHTML = html;
+    }
+
+    function confirmCategorySelection() {
+        if (selectedPath.length === 0) return;
+        const lastSelected = selectedPath[selectedPath.length - 1];
+        document.getElementById('selected-category-text').textContent =
+            selectedPath.map(item => item.name).join(' > ');
+        document.getElementById('selected-category-text').classList.remove('placeholder');
+        document.getElementById('category').value = lastSelected.id;
+        closeCategoryModal();
+    }
+
+    document.getElementById('category-modal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeCategoryModal();
+        }
+    });
+
+    let selectedProductImages = [];
+
+    function handleProductImageUpload(input) {
+        const files = Array.from(input.files);
+        const placeholder = document.getElementById('upload-placeholder');
+        const uploadedImagesContainer = document.getElementById('uploaded-images');
+
+        if (files.length > 0) {
+            placeholder.style.display = 'none';
+            uploadedImagesContainer.style.display = 'flex';
+
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedProductImages.push({
+                        file: file,
+                        url: e.target.result,
+                        id: Date.now() + index
+                    });
+
+                    const imageItem = document.createElement('div');
+                    imageItem.className = 'uploaded-image-item';
+                    imageItem.innerHTML = `
+                    <img src="${e.target.result}" alt="Product image">
+                    <button type="button" class="remove-image-btn" onclick="removeProductImage(${Date.now() + index})">×</button>
+                `;
+                    uploadedImagesContainer.appendChild(imageItem);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }
+
+    function removeProductImage(imageId) {
+        selectedProductImages = selectedProductImages.filter(img => img.id !== imageId);
+        const uploadedImagesContainer = document.getElementById('uploaded-images');
+        const placeholder = document.getElementById('upload-placeholder');
+
+        const imageItems = uploadedImagesContainer.querySelectorAll('.uploaded-image-item');
+        imageItems.forEach(item => {
+            const removeBtn = item.querySelector('.remove-image-btn');
+            if (removeBtn && removeBtn.onclick.toString().includes(imageId)) {
+                item.remove();
+            }
+        });
+
+        if (selectedProductImages.length === 0) {
+            placeholder.style.display = 'block';
+            uploadedImagesContainer.style.display = 'none';
+        }
+
+        const fileInput = document.getElementById('imageFile');
+        const dt = new DataTransfer();
+        selectedProductImages.forEach(img => {
+            dt.items.add(img.file);
+        });
+        fileInput.files = dt.files;
+    }
+
+    // Ẩn/hiện phần nhập vận chuyển tổng khi tích/bỏ checkbox useVariantShipping
+    function updateShippingSectionDisplay() {
+        const useVariantShipping = document.getElementById('toggleShippingVariant').checked;
+        const productShippingSection = document.getElementById('product-shipping-section');
+        productShippingSection.style.display = useVariantShipping ? 'none' : '';
+
+        // Bỏ required khi ẩn, thêm required khi hiện
+        productShippingSection.querySelectorAll('input').forEach(input => {
+            if (useVariantShipping) {
+                input.removeAttribute('required');
+            } else {
+                input.setAttribute('required', 'required');
+            }
+        });
+    }
+    document.getElementById('toggleShippingVariant').addEventListener('change', function() {
+        updateShippingSectionDisplay();
+        renderVariantTable();
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+        renderVariantTable();
+        updateShippingSectionDisplay();
+    });
 </script>
 </body>
 </html>
+    
