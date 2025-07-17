@@ -108,7 +108,16 @@ public class CheckoutController {
         List<PromotionDTO> voucherDiscount = new ArrayList<>();
         List<PromotionDTO> voucherFreeShip = new ArrayList<>();
         for (PromotionDTO promotionDTO : promotionDTOS) {
-            if (promotionDTO.getStatus().equalsIgnoreCase("ACTIVE")) {
+            System.out.println("----------total promtion");
+            System.out.println( promotionDTO.getName()+ "Per Usage limi"+  promotionDTO.getPerUserLimit()+ "----------Count promotion used------------" + oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId()));
+            System.out.println(promotionDTO.getName()+"Usage limit" +  promotionDTO.getUsageLimit() + "Usage Count" + promotionDTO.getUsageCount());
+            if (promotionDTO.getStatus().equalsIgnoreCase("ACTIVE")
+                    && promotionDTO.getPerUserLimit() >= oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId())
+                    && promotionDTO.getUsageLimit() >= promotionDTO.getUsageCount()
+            ) {
+                System.out.println(" --------------Active promotion");
+                System.out.println( promotionDTO.getName()+ "Per Usage limi"+  promotionDTO.getPerUserLimit()+ "----------Count promotion used------------" + oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId()));
+                System.out.println(promotionDTO.getName()+"Usage limit" +  promotionDTO.getUsageLimit() + "Usage Count" + promotionDTO.getUsageCount());
                 for (CategoryDTO category : promotionDTO.getCategories()) {
                     Integer ID_OF_ALL_CATEGORY = 313;
                     if (promotionDTO.getType().equalsIgnoreCase("SHIPPING")
@@ -120,11 +129,17 @@ public class CheckoutController {
                        List<Orderitem> list = oderItemService.getAllOrderItems();
                        if(promotionDTO.getId() == 17){
                            for (Orderitem orderitem : list) {
-                               if(!orderitem.getOrderid().getCustomerid().getId().equals(customer.getId())
-                                       && orderitem.getPromotionid() == 17
-                               ) {
-                                   voucherDiscount.add(promotionDTO);
-                               }
+//                               if(orderitem.getPromotionid() != null){
+                                   if(!orderitem.getOrderid().getCustomerid().getId().equals(customer.getId())
+                                           && (orderitem.getPromotionid() == 17)) {
+//                                       System.out.println("-------ACTIVEEEEE promtion" +promotionDTO);
+                                       voucherDiscount.add(promotionDTO);
+                                   }
+//                               }
+//                           else {
+//                                   voucherDiscount.add(promotionDTO);
+//                               }
+
                            }
                        }else {
                            voucherDiscount.add(promotionDTO);
@@ -145,7 +160,7 @@ public class CheckoutController {
 
         model.addAttribute("voucherDiscount", voucherDiscount);
         model.addAttribute("voucherFreeShip", voucherFreeShip);
-        model.addAttribute("price", preview.getPrice().intValueExact());
+        model.addAttribute("price", preview.getPrice().intValueExact() * preview.getQuantity());
 
         model.addAttribute("items", preview);
         model.addAttribute("customer", customer);
@@ -231,7 +246,7 @@ public Map<String, Object> getPreviewData(
 
 
     BigDecimal feeShip = BigDecimal.valueOf(shippingService.calculateShippingFee(shippingRequest));
-    BigDecimal totalPrice = inventoryPayment.getPrice().add(feeShip).multiply(BigDecimal.valueOf(preview.getQuantity()));
+    BigDecimal totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity())) .add(feeShip);
     BigDecimal feeShipVoucher = totalPrice;
     BigDecimal discountVoucher = BigDecimal.ZERO;
     BigDecimal feeShipDefault = feeShip;
@@ -243,8 +258,11 @@ public Map<String, Object> getPreviewData(
         if(feeShip.compareTo(BigDecimal.ZERO) <= 0) {
             feeShip = BigDecimal.ZERO;
         }
-        totalPrice = inventoryPayment.getPrice().add(feeShip).multiply(BigDecimal.valueOf(preview.getQuantity()));
+        totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity())).add(feeShip);
         feeShipVoucher = feeShipVoucher.subtract(totalPrice);
+//        if(feeShipVoucher.compareTo(BigDecimal.ZERO) <= 0) {
+//            feeShipVoucher = feeShip;
+//        }
     }
 
     if (discountId != null ) {
