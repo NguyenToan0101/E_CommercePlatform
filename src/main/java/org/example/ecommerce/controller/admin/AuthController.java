@@ -15,6 +15,9 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Controller
 @RequestMapping("/admin")
@@ -33,8 +36,9 @@ public class AuthController {
     public ResponseEntity<?> registrationSeller(@RequestBody AdminLoginRequest adminLoginRequest ) {
         try {
             if (adminService.isAdmin(adminLoginRequest.getEmail(), adminLoginRequest.getPassword())) {
-
-                return ResponseEntity.ok().build();
+                Map<String, Object> responseBody = new HashMap<>();
+                responseBody.put("email", adminLoginRequest.getEmail());
+                return ResponseEntity.ok(responseBody);
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email hoặc mật khẩu không đúng");
 

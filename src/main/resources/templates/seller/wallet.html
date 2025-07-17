@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="seller/fragments/head :: head">
+    <meta charset="UTF-8">
+    <title>Ví Musa Seller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" th:href="@{/assets/css/Seller.css}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body class="seller-wallet-page">
+<div class="main-layout">
+    <div th:replace="~{seller/fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div th:replace="~{seller/fragments/header :: header}"></div>
+        <div class="seller-wallet-container">
+            <!-- Big Header -->
+            <div style="display: flex; align-items: flex-start; background: #fff; border-radius: 20px; box-shadow: 0 2px 12px rgba(80,120,255,0.07); padding: 28px 32px 18px 32px; margin-bottom: 28px;">
+                <div style="font-size: 2.5rem; color: #4f8cff; margin-right: 18px;">
+                    <!-- SVG ví tiền -->
+                    <svg width="38" height="38" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="38" height="38" rx="8" fill="#eaf1ff"/><path d="M10 15.5V13.8A2.8 2.8 0 0 1 12.8 11h12.4A2.8 2.8 0 0 1 28 13.8v10.4A2.8 2.8 0 0 1 25.2 27H12.8A2.8 2.8 0 0 1 10 24.2V22" stroke="#4f8cff" stroke-width="2"/><rect x="17" y="19" width="4" height="4" rx="2" fill="#4f8cff"/></svg>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: 800; color: #183a7a; margin-bottom: 2px; letter-spacing: 0.5px;">Quản lý ví Musa</div>
+                    <div style="font-size: 1.08rem; color: #6b7280;">Theo dõi và quản lý tất cả giao dịch ví của bạn một cách hiệu quả</div>
+                </div>
+            </div>
+            <!-- Header -->
+            <div class="seller-wallet-header">
+                <div class="seller-wallet-header-info">
+                    <div>
+                        <div class="seller-wallet-balance" th:text="${#numbers.formatDecimal(balance, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</div>
+                        <div class="seller-wallet-balance-label">Số dư ví Musa</div>
+                    </div>
+                </div>
+                <div class="seller-wallet-header-action">
+                    <form th:action="@{/seller/wallet/withdraw}" method="get" style="display:inline;">
+                        <button class="seller-wallet-btn" type="submit">Rút tiền</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Cards Row (Chỉ giữ số dư và tổng giao dịch) -->
+            <div class="seller-wallet-cards">
+                <div class="seller-wallet-card">
+                    <div class="seller-wallet-card-label">Số dư hiện tại</div>
+                    <div class="seller-wallet-card-value" th:text="${#numbers.formatDecimal(balance, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</div>
+                </div>
+                <div class="seller-wallet-card">
+                    <div class="seller-wallet-card-label">Tổng giao dịch</div>
+                    <div class="seller-wallet-card-value" th:text="${transactionCount}">0</div>
+                </div>
+            </div>
+            <!-- Cashflow Chart -->
+            <div class="seller-wallet-chart-section" style="margin-bottom: 32px;">
+                <div class="seller-wallet-chart-title">Biểu đồ dòng tiền 30 ngày gần nhất</div>
+                <canvas id="cashflowChart" height="80"></canvas>
+            </div>
+
+            <!-- Transaction History -->
+            <div class="seller-wallet-history-section">
+                <div class="seller-wallet-history-header">
+                    <div class="seller-wallet-history-title">Lịch sử giao dịch</div>
+                    <form class="seller-wallet-history-filter" th:action="@{/seller/wallet}" method="get">
+                        <input type="date" name="fromDate" th:value="${fromDate}" th:max="${toDate}">
+                        <input type="date" name="toDate" th:value="${toDate}" th:min="${fromDate}">
+                        <button class="seller-wallet-btn" type="submit" style="padding: 7px 18px; font-size: 0.95rem;">Lọc</button>
+                    </form>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="seller-wallet-history-table">
+                        <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Loại</th>
+                            <th>Số tiền</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="tx : ${historyPage.content}">
+                            <td th:text="${#dates.format(tx.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
+                            <td>
+                                <span th:if="${tx.status} == 'Increase'" class="seller-wallet-history-type-income">Nạp tiền</span>
+                                <span th:if="${tx.status} == 'Decrease'" class="seller-wallet-history-type-expense">Rút/Chi tiêu</span>
+                            </td>
+                            <td th:text="${#numbers.formatDecimal(tx.amount, 0, 'COMMA', 0, 'POINT')} + ' ₫'">0 ₫</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(historyPage.content)}">
+                            <td colspan="3" style="text-align:center;color:#aaa;">Không có giao dịch nào</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div class="seller-wallet-pagination" th:if="${historyPage.totalPages > 1}">
+                    <ul>
+                        <li th:if="${historyPage.number > 0}">
+                            <a th:href="@{/seller/wallet(page=${historyPage.number},size=${historyPage.size},fromDate=${fromDate},toDate=${toDate})}">&laquo; Trước</a>
+                        </li>
+                        <li th:each="i : ${#numbers.sequence(1, historyPage.totalPages)}">
+                            <a th:href="@{/seller/wallet(page=${i},size=${historyPage.size},fromDate=${fromDate},toDate=${toDate})}"
+                               th:classappend="${i == historyPage.number + 1} ? 'active'">
+                                <span th:text="${i}"></span>
+                            </a>
+                        </li>
+                        <li th:if="${historyPage.number + 1 < historyPage.totalPages}">
+                            <a th:href="@{/seller/wallet(page=${historyPage.number + 2},size=${historyPage.size},fromDate=${fromDate},toDate=${toDate})}">Sau &raquo;</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div th:replace="~{seller/fragments/footer :: footer}"></div>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    fetch('/seller/wallet/cashflow')
+        .then(res => res.json())
+        .then(data => {
+            const labels = data.map(d => {
+                const date = new Date(d.date);
+                return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit' });
+            });
+            const income = data.map(d => d.income);
+            const expense = data.map(d => -d.expense);
+
+            const ctx = document.getElementById('cashflowChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Thu',
+                            data: income,
+                            backgroundColor: 'rgba(34,197,94,0.7)',
+                            borderColor: 'rgba(34,197,94,1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Chi',
+                            data: expense,
+                            backgroundColor: 'rgba(239,68,68,0.7)',
+                            borderColor: 'rgba(239,68,68,1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + Math.abs(context.parsed.y).toLocaleString('vi-VN') + ' ₫';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('vi-VN') + ' ₫';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+});
+</script>
+</body>
+</html> 

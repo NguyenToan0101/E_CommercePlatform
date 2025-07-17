@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="seller/fragments/head :: head">
+    <meta charset="UTF-8">
+    <title>Chi tiết đơn hàng</title>
+    <link rel="stylesheet" th:href="@{/assets/css/Seller.css}">
+</head>
+<body class="seller-order-page">
+<div class="main-layout">
+    <div th:replace="~{seller/fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div th:replace="~{seller/fragments/header :: header}"></div>
+        <div class="seller-order-content-wrapper">
+
+            <div style="flex:1;">
+           
+                <div class="seller-page-header">
+                    <i class="fa-solid fa-cart-shopping header-icon"></i>
+                    <div class="header-title-group">
+                        <h1 class="header-title">Chi tiết đơn hàng</h1>
+                        <p class="header-subtitle">Xem thông tin và xử lý đơn hàng của bạn</p>
+                    </div>
+                </div>
+                <div class="seller-order-detail-top">
+                    <!-- Card thông tin đơn hàng -->
+                    <div class="seller-order-detail-info-card">
+                        <h3>Thông tin đơn hàng</h3>
+                        <div class="seller-order-detail-info-fields">
+                            <div><b>Khách hàng:</b> <span th:text="${order.fullname != null && !#strings.isEmpty(order.fullname) ? order.fullname : (order.customerid != null ? order.customerid.firstname + ' ' + order.customerid.lastname : '')}"></span></div>
+                            <div><b>Ngày đặt:</b> <span th:text="${#dates.format(order.orderdate, 'dd/MM/yyyy HH:mm')}"></span></div>
+                            <div><b>Trạng thái:</b> <span th:class="'seller-order-status-badge ' + ${order.statusClass}" th:text="${order.status}"></span></div>
+                            <div><b>Tổng tiền:</b> <span th:text="${#numbers.formatDecimal(order.totalamount, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span></div>
+                            <div><b>Địa chỉ giao:</b> <span th:text="${order.address != null && !#strings.isEmpty(order.address) ? order.address : (order.customerid != null ? order.customerid.address : '')}"></span></div>
+                            <div><b>Số điện thoại:</b> <span th:text="${order.phone != null && !#strings.isEmpty(order.phone) && order.phone != 'null' ? order.phone : (order.customerid != null ? order.customerid.phone : '')}"></span></div>
+                        </div>
+                        <div class="seller-order-detail-actions">
+                            <button class="btn-primary">Cập nhật đơn hàng</button>
+                            <button class="order-action-btn" th:if="${order.status} == 'Chờ xác nhận'">Cập nhật trạng thái</button>
+                            <button class="order-action-btn" th:if="${order.status} == 'Yêu cầu trả hàng/hoàn tiền'">Xử lý trả hàng/hoàn tiền</button>
+                        </div>
+                    </div>
+                    <!-- Card tiến trình đơn hàng -->
+                    <div class="seller-order-detail-timeline-card">
+                        <h3>Tiến trình đơn hàng</h3>
+                        <ul class="seller-order-timeline-list">
+                            <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Chờ xác nhận' ? 'active'">
+                                <span class="seller-order-timeline-radio"></span> Chờ xác nhận
+                            </li>
+                            <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Đã xác nhận' ? 'active'">
+                                <span class="seller-order-timeline-radio"></span> Đã xác nhận
+                            </li>
+                            <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Chờ lấy hàng' ? 'active'">
+                                <span class="seller-order-timeline-radio"></span> Chờ lấy hàng
+                            </li>
+                            <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Đang giao' ? 'active'">
+                                <span class="seller-order-timeline-radio"></span> Đang giao
+                            </li>
+                            <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Đã giao' ? 'active'">
+                                <span class="seller-order-timeline-radio"></span> Đã giao
+                            </li>
+                            <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Đã hủy' ? 'active'">
+                                <span class="seller-order-timeline-radio"></span> Đã hủy
+                            </li>
+                            <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Yêu cầu trả hàng/hoàn tiền' ? 'active'">
+                                <span class="seller-order-timeline-radio"></span> Yêu cầu trả hàng/hoàn tiền
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- Card sản phẩm phía dưới -->
+                <div class="seller-order-detail-products-card">
+                    <h3>Sản phẩm trong đơn</h3>
+                    <table class="seller-order-products-table">
+                        <thead>
+                        <tr>
+                            <th>Ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Phân loại</th>
+                            <th>Số lượng</th>
+                            <th>Đơn giá</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${order.orderitems}">
+                            <td>
+                                <img th:src="${item.productid != null && item.productid.productimages != null && !#lists.isEmpty(item.productid.productimages) ? item.productid.productimages[0].imageurl : 'https://via.placeholder.com/48x48?text=No+Image'}" class="seller-order-product-thumb" alt="Ảnh SP" />
+                            </td>
+                            <td class="product-name-cell" th:text="${item.productid != null ? item.productid.name : 'Sản phẩm đã xóa'}"></td>
+                            <td th:text="${item.inventoryid != null ? item.inventoryid.color + ' / ' + item.inventoryid.dimension : ''}"></td>
+                            <td th:text="${item.quantity}"></td>
+                            <td th:text="${#numbers.formatDecimal(item.unitprice, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></td>
+                            <td th:text="${#numbers.formatDecimal(item.unitprice * item.quantity, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div th:replace="~{seller/fragments/footer :: footer}"></div>
+    </div>
+</div>
+</body>
+</html>
