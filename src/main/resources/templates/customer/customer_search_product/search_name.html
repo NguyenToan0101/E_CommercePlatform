@@ -29,7 +29,7 @@
       --gradient-light-end: #8de0a6;
       --primary: #088395;
       --accent: #F7EEDD;
-    }
+        }
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
@@ -39,7 +39,7 @@
     }
     h1, h2, h3, h4, h5, h6, p, a, span, div, label, input, button, .products-title, .category-header, .category-label, .account-link, .user-avatar, .account-menu-list a {
       color: #111 !important;
-    }
+        }
     .main-header {
       background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
       box-shadow: 0 2px 16px var(--shadow-light);
@@ -61,7 +61,7 @@
       display: block;
       margin-right: 8px;
       filter: drop-shadow(0 2px 8px #05bfdb33);
-    }
+        }
     .search-bar {
       flex: unset;
       margin: 0 auto;
@@ -73,7 +73,7 @@
       padding: 0 16px;
       width: 900px;
       border: 2px solid #05bfdb22;
-    }
+        }
     .search-bar input {
             border: none;
             background: transparent;
@@ -82,7 +82,7 @@
       padding: 12px 0;
       outline: none;
       color: #111 !important;
-    }
+        }
     .search-bar button {
       background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
       color: #fff;
@@ -97,7 +97,7 @@
       margin-left: 8px;
       transition: background 0.2s;
       box-shadow: 0 2px 8px var(--shadow-light);
-    }
+        }
     .search-bar button:hover { background: #0a4d68; }
     .header-right { display: flex; align-items: center; gap: 18px; overflow-x: auto; white-space: nowrap; max-width: 250px; }
     .account-link {
@@ -116,7 +116,7 @@
             display: block;
       opacity: 1;
       visibility: visible;
-    }
+        }
     .account-menu-list {
       display: none;
       position: fixed;
@@ -150,7 +150,7 @@
       border-bottom: none;
       border-right: none;
       transform: rotate(45deg);
-    }
+        }
     .account-menu-list a {
       color: var(--primary-black);
       padding: 12px 20px;
@@ -170,10 +170,10 @@
       border-left-color: var(--gradient-mid);
       color: var(--gradient-mid);
       transform: translateX(4px);
-    }
+        }
     .account-menu-list a:not(:last-child) {
       border-bottom: 1px solid #e0e7ef;
-    }
+        }
     .user-avatar {
       width: auto;
       height: auto;
@@ -203,12 +203,12 @@
       margin-left: 18px;
       cursor: pointer;
       text-decoration: none;
-    }
+        }
     .header-cart-link img {
         height: 40px;
       width: 40px;
       filter: drop-shadow(0 2px 8px #05bfdb33);
-    }
+        }
     .header-cart-link:hover img {
       transform: scale(1.08) rotate(-8deg);
       filter: drop-shadow(0 4px 16px #08839566);
@@ -229,18 +229,18 @@
       border-radius: 18px;
       box-shadow: 0 4px 24px var(--shadow-light);
       padding: 32px 32px 40px 32px;
-    }
+        }
     .products-title {
       font-size: 1.3rem;
       font-weight: 700;
       color: #088395;
       margin-bottom: 18px;
-    }
+        }
     .products-grid {
             display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 22px;
-    }
+        }
     .product-card {
       background: #f5fafd;
       border-radius: 0;
@@ -251,7 +251,7 @@
       transition: box-shadow 0.2s, transform 0.2s, border 0.2s;
             position: relative;
       border: 2px solid transparent;
-    }
+        }
     .product-card:hover {
       box-shadow: 0 12px 48px #05bfdb77;
       transform: translateY(-3px) scale(1.03);
@@ -321,7 +321,7 @@
             display: flex;
       flex-direction: column;
       gap: 2rem;
-    }
+        }
     .filter-section {
       margin-bottom: 2rem;
       background: #f5fafd;
@@ -338,13 +338,13 @@
       color: #088395;
             margin-bottom: 0.5rem;
       letter-spacing: 0.5px;
-    }
+        }
     .price-range-group {
             display: flex;
             gap: 0.5rem;
-      align-items: center;
+            align-items: center;
       width: 100%;
-    }
+        }
     .price-range-group input[type="number"] {
       flex: 1 1 0;
       min-width: 0;
@@ -364,7 +364,7 @@
     }
     .price-range-separator {
       color: #888;
-      font-weight: 600;
+            font-weight: 600;
       font-size: 1.2rem;
       padding: 0 0.2rem;
       user-select: none;
@@ -380,7 +380,7 @@
       color: #222;
       transition: border 0.2s, box-shadow 0.2s;
       margin-bottom: 0.5rem;
-    }
+        }
     .filters-sidebar input[type="number"]:focus,
     .filters-sidebar select:focus {
       border-color: #05bfdb;
@@ -392,15 +392,15 @@
       border: none;
       border-radius: 8px;
       font-size: 1rem;
-      font-weight: 600;
+            font-weight: 600;
       cursor: pointer;
       margin-right: 0.5rem;
-      margin-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
       background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
       color: #fff;
       box-shadow: 0 2px 8px #e0e7ef;
       transition: background 0.2s, transform 0.2s;
-    }
+        }
     .filters-sidebar button:hover {
       background: linear-gradient(90deg, #0a4d68 0%, #088395 100%);
       transform: translateY(-2px) scale(1.03);
@@ -411,12 +411,12 @@
       .price-range-separator { display: none; }
         }
     .price-range-group-vertical {
-      display: flex;
+            display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+            gap: 0.5rem;
       align-items: stretch;
       width: 100%;
-    }
+        }
     .price-range-group-vertical input[type="number"] {
       width: 100%;
       padding: 0.6rem 1rem;
@@ -433,7 +433,7 @@
       border-color: #05bfdb;
       box-shadow: 0 0 0 2px #05bfdb33;
       outline: none;
-    }
+            }
     .price-range-arrow {
       text-align: center;
       font-size: 1.3rem;
@@ -441,7 +441,7 @@
       font-weight: bold;
       user-select: none;
       margin: 0.1rem 0;
-    }
+        }
     </style>
 </head>
 <body>
@@ -506,8 +506,8 @@
                     <input type="number" id="minPrice" name="price_min" placeholder="Từ" th:value="${priceMin}">
                     <span class="price-range-arrow">↓↑</span>
                     <input type="number" id="maxPrice" name="price_max" placeholder="Đến" th:value="${priceMax}">
+                    </div>
                 </div>
-            </div>
             <div class="filter-section">
                 <div class="filter-title">Đánh giá sao</div>
                 <select id="ratingFilter" name="rate" th:value="${rate}">
@@ -564,7 +564,7 @@
         input.addEventListener('input', function(e) {
             this.value = this.value.replace(/[^\d]/g, '');
         });
-    });
+            });
 
     // Xử lý giá trị mặc định khi submit
     const filterForm = document.getElementById('filterForm');
