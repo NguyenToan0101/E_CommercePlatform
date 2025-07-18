@@ -13,8 +13,11 @@ public class ProductDetail {
     private List<Review> reviews;
     private List<Wishlist> wishlists;
     private BigDecimal price;
+    private  float rate;
+    private Integer solditems;
+    private Integer sumreview;
 
-    public ProductDetail(Product product, Shop shop, List<Inventory> inventories, List<Productimage> images, List<Review> reviews, List<Wishlist> wishlists, BigDecimal price) {
+    public ProductDetail(Product product, Shop shop, List<Inventory> inventories, List<Productimage> images, List<Review> reviews, List<Wishlist> wishlists, BigDecimal price, float rate, Integer solditems, Integer sumreview) {
         this.product = product;
         this.shop = shop;
         this.inventories = inventories;
@@ -22,6 +25,33 @@ public class ProductDetail {
         this.reviews = reviews;
         this.wishlists = wishlists;
         this.price = price;
+        this.rate = rate;
+        this.solditems = solditems;
+        this.sumreview = sumreview;
+    }
+
+    public Integer getSolditems() {
+        return solditems;
+    }
+
+    public void setSolditems(Integer solditems) {
+        this.solditems = solditems;
+    }
+
+    public Integer getSumreview() {
+        return sumreview;
+    }
+
+    public void setSumreview(Integer sumreview) {
+        this.sumreview = sumreview;
+    }
+
+    public float getRate() {
+        return rate;
+    }
+
+    public void setRate(float rate) {
+        this.rate = rate;
     }
 
     public Product getProduct() {
