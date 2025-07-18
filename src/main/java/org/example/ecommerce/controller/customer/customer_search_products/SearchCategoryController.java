@@ -50,4 +50,16 @@ public class SearchCategoryController {
         model.addAttribute("rate", rate);
         return "/customer/customer_search_product/search_name";
     }
+
+    @GetMapping("/filter_searchCategory")
+    public String filterCategoryByPriceAndRate(@RequestParam("categoryId") Integer categoryId,@RequestParam("price_min") BigDecimal priceMin, @RequestParam("price_max") BigDecimal priceMax, @RequestParam("rate") Integer rate, Model model, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        List<ProductView> products = searchProductService.searchCategoryByPriceAndRate(priceMin, priceMax, rate, categoryId);
+        model.addAttribute("customer", customer);
+        model.addAttribute("products", products);
+        model.addAttribute("priceMin", priceMin);
+        model.addAttribute("priceMax", priceMax);
+        model.addAttribute("rate", rate);
+        return "/customer/customer_search_product/search_category";
+    }
 }

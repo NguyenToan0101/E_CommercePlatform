@@ -237,7 +237,7 @@
       margin-bottom: 18px;
     }
     .products-grid {
-      display: grid;
+            display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 22px;
     }
@@ -410,6 +410,38 @@
       .price-range-group { flex-direction: column; gap: 0.3rem; }
       .price-range-separator { display: none; }
         }
+    .price-range-group-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: stretch;
+      width: 100%;
+    }
+    .price-range-group-vertical input[type="number"] {
+      width: 100%;
+      padding: 0.6rem 1rem;
+      border: 2px solid #e0e7ef;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: #fff;
+      color: #222;
+      transition: border 0.2s, box-shadow 0.2s;
+      text-align: right;
+      box-sizing: border-box;
+    }
+    .price-range-group-vertical input[type="number"]:focus {
+      border-color: #05bfdb;
+      box-shadow: 0 0 0 2px #05bfdb33;
+      outline: none;
+    }
+    .price-range-arrow {
+      text-align: center;
+      font-size: 1.3rem;
+      color: #05bfdb;
+      font-weight: bold;
+      user-select: none;
+      margin: 0.1rem 0;
+    }
     </style>
 </head>
 <body>
@@ -470,12 +502,12 @@
         <form id="filterForm" action="/filter_searchName" method="get" style="margin:0;">
             <div class="filter-section">
                 <div class="filter-title">Khoảng giá</div>
-                <div class="price-range-group">
+                <div class="price-range-group-vertical">
                     <input type="number" id="minPrice" name="price_min" placeholder="Từ" th:value="${priceMin}">
-                    <span class="price-range-separator">-</span>
+                    <span class="price-range-arrow">↓↑</span>
                     <input type="number" id="maxPrice" name="price_max" placeholder="Đến" th:value="${priceMax}">
-                    </div>
                 </div>
+            </div>
             <div class="filter-section">
                 <div class="filter-title">Đánh giá sao</div>
                 <select id="ratingFilter" name="rate" th:value="${rate}">
@@ -501,18 +533,18 @@
             <div class="product-card" th:each="product : ${products}" th:onclick="|window.location.href='/detailproduct?id=${product.productId}'|">
                 <div class="product-img-wrap">
                     <img th:src="@{${product.imageUrl}}" alt="Ảnh sản phẩm" class="product-img" />
-                </div>
+        </div>
                 <div class="product-info">
                     <div class="product-name" th:text="${product.name}"></div>
                     <div class="product-price" th:text="'₫' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}"></div>
                     <div class="product-meta">
                         <span th:text="'Đã bán ' + ${product.solditems}"></span>
                         <span class="product-rating"><span th:text="${product.rate}"></span>★</span>
-                    </div>
+                            </div>
                     <div class="product-address" th:text="${product.shopaddress}"></div>
-                </div>
-            </div>
-        </div>
+                        </div>
+                    </div>
+                    </div>
         <div class="pagination-container" id="paginationContainer">
             <!-- Nút phân trang sẽ render bằng JS hoặc Thymeleaf nếu có -->
         </div>

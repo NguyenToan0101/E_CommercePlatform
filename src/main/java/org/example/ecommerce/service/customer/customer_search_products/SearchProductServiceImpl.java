@@ -156,4 +156,45 @@ public class SearchProductServiceImpl implements SearchProductService {
         }
         return views;
     }
+
+    public List<ProductView> searchCategoryByPriceAndRate(BigDecimal priceMin, BigDecimal priceMax, Integer rates, Integer categoryId) {
+        List<ProductView> views = new ArrayList<>();
+
+        // Lấy tất cả category con (bao gồm cả chính nó)
+        List<Integer> allCategoryIds = new ArrayList<>();
+        collectCategoryAndChildren(categoryId, allCategoryIds);
+
+        List<Product> products = productRepository.findAll();
+        for (Product p : products) {
+            if (p.getStatus().equals("available")&& p.getCategoryid() != null && allCategoryIds.contains(p.getCategoryid().getId())) {
+
+                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
+                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
+
+                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
+                String key = "-";
+                int index = fullAddress.indexOf(key);
+                String shopaddress = (index != -1) ? fullAddress.substring(index + key.length()).trim() : fullAddress;
+
+
+                Float avgRating = reviewRepository.findAverageRatingByProductidAndRatingGreaterThan(p,rates);
+                float rate = (avgRating != null) ? avgRating : 0f;
+
+                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
+                int solditems = (sumSold != null) ? sumSold : 0;
+
+                List<Inventory> inventories = inventoryRepository.findAllByProductidAndPriceBetweenOrderByPriceAsc(p, priceMin, priceMax);
+
+                if (inventories == null || inventories.isEmpty()) {
+                    continue;
+                }
+
+                Inventory inventory = inventories.get(0);
+                String categoryName = categoryRepository.findById(p.getCategoryid().getId()).get().getCategoryname();
+
+                views.add(new ProductView(p.getId(), p.getName(), inventory.getPrice(), imageUrl, shopaddress, rate, categoryId, categoryName, solditems));
+            }
+        }
+        return views;
+    }
 }

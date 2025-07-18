@@ -10,4 +10,5 @@ public interface SearchProductService {
     List<ProductView> getProductCategory(Integer categoryId);
     List<ProductView> searchByName(String keyword);
     List<ProductView> searchByPriceAndRate(BigDecimal priceMin, BigDecimal priceMax, Integer rates, String productsSearchKey);
+    List<ProductView> searchCategoryByPriceAndRate(BigDecimal priceMin, BigDecimal priceMax, Integer rates, Integer categoryId);
 }
