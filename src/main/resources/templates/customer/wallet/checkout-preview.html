@@ -1154,32 +1154,12 @@
                         <div class="info-item">
                             <i class="fas fa-map-marker-alt"></i>
                             <span class="info-label">ĐỊA CHỈ:</span>
-                            <div class="info-value">
+                            <div class="info-value" style="display: flex; align-items: center; gap: 10px;">
                                 <input type="text" id="address" name="address" th:value="${customer.address}"
-                                       placeholder="Nhập địa chỉ" required/>
+                                       placeholder="Nhập địa chỉ hoặc chọn trên bản đồ" required style="flex:1; min-width:0;"/>
+                                <button type="button" id="openMapBtn" style="padding: 10px 16px; border-radius: 8px; background: linear-gradient(135deg, #088395, #05bfdb); color: #fff; border: none; font-weight: 600; cursor: pointer; transition: background 0.2s;">Chọn vị trí trên bản đồ</button>
                             </div>
-                        </div>
-                        <div class="info-item address-selection">
-                            <i class="fas fa-map"></i>
-                            <span class="info-label">CHỌN ĐỊA CHỈ:</span>
-                            <div class="info-value">
-                                <select id="province" >
-                                    <option value="">Chọn Tỉnh/Thành phố</option>
-                                </select>
-                            </div>
-                            <div class="info-value">
-                                <select id="district" disabled>
-                                    <option value="">Chọn Quận/Huyện</option>
-                                </select>
-                            </div>
-                            <div class="info-value">
-                                <select id="ward" disabled>
-                                    <option value="">Chọn Phường/Xã</option>
-                                </select>
-                            </div>
-                            <div class="info-value">
-                                <input type="text" id="houseNumber" placeholder="Nhập số nhà, tên đường"/>
-                            </div>
+                            <small style="margin-left: 44px; color: #6b7280;">Nhấn vào nút để chọn vị trí trên bản đồ hoặc nhập thủ công.</small>
                         </div>
                     </div>
                 </div>
@@ -1518,7 +1498,76 @@
         </div>
     </div>
 </div>
+<!-- Map Modal -->
+<div id="mapModal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.4); align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:12px; padding:16px; max-width:90vw; max-height:90vh; position:relative;">
+    <button id="closeMapBtn" style="position:absolute; top:8px; right:8px;">Đóng</button>
+    <div id="map" style="width:70vw; height:60vh; min-width:300px; min-height:300px;"></div>
+    </div>
+</div>
 <script>
+let map, marker;
+let defaultLocation = { lat: 10.8231, lng: 106.6297 }; // HCM City
+
+document.getElementById('openMapBtn').onclick = function() {
+    document.getElementById('mapModal').style.display = 'flex';
+    setTimeout(initMap, 100); // Delay to ensure modal is visible
+};
+
+document.getElementById('closeMapBtn').onclick = function() {
+    document.getElementById('mapModal').style.display = 'none';
+};
+
+function initMap() {
+    // Load Leaflet CSS/JS if not loaded
+    if (!window.L) {
+        let css = document.createElement('link');
+        css.rel = 'stylesheet';
+        css.href = 'https://unpkg.com/leaflet/dist/leaflet.css';
+        document.head.appendChild(css);
+
+        let script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet/dist/leaflet.js';
+        script.onload = createMap;
+        document.body.appendChild(script);
+    } else {
+        createMap();
+    }
+}
+
+function createMap() {
+    if (map) {
+        map.invalidateSize();
+        return;
+    }
+    map = L.map('map').setView([defaultLocation.lat, defaultLocation.lng], 15);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    map.on('click', async function(e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        if (marker) {
+            marker.setLatLng(e.latlng);
+        } else {
+            marker = L.marker(e.latlng).addTo(map);
+        }
+        // Reverse geocode
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1&accept-language=vi`);
+            const data = await response.json();
+            if (data && data.display_name) {
+                document.getElementById('address').value = data.display_name;
+            } else {
+                document.getElementById('address').value = lat + ',' + lng;
+            }
+        } catch (err) {
+            document.getElementById('address').value = lat + ',' + lng;
+        }
+        document.getElementById('mapModal').style.display = 'none';
+    });
+}
 
     function setTotalPrice(form) {
         const spanPrice = document.getElementById('totalPrice');

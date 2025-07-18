@@ -61,7 +61,7 @@ public class Customer {
     private Instant createdat;
 
     @Column(name = "image")
-    private byte[] image;
+    private String image;
 
     @Column(name = "version")
     private Integer version;
