@@ -128,18 +128,9 @@ public class CheckoutController {
                             && (category.getValue().equals(ID_OF_ALL_CATEGORY) || (category.getValue().equals(product.getCategoryid().getId())))) {
                        List<Orderitem> list = oderItemService.getAllOrderItems();
                        if(promotionDTO.getId() == 17){
-                           for (Orderitem orderitem : list) {
-//                               if(orderitem.getPromotionid() != null){
-                                   if(!orderitem.getOrderid().getCustomerid().getId().equals(customer.getId())
-                                           && (orderitem.getPromotionid() == 17)) {
-//                                       System.out.println("-------ACTIVEEEEE promtion" +promotionDTO);
-                                       voucherDiscount.add(promotionDTO);
-                                   }
-//                               }
-//                           else {
-//                                   voucherDiscount.add(promotionDTO);
-//                               }
-
+                           boolean checkNewUser = isCheckNewUser(list, customer);
+                           if(!checkNewUser){
+                               voucherDiscount.add(promotionDTO);
                            }
                        }else {
                            voucherDiscount.add(promotionDTO);
@@ -167,45 +158,24 @@ public class CheckoutController {
         return "customer/wallet/checkout-preview";
     }
 
-//    @GetMapping("/preview_realtime_data")
-//    @ResponseBody
-//    public Map<String, Object> getPreviewData(
-//            @RequestParam Integer inventory,
-//            @RequestParam Integer quantity,
-//            HttpSession session) {
-//
-//        Customer customer = (Customer) session.getAttribute("customer");
-//        CartPreviewDTO preview = paymentService.getCheckoutPreviewRealtime(customer, inventory, quantity);
-//
-//        Product product = paymentService.getProductById(inventory);
-//        Inventory inventoryPayment = paymentService.getInventoryById(inventory);
-//
-//        ShippingRequest shippingRequest = new ShippingRequest();
-//        shippingRequest.setProvinceFrom(paymentService.getProvinceShopAddressById(product));
-//        shippingRequest.setProvinceTo(addressDTOs.getProvinceName());
-//        shippingRequest.setDistrictTo(addressDTOs.getDistrictName());
-//        shippingRequest.setWeight(inventoryPayment.getWeight());
-//        shippingRequest.setHeight(inventoryPayment.getHeight());
-//        shippingRequest.setLength(inventoryPayment.getLength());
-//        shippingRequest.setWidth(inventoryPayment.getWidth());
-//        shippingRequest.setCategoryName(product.getCategoryid().getCategoryname());
-//
-//
-//        System.out.println("From " + paymentService.getProvinceShopAddressById(product));
-//        System.out.println("To " + addressDTOs.getProvinceName());
-//        System.out.println("To district " + addressDTOs.getDistrictName());
-//        System.out.println("-------"+ shippingRequest);
-//        System.out.println("fee shipping" + shippingService.calculateShippingFee(shippingRequest));
-//
-//        BigDecimal feeShip = BigDecimal.valueOf(shippingService.calculateShippingFee(shippingRequest));
-//        BigDecimal totalPrice = inventoryPayment.getPrice().add(feeShip).multiply(BigDecimal.valueOf(preview.getQuantity()));
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("feeShip", feeShip);
-//        response.put("priceTotal", totalPrice);
-//        response.put("timeDelivery" , shippingService.timeDelivery(shippingRequest).toString());
-//        return response;
-//    }
-@GetMapping("/preview_realtime_data")
+    private static boolean isCheckNewUser(List<Orderitem> list, Customer customer) {
+        boolean checkNewUser = false;
+        for (Orderitem orderitem : list) {
+
+            if(orderitem.getPromotionid() != null){
+                if(orderitem.getOrderid().getCustomerid().getId().equals(customer.getId())
+                        && (orderitem.getPromotionid() == 17)) {
+
+                    checkNewUser = true;
+
+                }
+            }
+        }
+        return checkNewUser;
+    }
+
+
+    @GetMapping("/preview_realtime_data")
 @ResponseBody
 public Map<String, Object> getPreviewData(
         @RequestParam Integer inventory,

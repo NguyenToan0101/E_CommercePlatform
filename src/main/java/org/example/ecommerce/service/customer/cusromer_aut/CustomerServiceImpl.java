@@ -1,8 +1,10 @@
 package org.example.ecommerce.service.customer.cusromer_aut;
 
 import org.example.ecommerce.entity.Customer;
+import org.example.ecommerce.entity.admin.Activity;
 import org.example.ecommerce.repository.CustomerRepository;
 import jakarta.mail.MessagingException;
+import org.example.ecommerce.service.admin.ActivityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,11 +25,12 @@ public class CustomerServiceImpl implements CustomerService {
     ZoneId zoneId = ZoneId.systemDefault();
 
     Instant instant = localDateTime.atZone(zoneId).toInstant();
-
+    private final ActivityService activityService;
     @Autowired
     private final CustomerRepository customerRepository;
 
-    public CustomerServiceImpl(CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
+    public CustomerServiceImpl(ActivityService activityService, CustomerRepository customerRepository, PasswordEncoder passwordEncoder) {
+        this.activityService = activityService;
         this.customerRepository = customerRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -72,6 +75,17 @@ public class CustomerServiceImpl implements CustomerService {
         if (customer == null) {
             return false;
         }
+        Activity activity;
+        if(customer.getLastname() != null){
+            activity = new Activity(customer.getFirstname() + " " + customer.getLastname(),"đăng kí tài khoản mới",Activity.Type.user_register.toString(),Activity.Status.SUCCESS.toString());
+
+        }else {
+            activity = new Activity(customer.getFirstname() ,"đăng kí tài khoản mới",Activity.Type.user_register.toString(),Activity.Status.SUCCESS.toString());
+
+        }
+
+        activityService.save(activity);
+
         customerRepository.save(customer);
         pendingCustomers.remove(token);
         return true;

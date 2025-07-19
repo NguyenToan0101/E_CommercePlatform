@@ -29,7 +29,7 @@ public class VisitInterceptor implements HandlerInterceptor {
             System.out.println("Người dùng đang dùng Tablet");
             device = "tablet";
         } else if (deviceType == DeviceType.COMPUTER) {
-            System.out.println("Người dùng đang dùng Desktop");
+//            System.out.println("Người dùng đang dùng Desktop");
             device = "desktop";
         }
         if ("/home".equals(path)) {

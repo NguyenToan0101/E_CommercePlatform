@@ -1,8 +1,10 @@
 package org.example.ecommerce.service.customer.wallet;
 
 import org.example.ecommerce.entity.*;
+import org.example.ecommerce.entity.admin.Activity;
 import org.example.ecommerce.repository.*;
 import org.example.ecommerce.service.PromotionService;
+import org.example.ecommerce.service.admin.ActivityService;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,8 +23,9 @@ public class PaymentService {
     private final ProductimageRepository productimageRepository;
     private final PromotionService promotionService;
     private final PromotionRepository promotionRepository;
+    private final ActivityService activityService;
 
-    public PaymentService(WalletRepository walletRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, CartitemRepository cartItemsRepository, CartRepository cartsRepository, InventoryRepository inventoryRepository, WalletHistoryRepository walletHistoryRepository, ProductimageRepository productimageRepository, PromotionService promotionService, PromotionRepository promotionRepository) {
+    public PaymentService(WalletRepository walletRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, CartitemRepository cartItemsRepository, CartRepository cartsRepository, InventoryRepository inventoryRepository, WalletHistoryRepository walletHistoryRepository, ProductimageRepository productimageRepository, PromotionService promotionService, PromotionRepository promotionRepository, ActivityService activityService) {
         this.walletRepository = walletRepository;
         this.ordersRepository = ordersRepository;
         this.orderItemsRepository = orderItemsRepository;
@@ -33,6 +36,7 @@ public class PaymentService {
         this.productimageRepository = productimageRepository;
         this.promotionService = promotionService;
         this.promotionRepository = promotionRepository;
+        this.activityService = activityService;
     }
 
     public String checkout(Customer customer, List<Integer> cartItemIds, String fullname, String phone, String address) {
@@ -197,6 +201,7 @@ public class PaymentService {
             oi1.setQuantity(quantity);
             oi1.setUnitprice(price);
             oi1.setPromotionid(freeship);
+
             orderItemsRepository.save(oi1);
             Optional<Promotion> promotion = getPromotionById(freeship);
             promotion.orElseThrow().setRevenue(promotion.orElseThrow().getRevenue().add(price));
@@ -220,7 +225,16 @@ public class PaymentService {
             promotion.orElseThrow().setUsageCount(promotion.orElseThrow().getUsageCount()+1);
             promotionRepository.save(promotion.orElseThrow());
         }
+        Activity activity;
+        if(customer.getLastname() != null){
+            activity = new Activity(customer.getFirstname() + " " + customer.getLastname(),"hoàn thành đơn hàng #" + product.getName(),
+                    Activity.Type.order_complete.toString(),Activity.Status.SUCCESS.toString());
+        }else {
+            activity = new Activity(customer.getFirstname() ,"hoàn thành đơn hàng #" + product.getName(),
+                    Activity.Type.order_complete.toString(),Activity.Status.SUCCESS.toString());
+        }
 
+        activityService.save(activity);
 
 
         Customer seller = product.getShopid().getSellerid().getCustomer();
