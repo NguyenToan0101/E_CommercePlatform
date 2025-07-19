@@ -41,7 +41,6 @@ public class WalletController {
         if (customer == null) return "redirect:/login";
 
         Wallet wallet = walletService.getOrCreateWallet(customer);
-        model.addAttribute("customer", customer);
         model.addAttribute("wallet", wallet);
         model.addAttribute("balance", wallet.getBalance());
         model.addAttribute("historyList", walletHistoryRepository.findAllByWalletidOrderByCreatedAtDesc(wallet));
@@ -49,20 +48,13 @@ public class WalletController {
     }
 
     @GetMapping("/wallet/deposit")
-    public String showDepositForm(HttpSession session, Model model) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        if (customer == null) {
-            return "redirect:/login";
-        } else {
-            model.addAttribute("customer", customer);
-            return "/customer/wallet/deposit";
-        }
+    public String showDepositForm(HttpSession session) {
+        return session.getAttribute("customer") == null ? "redirect:/login" : "/customer/wallet/deposit";
     }
 
     @PostMapping("/wallet/deposit")
-    public String initiateDeposit(@RequestParam("amount") BigDecimal amount, HttpSession session, HttpServletRequest request, Model model) {
+    public String initiateDeposit(@RequestParam("amount") BigDecimal amount, HttpSession session, HttpServletRequest request) {
         Customer customer = (Customer) session.getAttribute("customer");
-        model.addAttribute("customer", customer);
         if (customer == null) return "redirect:/login";
 
         Long orderCode = System.currentTimeMillis();
@@ -92,7 +84,7 @@ public class WalletController {
     public String payosReturn(HttpServletRequest request, HttpSession session, Model model) {
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) return "redirect:/login";
-        model.addAttribute("customer", customer);
+
         String status = request.getParameter("status");
         Long orderCode = (Long) session.getAttribute("orderCode");
         BigDecimal amount = (BigDecimal) session.getAttribute("depositAmount");

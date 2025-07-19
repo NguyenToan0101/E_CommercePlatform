@@ -1,35 +1,34 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-black: #1a2233;
-            --secondary-black: #222b45;
-            --accent-gray: #e0e7ef;
-            --light-gray: #f5f7fa;
-            --border-gray: #e5eaf2;
-            --text-gray: #6b7280;
+            --primary-black: #0a0a0a;
+            --secondary-black: #1a1a1a;
+            --accent-gray: #2a2a2a;
+            --light-gray: #f8f8f8;
+            --border-gray: #e5e5e5;
+            --text-gray: #666666;
             --white: #ffffff;
-            --gold-accent: #f7c873;
-            --success-green: #10b981;
+            --gold-accent: #d4af37;
             --error-red: #dc2626;
-            --orange-accent: #ff7a45;
-            --blue-accent: #3b82f6;
-            --shopee-orange: #ee4d2d;
-            --shadow-light: rgba(16, 42, 67, 0.04);
-            --shadow-medium: rgba(16, 42, 67, 0.10);
-            --shadow-heavy: rgba(16, 42, 67, 0.18);
+            --success-green: #10b981;
+            --google-blue: #4285f4;
+            --shadow-light: rgba(0, 0, 0, 0.05);
+            --shadow-medium: rgba(0, 0, 0, 0.1);
+            --shadow-heavy: rgba(0, 0, 0, 0.15);
+
+            /* New gradient colors matching the product listing page */
             --gradient-start: #0a4d68;
             --gradient-mid: #088395;
             --gradient-end: #05bfdb;
             --gradient-light-end: #8de0a6;
-            --primary: #088395;
-            --accent: #F7EEDD;
         }
 
         * {
@@ -39,410 +38,821 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: #fff;
-            height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-light-end) 100%);
+            min-height: 100vh;
+            color: var(--primary-black);
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            margin: 0 auto;
+        }
+
+        /* Logo Section */
+        .logo-section {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-container {
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .logo-container:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo-placeholder {
+            width: 140px;
+            height: 60px;
+            background: var(--white);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gradient-start);
+            font-size: 11px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-placeholder:hover {
+            border-color: var(--gradient-end);
+            background: var(--white);
+            transform: scale(1.05);
+        }
+
+        /* Login Container */
+        .login-container {
+            background: var(--white);
+            border-radius: 24px;
+            box-shadow:
+                    0 32px 64px rgba(0, 0, 0, 0.1),
+                    0 16px 32px rgba(0, 0, 0, 0.05),
+                    0 0 0 1px rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 50%, var(--gradient-start) 100%);
+        }
+
+        .login-header {
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-mid) 100%);
+            color: var(--white);
+            padding: 50px 40px;
+            text-align: center;
+            position: relative;
             overflow: hidden;
         }
 
-        .login-container {
-            width: 100%;
-            height: 100vh;
-            display: flex;
-        }
-
-        .brand-section {
-            flex: 0 0 50%;
-            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            position: relative;
-        }
-
-        .brand-logo {
-            margin-bottom: 30px;
-            text-align: center;
-        }
-
-        .brand-logo img {
-            width: 240px;
-            height: auto;
-            filter: brightness(0) invert(1);
-        }
-
-        .brand-slogan {
-            font-size: 1.1rem;
-            font-weight: 400;
-            text-align: center;
-            line-height: 1.6;
-            max-width: 280px;
-        }
-
-        .login-section {
-            flex: 0 0 50%;
-            background: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 40px;
-        }
-
-        .login-form-container {
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 8px 48px var(--shadow-medium);
-            padding: 40px;
-            width: 100%;
-            max-width: 480px;
-            border: 1px solid #e9ecef;
-        }
-
-        .form-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 28px;
-        }
-
-        .form-title {
-            font-size: 1.7rem;
-            font-weight: 700;
-            color: var(--primary-black);
-        }
-
-        .qr-login-btn {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: var(--gold-accent);
-            color: var(--primary-black);
-            border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            padding: 10px 14px;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .qr-login-btn:hover {
-            background: #f0c800;
-        }
-
-        .qr-login-btn svg {
-            width: 14px;
-            height: 14px;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        .input-field {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid var(--border-gray);
-            border-radius: 8px;
-            font-size: 1.05rem;
-            outline: none;
-            transition: border 0.2s;
-            background: #ffffff;
-        }
-
-        .input-field:focus {
-            border: 2px solid var(--gradient-mid);
-            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.1);
-        }
-
-        .password-field-container {
-            position: relative;
-        }
-
-        .password-toggle {
+        .login-header::before {
+            content: '';
             position: absolute;
-            right: 14px;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .login-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .login-icon svg {
+            width: 40px;
+            height: 40px;
+            color: var(--gradient-mid);
+        }
+
+        .login-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 36px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+        }
+
+        .login-subtitle {
+            font-size: 15px;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+        }
+
+        .login-form {
+            padding: 50px 40px;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+        }
+
+        .form-group:last-of-type {
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--gradient-start);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 16px 20px;
+            padding-right: 50px;
+            border: 2px solid var(--border-gray);
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--light-gray);
+            color: var(--primary-black);
+            font-family: inherit;
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-gray);
+            opacity: 0.7;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gradient-mid);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(8, 131, 149, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group input:valid {
+            border-color: var(--gradient-end);
+            background: var(--white);
+        }
+
+        .form-group.error input {
+            border-color: var(--error-red);
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        .form-group.focused input {
+            border-color: var(--gradient-mid);
+            background: var(--white);
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            background: none;
-            border: none;
-            cursor: pointer;
-            color: var(--text-gray);
-            font-size: 1.1rem;
+            color: var(--gradient-end);
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
         }
 
-        .login-button {
-            width: 100%;
-            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.15rem;
-            font-weight: 700;
-            padding: 14px 0;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(8, 131, 149, 0.3);
+        .form-group input:valid + .input-icon {
+            opacity: 1;
+            transform: translateY(-50%) scale(1);
         }
 
-        .login-button:hover {
-            background: var(--gradient-start);
-            box-shadow: 0 6px 16px rgba(8, 131, 149, 0.4);
+        .input-icon svg {
+            width: 16px;
+            height: 16px;
         }
 
+        /* Forgot Password */
         .forgot-password {
             text-align: right;
-            margin-bottom: 24px;
+            margin-top: -20px;
+            margin-bottom: 30px;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
         }
 
         .forgot-password a {
-            color: var(--gradient-end);
-            font-size: 0.95rem;
+            color: var(--text-gray);
             text-decoration: none;
-            font-weight: 600;
-            transition: color 0.2s;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s ease;
         }
 
         .forgot-password a:hover {
             color: var(--gradient-mid);
+            text-decoration: underline;
         }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 24px 0;
-        }
-
-        .divider-line {
-            flex: 1;
-            height: 1px;
-            background: var(--accent-gray);
-        }
-
-        .divider-text {
-            color: var(--text-gray);
-            font-size: 0.95rem;
+        /* Login Button */
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-mid) 100%);
+            color: var(--white);
+            padding: 18px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
             font-weight: 600;
-            padding: 0 16px;
-        }
-
-        .social-buttons {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 28px;
-        }
-
-        .social-btn {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            border-radius: 8px;
-            border: 2px solid var(--border-gray);
-            background: #ffffff;
-            font-weight: 600;
-            font-size: 1rem;
-            padding: 12px 0;
-            color: var(--primary-black);
             cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(8, 131, 149, 0.3);
+            font-family: inherit;
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
         }
 
-        .social-btn.facebook {
-            color: var(--blue-accent);
-            border-color: var(--blue-accent);
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.6s;
         }
 
-        .social-btn.facebook:hover {
-            background: var(--blue-accent);
-            color: #ffffff;
+        .login-btn:hover::before {
+            left: 100%;
         }
 
-        .social-btn.google {
+        .login-btn:hover {
+            background: linear-gradient(135deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 16px 32px rgba(8, 131, 149, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Loading state */
+        .login-btn:disabled {
+            background: var(--text-gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .login-btn.loading {
+            color: transparent;
+        }
+
+        .login-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            top: 50%;
+            left: 50%;
+            margin-left: -12px;
+            margin-top: -12px;
+            border: 2px solid var(--white);
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Messages */
+        .message {
+            margin: 24px 0;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            border-left: 4px solid;
+        }
+
+        .error-message {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--error-red);
+            border-color: var(--error-red);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .success-message {
+            background: rgba(8, 131, 149, 0.1);
             color: var(--gradient-mid);
             border-color: var(--gradient-mid);
         }
 
-        .social-btn.google:hover {
-            background: var(--gradient-mid);
-            color: #ffffff;
-        }
-
-        .social-btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
+        /* Register Section */
         .register-section {
+            background: rgba(8, 131, 149, 0.05);
+            padding: 30px 40px;
             text-align: center;
-            font-size: 1rem;
+            border-top: 1px solid rgba(8, 131, 149, 0.1);
+            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both;
+        }
+
+        .register-text {
             color: var(--text-gray);
-            font-weight: 500;
-        }
-
-        .register-section a {
-            display: inline-block;
-            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
-            color: #ffffff;
-            border-radius: 6px;
-            font-weight: 700;
-            margin-left: 6px;
-            padding: 8px 18px;
-            text-decoration: none;
-            transition: background 0.2s;
-        }
-
-        .register-section a:hover {
-            background: var(--gradient-start);
-        }
-
-        .error-message {
-            background: #fff5f5;
-            color: var(--error-red);
-            border: 2px solid var(--error-red);
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-size: 1rem;
-            font-weight: 600;
-            text-align: center;
+            font-size: 14px;
             margin-bottom: 20px;
-            animation: fadeIn 0.3s;
+        }
+
+        .register-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .register-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            min-width: 140px;
+        }
+
+        .register-btn-primary {
+            background: var(--white);
+            color: var(--gradient-start);
+            border: 2px solid var(--gradient-start);
+        }
+
+        .register-btn-primary:hover {
+            background: var(--gradient-start);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(10, 77, 104, 0.3);
+        }
+
+        .register-btn-google {
+            background: var(--google-blue);
+            color: var(--white);
+            border: 2px solid var(--google-blue);
+        }
+
+        .register-btn-google:hover {
+            background: #3367d6;
+            border-color: #3367d6;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.3);
+        }
+
+        .register-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.6s;
+        }
+
+        .register-btn:hover::before {
+            left: 100%;
+        }
+
+        .register-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
 
-        @media (max-width: 900px) {
-            .login-container {
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+                min-height: auto;
+                height: auto;
+            }
+
+            .login-header {
+                padding: 40px 24px;
+            }
+
+            .login-form {
+                padding: 40px 24px;
+            }
+
+            .register-section {
+                padding: 24px;
+            }
+
+            .login-title {
+                font-size: 30px;
+            }
+
+            .login-icon {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 20px;
+            }
+
+            .login-icon svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .register-buttons {
                 flex-direction: column;
+                align-items: center;
             }
-            .brand-section, .login-section {
-                flex: 0 0 50vh;
+
+            .register-btn {
+                width: 100%;
+                max-width: 280px;
             }
-            .brand-logo img {
-                width: 200px;
-            }
-            .brand-slogan {
-                font-size: 1rem;
-                max-width: 250px;
+
+            .logo-placeholder {
+                width: 120px;
+                height: 50px;
+                font-size: 10px;
             }
         }
 
         @media (max-width: 480px) {
-            .login-section {
-                padding: 20px;
+            .login-title {
+                font-size: 26px;
             }
-            .login-form-container {
-                padding: 24px;
+
+            .form-group input {
+                padding: 14px 16px;
+                padding-right: 45px;
+                font-size: 14px;
+            }
+
+            .login-btn {
+                padding: 16px 20px;
+            }
         }
-            .brand-logo img {
-                width: 180px;
+
+        /* Focus states for accessibility */
+        .form-group input:focus,
+        .login-btn:focus,
+        .register-btn:focus,
+        .forgot-password a:focus {
+            outline: 2px solid var(--gradient-end);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .form-group input {
+                border-width: 3px;
             }
-            .social-buttons {
-                flex-direction: column;
+
+            .login-btn,
+            .register-btn {
+                border-width: 3px;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="brand-section">
-            <div class="brand-logo">
-                <img src="/logo/logo.png" alt="Logo" />
+<div class="container">
+    <!-- Logo Section -->
+    <div class="logo-section">
+        <a href="/home" class="logo-container" aria-label="Về trang chủ">
+            <div class="logo-placeholder">
+                <!-- Replace this div with your logo image -->
+                <span>Your Logo</span>
             </div>
-            <div class="brand-slogan">
-                Nền tảng thương mại điện tử<br>
-                yêu thích ở Đông Nam Á & Đài Loan
+        </a>
+    </div>
+
+    <div class="login-container">
+        <div class="login-header">
+            <div class="login-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 17L15 12L10 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h1 class="login-title">Đăng nhập</h1>
+            <p class="login-subtitle">Chào mừng bạn trở lại</p>
+        </div>
+
+        <div class="login-form">
+            <form th:action="@{/login}" method="post" id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <input type="email" name="email" id="email" required placeholder="Nhập địa chỉ email" autocomplete="email">
+                        <div class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mật khẩu</label>
+                    <div class="input-wrapper">
+                        <input type="password" name="password" id="password" required placeholder="Nhập mật khẩu" autocomplete="current-password">
+                        <div class="input-icon">
+                            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="forgot-password">
+                    <a th:href="@{/customers/forgot_password}">Quên mật khẩu?</a>
+                </div>
+
+                <button type="submit" class="login-btn" id="loginBtn">
+                    Đăng nhập
+                </button>
+            </form>
+
+            <!-- Error Messages -->
+            <div th:if="${errorMessage}" th:text="${errorMessage}" class="message error-message"></div>
+
+            <div th:if="${param.error}" class="message error-message">
+                Tên đăng nhập hoặc mật khẩu không đúng.
+            </div>
+
+            <div th:if="${param.logout}" class="message success-message">
+                Bạn đã đăng xuất thành công.
             </div>
         </div>
 
-        <div class="login-section">
-            <div class="login-form-container">
-                <form th:action="@{/login}" method="post">
-                    <div class="form-header">
-                        <div class="form-title">Đăng nhập</div>
-                        <button type="button" class="qr-login-btn">
-                            Đăng nhập với mã QR
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
-                                <path d="M14 14h2v2h-2v-2zm4 0h2v2h-2v-2zm0 4h2v2h-2v-2zm-4 4h2v-2h-2v2z" stroke="currentColor" stroke-width="2"/>
-                            </svg>
-                        </button>
-                    </div>
-                    
-                    <div class="input-group">
-                        <input class="input-field" type="text" name="email" placeholder="Email/Số điện thoại/Tên đăng nhập" required autocomplete="username">
-                </div>
-
-                    <div class="input-group">
-                        <div class="password-field-container">
-                            <input class="input-field" type="password" name="password" placeholder="Mật khẩu" required autocomplete="current-password" id="password">
-                            <button type="button" class="password-toggle" onclick="togglePassword()">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
-                    
-                    <button class="login-button" type="submit">ĐĂNG NHẬP</button>
-
-                <div class="forgot-password">
-                        <a th:href="@{/customers/forgot_password}">Quên mật khẩu</a>
-                </div>
-
-                    <div class="divider">
-                        <div class="divider-line"></div>
-                        <div class="divider-text">HOẶC</div>
-                        <div class="divider-line"></div>
-            </div>
-
-                    <div class="social-buttons">
-                        <a href="#" class="social-btn facebook">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 5 3.657 9.127 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.127 22 17 22 12z"/>
+        <div class="register-section">
+            <p class="register-text">Bạn chưa có tài khoản?</p>
+            <div class="register-buttons">
+                <a th:href="@{/customers/register}" class="register-btn register-btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="8.5" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M20 8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23 11H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                            Facebook
+                    Đăng ký ngay
                 </a>
-                        <a href="/oauth2/authorization/google" class="social-btn google">
-                            <svg viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M21.805 10.023h-9.765v3.954h5.617c-.242 1.242-1.484 3.648-5.617 3.648-3.375 0-6.125-2.789-6.125-6.25s2.75-6.25 6.125-6.25c1.922 0 3.211.82 3.953 1.523l2.703-2.633C17.07 2.82 14.789 1.5 12.04 1.5 6.477 1.5 2 5.977 2 11.5s4.477 10 10.04 10c5.789 0 9.625-4.062 9.625-9.789 0-.656-.07-1.164-.16-1.688z"/>
+                <a href="/oauth2/authorization/google" class="register-btn register-btn-google">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="currentColor"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="currentColor"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="currentColor"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="currentColor"/>
                     </svg>
                     Google
                 </a>
             </div>
-                    
-                    <div class="register-section">
-                        Bạn mới biết đến Shopee?
-                        <a th:href="@{/customers/register}">Đăng ký</a>
-                    </div>
-                </form>
         </div>
     </div>
 </div>
 
 <script>
-        function togglePassword() {
+    document.addEventListener('DOMContentLoaded', function() {
+        // Form validation and enhancement
+        const loginForm = document.getElementById('loginForm');
+        const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
-            const toggleBtn = document.querySelector('.password-toggle i');
-            
-            if (passwordInput.type === 'password') {
-                passwordInput.type = 'text';
-                toggleBtn.className = 'fas fa-eye-slash';
-            } else {
-                passwordInput.type = 'password';
-                toggleBtn.className = 'fas fa-eye';
+        const loginBtn = document.getElementById('loginBtn');
+
+        loginForm.addEventListener('submit', function(e) {
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+
+            // Basic validation
+            if (!email || !password) {
+                e.preventDefault();
+
+                if (!email) {
+                    emailInput.closest('.form-group').classList.add('error');
+                    emailInput.focus();
+                }
+                if (!password) {
+                    passwordInput.closest('.form-group').classList.add('error');
+                    if (!email) passwordInput.focus();
+                }
+                return;
+            }
+
+            // Email format validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                e.preventDefault();
+                emailInput.closest('.form-group').classList.add('error');
+                emailInput.focus();
+                return;
+            }
+
+            // Add loading state
+            loginBtn.classList.add('loading');
+            loginBtn.disabled = true;
+        });
+
+        // Remove error state on input
+        [emailInput, passwordInput].forEach(input => {
+            input.addEventListener('input', function() {
+                this.closest('.form-group').classList.remove('error');
+            });
+
+            // Add focus effects
+            input.addEventListener('focus', function() {
+                this.closest('.form-group').classList.add('focused');
+            });
+
+            input.addEventListener('blur', function() {
+                this.closest('.form-group').classList.remove('focused');
+            });
+        });
+
+        // Email validation on blur
+        emailInput.addEventListener('blur', function() {
+            const email = this.value.trim();
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if (email && !emailRegex.test(email)) {
+                this.closest('.form-group').classList.add('error');
+            } else if (email) {
+                this.closest('.form-group').classList.remove('error');
+            }
+        });
+
+        // Auto-hide messages after 5 seconds
+        setTimeout(() => {
+            const messages = document.querySelectorAll('.message');
+            messages.forEach(message => {
+                if (message.textContent.trim() !== '') {
+                    message.style.transition = 'opacity 0.5s ease';
+                    message.style.opacity = '0';
+                    setTimeout(() => {
+                        message.style.display = 'none';
+                    }, 500);
+                }
+            });
+        }, 5000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Submit form on Enter when focused on password field
+            if (e.key === 'Enter' && document.activeElement === passwordInput) {
+                e.preventDefault();
+                loginBtn.click();
+            }
+        });
+
+        // Add smooth transitions for better UX
+        const inputs = document.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Tab') {
+                    // Smooth focus transition
+                    setTimeout(() => {
+                        if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+                            document.activeElement.closest('.form-group').classList.add('focused');
                         }
-        }
+                    }, 10);
+                }
+            });
+        });
+    });
 </script>
 </body>
 </html>

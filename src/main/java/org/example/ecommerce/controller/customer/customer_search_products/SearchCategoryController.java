@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -36,30 +35,5 @@ public class SearchCategoryController {
         model.addAttribute("products", products);
         model.addAttribute("keyword", keyword);
         return "/customer/customer_search_product/search_name";
-    }
-
-    @GetMapping("/filter_searchName")
-    public String filterByPriceAndRate(@RequestParam("keyword") String keyword,@RequestParam("price_min") BigDecimal priceMin, @RequestParam("price_max") BigDecimal priceMax, @RequestParam("rate") Integer rate, Model model, HttpSession session) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        List<ProductView> products = searchProductService.searchByPriceAndRate(priceMin, priceMax, rate, keyword);
-        model.addAttribute("customer", customer);
-        model.addAttribute("products", products);
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("priceMin", priceMin);
-        model.addAttribute("priceMax", priceMax);
-        model.addAttribute("rate", rate);
-        return "/customer/customer_search_product/search_name";
-    }
-
-    @GetMapping("/filter_searchCategory")
-    public String filterCategoryByPriceAndRate(@RequestParam("categoryId") Integer categoryId,@RequestParam("price_min") BigDecimal priceMin, @RequestParam("price_max") BigDecimal priceMax, @RequestParam("rate") Integer rate, Model model, HttpSession session) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        List<ProductView> products = searchProductService.searchCategoryByPriceAndRate(priceMin, priceMax, rate, categoryId);
-        model.addAttribute("customer", customer);
-        model.addAttribute("products", products);
-        model.addAttribute("priceMin", priceMin);
-        model.addAttribute("priceMax", priceMax);
-        model.addAttribute("rate", rate);
-        return "/customer/customer_search_product/search_category";
     }
 }

@@ -26,7 +26,6 @@ public class OrderController {
         if (customer == null) {
             return "redirect:/login";
         }
-        model.addAttribute("customer", customer);
         List<Order> orders = orderService.getAllOrdersByCustomerId(customer);
         model.addAttribute("orders", orders);
         return "customer/order/orders_list";
@@ -40,7 +39,7 @@ public class OrderController {
         }
         Order order = orderService.findById(orderId);
         List<OrderItemDTO> items = orderService.getOrderItemsWithDetails(order);
-        model.addAttribute("customer", customer);
+
         model.addAttribute("order", order);
         model.addAttribute("items", items);
         return "customer/order/view";

@@ -16,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.Serializable;
 import java.net.URI;
@@ -45,28 +44,17 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String home(Model model, HttpSession session, @RequestParam(value = "categoryPage", defaultValue = "1") int categoryPage) {
+    public String home(Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
         List<Category> categories = productService.getCategories();
-
-        int categoriesPerPage = 20;
-        int totalCategories = categories.size();
-        int totalCategoryPages = (int) Math.ceil((double) totalCategories / categoriesPerPage);
-        if (categoryPage < 1) categoryPage = 1;
-        if (categoryPage > totalCategoryPages) categoryPage = totalCategoryPages;
-        int startIdx = (categoryPage - 1) * categoriesPerPage;
-        int endIdx = Math.min(startIdx + categoriesPerPage, totalCategories);
-        List<Category> pagedCategories = categories.subList(startIdx, endIdx);
-
-        model.addAttribute("categories", pagedCategories);
-        model.addAttribute("categoryPage", categoryPage);
-        model.addAttribute("totalCategoryPages", totalCategoryPages);
         if (customer == null) {
             model.addAttribute("products", productService.getProductViews());
+            model.addAttribute("categories", categories);
             return "customer/customer_aut/home";
         }
         model.addAttribute("customer", customer);
         model.addAttribute("products", productService.getProductViews());
+        model.addAttribute("categories", categories);
         return "customer/customer_aut/home";
     }
     @GetMapping("/sellerChannel")

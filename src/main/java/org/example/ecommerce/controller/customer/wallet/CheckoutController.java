@@ -66,7 +66,7 @@ public class CheckoutController {
     public String checkoutRealtime(@RequestParam Integer inventory, @RequestParam Integer quantity,
                                    @RequestParam(required = false) Integer freeshipId,
                                    @RequestParam(required = false) Integer discountId,
-                                   @RequestParam(required = false) BigDecimal  totalPrice,
+                                   @RequestParam BigDecimal  totalPrice,
 
                                    @ModelAttribute Customer customer,
                                    HttpSession session, Model model) {

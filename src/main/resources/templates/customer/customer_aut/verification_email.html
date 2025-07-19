@@ -24,9 +24,9 @@
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
-            color: #111 !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, Arial, sans-serif;
+            background: linear-gradient(135deg, #0a4d68 0%, #8de0a6 100%);
+            color: #0a0a0a;
             line-height: 1.6;
             -webkit-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
@@ -52,16 +52,15 @@
             max-width: 600px;
             margin: 0 auto;
             background-color: #ffffff;
-            box-shadow: 0 4px 24px rgba(16, 42, 67, 0.04);
-            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border-radius: 16px;
             overflow: hidden;
         }
 
         /* Header */
         .email-header {
-            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
-            box-shadow: 0 2px 16px rgba(16, 42, 67, 0.04);
-            border-radius: 0 0 18px 18px;
+            background: linear-gradient(135deg, #0a4d68 0%, #088395 100%);
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
             padding: 40px 30px;
             text-align: center;
             position: relative;
@@ -71,24 +70,58 @@
             margin-bottom: 24px;
         }
 
-        .logo-img {
-            height: 240px;
-            width: auto;
-            display: block;
-            margin: 0 auto;
-            filter: drop-shadow(0 2px 8px #05bfdb33);
+        .logo-placeholder {
+            display: inline-block;
+            width: 120px;
+            height: 50px;
+            background-color: #ffffff;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            line-height: 46px;
+            text-align: center;
+            color: #0a4d68;
+            font-size: 10px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .header-icon {
-            display: none;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #05bfdb 0%, #8de0a6 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 24px rgba(5, 191, 219, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
         }
 
         .header-title {
-            display: none;
+            color: rgba(3, 25, 71, 0.97);
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
         .header-subtitle {
-            display: none;
+            color: rgba(3, 25, 71, 0.97);
+            font-size: 15px;
+            font-weight: 400;
         }
 
         /* Body */
@@ -99,7 +132,7 @@
         .greeting {
             font-size: 20px;
             font-weight: 600;
-            color: #088395;
+            color: #0a4d68;
             margin-bottom: 16px;
         }
 
@@ -110,33 +143,31 @@
             margin-bottom: 24px;
             text-align: center;
             padding: 16px;
-            background: #fff;
-            border-radius: 12px;
-            border: 2px solid #05bfdb22;
-            box-shadow: 0 2px 12px rgba(16, 42, 67, 0.04);
+            background: rgba(8, 131, 149, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #088395;
         }
 
         .message-text {
             font-size: 15px;
-            color: #111 !important;
+            color: #666666;
             line-height: 1.7;
             margin-bottom: 32px;
         }
 
         /* Benefits Section */
         .benefits-section {
-            background: #fff;
+            background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
             padding: 24px;
-            border-radius: 12px;
+            border-radius: 8px;
             margin-bottom: 32px;
-            border: 2px solid #05bfdb22;
-            box-shadow: 0 2px 12px rgba(16, 42, 67, 0.04);
+            border: 1px solid rgba(8, 131, 149, 0.1);
         }
 
         .benefits-title {
             font-size: 18px;
             font-weight: 600;
-            color: #088395;
+            color: #0a4d68;
             margin-bottom: 20px;
             text-align: center;
         }
@@ -146,13 +177,13 @@
             align-items: center;
             margin-bottom: 12px;
             font-size: 14px;
-            color: #111 !important;
+            color: #666666;
         }
 
         .benefit-icon {
             width: 24px;
             height: 24px;
-            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            background: linear-gradient(135deg, #088395 0%, #05bfdb 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -169,37 +200,38 @@
 
         .cta-button {
             display: inline-block;
-            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            background: linear-gradient(135deg, #088395 0%, #05bfdb 100%);
             color: #ffffff;
             text-decoration: none;
-            padding: 12px 24px;
+            padding: 18px 36px;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            box-shadow: 0 2px 8px rgba(16, 42, 67, 0.04);
-            transition: background 0.2s;
+            box-shadow: 0 8px 24px rgba(8, 131, 149, 0.3);
+            transition: all 0.3s ease;
         }
 
         .cta-button:hover {
-            background: #0a4d68;
+            background: linear-gradient(135deg, #0a4d68 0%, #088395 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(8, 131, 149, 0.4);
         }
 
         /* Security Notice */
         .security-notice {
-            background: #fff;
-            border-left: 4px solid #f7c873;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(255, 193, 7, 0.1) 100%);
+            border-left: 4px solid #d4af37;
             padding: 20px;
             margin-bottom: 32px;
             border-radius: 0 8px 8px 0;
-            box-shadow: 0 2px 12px rgba(16, 42, 67, 0.04);
         }
 
         .security-notice-title {
             font-size: 14px;
             font-weight: 600;
-            color: #088395;
+            color: #0a4d68;
             margin-bottom: 8px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -207,24 +239,23 @@
 
         .security-notice-text {
             font-size: 13px;
-            color: #111 !important;
+            color: #666666;
             line-height: 1.6;
         }
 
         /* Next Steps */
         .next-steps {
-            background: #fff;
+            background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
             padding: 24px;
-            border-radius: 12px;
+            border-radius: 8px;
             margin-bottom: 32px;
-            border: 2px solid #05bfdb22;
-            box-shadow: 0 2px 12px rgba(16, 42, 67, 0.04);
+            border: 1px solid rgba(8, 131, 149, 0.1);
         }
 
         .next-steps-title {
             font-size: 16px;
             font-weight: 600;
-            color: #088395;
+            color: #0a4d68;
             margin-bottom: 16px;
             text-align: center;
         }
@@ -234,11 +265,11 @@
             align-items: flex-start;
             margin-bottom: 12px;
             font-size: 14px;
-            color: #111 !important;
+            color: #666666;
         }
 
         .step-number {
-            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            background: linear-gradient(135deg, #0a4d68 0%, #088395 100%);
             color: #ffffff;
             width: 24px;
             height: 24px;
@@ -254,16 +285,15 @@
 
         /* Footer */
         .email-footer {
-            background: #e0f7fa;
-            border-top: 1px solid #e5eaf2;
-            color: #088395;
+            background: linear-gradient(135deg, #0a4d68 0%, #088395 100%);
+            color: #ffffff;
             padding: 30px;
             text-align: center;
         }
 
         .footer-text {
             font-size: 13px;
-            color: #088395;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 16px;
             line-height: 1.6;
         }
@@ -273,7 +303,7 @@
         }
 
         .footer-link {
-            color: #088395;
+            color: #8de0a6;
             text-decoration: none;
             font-size: 13px;
             font-weight: 500;
@@ -287,10 +317,10 @@
 
         .footer-company {
             font-size: 12px;
-            color: #088395;
+            color: rgba(255, 255, 255, 0.6);
             margin-top: 20px;
             padding-top: 20px;
-            border-top: 1px solid #e5eaf2;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         /* Responsive */
@@ -316,21 +346,27 @@
                 font-size: 14px !important;
             }
 
-            .logo-img {
-                height: 180px !important;
+            .logo-placeholder {
+                width: 100px !important;
+                height: 40px !important;
+                line-height: 36px !important;
+                font-size: 9px !important;
             }
 
-
+            .header-icon {
+                width: 80px !important;
+                height: 80px !important;
+            }
         }
 
         /* Dark mode support */
         @media (prefers-color-scheme: dark) {
             .email-container {
-                background-color: #1a2233 !important;
+                background-color: #1a1a1a !important;
             }
 
             .email-body {
-                background-color: #1a2233 !important;
+                background-color: #1a1a1a !important;
             }
 
             .greeting {
@@ -338,7 +374,7 @@
             }
 
             .message-text {
-                color: #e0e7ef !important;
+                color: #cccccc !important;
             }
 
             .benefits-section,
@@ -348,7 +384,7 @@
             }
 
             .security-notice {
-                background: rgba(247, 200, 115, 0.1) !important;
+                background: rgba(212, 175, 55, 0.1) !important;
             }
 
             .benefits-title,
@@ -360,13 +396,13 @@
             .benefit-item,
             .step-item,
             .security-notice-text {
-                color: #e0e7ef !important;
+                color: #cccccc !important;
             }
         }
     </style>
 </head>
 <body>
-<div style="background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%); padding: 20px 0;">
+<div style="background: linear-gradient(135deg, #0a4d68 0%, #8de0a6 100%); padding: 20px 0;">
     <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
         <tr>
             <td align="center">
@@ -374,10 +410,19 @@
                     <!-- Header -->
                     <div class="email-header">
                         <div class="logo-container">
-                            <img src="https://res.cloudinary.com/dhqoofpfa/image/upload/v1752901003/5432561b-b593-49e6-871a-88ed8c46baaa_logo.png" alt="Logo" class="logo-img">
+                            <div class="logo-placeholder">
+                                Your Logo
+                            </div>
                         </div>
 
+                        <div class="header-icon">
+                            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 6L9 17L4 12" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
 
+                        <h1 class="header-title">Chúc mừng!</h1>
+                        <p class="header-subtitle">Tài khoản của bạn đã được tạo thành công</p>
                     </div>
 
                     <!-- Body -->
@@ -495,7 +540,7 @@
                         </div>
 
                         <div class="footer-company">
-                            © 2024 E-Commerce Platform. Tất cả quyền được bảo lưu.
+                            © 2024 Your Company Name. Tất cả quyền được bảo lưu.
                             <br>
                             Địa chỉ: 123 Đường ABC, Quận XYZ, TP. 123
                             <br>

@@ -19,6 +19,4 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
 
 
     List<Integer> findRateById(Integer id);
-    @Query("SELECT AVG(r.rating) FROM Review r WHERE r.productid= :product AND r.rating > :rate")
-    Float findAverageRatingByProductidAndRatingGreaterThan(@Param("product")Product productid, @Param("rate") Integer ratingIsGreaterThan);
 }
