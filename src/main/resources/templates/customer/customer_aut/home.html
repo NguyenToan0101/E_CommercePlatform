@@ -509,7 +509,7 @@
 <!-- Main Header -->
 <header class="main-header">
   <div class="header-left" style="display: flex; align-items: center; gap: 18px;">
-    <a href="/" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+    <a th:href="@{/home}" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
       <img src="/logo/logo.png" alt="Logo" class="logo-img" />
     </a>
         </div>
@@ -541,6 +541,23 @@
                 <div class="category-cell empty"></div>
             </th:block>
         </th:block>
+      </div>
+      <!-- Category Pagination Controls -->
+      <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 1.5rem;">
+        <form th:action="@{/home}" method="get" style="display: inline;">
+          <input type="hidden" name="categoryPage" th:value="${categoryPage - 1}" />
+          <button class="pagination-btn" type="submit" th:disabled="${categoryPage == 1}">&lt;</button>
+        </form>
+        <th:block th:each="pageNum : ${#numbers.sequence(1, totalCategoryPages > 10 ? 10 : totalCategoryPages)}">
+          <form th:action="@{/home}" method="get" style="display: inline;">
+            <input type="hidden" name="categoryPage" th:value="${pageNum}" />
+            <button class="pagination-btn" type="submit" th:classappend="${categoryPage == pageNum} ? 'active'" th:text="${pageNum}"></button>
+          </form>
+        </th:block>
+        <form th:action="@{/home}" method="get" style="display: inline;">
+          <input type="hidden" name="categoryPage" th:value="${categoryPage + 1}" />
+          <button class="pagination-btn" type="submit" th:disabled="${categoryPage == totalCategoryPages}">&gt;</button>
+        </form>
       </div>
     </div>
 <!-- Lưới sản phẩm -->
