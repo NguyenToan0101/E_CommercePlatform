@@ -617,7 +617,7 @@
                         <a th:href="@{/orders}">Đơn mua</a>
                         <a th:href="@{/logout}">Đăng xuất</a>
                     </div>
-                </div>
+            </div>
             </th:block>
             <a th:unless="${#authentication.principal.customer}" href="/login" class="account-link" style="color:#fff;">Đăng nhập</a>
         </div>
@@ -628,8 +628,8 @@
             <a href="/home" class="logo">
                 <img src="/logo/logo.png" alt="Logo" class="logo-img">
             </a>
-        </div>
-        
+    </div>
+
         <form class="search-bar" action="/search_name" method="GET" style="max-width: 900px; margin: 0 auto;">
             <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
             <button type="submit" aria-label="Tìm kiếm">
@@ -644,77 +644,77 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <div class="content">
-                <div class="error-message">
-                    <div class="icon">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <p th:text="${error}">Có lỗi xảy ra khi thanh toán, vui lòng thử lại.</p>
-                </div>
-
-                <div class="actions">
-                    <a href="/home" class="action-link action-primary">
-                        <i class="fas fa-home"></i>
-                        <span>Quay lại trang chủ</span>
-                    </a>
-
-                    <a href="/wallet" class="action-link action-secondary">
-                        <i class="fas fa-wallet"></i>
-                        <span>Nạp thêm tiền</span>
-                    </a>
-
-                    <a href="/cart" class="action-link action-tertiary">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Xem giỏ hàng</span>
-                    </a>
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="help-section">
-                    <h3>
-                        <i class="fas fa-question-circle icon"></i>
-                        Cần hỗ trợ?
-                    </h3>
-                    <p>
-                        Nếu bạn gặp khó khăn trong việc thanh toán, vui lòng liên hệ với bộ phận hỗ trợ khách hàng
-                        hoặc kiểm tra lại thông tin thanh toán của bạn.
-                    </p>
-                </div>
+    <div class="content">
+        <div class="error-message">
+            <div class="icon">
+                <i class="fas fa-exclamation-triangle"></i>
             </div>
+            <p th:text="${error}">Có lỗi xảy ra khi thanh toán, vui lòng thử lại.</p>
         </div>
+
+        <div class="actions">
+            <a href="/home" class="action-link action-primary">
+                <i class="fas fa-home"></i>
+                <span>Quay lại trang chủ</span>
+            </a>
+
+            <a href="/wallet" class="action-link action-secondary">
+                <i class="fas fa-wallet"></i>
+                <span>Nạp thêm tiền</span>
+            </a>
+
+            <a href="/cart" class="action-link action-tertiary">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Xem giỏ hàng</span>
+            </a>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="help-section">
+            <h3>
+                <i class="fas fa-question-circle icon"></i>
+                Cần hỗ trợ?
+            </h3>
+            <p>
+                Nếu bạn gặp khó khăn trong việc thanh toán, vui lòng liên hệ với bộ phận hỗ trợ khách hàng
+                hoặc kiểm tra lại thông tin thanh toán của bạn.
+            </p>
+        </div>
+    </div>
+</div>
     </main>
 
-    <script>
-        // Add loading animation to links
-        document.querySelectorAll('.action-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Don't add loading if it's an external link or has special handling
-                if (!this.href.startsWith('mailto:') && !this.href.startsWith('tel:')) {
-                    this.classList.add('loading');
+<script>
+    // Add loading animation to links
+    document.querySelectorAll('.action-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            // Don't add loading if it's an external link or has special handling
+            if (!this.href.startsWith('mailto:') && !this.href.startsWith('tel:')) {
+                this.classList.add('loading');
 
-                    // Remove loading after a short delay if navigation fails
-                    setTimeout(() => {
-                        this.classList.remove('loading');
-                    }, 3000);
-                }
-            });
-        });
-
-        // Add entrance animation delay for action buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            const actionLinks = document.querySelectorAll('.action-link');
-            actionLinks.forEach((link, index) => {
-                link.style.opacity = '0';
-                link.style.transform = 'translateY(20px)';
-
+                // Remove loading after a short delay if navigation fails
                 setTimeout(() => {
-                    link.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-                    link.style.opacity = '1';
-                    link.style.transform = 'translateY(0)';
-                }, 300 + (index * 100));
-            });
+                    this.classList.remove('loading');
+                }, 3000);
+            }
         });
-    </script>
+    });
+
+    // Add entrance animation delay for action buttons
+    document.addEventListener('DOMContentLoaded', function() {
+        const actionLinks = document.querySelectorAll('.action-link');
+        actionLinks.forEach((link, index) => {
+            link.style.opacity = '0';
+            link.style.transform = 'translateY(20px)';
+
+            setTimeout(() => {
+                link.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                link.style.opacity = '1';
+                link.style.transform = 'translateY(0)';
+            }, 300 + (index * 100));
+        });
+    });
+</script>
 </body>
 </html>

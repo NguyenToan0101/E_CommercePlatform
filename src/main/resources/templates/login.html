@@ -341,7 +341,7 @@
             }
             .login-form-container {
                 padding: 24px;
-            }
+        }
             .brand-logo img {
                 width: 180px;
             }
@@ -362,7 +362,7 @@
                 yêu thích ở Đông Nam Á & Đài Loan
             </div>
         </div>
-        
+
         <div class="login-section">
             <div class="login-form-container">
                 <form th:action="@{/login}" method="post">
@@ -381,8 +381,8 @@
                     
                     <div class="input-group">
                         <input class="input-field" type="text" name="email" placeholder="Email/Số điện thoại/Tên đăng nhập" required autocomplete="username">
-                    </div>
-                    
+                </div>
+
                     <div class="input-group">
                         <div class="password-field-container">
                             <input class="input-field" type="password" name="password" placeholder="Mật khẩu" required autocomplete="current-password" id="password">
@@ -395,44 +395,44 @@
                     <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
                     
                     <button class="login-button" type="submit">ĐĂNG NHẬP</button>
-                    
-                    <div class="forgot-password">
+
+                <div class="forgot-password">
                         <a th:href="@{/customers/forgot_password}">Quên mật khẩu</a>
-                    </div>
-                    
+                </div>
+
                     <div class="divider">
                         <div class="divider-line"></div>
                         <div class="divider-text">HOẶC</div>
                         <div class="divider-line"></div>
-                    </div>
-                    
+            </div>
+
                     <div class="social-buttons">
                         <a href="#" class="social-btn facebook">
                             <svg viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 5 3.657 9.127 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.127 22 17 22 12z"/>
-                            </svg>
+                    </svg>
                             Facebook
-                        </a>
+                </a>
                         <a href="/oauth2/authorization/google" class="social-btn google">
                             <svg viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M21.805 10.023h-9.765v3.954h5.617c-.242 1.242-1.484 3.648-5.617 3.648-3.375 0-6.125-2.789-6.125-6.25s2.75-6.25 6.125-6.25c1.922 0 3.211.82 3.953 1.523l2.703-2.633C17.07 2.82 14.789 1.5 12.04 1.5 6.477 1.5 2 5.977 2 11.5s4.477 10 10.04 10c5.789 0 9.625-4.062 9.625-9.789 0-.656-.07-1.164-.16-1.688z"/>
-                            </svg>
-                            Google
-                        </a>
-                    </div>
+                    </svg>
+                    Google
+                </a>
+            </div>
                     
                     <div class="register-section">
                         Bạn mới biết đến Shopee?
                         <a th:href="@{/customers/register}">Đăng ký</a>
                     </div>
                 </form>
-            </div>
         </div>
     </div>
+</div>
 
-    <script>
+<script>
         function togglePassword() {
-            const passwordInput = document.getElementById('password');
+        const passwordInput = document.getElementById('password');
             const toggleBtn = document.querySelector('.password-toggle i');
             
             if (passwordInput.type === 'password') {
@@ -441,8 +441,8 @@
             } else {
                 passwordInput.type = 'password';
                 toggleBtn.className = 'fas fa-eye';
-            }
+                        }
         }
-    </script>
+</script>
 </body>
 </html>

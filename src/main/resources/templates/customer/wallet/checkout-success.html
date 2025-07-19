@@ -720,7 +720,7 @@
                         <a th:href="@{/orders}">Đơn mua</a>
                         <a th:href="@{/logout}">Đăng xuất</a>
                     </div>
-                </div>
+            </div>
             </th:block>
             <a th:unless="${#authentication.principal.customer}" href="/login" class="account-link" style="color:#fff;">Đăng nhập</a>
         </div>
@@ -731,8 +731,8 @@
             <a href="/home" class="logo">
                 <img src="/logo/logo.png" alt="Logo" class="logo-img">
             </a>
-        </div>
-        
+    </div>
+
         <form class="search-bar" action="/search_name" method="GET" style="max-width: 900px; margin: 0 auto;">
             <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
             <button type="submit" aria-label="Tìm kiếm">
@@ -750,116 +750,116 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="container">
-            <div class="content">
-                <div class="celebration">
-                    <span class="emoji">🎉</span>
-                    <h3>Chúc mừng!</h3>
-                    <p>Đơn hàng của bạn đã được xác nhận và đang được xử lý</p>
-                </div>
+    <div class="content">
+        <div class="celebration">
+            <span class="emoji">🎉</span>
+            <h3>Chúc mừng!</h3>
+            <p>Đơn hàng của bạn đã được xác nhận và đang được xử lý</p>
+        </div>
 
-                <div class="success-message">
-                    <div class="icon">
-                        <i class="fas fa-check-circle"></i>
-                    </div>
-                    <p th:text="${message}">Cảm ơn bạn đã mua hàng.</p>
-                </div>
+        <div class="success-message">
+            <div class="icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p th:text="${message}">Cảm ơn bạn đã mua hàng.</p>
+        </div>
 
-                <div class="actions">
-                    <a href="/home" class="action-link action-primary">
-                        <i class="fas fa-home"></i>
-                        <span>Quay lại trang chủ</span>
-                    </a>
+        <div class="actions">
+            <a href="/home" class="action-link action-primary">
+                <i class="fas fa-home"></i>
+                <span>Quay lại trang chủ</span>
+            </a>
 
-                    <div class="action-row">
-                        <a href="/wallet" class="action-link action-secondary">
-                            <i class="fas fa-wallet"></i>
-                            <span>Xem ví</span>
-                        </a>
+            <div class="action-row">
+                <a href="/wallet" class="action-link action-secondary">
+                    <i class="fas fa-wallet"></i>
+                    <span>Xem ví</span>
+                </a>
 
-                        <a href="/orders" class="action-link action-tertiary">
-                            <i class="fas fa-receipt"></i>
-                            <span>Xem đơn hàng</span>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="divider"></div>
-
-                <div class="help-section">
-                    <h3>
-                        <i class="fas fa-question-circle icon"></i>
-                        Cần hỗ trợ?
-                    </h3>
-                    <p>
-                        Đơn hàng sẽ được giao trong 4-5 ngày làm việc.
-                    </p>
-                </div>
+                <a href="/orders" class="action-link action-tertiary">
+                    <i class="fas fa-receipt"></i>
+                    <span>Xem đơn hàng</span>
+                </a>
             </div>
         </div>
+
+        <div class="divider"></div>
+
+        <div class="help-section">
+            <h3>
+                <i class="fas fa-question-circle icon"></i>
+                Cần hỗ trợ?
+            </h3>
+            <p>
+                Đơn hàng sẽ được giao trong 4-5 ngày làm việc.
+            </p>
+        </div>
+    </div>
+</div>
     </main>
 
-    <script>
-        // Create confetti animation
-        function createConfetti() {
-            const confettiContainer = document.getElementById('confetti');
+<script>
+    // Create confetti animation
+    function createConfetti() {
+        const confettiContainer = document.getElementById('confetti');
             const colors = ['var(--success-green)', 'var(--gradient-start)', 'var(--orange-accent)'];
 
-            for (let i = 0; i < 50; i++) {
-                const confettiPiece = document.createElement('div');
-                confettiPiece.className = 'confetti-piece';
-                confettiPiece.style.left = Math.random() * 100 + '%';
-                confettiPiece.style.animationDelay = Math.random() * 3 + 's';
-                confettiPiece.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confettiContainer.appendChild(confettiPiece);
-            }
-
-            // Remove confetti after animation
-            setTimeout(() => {
-                confettiContainer.innerHTML = '';
-            }, 6000);
+        for (let i = 0; i < 50; i++) {
+            const confettiPiece = document.createElement('div');
+            confettiPiece.className = 'confetti-piece';
+            confettiPiece.style.left = Math.random() * 100 + '%';
+            confettiPiece.style.animationDelay = Math.random() * 3 + 's';
+            confettiPiece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            confettiPiece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confettiContainer.appendChild(confettiPiece);
         }
 
-        // Add loading animation to links
-        document.querySelectorAll('.action-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                if (!this.href.startsWith('mailto:') && !this.href.startsWith('tel:')) {
-                    this.classList.add('loading');
+        // Remove confetti after animation
+        setTimeout(() => {
+            confettiContainer.innerHTML = '';
+        }, 6000);
+    }
 
-                    setTimeout(() => {
-                        this.classList.remove('loading');
-                    }, 3000);
-                }
-            });
-        });
-
-        // Add entrance animation delay for action buttons
-        document.addEventListener('DOMContentLoaded', function() {
-            // Start confetti animation
-            createConfetti();
-
-            // Animate action buttons
-            const actionLinks = document.querySelectorAll('.action-link');
-            actionLinks.forEach((link, index) => {
-                link.style.opacity = '0';
-                link.style.transform = 'translateY(20px)';
+    // Add loading animation to links
+    document.querySelectorAll('.action-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            if (!this.href.startsWith('mailto:') && !this.href.startsWith('tel:')) {
+                this.classList.add('loading');
 
                 setTimeout(() => {
-                    link.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
-                    link.style.opacity = '1';
-                    link.style.transform = 'translateY(0)';
-                }, 500 + (index * 100));
-            });
+                    this.classList.remove('loading');
+                }, 3000);
+            }
         });
+    });
 
-        // Add some interactive celebration effects
-        document.querySelector('.success-icon').addEventListener('click', function() {
-            createConfetti();
-            this.style.animation = 'none';
+    // Add entrance animation delay for action buttons
+    document.addEventListener('DOMContentLoaded', function() {
+        // Start confetti animation
+        createConfetti();
+
+        // Animate action buttons
+        const actionLinks = document.querySelectorAll('.action-link');
+        actionLinks.forEach((link, index) => {
+            link.style.opacity = '0';
+            link.style.transform = 'translateY(20px)';
+
             setTimeout(() => {
-                this.style.animation = 'successPulse 2s infinite';
-            }, 100);
+                link.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+                link.style.opacity = '1';
+                link.style.transform = 'translateY(0)';
+            }, 500 + (index * 100));
         });
-    </script>
+    });
+
+    // Add some interactive celebration effects
+    document.querySelector('.success-icon').addEventListener('click', function() {
+        createConfetti();
+        this.style.animation = 'none';
+        setTimeout(() => {
+            this.style.animation = 'successPulse 2s infinite';
+        }, 100);
+    });
+</script>
 </body>
 </html>

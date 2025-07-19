@@ -687,61 +687,61 @@
         </a>
     </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <div class="review-container">
-            <h2 class="review-title">Đánh giá sản phẩm</h2>
+<!-- Main Content -->
+<main class="main-content">
+    <div class="review-container">
+        <h2 class="review-title">Đánh giá sản phẩm</h2>
 
-            <!-- Flash Messages -->
-            <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
-            <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+        <!-- Flash Messages -->
+        <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
-            <!-- Review Form -->
-            <form th:action="@{/review}" th:object="${review}" method="post" class="review-form" enctype="multipart/form-data">
-                <input type="hidden" th:field="*{productid}" />
-                <input type="hidden" th:field="*{orderid}" />
+        <!-- Review Form -->
+        <form th:action="@{/review}" th:object="${review}" method="post" class="review-form" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{productid}" />
+            <input type="hidden" th:field="*{orderid}" />
 
-                <div class="form-group">
-                    <label for="rating" class="form-label">Số sao:</label>
-                    <select th:field="*{rating}" id="rating" class="form-select" required>
-                        <option value="" disabled selected>--</option>
-                        <option value="1">1 Sao</option>
-                        <option value="2">2 Sao</option>
-                        <option value="3">3 Sao</option>
-                        <option value="4">4 Sao</option>
-                        <option value="5">5 Sao</option>
-                    </select>
-                </div>
+            <div class="form-group">
+                <label for="rating" class="form-label">Số sao:</label>
+                <select th:field="*{rating}" id="rating" class="form-select" required>
+                    <option value="" disabled selected>--</option>
+                    <option value="1">1 Sao</option>
+                    <option value="2">2 Sao</option>
+                    <option value="3">3 Sao</option>
+                    <option value="4">4 Sao</option>
+                    <option value="5">5 Sao</option>
+                </select>
+            </div>
 
-                <div class="form-group">
-                    <label for="comment" class="form-label">Bình luận:</label>
-                    <textarea th:field="*{comment}" id="comment" class="form-textarea" rows="5" placeholder="Viết bình luận của bạn..."></textarea>
-                </div>
+            <div class="form-group">
+                <label for="comment" class="form-label">Bình luận:</label>
+                <textarea th:field="*{comment}" id="comment" class="form-textarea" rows="5" placeholder="Viết bình luận của bạn..."></textarea>
+            </div>
 
-                <div class="form-group">
-                    <label for="media" class="form-label">Ảnh/Video:</label>
+            <div class="form-group">
+                <label for="media" class="form-label">Ảnh/Video:</label>
                     <input type="file" id="media" name="mediaFiles" multiple accept="image/*,video/*">
-                    <small>Chọn tối đa 5 ảnh hoặc video (mỗi file tối đa 10MB).</small>
+                <small>Chọn tối đa 5 ảnh hoặc video (mỗi file tối đa 10MB).</small>
                     
                     <!-- Preview Container -->
                     <div id="preview-container" class="preview-container" style="display: none;">
                         <h4 class="preview-title">Xem trước:</h4>
                         <div id="preview-grid" class="preview-grid"></div>
                     </div>
-                </div>
+            </div>
 
-                <button type="submit" class="submit-btn">Gửi đánh giá</button>
-            </form>
+            <button type="submit" class="submit-btn">Gửi đánh giá</button>
+        </form>
 
-            <!-- Back Link -->
-            <a href="javascript:history.go(-2)" class="back-link">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Quay lại đơn hàng
-            </a>
-        </div>
-    </main>
+        <!-- Back Link -->
+        <a href="javascript:history.go(-2)" class="back-link">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Quay lại đơn hàng
+        </a>
+    </div>
+</main>
 
     <script>
         // File preview functionality
