@@ -85,6 +85,7 @@ public class CustomerController {
         if (customer == null) {
             return "redirect:/login";
         }
+        model.addAttribute("customer", customer);
         return "customer/customer_aut/change-password";
     }
 
@@ -97,7 +98,7 @@ public class CustomerController {
         if (customer == null) {
             return "redirect:/login";
         }
-
+        model.addAttribute("customer", customer);
         boolean isValid = customerService.checkPassword(customer.getEmail(), oldPassword);
         if (!isValid) {
             model.addAttribute("errorMessage", "Mật khẩu cũ không đúng");

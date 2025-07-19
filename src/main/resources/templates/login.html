@@ -261,7 +261,7 @@
             font-weight: 600;
             text-align: center;
             animation: fadeIn 0.3s;
-        }
+            }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -275,7 +275,7 @@
             <img src="/logo/logo.png" alt="Logo Shopee"  />
         </div>
         <div class="login-slogan">Nền tảng thương mại điện tử<br>yêu thích ở Đông Nam Á & Đài Loan</div>
-    </div>
+                        </div>
     <div class="login-right">
         <form class="login-form-box" th:action="@{/login}" method="post">
             <div class="login-form-title">Đăng nhập</div>
@@ -296,7 +296,7 @@
                 <div class="or-line"></div>
                 <div class="or-text">HOẶC</div>
                 <div class="or-line"></div>
-            </div>
+        </div>
             <div class="social-row">
                 <a href="#" class="social-btn facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 5 3.657 9.127 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.127 22 17 22 12z"/></svg> Facebook</a>
                 <a href="/oauth2/authorization/google" class="social-btn google"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.805 10.023h-9.765v3.954h5.617c-.242 1.242-1.484 3.648-5.617 3.648-3.375 0-6.125-2.789-6.125-6.25s2.75-6.25 6.125-6.25c1.922 0 3.211.82 3.953 1.523l2.703-2.633C17.07 2.82 14.789 1.5 12.04 1.5 6.477 1.5 2 5.977 2 11.5s4.477 10 10.04 10c5.789 0 9.625-4.062 9.625-9.789 0-.656-.07-1.164-.16-1.688z"/></svg> Google</a>
@@ -304,7 +304,7 @@
             <div class="register-row">
                 Bạn mới biết đến Shopee?
                 <a th:href="@{/customers/register}">Đăng ký</a>
-            </div>
+        </div>
         </form>
     </div>
 </div>
