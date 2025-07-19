@@ -4,309 +4,445 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng nhập</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body {
+        :root {
+            --primary-black: #1a2233;
+            --secondary-black: #222b45;
+            --accent-gray: #e0e7ef;
+            --light-gray: #f5f7fa;
+            --border-gray: #e5eaf2;
+            --text-gray: #6b7280;
+            --white: #ffffff;
+            --gold-accent: #f7c873;
+            --success-green: #10b981;
+            --error-red: #dc2626;
+            --orange-accent: #ff7a45;
+            --blue-accent: #3b82f6;
+            --shopee-orange: #ee4d2d;
+            --shadow-light: rgba(16, 42, 67, 0.04);
+            --shadow-medium: rgba(16, 42, 67, 0.10);
+            --shadow-heavy: rgba(16, 42, 67, 0.18);
+            --gradient-start: #0a4d68;
+            --gradient-mid: #088395;
+            --gradient-end: #05bfdb;
+            --gradient-light-end: #8de0a6;
+            --primary: #088395;
+            --accent: #F7EEDD;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            min-height: 100vh;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .login-wrapper {
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
-            padding: 0px;
             box-sizing: border-box;
-            max-width: 1200px;
-            margin: 0 auto;
         }
-        .login-left {
-            flex: 1.2;
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .login-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+        }
+
+        .brand-section {
+            flex: 0 0 50%;
+            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             color: #fff;
-            height: 100vh;
-            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
-            min-width: 340px;
+            position: relative;
         }
-        .login-logo {
-            width: 260px;
-            height: 260px;
-            margin-bottom: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .login-logo img {
-            width: 200%;
-            height: 200%;
-            object-fit: contain;
-            display: block;
-        }
-        .login-slogan {
-            font-size: 1.2rem;
-            font-weight: 400;
-            margin-bottom: 0;
+
+        .brand-logo {
+            margin-bottom: 30px;
             text-align: center;
-            line-height: 1.5;
-            max-width: 400px;
         }
-        .login-right {
-            flex: 1;
+
+        .brand-logo img {
+            width: 240px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .brand-slogan {
+            font-size: 1.1rem;
+            font-weight: 400;
+            text-align: center;
+            line-height: 1.6;
+            max-width: 280px;
+        }
+
+        .login-section {
+            flex: 0 0 50%;
+            background: #f8f9fa;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            background: #fff;
-            min-width: 340px;
-            padding: 0px;
+            padding: 40px;
         }
-        .login-form-box {
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 32px rgba(0,0,0,0.10);
-            padding: 32px 32px 24px 32px;
+
+        .login-form-container {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 48px var(--shadow-medium);
+            padding: 40px;
             width: 100%;
-            max-width: 400px;
+            max-width: 480px;
+            border: 1px solid #e9ecef;
+        }
+
+        .form-header {
             display: flex;
-            flex-direction: column;
-            gap: 18px;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
         }
-        .login-form-title {
-            font-size: 1.5rem;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: #222;
+
+        .form-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--primary-black);
         }
-        .qr-btn-row {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 8px;
-        }
-        .qr-btn {
+
+        .qr-login-btn {
             display: flex;
             align-items: center;
-            gap: 8px;
-            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
-            color: #fff;
+            gap: 6px;
+            background: var(--gold-accent);
+            color: var(--primary-black);
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-weight: 600;
-            font-size: 1rem;
-            padding: 8px 20px;
-            cursor: pointer;
-            transition: background 0.2s, box-shadow 0.2s;
-            box-shadow: 0 2px 8px #05bfdb22;
-        }
-        .qr-btn:hover {
-            background: linear-gradient(90deg, #088395 0%, #0a4d68 100%);
-        }
-        .qr-btn svg {
-            width: 20px;
-            height: 20px;
-            color: #ffd600;
-        }
-        .login-input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1.5px solid #ddd;
-            border-radius: 4px;
-            font-size: 1rem;
-            margin-bottom: 12px;
-            outline: none;
-            transition: border 0.2s;
-        }
-        .login-input:focus {
-            border: 1.5px solid #ee4d2d;
-        }
-        .login-btn {
-            width: 100%;
-            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            padding: 12px 0;
-            margin-top: 8px;
+            font-size: 0.9rem;
+            padding: 10px 14px;
             cursor: pointer;
             transition: background 0.2s;
         }
-        .login-btn:hover {
-            background: linear-gradient(90deg, #088395 0%, #0a4d68 100%);
+
+        .qr-login-btn:hover {
+            background: #f0c800;
         }
-        .forgot-row {
-            display: flex;
-            justify-content: flex-end;
-            margin-bottom: 8px;
+
+        .qr-login-btn svg {
+            width: 14px;
+            height: 14px;
         }
-        .forgot-link {
-            color: #05bfdb;
-            font-size: 0.98rem;
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 1.05rem;
+            outline: none;
+            transition: border 0.2s;
+            background: #ffffff;
+        }
+
+        .input-field:focus {
+            border: 2px solid var(--gradient-mid);
+            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.1);
+        }
+
+        .password-field-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-gray);
+            font-size: 1.1rem;
+        }
+
+        .login-button {
+            width: 100%;
+            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.15rem;
+            font-weight: 700;
+            padding: 14px 0;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(8, 131, 149, 0.3);
+        }
+
+        .login-button:hover {
+            background: var(--gradient-start);
+            box-shadow: 0 6px 16px rgba(8, 131, 149, 0.4);
+        }
+
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 24px;
+        }
+
+        .forgot-password a {
+            color: var(--gradient-end);
+            font-size: 0.95rem;
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
             transition: color 0.2s;
         }
-        .forgot-link:hover {
-            color: #ee4d2d;
+
+        .forgot-password a:hover {
+            color: var(--gradient-mid);
         }
-        .or-row {
+
+        .divider {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin: 12px 0 8px 0;
+            margin: 24px 0;
         }
-        .or-line {
+
+        .divider-line {
             flex: 1;
             height: 1px;
-            background: #eee;
+            background: var(--accent-gray);
         }
-        .or-text {
-            color: #aaa;
+
+        .divider-text {
+            color: var(--text-gray);
             font-size: 0.95rem;
-            font-weight: 500;
+            font-weight: 600;
+            padding: 0 16px;
         }
-        .social-row {
+
+        .social-buttons {
             display: flex;
-            gap: 12px;
-            margin-bottom: 8px;
+            gap: 14px;
+            margin-bottom: 28px;
         }
+
         .social-btn {
             flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            border-radius: 4px;
-            border: 1.5px solid #ddd;
-            background: #fff;
+            border-radius: 8px;
+            border: 2px solid var(--border-gray);
+            background: #ffffff;
             font-weight: 600;
             font-size: 1rem;
-            padding: 10px 0;
-            color: #222;
+            padding: 12px 0;
+            color: var(--primary-black);
             cursor: pointer;
-            transition: border 0.2s, box-shadow 0.2s;
-        }
-        .social-btn.facebook {
-            color: #1877f3;
-            border-color: #1877f3;
-        }
-        .social-btn.google {
-            color: #088395;
-            border-color: #088395;
-            background: #fff;
-            transition: background 0.2s, color 0.2s;
-        }
-        .social-btn.google:hover {
-            background: #088395;
-            color: #fff;
-            border-color: #088395;
-        }
-        .social-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-        .register-row {
-            text-align: center;
-            margin-top: 8px;
-            font-size: 1rem;
-            color: #888;
-        }
-        .register-row a {
-            display: inline-block;
-            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
-            color: #fff;
-            border-radius: 4px;
-            font-weight: 600;
-            margin-left: 4px;
-            padding: 6px 18px;
+            transition: all 0.2s;
             text-decoration: none;
-            transition: background 0.2s, color 0.2s;
         }
-        .register-row a:hover {
-            background: linear-gradient(90deg, #088395 0%, #0a4d68 100%);
-            color: #fff;
+
+        .social-btn.facebook {
+            color: var(--blue-accent);
+            border-color: var(--blue-accent);
         }
-        @media (max-width: 900px) {
-            .login-wrapper { flex-direction: column; padding: 16px; }
-            .login-left, .login-right { min-width: 100vw; height: auto; }
-            .login-left { padding: 32px 0 0 0; }
-            .login-right { padding: 0 0 32px 0; }
+
+        .social-btn.facebook:hover {
+            background: var(--blue-accent);
+            color: #ffffff;
         }
-        @media (max-width: 600px) {
-            .login-wrapper { padding: 6px; }
-            .login-form-box { padding: 18px 6px 12px 6px; max-width: 98vw; }
-            .login-logo { width: 160px; height: 160px; }
-            .login-slogan { font-size: 1rem; }
+
+        .social-btn.google {
+            color: var(--gradient-mid);
+            border-color: var(--gradient-mid);
         }
-        .login-error-message {
-            background: #ffeaea;
-            color: #dc2626;
-            border: 1.5px solid #dc2626;
+
+        .social-btn.google:hover {
+            background: var(--gradient-mid);
+            color: #ffffff;
+        }
+
+        .social-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .register-section {
+            text-align: center;
+            font-size: 1rem;
+            color: var(--text-gray);
+            font-weight: 500;
+        }
+
+        .register-section a {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
+            color: #ffffff;
             border-radius: 6px;
-            padding: 10px 14px;
-            margin-bottom: 10px;
+            font-weight: 700;
+            margin-left: 6px;
+            padding: 8px 18px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .register-section a:hover {
+            background: var(--gradient-start);
+        }
+
+        .error-message {
+            background: #fff5f5;
+            color: var(--error-red);
+            border: 2px solid var(--error-red);
+            border-radius: 8px;
+            padding: 12px 16px;
             font-size: 1rem;
             font-weight: 600;
             text-align: center;
+            margin-bottom: 20px;
             animation: fadeIn 0.3s;
-            }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-10px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        @media (max-width: 900px) {
+            .login-container {
+                flex-direction: column;
+            }
+            .brand-section, .login-section {
+                flex: 0 0 50vh;
+            }
+            .brand-logo img {
+                width: 200px;
+            }
+            .brand-slogan {
+                font-size: 1rem;
+                max-width: 250px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-section {
+                padding: 20px;
+            }
+            .login-form-container {
+                padding: 24px;
+            }
+            .brand-logo img {
+                width: 180px;
+            }
+            .social-buttons {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="login-wrapper">
-    <div class="login-left">
-        <div class="login-logo">
-            <img src="/logo/logo.png" alt="Logo Shopee"  />
+    <div class="login-container">
+        <div class="brand-section">
+            <div class="brand-logo">
+                <img src="/logo/logo.png" alt="Logo" />
+            </div>
+            <div class="brand-slogan">
+                Nền tảng thương mại điện tử<br>
+                yêu thích ở Đông Nam Á & Đài Loan
+            </div>
         </div>
-        <div class="login-slogan">Nền tảng thương mại điện tử<br>yêu thích ở Đông Nam Á & Đài Loan</div>
+        
+        <div class="login-section">
+            <div class="login-form-container">
+                <form th:action="@{/login}" method="post">
+                    <div class="form-header">
+                        <div class="form-title">Đăng nhập</div>
+                        <button type="button" class="qr-login-btn">
+                            Đăng nhập với mã QR
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <rect x="3" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                                <rect x="14" y="3" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                                <rect x="3" y="14" width="7" height="7" stroke="currentColor" stroke-width="2"/>
+                                <path d="M14 14h2v2h-2v-2zm4 0h2v2h-2v-2zm0 4h2v2h-2v-2zm-4 4h2v-2h-2v2z" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="input-group">
+                        <input class="input-field" type="text" name="email" placeholder="Email/Số điện thoại/Tên đăng nhập" required autocomplete="username">
+                    </div>
+                    
+                    <div class="input-group">
+                        <div class="password-field-container">
+                            <input class="input-field" type="password" name="password" placeholder="Mật khẩu" required autocomplete="current-password" id="password">
+                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                                <i class="fas fa-eye"></i>
+                            </button>
                         </div>
-    <div class="login-right">
-        <form class="login-form-box" th:action="@{/login}" method="post">
-            <div class="login-form-title">Đăng nhập</div>
-            <div class="qr-btn-row">
-                <button type="button" class="qr-btn">
-                    Đăng nhập với mã QR
-                    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="7" height="7" stroke="#ffd600" stroke-width="2"/><rect x="14" y="3" width="7" height="7" stroke="#ffd600" stroke-width="2"/><rect x="3" y="14" width="7" height="7" stroke="#ffd600" stroke-width="2"/><path d="M14 14h2v2h-2v-2zm4 0h2v2h-2v-2zm0 4h2v2h-2v-2zm-4 4h2v-2h-2v2z" stroke="#ffd600" stroke-width="2"/></svg>
-                </button>
+                    </div>
+                    
+                    <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
+                    
+                    <button class="login-button" type="submit">ĐĂNG NHẬP</button>
+                    
+                    <div class="forgot-password">
+                        <a th:href="@{/customers/forgot_password}">Quên mật khẩu</a>
+                    </div>
+                    
+                    <div class="divider">
+                        <div class="divider-line"></div>
+                        <div class="divider-text">HOẶC</div>
+                        <div class="divider-line"></div>
+                    </div>
+                    
+                    <div class="social-buttons">
+                        <a href="#" class="social-btn facebook">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 5 3.657 9.127 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.127 22 17 22 12z"/>
+                            </svg>
+                            Facebook
+                        </a>
+                        <a href="/oauth2/authorization/google" class="social-btn google">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M21.805 10.023h-9.765v3.954h5.617c-.242 1.242-1.484 3.648-5.617 3.648-3.375 0-6.125-2.789-6.125-6.25s2.75-6.25 6.125-6.25c1.922 0 3.211.82 3.953 1.523l2.703-2.633C17.07 2.82 14.789 1.5 12.04 1.5 6.477 1.5 2 5.977 2 11.5s4.477 10 10.04 10c5.789 0 9.625-4.062 9.625-9.789 0-.656-.07-1.164-.16-1.688z"/>
+                            </svg>
+                            Google
+                        </a>
+                    </div>
+                    
+                    <div class="register-section">
+                        Bạn mới biết đến Shopee?
+                        <a th:href="@{/customers/register}">Đăng ký</a>
+                    </div>
+                </form>
             </div>
-            <input class="login-input" type="text" name="email" placeholder="Email/Số điện thoại/Tên đăng nhập" required autocomplete="username">
-            <input class="login-input" type="password" name="password" placeholder="Mật khẩu" required autocomplete="current-password">
-            <div th:if="${errorMessage}" class="login-error-message" th:text="${errorMessage}"></div>
-            <button class="login-btn" type="submit">ĐĂNG NHẬP</button>
-            <div class="forgot-row">
-                <a th:href="@{/customers/forgot_password}" class="forgot-link">Quên mật khẩu</a>
-            </div>
-            <div class="or-row">
-                <div class="or-line"></div>
-                <div class="or-text">HOẶC</div>
-                <div class="or-line"></div>
         </div>
-            <div class="social-row">
-                <a href="#" class="social-btn facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 12c0-5.522-4.477-10-10-10S2 6.478 2 12c0 5 3.657 9.127 8.438 9.877v-6.987h-2.54v-2.89h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.242 0-1.632.771-1.632 1.562v1.875h2.773l-.443 2.89h-2.33v6.987C18.343 21.127 22 17 22 12z"/></svg> Facebook</a>
-                <a href="/oauth2/authorization/google" class="social-btn google"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.805 10.023h-9.765v3.954h5.617c-.242 1.242-1.484 3.648-5.617 3.648-3.375 0-6.125-2.789-6.125-6.25s2.75-6.25 6.125-6.25c1.922 0 3.211.82 3.953 1.523l2.703-2.633C17.07 2.82 14.789 1.5 12.04 1.5 6.477 1.5 2 5.977 2 11.5s4.477 10 10.04 10c5.789 0 9.625-4.062 9.625-9.789 0-.656-.07-1.164-.16-1.688z"/></svg> Google</a>
-            </div>
-            <div class="register-row">
-                Bạn mới biết đến Shopee?
-                <a th:href="@{/customers/register}">Đăng ký</a>
-        </div>
-        </form>
     </div>
-</div>
+
+    <script>
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtn = document.querySelector('.password-toggle i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleBtn.className = 'fas fa-eye-slash';
+            } else {
+                passwordInput.type = 'password';
+                toggleBtn.className = 'fas fa-eye';
+            }
+        }
+    </script>
 </body>
 </html>
