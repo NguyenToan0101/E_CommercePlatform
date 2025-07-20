@@ -8,334 +8,152 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-blue: #0a4d68;
-            --secondary-blue: #088395;
-            --accent-teal: #05bfdb;
-            --light-green: #8de0a6;
-            --light-gray: #f8f8f8;
-            --border-gray: #e5e5e5;
-            --text-gray: #666666;
-            --white: #ffffff;
-            --gold-accent: #d4af37;
-            --success-green: #10b981;
-            --shadow-light: rgba(10, 77, 104, 0.05);
-            --shadow-medium: rgba(10, 77, 104, 0.1);
-            --shadow-heavy: rgba(10, 77, 104, 0.15);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-blue: #0a4d68;
+            --secondary-blue: #088395;
+            --gradient-start: #0a4d68;
+            --gradient-end: #05bfdb;
+            --white: #ffffff;
+            --text-gray: #666666;
+            --border-gray: #e5e5e5;
+            --light-gray: #f8f8f8;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-green) 100%);
+            background: var(--white);
             min-height: 100vh;
-            color: var(--primary-blue);
-            line-height: 1.6;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
+            padding: 20px;
+            color: var(--primary-blue);
             position: relative;
-            overflow: hidden;
         }
 
-        /* Animated background elements */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.5;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .container {
-            max-width: 600px;
+        .header {
             width: 100%;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Logo Section */
-        .logo-section {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--white);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-gray);
         }
 
         .logo-container {
-            display: inline-block;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .logo-container:hover {
-            transform: translateY(-2px);
-        }
-
-        .logo-placeholder {
-            width: 140px;
-            height: 60px;
-            background: var(--white);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
+        }
+
+        .logo-placeholder, .logo-container img {
+            height: 100px;
+            width: auto;
+            display: block;
+        }
+
+        .help-link {
+            color: var(--secondary-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .help-link:hover {
             color: var(--primary-blue);
-            font-size: 11px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px var(--shadow-light);
         }
 
-        .logo-placeholder:hover {
-            border-color: var(--accent-teal);
-            background: var(--white);
-            transform: scale(1.05);
-        }
-
-        /* Success Container */
         .success-container {
+            width: 100%;
+            max-width: 400px;
             background: var(--white);
-            border-radius: 24px;
-            box-shadow:
-                    0 32px 64px var(--shadow-light),
-                    0 16px 32px var(--shadow-medium),
-                    0 0 0 1px rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-            position: relative;
-        }
-
-        .success-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--success-green) 0%, var(--accent-teal) 50%, var(--success-green) 100%);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
         }
 
         .success-header {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            color: var(--white);
-            padding: 50px 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .success-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
+            margin-bottom: 20px;
         }
 
         .success-icon {
-            width: 120px;
-            height: 120px;
-            background: var(--success-green);
+            width: 60px;
+            height: 60px;
+            background: var(--primary-blue);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            position: relative;
-            overflow: hidden;
-            animation: pulse 2s ease-in-out infinite;
-            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
-        }
-
-        .success-icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
-            animation: shimmer 3s ease-in-out infinite;
+            margin: 0 auto 16px;
         }
 
         .success-icon svg {
-            width: 60px;
-            height: 60px;
+            width: 24px;
+            height: 24px;
             color: var(--white);
-            position: relative;
-            z-index: 1;
-            animation: checkmark 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
         }
 
         .success-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 42px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            margin-bottom: 16px;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
-        }
-
-        .success-subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-            max-width: 400px;
-            margin: 0 auto;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
-        }
-
-        .success-body {
-            padding: 50px 40px;
-            text-align: center;
-        }
-
-        .welcome-message {
-            font-size: 18px;
-            color: var(--primary-blue);
-            margin-bottom: 30px;
-            font-weight: 500;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
-        }
-
-        .features-list {
-            background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 40px;
-            border-left: 4px solid var(--accent-teal);
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
-        }
-
-        .features-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--primary-blue);
-            margin-bottom: 20px;
-            letter-spacing: -0.5px;
-        }
-
-        .feature-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 15px;
-            color: var(--text-gray);
-            font-weight: 500;
-        }
-
-        .feature-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .feature-icon {
-            width: 24px;
-            height: 24px;
-            background: var(--success-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            flex-shrink: 0;
-        }
-
-        .feature-icon svg {
-            width: 12px;
-            height: 12px;
-            color: var(--white);
-        }
-
-        /* Countdown Section */
-        .countdown-section {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            color: var(--white);
-            padding: 30px 40px;
-            text-align: center;
-            position: relative;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
-        }
-
-        .countdown-text {
-            font-size: 15px;
-            margin-bottom: 16px;
-            opacity: 0.9;
-        }
-
-        .countdown-timer {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .countdown-number {
-            width: 60px;
-            height: 60px;
-            background: var(--light-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             font-size: 24px;
             font-weight: 700;
             color: var(--primary-blue);
-            position: relative;
-            overflow: hidden;
-            animation: countdownPulse 1s ease-in-out infinite;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            margin-bottom: 8px;
         }
 
-        .countdown-number::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: conic-gradient(from 0deg, transparent 0deg, rgba(255,255,255,0.2) 360deg);
-            animation: rotate 2s linear infinite;
+        .success-subtitle {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.5;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
-        .countdown-label {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            opacity: 0.7;
-        }
-
-        .redirect-info {
-            font-size: 13px;
-            opacity: 0.8;
+        .welcome-message {
+            font-size: 16px;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
             font-weight: 500;
         }
 
-        /* Action Buttons */
+        .countdown-section {
+            background: rgba(8, 131, 149, 0.05);
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 20px;
+            border: 1px solid rgba(8, 131, 149, 0.2);
+        }
+
+        .countdown-text {
+            font-size: 14px;
+            color: var(--text-gray);
+            margin-bottom: 12px;
+        }
+
+        .countdown-timer {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 8px;
+        }
+
         .action-buttons {
             display: flex;
-            gap: 16px;
+            gap: 12px;
             justify-content: center;
-            margin-top: 30px;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
+            margin-top: 20px;
         }
 
         .btn {
@@ -343,56 +161,41 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 14px 24px;
-            border-radius: 12px;
+            padding: 10px 16px;
+            border-radius: 4px;
             text-decoration: none;
             font-weight: 600;
             font-size: 14px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-            min-width: 160px;
+            transition: all 0.3s ease;
+            min-width: 140px;
         }
 
         .btn-primary {
-            background: var(--white);
-            color: var(--primary-blue);
-            border: 2px solid var(--white);
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 2px 8px #05bfdb22;
         }
 
         .btn-primary:hover {
-            background: var(--light-gray);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+            background: linear-gradient(90deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: #fff;
         }
 
         .btn-secondary {
-            background: transparent;
-            color: var(--white);
-            border: 2px solid rgba(255,255,255,0.3);
+            background: #fff;
+            color: var(--secondary-blue);
+            border: 1.5px solid var(--secondary-blue);
+            font-weight: 700;
+            transition: background 0.2s, color 0.2s;
         }
 
         .btn-secondary:hover {
-            background: rgba(255,255,255,0.1);
-            border-color: var(--white);
-            transform: translateY(-2px);
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.6s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: #fff;
+            border: none;
         }
 
         .btn svg {
@@ -400,320 +203,87 @@
             height: 16px;
         }
 
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes shimmer {
-            0%, 100% {
-                opacity: 0.2;
-            }
-            50% {
-                opacity: 0.8;
-            }
-        }
-
-        @keyframes checkmark {
-            0% {
-                transform: scale(0) rotate(45deg);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.2) rotate(45deg);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes countdownPulse {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(141, 224, 166, 0.4);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 0 10px rgba(141, 224, 166, 0);
-            }
-        }
-
-        @keyframes rotate {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
         /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 20px 15px;
+        @media (max-width: 480px) {
+            .success-container {
+                max-width: 100%;
             }
-
-            .success-header {
-                padding: 40px 24px;
-            }
-
-            .success-body {
-                padding: 40px 24px;
-            }
-
-            .countdown-section {
-                padding: 24px;
-            }
-
             .success-title {
-                font-size: 32px;
+                font-size: 20px;
             }
-
-            .success-icon {
-                width: 100px;
-                height: 100px;
-                margin-bottom: 24px;
-            }
-
-            .success-icon svg {
-                width: 50px;
-                height: 50px;
-            }
-
             .action-buttons {
                 flex-direction: column;
                 align-items: center;
             }
-
             .btn {
                 width: 100%;
-                max-width: 280px;
-            }
-
-            .countdown-timer {
-                gap: 12px;
-            }
-
-            .countdown-number {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-            }
-
-            .logo-placeholder {
-                width: 120px;
-                height: 50px;
-                font-size: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .success-title {
-                font-size: 28px;
-            }
-
-            .features-list {
-                padding: 24px 20px;
-            }
-
-            .feature-item {
-                font-size: 14px;
-            }
-        }
-
-        /* Focus states for accessibility */
-        .btn:focus,
-        .logo-container:focus {
-            outline: 2px solid var(--accent-teal);
-            outline-offset: 2px;
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            .btn {
-                border-width: 3px;
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+                max-width: 250px;
             }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Logo Section -->
-    <div class="logo-section">
-        <a href="/home" class="logo-container" aria-label="Về trang chủ">
-            <div class="logo-placeholder">
-                <!-- Replace this div with your logo image -->
-                <span>Your Logo</span>
-            </div>
-        </a>
+<div class="header">
+    <a href="/home" class="logo-container" aria-label="Về trang chủ">
+        <img src="/logo/logo.png" alt="Logo" />
+    </a>
+    <a href="/help" class="help-link">Bạn cần giúp đỡ?</a>
+</div>
+<div class="success-container">
+    <div class="success-header">
+        <div class="success-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </div>
+        <h1 class="success-title">Chúc mừng!</h1>
+        <p class="success-subtitle">Tài khoản của bạn đã được tạo thành công và sẵn sàng sử dụng</p>
     </div>
-
-    <div class="success-container">
-        <div class="success-header">
-            <div class="success-icon">
+    <p class="welcome-message">
+        Chào mừng bạn đến với cộng đồng của chúng tôi. Bạn có thể bắt đầu khám phá ngay bây giờ!
+    </p>
+    <div class="countdown-section">
+        <p class="countdown-text">Tự động chuyển hướng đến trang đăng nhập</p>
+        <div class="countdown-timer" id="countdown">5</div>
+        <div class="action-buttons">
+            <a href="/login" class="btn btn-primary">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 17L15 12L10 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-            </div>
-            <h1 class="success-title">Chúc mừng!</h1>
-            <p class="success-subtitle">Tài khoản của bạn đã được tạo thành công và sẵn sàng sử dụng</p>
-        </div>
-
-        <div class="success-body">
-            <p class="welcome-message">
-                Chào mừng bạn đến với cộng đồng của chúng tôi. Bạn có thể bắt đầu khám phá ngay bây giờ!
-            </p>
-
-            <div class="features-list">
-                <h3 class="features-title">Những gì bạn có thể làm:</h3>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span>Truy cập đầy đủ tất cả tính năng</span>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span>Quản lý thông tin cá nhân</span>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span>Nhận thông báo và cập nhật mới nhất</span>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon">
-                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
-                    <span>Hỗ trợ khách hàng 24/7</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="countdown-section">
-            <p class="countdown-text">Tự động chuyển hướng đến trang đăng nhập</p>
-
-            <div class="countdown-timer">
-                <div class="countdown-number" id="countdown">5</div>
-            </div>
-            <div class="countdown-label">giây</div>
-
-            <p class="redirect-info">Hoặc bạn có thể chọn hành động bên dưới</p>
-
-            <div class="action-buttons">
-                <a href="/login" class="btn btn-primary">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M10 17L15 12L10 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Đăng nhập ngay
-                </a>
-                <a href="/home" class="btn btn-secondary">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Về trang chủ
-                </a>
-            </div>
+                Đăng nhập ngay
+            </a>
+            <a href="/home" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Về trang chủ
+            </a>
         </div>
     </div>
 </div>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let timeLeft = 5;
         const countdownElem = document.getElementById('countdown');
 
-        // Enhanced countdown with smooth animations
         const timer = setInterval(() => {
             timeLeft--;
             countdownElem.textContent = timeLeft;
 
-            // Add pulse animation on each second
-            countdownElem.style.animation = 'none';
-            setTimeout(() => {
-                countdownElem.style.animation = 'countdownPulse 1s ease-in-out infinite';
-            }, 10);
-
             if (timeLeft <= 0) {
                 clearInterval(timer);
-
-                // Add loading state before redirect
                 countdownElem.textContent = '0';
-                countdownElem.style.background = 'var(--success-green)';
-                countdownElem.style.color = 'var(--white)';
-
-                // Smooth redirect with fade out
                 document.body.style.transition = 'opacity 0.5s ease-out';
                 document.body.style.opacity = '0';
-
                 setTimeout(() => {
                     window.location.href = "/login";
                 }, 500);
             }
         }, 1000);
 
-        // Add keyboard shortcuts for better UX
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
@@ -724,13 +294,11 @@
             }
         });
 
-        // Add click to skip countdown
         countdownElem.addEventListener('click', function() {
             clearInterval(timer);
             window.location.href = "/login";
         });
 
-        // Add hover effect for countdown
         countdownElem.addEventListener('mouseenter', function() {
             this.style.cursor = 'pointer';
             this.style.transform = 'scale(1.1)';

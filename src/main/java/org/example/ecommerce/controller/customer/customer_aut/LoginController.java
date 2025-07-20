@@ -23,26 +23,32 @@ import java.net.URI;
 public class LoginController {
     @Autowired
     private CustomerService customerService;
-
+    private final AdminService adminService;
+    public LoginController(AdminService adminService) {
+        this.adminService = adminService;
+    }
 
     @PostMapping("/login")
     public String login(@RequestParam String email,
                         @RequestParam String password,
                         HttpSession session,
                         Model model) {
-
-        Customer customer = customerService.login(email, password);
+        if(adminService.isAdmin(email,password)){
+            return "redirect:/adminHome";
+        }
+        Customer customer = customerService.login(email,password);
 
         if (customer != null) {
-            System.out.println("Customer logged in" + customer);
-            if(email.equalsIgnoreCase("de180895nguyencongtoan@gmail.com") && password.equalsIgnoreCase("congtoan0101")){
-                return "redirect:/delivery/orders";
+            if (customer.isLocked()) {
+                model.addAttribute("errorMessage", "Tài khoản của bạn đã bị khóa");
+                return "login";
             }
-            session.setAttribute("customer", customer);
-            session.setAttribute("role", customer.getRole());
-            return "redirect:/home";
-        }else{
-
+            else {
+                session.setAttribute("customer", customer);
+                session.setAttribute("role", customer.getRole());
+                return "redirect:/home";
+            }
+        } else {
             model.addAttribute("errorMessage", "email hoặc mật khẩu không đúng");
             return "login";
         }

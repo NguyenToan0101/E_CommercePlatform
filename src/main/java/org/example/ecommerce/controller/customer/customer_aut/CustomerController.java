@@ -2,6 +2,7 @@
 package org.example.ecommerce.controller.customer.customer_aut;
 
 import org.example.ecommerce.entity.Customer;
+import org.example.ecommerce.service.UploadImageFile;
 import org.example.ecommerce.service.customer.cusromer_aut.CustomerService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -19,6 +20,8 @@ import java.util.Base64;
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private UploadImageFile  uploadImageFile;
 
     @GetMapping("/register")
     public String showRegisterForm(Model model) {
@@ -35,7 +38,8 @@ public class CustomerController {
                            Model model) {
         try {
             if (!imageFile.isEmpty()) {
-                customer.setImage(imageFile.getBytes());
+                String imageUrl = uploadImageFile.uploadImage(imageFile);
+                customer.setImage(imageUrl);
             }
             String siteURL = request.getRequestURL().toString().replace(request.getServletPath(), "");
             customerService.register(customer, siteURL);
@@ -67,11 +71,6 @@ public class CustomerController {
         if (customer == null) {
             return "redirect:/login";
         }
-
-        if (customer.getImage() != null) {
-            String base64Image = Base64.getEncoder().encodeToString(customer.getImage());
-            model.addAttribute("base64Image", base64Image);
-        }
         model.addAttribute("customer", customer);
         return "customer/customer_aut/profile";
     }
@@ -86,6 +85,7 @@ public class CustomerController {
         if (customer == null) {
             return "redirect:/login";
         }
+        model.addAttribute("customer", customer);
         return "customer/customer_aut/change-password";
     }
 
@@ -98,7 +98,7 @@ public class CustomerController {
         if (customer == null) {
             return "redirect:/login";
         }
-
+        model.addAttribute("customer", customer);
         boolean isValid = customerService.checkPassword(customer.getEmail(), oldPassword);
         if (!isValid) {
             model.addAttribute("errorMessage", "Mật khẩu cũ không đúng");
@@ -165,10 +165,6 @@ public class CustomerController {
         if (email == null) {
             return "redirect:/login";
         }
-        if (customer.getImage() != null) {
-            String base64Image = Base64.getEncoder().encodeToString(customer.getImage());
-            model.addAttribute("base64Image", base64Image);
-        }
         model.addAttribute("customer", customerService.findByEmail(email));
         return "customer/customer_aut/profile_edit";
     }
@@ -186,8 +182,9 @@ public class CustomerController {
         customer1.setFirstname(formCustomer.getFirstname());
         customer1.setLastname(formCustomer.getLastname());
         try {
-            if (imageFile != null && !imageFile.isEmpty()) {
-                customer1.setImage(imageFile.getBytes());
+            if (!imageFile.isEmpty()) {
+                String imageUrl = uploadImageFile.uploadImage(imageFile);
+                customer.setImage(imageUrl);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);

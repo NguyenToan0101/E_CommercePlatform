@@ -5,14 +5,17 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-
+@Getter
+@Setter
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -50,7 +53,7 @@ public class Customer {
     @Column(name = "role", length = Integer.MAX_VALUE)
     private String role;
 
-    @Column(name = "status")
+    @Column(name = "status" ,nullable = false)
     private Boolean status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
@@ -58,28 +61,35 @@ public class Customer {
     private Instant createdat;
 
     @Column(name = "image")
-    private byte[] image;
+    private String image;
 
     @Column(name = "version")
-    private Long version;
+    private Integer version;
 
     @OneToMany(mappedBy = "customerid")
     private Set<Cart> carts = new LinkedHashSet<>();
 
-//    @OneToMany(mappedBy = "customerid")
-//    private Set<Complaint> complaints = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "customer")
+    private Set<Complaint> complaints = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "customerid")
     private Set<Conversation> conversations = new LinkedHashSet<>();
 
+    @Column(name = "locked_until")
+    private LocalDateTime lockedUntil;
+
+    @Column(name = "is_locked")
+    private boolean isLocked;
+
     @OneToMany(mappedBy = "customerid")
     private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "customerid")
+    @OneToMany(mappedBy = "customerid")  // mappedBy trùng với tên biến Customer trong Order
     private Set<Order> orders = new LinkedHashSet<>();
 
-    @OneToOne(mappedBy = "customer")
+
     @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customer")
     private Seller seller;
 
     @OneToOne(mappedBy = "customerid")
@@ -88,179 +98,4 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return (phone == null || phone.trim().isEmpty() || "null".equalsIgnoreCase(phone.trim())) ? null : phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public LocalDate getDateofbirth() {
-        return dateofbirth;
-    }
-
-    public void setDateofbirth(LocalDate dateofbirth) {
-        this.dateofbirth = dateofbirth;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
-
-    public Instant getCreatedat() {
-        return createdat;
-    }
-
-    public void setCreatedat(Instant createdat) {
-        this.createdat = createdat;
-    }
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
-
-    public Set<Cart> getCarts() {
-        return carts;
-    }
-
-    public void setCarts(Set<Cart> carts) {
-        this.carts = carts;
-    }
-
-//    public Set<Complaint> getComplaints() {
-//        return complaints;
-//    }
-//
-//    public void setComplaints(Set<Complaint> complaints) {
-//        this.complaints = complaints;
-//    }
-//
-//    public Set<Conversation> getConversations() {
-//        return conversations;
-//    }
-
-    public void setConversations(Set<Conversation> conversations) {
-        this.conversations = conversations;
-    }
-
-    public Set<Ordernotification> getOrdernotifications() {
-        return ordernotifications;
-    }
-
-    public void setOrdernotifications(Set<Ordernotification> ordernotifications) {
-        this.ordernotifications = ordernotifications;
-    }
-
-    public Set<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(Set<Order> orders) {
-        this.orders = orders;
-    }
-
-    public Seller getSeller() {
-        return seller;
-    }
-
-    public void setSeller(Seller seller) {
-        this.seller = seller;
-    }
-
-    public Wallet getWallet() {
-        return wallet;
-    }
-
-    public void setWallet(Wallet wallet) {
-        this.wallet = wallet;
-    }
-
-    public Set<Wishlist> getWishlists() {
-        return wishlists;
-    }
-
-    public void setWishlists(Set<Wishlist> wishlists) {
-        this.wishlists = wishlists;
-    }
-}
+   }

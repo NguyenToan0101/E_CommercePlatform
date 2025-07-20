@@ -4,32 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title th:text="'Đánh giá sản phẩm'">Đánh giá sản phẩm</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-black: #0a0a0a;
-            --secondary-black: #1a1a1a;
-            --accent-gray: #2a2a2a;
-            --light-gray: #f8f8f8;
-            --border-gray: #e5e5e5;
-            --text-gray: #666666;
+            --primary-black: #1a2233;
+            --secondary-black: #222b45;
+            --accent-gray: #e0e7ef;
+            --light-gray: #f5f7fa;
+            --border-gray: #e5eaf2;
+            --text-gray: #6b7280;
             --white: #ffffff;
-            --gold-accent: #d4af37;
+            --gold-accent: #f7c873;
             --success-green: #10b981;
             --error-red: #dc2626;
-            --orange-accent: #ff6b35;
+            --orange-accent: #ff7a45;
             --blue-accent: #3b82f6;
             --shopee-orange: #ee4d2d;
-            --shadow-light: rgba(0, 0, 0, 0.05);
-            --shadow-medium: rgba(0, 0, 0, 0.1);
-            --shadow-heavy: rgba(0, 0, 0, 0.15);
+            --shadow-light: rgba(16, 42, 67, 0.04);
+            --shadow-medium: rgba(16, 42, 67, 0.10);
+            --shadow-heavy: rgba(16, 42, 67, 0.18);
             --gradient-start: #0a4d68;
             --gradient-mid: #088395;
             --gradient-end: #05bfdb;
             --gradient-light-end: #8de0a6;
+            --primary: #088395;
+            --accent: #F7EEDD;
         }
 
         * {
@@ -39,15 +39,237 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-light-end) 100%);
-            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
+            color: #111 !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3, h4, h5, h6, p, a, span, div, label, input, button {
+            color: #111 !important;
+        }
+
+        /* Header */
+        .main-header {
+            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
+            box-shadow: 0 2px 16px var(--shadow-light);
+            border-radius: 0 0 18px 18px;
+            padding: 0 32px;
+            height: 88px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left { 
+            display: flex; 
+            align-items: center; 
+            gap: 18px; 
+        }
+
+        .logo { 
+            font-size: 2.6rem; 
+            font-weight: 700; 
+            color: #111 !important; 
+            letter-spacing: 1px; 
+        }
+
+        .logo-img {
+            height: 80px !important;
+            width: auto !important;
+            display: block;
+            margin-right: 8px;
+            filter: drop-shadow(0 2px 8px #05bfdb33);
+        }
+
+        .search-bar {
+            flex: unset;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px var(--shadow-light);
+            padding: 0 16px;
+            width: 900px;
+            border: 2px solid #05bfdb22;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            flex: 1;
+            padding: 12px 0;
+            outline: none;
+            color: #111 !important;
+        }
+
+        .search-bar button {
+            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px var(--shadow-light);
+        }
+
+        .search-bar button:hover { 
+            background: #0a4d68; 
+        }
+
+        .header-right { 
+            display: flex; 
+            align-items: center; 
+            gap: 18px; 
+            overflow-x: auto; 
+            white-space: nowrap; 
+            max-width: 250px; 
+        }
+
+        .account-link {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111 !important;
+            background: none;
+            padding: 0 0 0 2px;
+            text-decoration: none;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .user-info-box { 
+            position: relative; 
+            display: flex; 
+            align-items: center; 
+            gap: 4px; 
+        }
+
+        .user-info-box:hover .account-menu-list,
+        .user-info-box:focus-within .account-menu-list {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .account-menu-list {
+            display: none;
+            position: fixed;
+            top: 72px;
+            right: 32px;
+            background: #fff;
+            min-width: 200px;
+            border-radius: 16px;
+            box-shadow: 0 16px 48px rgba(16,42,67,0.13);
+            border: 1px solid #e0e7ef;
+            overflow: visible;
+            z-index: 9999;
+            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .account-menu-list::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border: 1px solid #e0e7ef;
+            border-bottom: none;
+            border-right: none;
+            transform: rotate(45deg);
+        }
+
+        .account-menu-list a {
             color: var(--primary-black);
-            line-height: 1.6;
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.15s, color 0.15s, transform 0.15s;
+            border-left: 3px solid transparent;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .account-menu-list a:hover {
+            background: var(--accent-gray);
+            border-left-color: var(--gradient-mid);
+            color: var(--gradient-mid);
+            transform: translateX(4px);
+        }
+
+        .account-menu-list a:not(:last-child) {
+            border-bottom: 1px solid #e0e7ef;
+        }
+
+        .user-avatar {
+            width: auto;
+            height: auto;
+            background: none;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0;
+            overflow: visible;
+            padding: 0;
+        }
+
+        .user-avatar img {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+        .header-cart-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            margin-left: 18px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .header-cart-link img {
+            height: 40px;
+            width: 40px;
+            filter: drop-shadow(0 2px 8px #05bfdb33);
+        }
+        .header-cart-link:hover img {
+            transform: scale(1.08) rotate(-8deg);
+            filter: drop-shadow(0 4px 16px #08839566);
         }
 
         /* Main Content */
         .main-content {
+            min-height: calc(100vh - 88px);
             padding: 40px 40px;
             max-width: 800px;
             margin: 0 auto;
@@ -147,6 +369,179 @@
             opacity: 0.7;
         }
 
+        /* File Input */
+        input[type="file"] {
+            padding: 8px;
+            border: 2px dashed var(--border-gray);
+            border-radius: 8px;
+            background: var(--light-gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"]:hover {
+            border-color: var(--gradient-mid);
+            background: rgba(8, 131, 149, 0.05);
+        }
+
+        small {
+            color: var(--text-gray);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        /* Preview Styles */
+        .preview-container {
+            margin-top: 20px;
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: 12px;
+            border: 2px dashed var(--border-gray);
+        }
+
+        .preview-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-black);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .preview-title::before {
+            content: '👁️';
+            font-size: 18px;
+        }
+
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .preview-item {
+            position: relative;
+            background: var(--white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px var(--shadow-light);
+            border: 2px solid var(--border-gray);
+            transition: all 0.3s ease;
+        }
+
+        .preview-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px var(--shadow-medium);
+            border-color: var(--gradient-mid);
+        }
+
+        .preview-item img,
+        .preview-item video {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        .preview-item video {
+            background: var(--primary-black);
+        }
+
+        .preview-item-info {
+            padding: 8px 12px;
+            background: var(--white);
+        }
+
+        .preview-item-name {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--primary-black);
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .preview-item-size {
+            font-size: 10px;
+            color: var(--text-gray);
+        }
+
+        .preview-item-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background: rgba(220, 38, 38, 0.9);
+            color: var(--white);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            transition: all 0.2s ease;
+            opacity: 0;
+            z-index: 10;
+            pointer-events: auto;
+        }
+
+        .preview-item:hover .preview-item-remove {
+            opacity: 1;
+        }
+
+        .preview-item-remove:hover {
+            background: var(--error-red);
+            transform: scale(1.1);
+        }
+
+        .preview-item-remove:active {
+            transform: scale(0.95);
+        }
+
+        .preview-item-type {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            padding: 2px 6px;
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--white);
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .preview-item-type.image {
+            background: rgba(59, 130, 246, 0.8);
+        }
+
+        .preview-item-type.video {
+            background: rgba(220, 38, 38, 0.8);
+        }
+
+        /* Empty state */
+        .preview-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-gray);
+        }
+
+        .preview-empty-icon {
+            font-size: 48px;
+            margin-bottom: 10px;
+            opacity: 0.5;
+        }
+
+        .preview-empty-text {
+            font-size: 14px;
+        }
+
         /* Submit Button */
         .submit-btn {
             padding: 15px 30px;
@@ -155,7 +550,7 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            background: var(--gradient-mid);
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-mid));
             color: var(--white);
             transition: all 0.3s ease;
             align-self: center;
@@ -164,7 +559,7 @@
         }
 
         .submit-btn:hover {
-            background: var(--gradient-start);
+            background: linear-gradient(135deg, var(--gradient-mid), var(--gradient-end));
             transform: translateY(-1px);
             box-shadow: 0 4px 12px var(--shadow-medium);
         }
@@ -197,6 +592,28 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 900px) {
+            .main-header { 
+                padding: 0 8px; 
+            }
+            .search-bar { 
+                width: 100%; 
+                max-width: 400px; 
+            }
+        }
+
+        @media (max-width: 600px) {
+            .main-header { 
+                flex-direction: column; 
+                height: auto; 
+                gap: 8px; 
+                padding: 10px;
+            }
+            .search-bar { 
+                margin: 8px 0; 
+            }
+        }
+
         @media (max-width: 768px) {
             .main-content {
                 padding: 20px 20px;
@@ -217,6 +634,59 @@
     </style>
 </head>
 <body>
+    <!-- Header Top Bar -->
+    <div class="header-top-bar" style="background: #fff; color: #111; font-size: 1rem; padding: 0 32px; height: 38px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5eaf2;">
+        <div class="header-top-left" style="display: flex; align-items: center; gap: 18px;">
+            <a th:href="@{/seller}" style="color: #111; text-decoration: none; font-weight: 600;">Kênh Người Bán</a>
+            <span style="color: #bbb;">|</span>
+            <span style="font-weight: 600; color: #111;">Kết nối</span>
+            <a href="#" style="margin-left: 6px; display: inline-flex; align-items: center;" title="Facebook">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#1877F3"/><path d="M21.333 16.001h-3.2v8h-3.2v-8h-2.133v-2.667h2.133v-1.6c0-2.133 1.067-3.2 3.2-3.2h2.133v2.667h-1.6c-.267 0-.533.267-.533.533v1.6h2.133l-.267 2.667z" fill="#fff"/></svg>
+            </a>
+            <a href="#" style="margin-left: 2px; display: inline-flex; align-items: center;" title="Instagram">
+                <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><radialGradient id="ig1" cx="16" cy="16" r="16" gradientUnits="userSpaceOnUse"><stop stop-color="#FFD600"/><stop offset="0.5" stop-color="#FF0069"/><stop offset="1" stop-color="#2827FF"/></radialGradient><circle cx="16" cy="16" r="16" fill="url(#ig1)"/><rect x="9" y="9" width="14" height="14" rx="4" fill="#fff"/><circle cx="16" cy="16" r="3.5" fill="#FF0069"/><circle cx="21.5" cy="10.5" r="1.5" fill="#FFD600"/></svg>
+            </a>
+        </div>
+        <div class="header-top-right" style="display: flex; align-items: center; gap: 18px;">
+            <a href="#" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/></svg> Thông Báo</a>
+            <th:block th:if="${#authentication.principal.customer}">
+                <div class="user-info-box">
+                    <div class="user-avatar" th:if="${#authentication.principal.customer.image != null && !#strings.isEmpty(#authentication.principal.customer.image)}" style="background: none;">
+                        <img th:src="@{${#authentication.principal.customer.image}}" alt="avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" />
+                    </div>
+                    <span class="user-avatar" th:if="${#authentication.principal.customer.image == null || #strings.isEmpty(#authentication.principal.customer.image)}" th:text="${#authentication.principal.customer.firstname.substring(0,1)}"></span>
+                    <a class="account-link" th:text="${#authentication.principal.customer.firstname + ' ' + #authentication.principal.customer.lastname}" tabindex="0" style="color: #111 !important; font-weight: 700;"></a>
+                    <div class="account-menu-list">
+                        <a th:href="@{/customers/profile}">Tài khoản của tôi</a>
+                        <a th:href="@{/wallet}">Ví của tôi</a>
+                        <a th:href="@{/wishlist}">Danh sách yêu thích</a>
+                        <a th:href="@{/orders}">Đơn mua</a>
+                        <a th:href="@{/logout}">Đăng xuất</a>
+                    </div>
+                </div>
+            </th:block>
+            <a th:unless="${#authentication.principal.customer}" href="/login" class="account-link" style="color:#fff;">Đăng nhập</a>
+        </div>
+    </div>
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="header-left">
+            <a href="/home" class="logo">
+                <img src="/logo/logo.png" alt="Logo" class="logo-img">
+            </a>
+        </div>
+        
+        <form class="search-bar" action="/search_name" method="GET" style="max-width: 900px; margin: 0 auto;">
+            <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
+            <button type="submit" aria-label="Tìm kiếm">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+            </button>
+        </form>
+        <a href="/cart" class="header-cart-link" title="Giỏ hàng">
+            <img src="/logo/cart.png" alt="Giỏ hàng" />
+        </a>
+    </header>
+
 <!-- Main Content -->
 <main class="main-content">
     <div class="review-container">
@@ -227,7 +697,7 @@
         <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
 
         <!-- Review Form -->
-        <form th:action="@{/review}" th:object="${review}" method="post" class="review-form">
+        <form th:action="@{/review}" th:object="${review}" method="post" class="review-form" enctype="multipart/form-data">
             <input type="hidden" th:field="*{productid}" />
             <input type="hidden" th:field="*{orderid}" />
 
@@ -248,6 +718,18 @@
                 <textarea th:field="*{comment}" id="comment" class="form-textarea" rows="5" placeholder="Viết bình luận của bạn..."></textarea>
             </div>
 
+            <div class="form-group">
+                <label for="media" class="form-label">Ảnh/Video:</label>
+                    <input type="file" id="media" name="mediaFiles" multiple accept="image/*,video/*">
+                <small>Chọn tối đa 5 ảnh hoặc video (mỗi file tối đa 10MB).</small>
+                    
+                    <!-- Preview Container -->
+                    <div id="preview-container" class="preview-container" style="display: none;">
+                        <h4 class="preview-title">Xem trước:</h4>
+                        <div id="preview-grid" class="preview-grid"></div>
+                    </div>
+            </div>
+
             <button type="submit" class="submit-btn">Gửi đánh giá</button>
         </form>
 
@@ -260,5 +742,203 @@
         </a>
     </div>
 </main>
+
+    <script>
+        // File preview functionality
+        const fileInput = document.getElementById('media');
+        const previewContainer = document.getElementById('preview-container');
+        const previewGrid = document.getElementById('preview-grid');
+        const maxFiles = 5;
+        const maxFileSize = 10 * 1024 * 1024; // 10MB
+
+        let selectedFiles = [];
+
+        fileInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            
+            // Validate file count
+            if (selectedFiles.length + files.length > maxFiles) {
+                alert(`Bạn chỉ có thể chọn tối đa ${maxFiles} file.`);
+                return;
+            }
+
+            // Process each file
+            files.forEach(file => {
+                // Validate file size
+                if (file.size > maxFileSize) {
+                    alert(`File "${file.name}" quá lớn. Kích thước tối đa là 10MB.`);
+                    return;
+                }
+
+                // Validate file type
+                if (!file.type.startsWith('image/') && !file.type.startsWith('video/')) {
+                    alert(`File "${file.name}" không phải là ảnh hoặc video.`);
+                    return;
+                }
+
+                // Add to selected files
+                selectedFiles.push(file);
+                createPreviewItem(file);
+            });
+
+            // Show preview container
+            if (selectedFiles.length > 0) {
+                previewContainer.style.display = 'block';
+            }
+
+            // Update file input
+            updateFileInput();
+        });
+
+        function createPreviewItem(file) {
+            const previewItem = document.createElement('div');
+            previewItem.className = 'preview-item';
+            previewItem.dataset.filename = file.name;
+
+            const isImage = file.type.startsWith('image/');
+            const isVideo = file.type.startsWith('video/');
+
+            // Format file size
+            const fileSize = formatFileSize(file.size);
+
+            // Create media element
+            let mediaElement;
+            if (isImage) {
+                mediaElement = document.createElement('img');
+                mediaElement.src = URL.createObjectURL(file);
+                mediaElement.alt = file.name;
+                mediaElement.onload = () => {
+                    previewItem.style.opacity = '1';
+                };
+            } else {
+                mediaElement = document.createElement('video');
+                mediaElement.src = URL.createObjectURL(file);
+                mediaElement.muted = true;
+                mediaElement.onloadedmetadata = () => {
+                    previewItem.style.opacity = '1';
+                };
+            }
+
+            // Create type badge
+            const typeBadge = document.createElement('div');
+            typeBadge.className = `preview-item-type ${isImage ? 'image' : 'video'}`;
+            typeBadge.textContent = isImage ? '📷' : '🎥';
+
+            // Create remove button
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'preview-item-remove';
+            removeButton.innerHTML = '<i class="fas fa-times"></i>';
+            removeButton.onclick = () => removeFile(file.name);
+
+            // Create info section
+            const infoSection = document.createElement('div');
+            infoSection.className = 'preview-item-info';
+            infoSection.innerHTML = `
+                <div class="preview-item-name" title="${file.name}">${file.name}</div>
+                <div class="preview-item-size">${fileSize}</div>
+            `;
+
+            // Append all elements
+            previewItem.appendChild(typeBadge);
+            previewItem.appendChild(removeButton);
+            previewItem.appendChild(mediaElement);
+            previewItem.appendChild(infoSection);
+
+            previewGrid.appendChild(previewItem);
+
+            // Add animation
+            previewItem.style.opacity = '0';
+            previewItem.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                previewItem.style.transition = 'all 0.3s ease';
+                previewItem.style.transform = 'scale(1)';
+            }, 10);
+        }
+
+        function removeFile(filename) {
+            // Remove from selected files
+            selectedFiles = selectedFiles.filter(file => file.name !== filename);
+            
+            // Remove preview item
+            const previewItem = document.querySelector(`[data-filename="${filename}"]`);
+            if (previewItem) {
+                previewItem.style.transform = 'scale(0.8)';
+                previewItem.style.opacity = '0';
+                setTimeout(() => {
+                    previewItem.remove();
+                }, 300);
+            }
+
+            // Hide preview container if no files
+            if (selectedFiles.length === 0) {
+                previewContainer.style.display = 'none';
+            }
+
+            // Update file input
+            updateFileInput();
+        }
+
+        function updateFileInput() {
+            // Create new FileList-like object
+            const dataTransfer = new DataTransfer();
+            selectedFiles.forEach(file => {
+                dataTransfer.items.add(file);
+            });
+            fileInput.files = dataTransfer.files;
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // Add drag and drop functionality
+        const dropZone = document.querySelector('.form-group');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.style.borderColor = '#088395';
+            dropZone.style.backgroundColor = 'rgba(8, 131, 149, 0.05)';
+        }
+
+        function unhighlight(e) {
+            dropZone.style.borderColor = '';
+            dropZone.style.backgroundColor = '';
+        }
+
+        dropZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = Array.from(dt.files);
+            
+            // Simulate file input change
+            const event = new Event('change', { bubbles: true });
+            Object.defineProperty(event, 'target', { value: fileInput });
+            Object.defineProperty(event, 'files', { value: files });
+            
+            fileInput.dispatchEvent(event);
+        }
+    </script>
 </body>
 </html>

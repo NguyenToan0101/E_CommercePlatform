@@ -4,26 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng ký</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary-blue: #0a4d68;
-            --secondary-blue: #088395;
-            --accent-teal: #05bfdb;
-            --light-green: #8de0a6;
-            --light-gray: #f8f8f8;
-            --border-gray: #e5e5e5;
-            --text-gray: #666666;
+            --primary-black: #1a2233;
+            --secondary-black: #222b45;
+            --accent-gray: #e0e7ef;
+            --light-gray: #f5f7fa;
+            --border-gray: #e5eaf2;
+            --text-gray: #6b7280;
             --white: #ffffff;
-            --gold-accent: #d4af37;
-            --error-red: #dc2626;
+            --gold-accent: #f7c873;
             --success-green: #10b981;
-            --warning-orange: #f59e0b;
-            --shadow-light: rgba(10, 77, 104, 0.05);
-            --shadow-medium: rgba(10, 77, 104, 0.1);
-            --shadow-heavy: rgba(10, 77, 104, 0.15);
+            --error-red: #dc2626;
+            --orange-accent: #ff7a45;
+            --blue-accent: #3b82f6;
+            --shopee-orange: #ee4d2d;
+            --shadow-light: rgba(16, 42, 67, 0.04);
+            --shadow-medium: rgba(16, 42, 67, 0.10);
+            --shadow-heavy: rgba(16, 42, 67, 0.18);
+            --gradient-start: #0a4d68;
+            --gradient-mid: #088395;
+            --gradient-end: #05bfdb;
+            --gradient-light-end: #8de0a6;
+            --primary: #088395;
+            --accent: #F7EEDD;
         }
 
         * {
@@ -33,207 +39,105 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-green) 100%);
-            min-height: 100vh;
-            color: var(--primary-blue);
-            line-height: 1.6;
-            padding: 40px 20px;
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .register-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+        }
+
+        .brand-section {
+            flex: 0 0 50%;
+            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
             position: relative;
         }
 
-        /* Animated background elements */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.5;
-            animation: float 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 700px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* Logo Section */
-        .logo-section {
-            text-align: center;
+        .brand-logo {
             margin-bottom: 30px;
-            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .logo-container {
-            display: inline-block;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .logo-container:hover {
-            transform: translateY(-2px);
-        }
-
-        .logo-placeholder {
-            width: 140px;
-            height: 60px;
-            background: var(--white);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-blue);
-            font-size: 11px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px var(--shadow-light);
-        }
-
-        .logo-placeholder:hover {
-            border-color: var(--accent-teal);
-            background: var(--white);
-            transform: scale(1.05);
-        }
-
-        /* Registration Container */
-        .registration-container {
-            background: var(--white);
-            border-radius: 24px;
-            box-shadow:
-                    0 32px 64px var(--shadow-light),
-                    0 16px 32px var(--shadow-medium),
-                    0 0 0 1px rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-            position: relative;
-        }
-
-        .registration-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-blue) 0%, var(--accent-teal) 50%, var(--primary-blue) 100%);
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            color: var(--white);
-            padding: 40px;
             text-align: center;
-            position: relative;
-            overflow: hidden;
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
+        .brand-logo img {
+            width: 240px;
+            height: auto;
+            filter: brightness(0) invert(1);
         }
 
-        .header-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--white);
-            border-radius: 50%;
+        .brand-slogan {
+            font-size: 1.1rem;
+            font-weight: 400;
+            text-align: center;
+            line-height: 1.6;
+            max-width: 280px;
+        }
+
+        .register-section {
+            flex: 0 0 50%;
+            background: #f8f9fa;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 24px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .header-icon svg {
-            width: 36px;
-            height: 36px;
-            color: var(--secondary-blue);
-        }
-
-        .header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 36px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            margin-bottom: 12px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .header-subtitle {
-            font-size: 15px;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-
-        .form-container {
             padding: 40px;
         }
 
-        /* Avatar Section */
+        .register-form-container {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 48px var(--shadow-medium);
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            border: 1px solid #e9ecef;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--primary-black);
+            margin-bottom: 8px;
+        }
+
+        .form-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+
         .avatar-section {
             text-align: center;
-            margin-bottom: 40px;
-            padding: 30px;
+            margin-bottom: 24px;
+            padding: 20px;
             background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
-            border-radius: 16px;
+            border-radius: 12px;
             border: 2px dashed var(--border-gray);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .avatar-section:hover {
-            border-color: var(--accent-teal);
-            transform: translateY(-2px);
-            box-shadow: 0 15px 30px var(--shadow-light);
-        }
-
-        .avatar-section h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--primary-blue);
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            letter-spacing: -0.5px;
         }
 
         .avatar-preview {
-            width: 120px;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
-            border: 4px solid var(--white);
+            border: 3px solid var(--white);
             background: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            margin: 0 auto 20px;
-            box-shadow: 0 15px 35px var(--shadow-medium);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .avatar-preview:hover {
-            transform: scale(1.05);
-            border-color: var(--accent-teal);
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 20px var(--shadow-light);
         }
 
         .avatar-preview img {
@@ -244,9 +148,7 @@
 
         .avatar-placeholder {
             color: var(--text-gray);
-            font-size: 12px;
-            text-align: center;
-            font-weight: 500;
+            font-size: 24px;
         }
 
         .file-input-wrapper {
@@ -267,61 +169,33 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
-            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-teal) 100%);
+            gap: 6px;
+            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
             color: var(--white);
-            padding: 12px 20px;
-            border-radius: 12px;
+            padding: 8px 16px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 13px;
+            font-size: 0.85rem;
             font-weight: 600;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 8px 25px rgba(8, 131, 149, 0.3);
+            letter-spacing: 0.5px;
         }
 
         .file-input-label:hover {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 15px 35px rgba(8, 131, 149, 0.4);
+            background: var(--gradient-start);
+            transform: translateY(-1px);
         }
 
         .file-input-label svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        /* Form Styles - Vertical Layout */
-        .form-section {
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            color: var(--primary-blue);
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            letter-spacing: -0.5px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background: var(--accent-teal);
+            width: 14px;
+            height: 14px;
         }
 
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            gap: 16px;
             margin-bottom: 20px;
         }
 
@@ -337,26 +211,23 @@
             display: block;
             margin-bottom: 8px;
             font-weight: 600;
-            color: var(--primary-blue);
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            color: var(--primary-black);
+            font-size: 0.9rem;
         }
 
         .required {
             color: var(--error-red);
         }
 
-        .form-group input,
-        .form-group select {
+        .form-group input {
             width: 100%;
             padding: 14px 16px;
             border: 2px solid var(--border-gray);
-            border-radius: 12px;
-            font-size: 15px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            background: var(--light-gray);
-            color: var(--primary-blue);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: var(--white);
+            color: var(--primary-black);
             font-family: inherit;
         }
 
@@ -365,397 +236,165 @@
             opacity: 0.7;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus {
             outline: none;
-            border-color: var(--secondary-blue);
+            border-color: var(--gradient-mid);
             background: var(--white);
-            box-shadow: 0 0 0 4px rgba(8, 131, 149, 0.1);
-            transform: translateY(-1px);
+            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.1);
         }
 
-        .form-group.error input,
-        .form-group.error select {
+        .form-group.error input {
             border-color: var(--error-red);
             background: rgba(220, 38, 38, 0.05);
         }
 
-        .form-group.success input,
-        .form-group.success select {
+        .form-group.success input {
             border-color: var(--success-green);
             background: rgba(16, 185, 129, 0.05);
         }
 
         .error-message {
             color: var(--error-red);
-            font-size: 12px;
+            font-size: 0.8rem;
             margin-top: 6px;
             display: none;
             font-weight: 500;
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .form-group.error .error-message {
             display: block;
         }
 
-        /* Password Strength Indicator */
-        .password-strength {
-            margin-top: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .strength-weak {
-            color: var(--error-red);
-        }
-
-        .strength-medium {
-            color: var(--warning-orange);
-        }
-
-        .strength-strong {
-            color: var(--success-green);
-        }
-
-        .password-requirements {
-            margin-top: 12px;
-            padding: 16px;
-            background: var(--light-gray);
-            border-radius: 8px;
-            border-left: 4px solid var(--border-gray);
-        }
-
-        .requirements-title {
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--primary-blue);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .requirement {
-            display: block;
-            font-size: 11px;
-            color: var(--text-gray);
-            margin-bottom: 4px;
-            transition: color 0.3s ease;
-        }
-
-        .requirement.met {
-            color: var(--success-green);
-            font-weight: 600;
-        }
-
-        .age-info {
-            font-size: 12px;
-            color: var(--text-gray);
-            margin-top: 6px;
-            font-weight: 500;
-        }
-
-        /* Submit Section */
         .submit-section {
             text-align: center;
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 1px solid var(--border-gray);
+            margin-top: 32px;
         }
 
         .submit-btn {
-            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-teal) 100%);
+            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
             color: var(--white);
-            padding: 18px 40px;
             border: none;
-            border-radius: 12px;
-            font-size: 15px;
-            font-weight: 600;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 14px 32px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 8px 25px rgba(8, 131, 149, 0.3);
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(8, 131, 149, 0.3);
             font-family: inherit;
-            position: relative;
-            overflow: hidden;
             min-width: 200px;
         }
 
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.6s;
-        }
-
-        .submit-btn:hover::before {
-            left: 100%;
-        }
-
         .submit-btn:hover {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 16px 32px rgba(8, 131, 149, 0.4);
+            background: var(--gradient-start);
+            box-shadow: 0 6px 16px rgba(8, 131, 149, 0.4);
+            transform: translateY(-1px);
         }
 
         .submit-btn:disabled {
-            background: var(--text-gray);
+            opacity: 0.7;
             cursor: not-allowed;
             transform: none;
-            box-shadow: none;
         }
 
-        .submit-btn svg {
-            width: 18px;
-            height: 18px;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        /* Messages */
-        .message {
+        .login-link {
             text-align: center;
-            margin-top: 20px;
-            padding: 16px 20px;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 500;
-            animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-top: 24px;
+            font-size: 0.95rem;
+            color: var(--text-gray);
         }
 
-        .error-msg {
-            background: rgba(220, 38, 38, 0.1);
-            color: var(--error-red);
-            border-left: 4px solid var(--error-red);
+        .login-link a {
+            color: var(--gradient-end);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
         }
 
-        .success-msg {
-            background: rgba(8, 131, 149, 0.1);
-            color: var(--secondary-blue);
-            border-left: 4px solid var(--secondary-blue);
+        .login-link a:hover {
+            color: var(--gradient-mid);
         }
 
-        /* Loading Animation */
-        .loading-spinner {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top-color: var(--white);
-            animation: spin 1s linear infinite;
-            margin-right: 8px;
-            vertical-align: middle;
-        }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
+        @media (max-width: 900px) {
+            .register-container {
+                flex-direction: column;
             }
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
+            .brand-section, .register-section {
+                flex: 0 0 50vh;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .brand-logo img {
+                width: 200px;
             }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
+            .brand-slogan {
+                font-size: 1rem;
+                max-width: 250px;
             }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 20px 15px;
-            }
-
-            .container {
-                margin: 0;
-            }
-
-            .header {
-                padding: 30px 24px;
-            }
-
-            .form-container {
-                padding: 30px 24px;
-            }
-
             .form-row {
                 grid-template-columns: 1fr;
                 gap: 16px;
             }
-
-            .header h2 {
-                font-size: 28px;
-            }
-
-            .avatar-section {
-                padding: 24px 20px;
-            }
-
-            .avatar-preview {
-                width: 100px;
-                height: 100px;
-            }
-
-            .logo-placeholder {
-                width: 120px;
-                height: 50px;
-                font-size: 10px;
-            }
         }
 
         @media (max-width: 480px) {
-            .header h2 {
-                font-size: 24px;
+            .register-section {
+                padding: 20px;
             }
-
-            .header-icon {
+            .register-form-container {
+                padding: 24px;
+            }
+            .brand-logo img {
+                width: 180px;
+            }
+            .avatar-preview {
                 width: 60px;
                 height: 60px;
             }
-
-            .header-icon svg {
-                width: 28px;
-                height: 28px;
-            }
-
             .submit-btn {
                 width: 100%;
-                padding: 16px 20px;
-            }
-        }
-
-        /* Focus states for accessibility */
-        .form-group input:focus,
-        .form-group select:focus,
-        .submit-btn:focus,
-        .file-input-label:focus,
-        .logo-container:focus {
-            outline: 2px solid var(--accent-teal);
-            outline-offset: 2px;
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            .form-group input,
-            .form-group select {
-                border-width: 3px;
-            }
-
-            .submit-btn {
-                border: 3px solid var(--secondary-blue);
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+                padding: 12px 20px;
             }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Logo Section -->
-    <div class="logo-section">
-        <a href="/home" class="logo-container" aria-label="Về trang chủ">
-            <div class="logo-placeholder">
-                <!-- Replace this div with your logo image -->
-                <span>Your Logo</span>
+    <div class="register-container">
+        <div class="brand-section">
+            <div class="brand-logo">
+                <img src="/logo/logo.png" alt="Logo" />
             </div>
-        </a>
+            <div class="brand-slogan">
+                Nền tảng thương mại điện tử<br>
+                yêu thích ở Đông Nam Á & Đài Loan
     </div>
-
-    <div class="registration-container">
-        <div class="header">
-            <div class="header-icon">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="8.5" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M20 8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M23 11H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <h2>Đăng ký tài khoản</h2>
-            <p class="header-subtitle">Tạo tài khoản mới để trải nghiệm dịch vụ của chúng tôi</p>
         </div>
 
-        <div class="form-container">
+        <div class="register-section">
+            <div class="register-form-container">
             <form th:action="@{/customers/register}" method="post" enctype="multipart/form-data" th:object="${customer}" id="registrationForm">
+                    <div class="form-header">
+                        <div class="form-title">Đăng ký tài khoản</div>
+                        <div class="form-subtitle">Tạo tài khoản mới để trải nghiệm dịch vụ của chúng tôi</div>
+                    </div>
 
                 <!-- Avatar Section -->
                 <div class="avatar-section">
-                    <h3>Ảnh đại diện</h3>
                     <div class="avatar-preview" id="avatarPreview">
                         <div class="avatar-placeholder">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M20 21C20 18.7909 20 17.6863 19.3259 16.9393C18.6519 16.1924 17.596 16.0399 15.484 15.7347C14.1106 15.5413 12.7213 15.4446 11.3309 15.4446C9.94035 15.4446 8.55102 15.5413 7.17766 15.7347C5.06566 16.0399 4.00967 16.1924 3.33564 16.9393C2.66162 17.6863 2.66162 18.7909 2.66162 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                                <i class="fas fa-user"></i>
                         </div>
                     </div>
                     <div class="file-input-wrapper">
                         <input type="file" name="imageFile" id="imageFile" accept="image/*" aria-label="Chọn ảnh đại diện">
                         <label for="imageFile" class="file-input-label">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M8.5 10C9.32843 10 10 9.32843 10 8.5C10 7.67157 9.32843 7 8.5 7C7.67157 7 7 7.67157 7 8.5C7 9.32843 7.67157 10 8.5 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <path d="M21 15L16 10L5 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                                <i class="fas fa-camera"></i>
                             Chọn ảnh
                         </label>
                     </div>
                 </div>
 
                 <!-- Personal Information Section -->
-                <div class="form-section">
-                    <h3 class="section-title">Thông tin cá nhân</h3>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName">Họ <span class="required">*</span></label>
@@ -767,98 +406,42 @@
                             <label for="lastName">Tên <span class="required">*</span></label>
                             <input type="text" th:field="*{lastname}" id="lastName" required placeholder="Nhập tên của bạn" autocomplete="family-name">
                             <div class="error-message">Vui lòng nhập tên</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="gender">Giới tính <span class="required">*</span></label>
-                            <select th:field="*{gender}" id="gender" required autocomplete="sex">
-                                <option value="">Chọn giới tính</option>
-                                <option value="M">Nam</option>
-                                <option value="F">Nữ</option>
-                                <option value="O">Khác</option>
-                            </select>
-                            <div class="error-message">Vui lòng chọn giới tính</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="dateOfBirth">Ngày sinh <span class="required">*</span></label>
-                            <input type="date" th:field="*{dateofbirth}" id="dateOfBirth" required autocomplete="bday">
-                            <div class="age-info" id="ageInfo"></div>
-                            <div class="error-message">Bạn phải từ 16 tuổi trở lên</div>
-                        </div>
-                    </div>
-
-                    <div class="form-group full-width">
-                        <label for="address">Địa chỉ <span class="required">*</span></label>
-                        <input type="text" th:field="*{address}" id="address" required placeholder="Nhập địa chỉ của bạn" autocomplete="street-address">
-                        <div class="error-message">Vui lòng nhập địa chỉ</div>
                     </div>
                 </div>
 
                 <!-- Contact Information Section -->
-                <div class="form-section">
-                    <h3 class="section-title">Thông tin liên hệ</h3>
-
-                    <div class="form-row">
-                        <div class="form-group">
+                    <div class="form-group full-width">
                             <label for="email">Email <span class="required">*</span></label>
                             <input type="email" th:field="*{email}" id="email" required placeholder="example@domain.com" autocomplete="email">
                             <div class="error-message">Vui lòng nhập email hợp lệ</div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="phone">Số điện thoại <span class="required">*</span></label>
-                            <input type="text" th:field="*{phone}" id="phone" maxlength="10" pattern="[0-9]{10}" required placeholder="0123456789" autocomplete="tel">
-                            <div class="error-message">Số điện thoại phải có đúng 10 chữ số</div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Security Section -->
-                <div class="form-section">
-                    <h3 class="section-title">Bảo mật</h3>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label for="password">Mật khẩu <span class="required">*</span></label>
-                            <input type="password" th:field="*{password}" id="password" minlength="8" required placeholder="Nhập mật khẩu" autocomplete="new-password">
-                            <div class="password-strength" id="passwordStrength"></div>
-                            <div class="password-requirements">
-                                <div class="requirements-title">Yêu cầu mật khẩu:</div>
-                                <span class="requirement" id="req-length">• Ít nhất 8 ký tự</span>
-                                <span class="requirement" id="req-upper">• Có chữ hoa (A-Z)</span>
-                                <span class="requirement" id="req-lower">• Có chữ thường (a-z)</span>
-                                <span class="requirement" id="req-number">• Có số (0-9)</span>
-                                <span class="requirement" id="req-special">• Có ký tự đặc biệt (!@#$%^&*)</span>
-                            </div>
-                            <div class="error-message">Mật khẩu không đủ mạnh</div>
+                            <input type="password" th:field="*{password}" id="password" required placeholder="Nhập mật khẩu" autocomplete="new-password">
+                            <div class="error-message">Vui lòng nhập mật khẩu</div>
                         </div>
 
                         <div class="form-group">
                             <label for="confirmPassword">Xác nhận mật khẩu <span class="required">*</span></label>
                             <input type="password" id="confirmPassword" required placeholder="Nhập lại mật khẩu" autocomplete="new-password">
                             <div class="error-message">Mật khẩu xác nhận không khớp</div>
-                        </div>
                     </div>
                 </div>
 
                 <div class="submit-section">
                     <button type="submit" class="submit-btn" id="submitBtn">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <circle cx="8.5" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M20 8V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M23 11H17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                            <i class="fas fa-user-plus"></i>
                         Đăng ký tài khoản
                     </button>
                 </div>
-            </form>
 
-            <div th:if="${errorMessage}" th:text="${errorMessage}" class="message error-msg"></div>
-            <div th:if="${successMessage}" th:text="${successMessage}" class="message success-msg"></div>
+                    <div class="login-link">
+                        Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a>
+                    </div>
+                </form>
         </div>
     </div>
 </div>
@@ -896,75 +479,14 @@
             } else {
                 preview.innerHTML = `
                     <div class="avatar-placeholder">
-                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            <path d="M20 21C20 18.7909 20 17.6863 19.3259 16.9393C18.6519 16.1924 17.596 16.0399 15.484 15.7347C14.1106 15.5413 12.7213 15.4446 11.3309 15.4446C9.94035 15.4446 8.55102 15.5413 7.17766 15.7347C5.06566 16.0399 4.00967 16.1924 3.33564 16.9393C2.66162 17.6863 2.66162 18.7909 2.66162 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+                            <i class="fas fa-user"></i>
                     </div>
                 `;
             }
         });
 
-        // Enhanced phone number validation
-        const phoneInput = document.getElementById('phone');
-        phoneInput.addEventListener('input', function(e) {
-            const value = e.target.value.replace(/\D/g, '');
-            e.target.value = value;
-
-            const formGroup = e.target.closest('.form-group');
-            if (value.length !== 10) {
-                formGroup.classList.add('error');
-                formGroup.classList.remove('success');
-            } else {
-                formGroup.classList.remove('error');
-                formGroup.classList.add('success');
-            }
-        });
-
-        // Enhanced password strength validation
-        function checkPasswordStrength(password) {
-            const requirements = {
-                length: password.length >= 8,
-                upper: /[A-Z]/.test(password),
-                lower: /[a-z]/.test(password),
-                number: /\d/.test(password),
-                special: /[!@#$%^&*(),.?":{}|<>]/.test(password)
-            };
-
-            // Update requirement indicators
-            document.getElementById('req-length').classList.toggle('met', requirements.length);
-            document.getElementById('req-upper').classList.toggle('met', requirements.upper);
-            document.getElementById('req-lower').classList.toggle('met', requirements.lower);
-            document.getElementById('req-number').classList.toggle('met', requirements.number);
-            document.getElementById('req-special').classList.toggle('met', requirements.special);
-
-            const metCount = Object.values(requirements).filter(Boolean).length;
-            const strengthIndicator = document.getElementById('passwordStrength');
-            const passwordGroup = document.getElementById('password').closest('.form-group');
-
-            if (metCount < 3) {
-                strengthIndicator.textContent = 'Yếu';
-                strengthIndicator.className = 'password-strength strength-weak';
-                passwordGroup.classList.add('error');
-                passwordGroup.classList.remove('success');
-                return false;
-            } else if (metCount < 5) {
-                strengthIndicator.textContent = 'Trung bình';
-                strengthIndicator.className = 'password-strength strength-medium';
-                passwordGroup.classList.remove('error');
-                passwordGroup.classList.remove('success');
-                return true;
-            } else {
-                strengthIndicator.textContent = 'Mạnh';
-                strengthIndicator.className = 'password-strength strength-strong';
-                passwordGroup.classList.remove('error');
-                passwordGroup.classList.add('success');
-                return true;
-            }
-        }
-
+            // Simple password validation
         document.getElementById('password').addEventListener('input', function(e) {
-            checkPasswordStrength(e.target.value);
             validatePasswords();
         });
 
@@ -991,38 +513,6 @@
 
         document.getElementById('confirmPassword').addEventListener('input', validatePasswords);
 
-        // Enhanced age validation (16+ years old)
-        function validateAge() {
-            const dateOfBirth = document.getElementById('dateOfBirth').value;
-            const ageInfo = document.getElementById('ageInfo');
-            const formGroup = document.getElementById('dateOfBirth').closest('.form-group');
-
-            if (dateOfBirth) {
-                const birthDate = new Date(dateOfBirth);
-                const today = new Date();
-                const age = today.getFullYear() - birthDate.getFullYear();
-                const monthDiff = today.getMonth() - birthDate.getMonth();
-
-                const actualAge = monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())
-                    ? age - 1 : age;
-
-                ageInfo.textContent = `Tuổi: ${actualAge}`;
-
-                if (actualAge < 16) {
-                    formGroup.classList.add('error');
-                    formGroup.classList.remove('success');
-                    return false;
-                } else {
-                    formGroup.classList.remove('error');
-                    formGroup.classList.add('success');
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        document.getElementById('dateOfBirth').addEventListener('change', validateAge);
-
         // Enhanced form validation
         const registrationForm = document.getElementById('registrationForm');
         const submitBtn = document.getElementById('submitBtn');
@@ -1041,26 +531,8 @@
                 }
             });
 
-            // Validate phone number
-            const phone = document.getElementById('phone').value;
-            if (phone.length !== 10 || !/^\d{10}$/.test(phone)) {
-                document.getElementById('phone').closest('.form-group').classList.add('error');
-                isValid = false;
-            }
-
-            // Validate password strength
-            const password = document.getElementById('password').value;
-            if (!checkPasswordStrength(password)) {
-                isValid = false;
-            }
-
             // Validate password confirmation
             if (!validatePasswords()) {
-                isValid = false;
-            }
-
-            // Validate age
-            if (!validateAge()) {
                 isValid = false;
             }
 
@@ -1086,7 +558,7 @@
                 }
             } else {
                 // Add loading state
-                submitBtn.innerHTML = '<span class="loading-spinner"></span> Đang đăng ký...';
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang đăng ký...';
                 submitBtn.disabled = true;
             }
         });
@@ -1116,11 +588,6 @@
                 }
             });
         });
-
-        // Set max date for date of birth (today - 16 years)
-        const today = new Date();
-        const maxDate = new Date(today.getFullYear() - 16, today.getMonth(), today.getDate());
-        document.getElementById('dateOfBirth').max = maxDate.toISOString().split('T')[0];
 
         // Enhanced keyboard navigation
         document.addEventListener('keydown', function(e) {

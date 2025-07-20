@@ -1,5 +1,6 @@
 package org.example.ecommerce.service.customer.customer_product;
 
+import org.example.ecommerce.entity.Category;
 import org.example.ecommerce.entity.Inventory;
 import org.example.ecommerce.entity.Product;
 import org.example.ecommerce.entity.Productimage;
@@ -39,31 +40,21 @@ public class CustomerProductServiceImpl implements CustomerProductService {
         List<ProductView> views = new ArrayList<>();
         for (Product p : products) {
             if (p.getStatus().equals("available")) {
-                List<Inventory> inventories = inventoryRepository.findAllByProductid(p);
-                int totalSold = (inventories == null || inventories.isEmpty())
-                        ? 0
-                        : inventories.stream()
-                        .mapToInt(inv -> inv.getSolditems() != null ? inv.getSolditems() : 0)
-                        .sum();
-
 
                 List<Productimage> imgs = productimageRepository.findAllByProductid(p);
                 String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
                 String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                String keyword = "Tỉnh";
-                int index = fullAddress.indexOf(keyword);
-                String shopaddress = (index != -1) ? fullAddress.substring(index + keyword.length()).trim() : fullAddress;
+                int index = fullAddress.lastIndexOf("-");
+                String shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
 
-                List<Integer> rates = reviewRepository.findRateById(p.getId());
-                float rate = 0f;
-                if (!rates.isEmpty()) {
-                    float sum = 0f;
-                    for (int r : rates) {
-                        sum += r;
-                    }
-                    rate = Math.round((sum / rates.size()) * 10f) / 10f;
-                }
+
+                Float avgRating = reviewRepository.findAverageRatingByProductid(p);
+                float rate = (avgRating != null) ? avgRating : 0f;
+
+                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
+                int solditems = (sumSold != null) ? sumSold : 0;
+
 
                 Integer categoryId = null;
                 String categoryName = null;
@@ -72,10 +63,14 @@ public class CustomerProductServiceImpl implements CustomerProductService {
                     categoryName= categoryRepository.findById(categoryId).get().getCategoryname();
                 }
 
-                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), imageUrl, shopaddress, rate, categoryId, categoryName,solditems));
             }
         }
         return views;
+    }
+
+    public List<Category> getCategories() {
+        return categoryRepository.findRootCategories();
     }
 
 }

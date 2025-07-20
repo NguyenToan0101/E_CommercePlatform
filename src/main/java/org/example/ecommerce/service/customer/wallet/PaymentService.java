@@ -20,8 +20,9 @@ public class PaymentService {
     private final WalletHistoryRepository walletHistoryRepository;
     private final ProductimageRepository productimageRepository;
     private final PromotionService promotionService;
+    private final PromotionRepository promotionRepository;
 
-    public PaymentService(WalletRepository walletRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, CartitemRepository cartItemsRepository, CartRepository cartsRepository, InventoryRepository inventoryRepository, WalletHistoryRepository walletHistoryRepository, ProductimageRepository productimageRepository, PromotionService promotionService) {
+    public PaymentService(WalletRepository walletRepository, OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, CartitemRepository cartItemsRepository, CartRepository cartsRepository, InventoryRepository inventoryRepository, WalletHistoryRepository walletHistoryRepository, ProductimageRepository productimageRepository, PromotionService promotionService, PromotionRepository promotionRepository) {
         this.walletRepository = walletRepository;
         this.ordersRepository = ordersRepository;
         this.orderItemsRepository = orderItemsRepository;
@@ -31,6 +32,7 @@ public class PaymentService {
         this.walletHistoryRepository = walletHistoryRepository;
         this.productimageRepository = productimageRepository;
         this.promotionService = promotionService;
+        this.promotionRepository = promotionRepository;
     }
 
     public String checkout(Customer customer, List<Integer> cartItemIds, String fullname, String phone, String address) {
@@ -196,6 +198,11 @@ public class PaymentService {
             oi1.setUnitprice(price);
             oi1.setPromotionid(freeship);
             orderItemsRepository.save(oi1);
+            Optional<Promotion> promotion = getPromotionById(freeship);
+            promotion.orElseThrow().setRevenue(promotion.orElseThrow().getRevenue().add(price));
+            promotion.orElseThrow().setOrders(promotion.orElseThrow().getOrders()+1);
+            promotion.orElseThrow().setUsageCount(promotion.orElseThrow().getUsageCount()+1);
+            promotionRepository.save(promotion.orElseThrow());
         }
 
         if (discount != null) {
@@ -207,6 +214,11 @@ public class PaymentService {
             oi2.setUnitprice(price);
             oi2.setPromotionid(discount);
             orderItemsRepository.save(oi2);
+            Optional<Promotion> promotion = getPromotionById(discount);
+            promotion.orElseThrow().setRevenue(promotion.orElseThrow().getRevenue().add(price));
+            promotion.orElseThrow().setOrders(promotion.orElseThrow().getOrders()+1);
+            promotion.orElseThrow().setUsageCount(promotion.orElseThrow().getUsageCount()+1);
+            promotionRepository.save(promotion.orElseThrow());
         }
 
 
@@ -251,8 +263,7 @@ public class PaymentService {
             CartPreviewDTO dto = new CartPreviewDTO();
             dto.setId(ci.getId());
             dto.setProductName(ci.getProductid().getName());
-            List<Productimage> images = productimageRepository.findAllByProductid(ci.getProductid());
-            String imageUrl = images.isEmpty() ? null : images.get(0).getImageurl();
+            String imageUrl = ci.getInventoryid().getImage();
             dto.setImageUrl(imageUrl);
 
             dto.setQuantity(ci.getQuantity());
@@ -276,8 +287,7 @@ public class PaymentService {
             dto.setId(null);
             dto.setProductName(product.getName());
 
-            List<Productimage> images = productimageRepository.findAllByProductid(product);
-            String imageUrl = images.isEmpty() ? null : images.get(0).getImageurl();
+            String imageUrl = inventory.getImage();
             dto.setImageUrl(imageUrl);
 
             dto.setQuantity(quantity);

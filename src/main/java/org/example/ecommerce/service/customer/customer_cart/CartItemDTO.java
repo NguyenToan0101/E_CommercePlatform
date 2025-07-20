@@ -12,6 +12,8 @@ public class CartItemDTO {
     private String color;
     private String dimension;
     private String imageUrl;
+    private Integer shopId;
+    private String shopName;
 
     public CartItemDTO() {
     }
@@ -86,5 +88,21 @@ public class CartItemDTO {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 }
