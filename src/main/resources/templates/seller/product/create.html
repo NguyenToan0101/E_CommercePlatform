@@ -167,7 +167,7 @@
                                                 <input type="number" th:name="'inventories[' + ${idx.index} + '].quantity'" th:value="${inv.quantity}" placeholder="Số lượng" min="0" required class="variant-input" />
                                             </td>
                                             <td>
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].weight'" th:value="${inv.weight}" placeholder="Cân nặng" min="0" required style="width:70px;"> gr
+                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].weight'" th:value="${inv.weight}" placeholder="Cân nặng" min="0.01" required style="width:70px;"> kg
                                             </td>
                                             <td>
                                                 <input type="number" th:name="'inventories[' + ${idx.index} + '].length'" th:value="${inv.length}" placeholder="Dài" min="0" required style="width:50px;"> cm
@@ -195,7 +195,7 @@
                         <div id="product-shipping-section">
                             <div class="form-group">
                                 <label for="weight">* Cân nặng (Sau khi đóng gói)</label>
-                                <input type="number" id="weight" th:field="*{weight}" placeholder="Nhập cân nặng" min="0" required> gr
+                                <input type="number" id="weight" th:field="*{weight}" placeholder="Nhập cân nặng" min="0.01" required> kg
                             </div>
                             <div class="form-group">
                                 <label>Kích thước đóng gói (cm)</label>

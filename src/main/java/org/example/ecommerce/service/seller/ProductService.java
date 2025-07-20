@@ -1,6 +1,5 @@
 package org.example.ecommerce.service.seller;
 
-import org.example.ecommerce.common.dto.ProductSalesDTO;
 import org.example.ecommerce.common.dto.InventorySalesDTO;
 import org.example.ecommerce.common.dto.ProductSalesDTO;
 import org.example.ecommerce.entity.*;
@@ -240,7 +239,7 @@ public class ProductService {
 
         BigDecimal totalRevenue = orderItems.stream()
                 .map(item -> item.getUnitprice().multiply(new BigDecimal(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(BigDecimal.ZERO, BigDecimal::add);  
         int totalSoldQuantity = orderItems.stream()
                 .mapToInt(Orderitem::getQuantity)
                 .sum();

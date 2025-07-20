@@ -66,7 +66,7 @@ public class Inventory {
     private Integer weight;
 
     @Column(name = "length")
-    private Integer length;
+    private Float length;
 
     @Column(name = "width")
     private Integer width;
