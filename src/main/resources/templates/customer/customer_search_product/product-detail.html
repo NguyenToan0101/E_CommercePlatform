@@ -325,6 +325,9 @@
             color: var(--shopee-orange);
             font-weight: bold;
         }
+        .product-price-value {
+            color: #ff0000 !important;
+        }
         .flash-sale {
             background-color: var(--orange-accent);
             color: white;
@@ -687,8 +690,8 @@
                 <span style="font-weight: bold;">An Tâm Mua Sắm Cùng MUSA</span>
                     </div>
             <div class="product-price" id="price-range">
-                <!-- Price range will be populated by JavaScript -->
-                </div>
+                <!-- Giá sẽ được render bởi JS -->
+            </div>
             <div class="flash-sale">
                 FLASH SALE
                     </div>
@@ -806,6 +809,9 @@
     </div>
 </div>
 
+<!-- Thêm hiệu ứng loading toàn màn hình -->
+<div id="fullpage-loading" style="display:none;position:fixed;z-index:99999;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);align-items:center;justify-content:center;"><div style="font-size:2rem;color:#088395;"><i class="fas fa-spinner fa-spin"></i> Đang xử lý...</div></div>
+
 <script th:inline="javascript">
     // Lấy productId từ Thymeleaf
     const productId = [[${detail.product.id}]];
@@ -842,7 +848,7 @@
         selectedInventory = null;
         let stock = 0;
         let inventoryImage = null;
-        
+        let selectedInvObj = null;
         inventories.forEach(inv => {
             if (
                 inv.getAttribute('data-color') === selectedColor &&
@@ -851,6 +857,9 @@
                 selectedInventory = inv;
                 stock = parseInt(inv.getAttribute('data-quantity')) || 0;
                 inventoryImage = inv.getAttribute('data-image');
+                selectedInvObj = {
+                    price: parseFloat(inv.getAttribute('data-price'))
+                };
             }
         });
         
@@ -869,6 +878,7 @@
                 }
             });
         }
+        renderPriceRange(selectedInvObj);
     }
 
         const qtyInput = document.getElementById('quantity');
@@ -927,22 +937,24 @@
         }
         if (!selectedInventory) {
             alert('Vui lòng chọn phân loại còn hàng!');
-                return;
-            }
+            return;
+        }
         const inventoryId = selectedInventory.getAttribute('data-id');
         const quantity = document.getElementById('quantity').value;
         if (!productId) {
             alert('Không xác định được sản phẩm!');
             return;
         }
+        showFullPageLoading(true);
         fetch('/cart/add', {
-                method: 'POST',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: `productId=${productId}&inventoryId=${inventoryId}&quantity=${quantity}`
         })
         .then(response => {
+            showFullPageLoading(false);
             if (response.ok) {
                 showAddToCartSuccess();
             } else {
@@ -950,6 +962,7 @@
             }
         })
         .catch(() => {
+            showFullPageLoading(false);
             alert('Có lỗi xảy ra khi thêm vào giỏ hàng!');
         });
     };
@@ -978,6 +991,7 @@
             if (seenSizes[size]) el.style.display = 'none';
             else seenSizes[size] = true;
         });
+        renderPriceRange();
     });
 
     // User menu JS from home.html
@@ -1148,6 +1162,49 @@
             // Re-enable the button
             heartIcon.style.pointerEvents = 'auto';
         });
+    }
+
+    // Lấy danh sách inventory từ DOM
+    function getInventories() {
+        const inventories = [];
+        document.querySelectorAll('#inventory-data .inventory-item').forEach(inv => {
+            inventories.push({
+                id: inv.getAttribute('data-id'),
+                color: inv.getAttribute('data-color'),
+                size: inv.getAttribute('data-size'),
+                quantity: parseInt(inv.getAttribute('data-quantity')),
+                sold: parseInt(inv.getAttribute('data-sold')),
+                price: parseFloat(inv.getAttribute('data-price')),
+                image: inv.getAttribute('data-image')
+            });
+        });
+        return inventories;
+    }
+
+    // Hiển thị giá từ thấp đến cao hoặc 1 giá nếu chỉ có 1
+    function renderPriceRange(selectedInv) {
+        const priceDiv = document.getElementById('price-range');
+        const inventories = getInventories();
+        let html = '';
+        if (selectedInv) {
+            html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${selectedInv.price.toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
+        } else {
+            const prices = inventories.map(i => i.price).sort((a,b)=>a-b);
+            const allEqual = prices.every(p => p === prices[0]);
+            if (allEqual) {
+                html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${prices[0].toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
+            } else {
+                html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${prices[0].toLocaleString('vi-VN', {style:'currency',currency:'VND'})} - ${prices[prices.length-1].toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
+            }
+        }
+        priceDiv.innerHTML = html;
+    }
+
+    // Hiệu ứng loading toàn màn hình khi thêm vào giỏ hàng
+    function showFullPageLoading(show) {
+        const loading = document.getElementById('fullpage-loading');
+        if (show) loading.style.display = 'flex';
+        else loading.style.display = 'none';
     }
 </script>
 </body>
