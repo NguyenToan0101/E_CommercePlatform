@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,6 +110,7 @@ public class CancelReturnService {
 
             List<Orderitem> allItems = orderItemsRepository.findAllByOrderid(oldOrder);
             boolean onlyOne = allItems.size() == 1;
+            Complaint complaint = new Complaint();
 
             if (!onlyOne) {
                 Order newOrder = new Order();
@@ -131,25 +133,25 @@ public class CancelReturnService {
                 BigDecimal remain = oldOrder.getTotalamount().subtract(newOrder.getTotalamount());
                 oldOrder.setTotalamount(remain);
                 ordersRepository.save(oldOrder);
+                complaint.setOrderId(newOrder.getId());
 
             } else {
                 oldOrder.setStatus("Yêu cầu trả hàng/hoàn tiền");
                 ordersRepository.save(oldOrder);
+                complaint.setOrderId(oldOrder.getId());
             }
 
             ComplaintCategory complaintCategory = complaintCategoryRepository.findById(categoryId).orElse(null);
             ComplaintReason complaintReason = complaintReasonRepository.findById(reasonId).orElse(null);
 
 
-            Complaint complaint = new Complaint();
             complaint.setCustomer(customer);
             complaint.setCategory(complaintCategory);
             complaint.setReason(complaintReason);
             complaint.setDescription(description);
             complaint.setStatus("pending");
-            complaint.setCreatedAt(java.time.Instant.now());
-            complaint.setUpdatedAt(java.time.Instant.now());
-            complaint.setOrderItem(orderItem);
+            complaint.setCreatedAt(LocalDateTime.from(Instant.now()));
+            complaint.setUpdatedAt(LocalDateTime.from(Instant.now()));
             complaintRepository.save(complaint);
 
             if (mediaFiles != null) {

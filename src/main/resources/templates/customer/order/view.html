@@ -234,14 +234,14 @@
 
         /* Header Top Bar */
         .header-top-bar {
-            background: #fff; 
-            color: #111; 
-            font-size: 1rem; 
-            padding: 0 32px; 
-            height: 38px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: space-between; 
+            background: #fff;
+            color: #111;
+            font-size: 1rem;
+            padding: 0 32px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             border-bottom: 1px solid #e5eaf2;
         }
 
@@ -487,11 +487,11 @@
             border-bottom: 2px solid var(--teal-gradient-end);
             text-align: center;
         }
-        
+
         .products-table th:nth-child(2) {
             text-align: left;
         }
-        
+
         .products-table th:nth-child(6),
         .products-table th:nth-child(7) {
             text-align: right;
@@ -504,28 +504,28 @@
             white-space: nowrap;
             text-align: center;
         }
-        
+
         .products-table td:nth-child(1) {
             text-align: center;
             width: 100px;
         }
-        
+
         .products-table td:nth-child(2) {
             text-align: left;
             width: 200px;
         }
-        
+
         .products-table td:nth-child(3),
         .products-table td:nth-child(4) {
             text-align: center;
             width: 80px;
         }
-        
+
         .products-table td:nth-child(5) {
             text-align: center;
             width: 80px;
         }
-        
+
         .products-table td:nth-child(6),
         .products-table td:nth-child(7) {
             text-align: right;
@@ -561,11 +561,11 @@
             display: block;
             transition: all 0.3s ease;
         }
-        
+
         .product-link:hover {
             transform: scale(1.02);
         }
-        
+
         .product-name {
             font-weight: 600;
             color: var(--text-dark);
@@ -575,11 +575,11 @@
             white-space: normal;
             transition: color 0.3s ease;
         }
-        
+
         .product-link:hover .product-name {
             color: var(--teal-gradient-end);
         }
-        
+
         .product-link:hover .product-image {
             transform: scale(1.05);
             box-shadow: 0 8px 24px rgba(74, 155, 155, 0.3);
@@ -726,37 +726,37 @@
             border: 2px solid transparent;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
+
         .btn-danger {
             background: linear-gradient(135deg, #dc2626, #b91c1c);
             color: var(--white);
             border-color: #dc2626;
         }
-        
+
         .btn-danger:hover {
             background: linear-gradient(135deg, #b91c1c, #991b1b);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(220, 38, 38, 0.3);
         }
-        
+
         .btn-warning {
             background: linear-gradient(135deg, #f59e0b, #d97706);
             color: var(--white);
             border-color: #f59e0b;
         }
-        
+
         .btn-warning:hover {
             background: linear-gradient(135deg, #d97706, #b45309);
             transform: translateY(-2px);
             box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
         }
-        
+
         .btn-success {
             background: linear-gradient(135deg, #10b981, #059669);
             color: var(--white);
             border-color: #10b981;
         }
-        
+
         .btn-success:hover {
             background: linear-gradient(135deg, #059669, #047857);
             transform: translateY(-2px);
@@ -942,174 +942,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* Loading Overlay Styles */
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            backdrop-filter: blur(5px);
-        }
-
-        .loading-content {
-            background: var(--white);
-            padding: 40px;
-            border-radius: 20px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 400px;
-            width: 90%;
-            animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid var(--border-gray);
-            border-top: 4px solid var(--teal-gradient-start);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        .loading-text {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 20px;
-        }
-
-        .loading-progress {
-            width: 100%;
-            height: 6px;
-            background: var(--border-gray);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--teal-gradient-start), var(--teal-gradient-end));
-            border-radius: 3px;
-            animation: progressAnimation 2s ease-in-out infinite;
-        }
-
-        @keyframes progressAnimation {
-            0% { width: 0%; }
-            50% { width: 70%; }
-            100% { width: 100%; }
-        }
-
-        /* Notification Styles */
-        #notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 10000;
-            display: none;
-            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        @keyframes slideInRight {
-            from {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .notification {
-            background: var(--white);
-            padding: 16px 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-            border-left: 4px solid;
-            min-width: 300px;
-            max-width: 400px;
-        }
-
-        .notification-success {
-            border-left-color: var(--success-green);
-        }
-
-        .notification-error {
-            border-left-color: var(--error-red);
-        }
-
-        .notification-content {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .notification-content i {
-            font-size: 20px;
-            flex-shrink: 0;
-        }
-
-        .notification-success .notification-content i {
-            color: var(--success-green);
-        }
-
-        .notification-error .notification-content i {
-            color: var(--error-red);
-        }
-
-        .notification-content span {
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-dark);
-            line-height: 1.4;
-        }
-
-        /* Responsive for loading and notifications */
-        @media (max-width: 768px) {
-            .loading-content {
-                padding: 30px 20px;
-                margin: 20px;
-            }
-
-            .loading-spinner {
-                width: 50px;
-                height: 50px;
-            }
-
-            .loading-text {
-                font-size: 16px;
-            }
-
-            #notification {
-                top: 10px;
-                right: 10px;
-                left: 10px;
-                min-width: auto;
-            }
-
-            .notification {
-                padding: 14px 16px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -1233,141 +1065,139 @@
     <div class="main-content" th:attr="data-order-id=${order.id}">
 
 
-    <!-- Customer Information Section -->
-    <div class="customer-info">
-        <h2>
-            <i class="fas fa-user section-icon"></i>
-            Thông tin khách hàng
-        </h2>
+        <!-- Customer Information Section -->
+        <div class="customer-info">
+            <h2>
+                <i class="fas fa-user section-icon"></i>
+                Thông tin khách hàng
+            </h2>
 
-        <div class="info-grid">
-            <div class="info-item">
-                <i class="fas fa-user item-icon"></i>
-                <span class="label">Họ tên:</span>
-                <span class="value" th:text="${order.fullname}">Nguyễn Văn A</span>
+            <div class="info-grid">
+                <div class="info-item">
+                    <i class="fas fa-user item-icon"></i>
+                    <span class="label">Họ tên:</span>
+                    <span class="value" th:text="${order.fullname}">Nguyễn Văn A</span>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-phone item-icon"></i>
+                    <span class="label">Số điện thoại:</span>
+                    <span class="value" th:text="${order.phone}">0123456789</span>
+                </div>
+
+                <div class="info-item">
+                    <i class="fas fa-map-marker-alt item-icon"></i>
+                    <span class="label">Địa chỉ:</span>
+                    <span class="value" th:text="${order.address}">123 Đường ABC, Quận XYZ, TP.HCM</span>
+                </div>
             </div>
+        </div>
 
-            <div class="info-item">
-                <i class="fas fa-phone item-icon"></i>
-                <span class="label">Số điện thoại:</span>
-                <span class="value" th:text="${order.phone}">0123456789</span>
+        <!-- Products Section -->
+        <div class="products-section">
+            <h2>
+                <i class="fas fa-shopping-bag section-icon"></i>
+                Danh sách sản phẩm
+            </h2>
+
+            <div class="table-container">
+                <table class="products-table">
+                    <thead>
+                    <tr>
+                        <th th:if="${order.status == 'Đã giao'}">Chọn</th>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Màu</th>
+                        <th>Kích thước</th>
+                        <th>Số lượng</th>
+                        <th>Đơn giá</th>
+                        <th>Thành tiền</th>
+                    </tr>
+                    </thead>
+                    <tbody id="products-tbody">
+                    <tr th:each="item : ${items}" class="product-row">
+                        <td th:if="${order.status == 'Đã giao'}">
+                            <input type="checkbox" class="return-checkbox" th:value="${item.orderitemid}" th:attr="data-product-id=${item.productId}" />
+                        </td>
+                        <td>
+                            <a th:href="@{/detailproduct(id=${item.productId})}" class="product-link">
+                                <img th:src="@{${item.imageUrl}}" alt="Product Image" class="product-image"/>
+                            </a>
+                        </td>
+                        <td>
+                            <a th:href="@{/detailproduct(id=${item.productId})}" class="product-link">
+                                <div class="product-name" th:text="${item.productName}">Tên sản phẩm</div>
+                            </a>
+                        </td>
+                        <td>
+                            <span class="product-attribute" th:text="${item.color}">Đỏ</span>
+                        </td>
+                        <td>
+                            <span class="product-attribute" th:text="${item.dimension}">L</span>
+                        </td>
+                        <td>
+                            <span class="quantity-badge" th:text="${item.quantity}">1</span>
+                        </td>
+                        <td>
+                            <span class="price unit-price" th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'" th:attr="data-price=${item.unitPrice}">100,000 đ</span>
+                        </td>
+                        <td>
+                            <span class="price item-total" th:attr="data-quantity=${item.quantity}, data-unit-price=${item.unitPrice}">0 đ</span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
+        </div>
 
-            <div class="info-item">
-                <i class="fas fa-map-marker-alt item-icon"></i>
-                <span class="label">Địa chỉ:</span>
-                <span class="value" th:text="${order.address}">123 Đường ABC, Quận XYZ, TP.HCM</span>
+        <!-- Total Section -->
+        <div class="total-section">
+            <h2>
+                <i class="fas fa-calculator section-icon"></i>
+                Tổng số lượng
+            </h2>
+
+            <div class="total-row">
+                <span class="total-label">Tổng số lượng:</span>
+                <span class="total-value" id="total-quantity">0 sản phẩm</span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Tạm tính:</span>
+                <span class="total-value" id="subtotal">0 đ</span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Phí vận chuyển:</span>
+                <span class="total-value" id="shipping-fee">Miễn phí</span>
+            </div>
+            <div class="total-row grand-total">
+                <span class="total-label">Tổng cộng:</span>
+                <span class="total-value" id="grand-total">0 đ</span>
             </div>
         </div>
-    </div>
 
-    <!-- Products Section -->
-    <div class="products-section">
-        <h2>
-            <i class="fas fa-shopping-bag section-icon"></i>
-            Danh sách sản phẩm
-        </h2>
+        <!-- Actions -->
+        <div class="actions">
+            <!-- Nút hủy hàng cho trạng thái "Chờ xác nhận" và "Đã xác nhận" -->
+            <a th:if="${order.status == 'Chờ xác nhận' || order.status == 'Đã xác nhận'}"
+               href="#" class="action-btn btn-danger" onclick="cancelOrder()">
+                <i class="fas fa-times-circle"></i>
+                Hủy hàng
+            </a>
 
-        <div class="table-container">
-            <table class="products-table">
-                <thead>
-                <tr>
-                    <th>Hình ảnh</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Màu</th>
-                    <th>Kích thước</th>
-                    <th>Số lượng</th>
-                    <th>Đơn giá</th>
-                    <th>Thành tiền</th>
-                    <th>Hành động</th>
-                </tr>
-                </thead>
-                <tbody id="products-tbody">
-                <tr th:each="item : ${items}" class="product-row">
-                    <td>
-                        <a th:href="@{/detailproduct(id=${item.productId})}" class="product-link">
-                            <img th:src="@{${item.imageUrl}}" alt="Product Image" class="product-image"/>
-                        </a>
-                    </td>
-                    <td>
-                        <a th:href="@{/detailproduct(id=${item.productId})}" class="product-link">
-                            <div class="product-name" th:text="${item.productName}">Tên sản phẩm</div>
-                        </a>
-                    </td>
-                    <td>
-                        <span class="product-attribute" th:text="${item.color}">Đỏ</span>
-                    </td>
-                    <td>
-                        <span class="product-attribute" th:text="${item.dimension}">L</span>
-                    </td>
-                    <td>
-                        <span class="quantity-badge" th:text="${item.quantity}">1</span>
-                    </td>
-                    <td>
-                        <span class="price unit-price" th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'" th:attr="data-price=${item.unitPrice}">100,000 đ</span>
-                    </td>
-                    <td>
-                        <span class="price item-total" th:attr="data-quantity=${item.quantity}, data-unit-price=${item.unitPrice}">0 đ</span>
-                    </td>
-                    <td>
-                        <a th:href="@{/return-request(orderItemsId=${item.orderItemsId})}" class="action-btn btn-warning" style="padding: 8px 16px; font-size: 13px;">
-                            <i class="fas fa-undo-alt"></i> Trả hàng
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            <!-- Nút Trả hàng/Hoàn tiền và Đánh giá sản phẩm cho trạng thái "Đã giao" -->
+            <a th:if="${order.status == 'Đã giao'}"
+               href="#" class="action-btn btn-warning" id="return-btn">
+                <i class="fas fa-undo-alt"></i>
+                Trả hàng/Hoàn tiền
+            </a>
+
+            <a th:if="${order.status == 'Đã giao'}"
+               href="#" class="action-btn btn-success" id="review-btn">
+                <i class="fas fa-star"></i>
+                Đánh giá sản phẩm
+            </a>
         </div>
     </div>
-
-    <!-- Total Section -->
-    <div class="total-section">
-        <h2>
-            <i class="fas fa-calculator section-icon"></i>
-            Tổng số lượng
-        </h2>
-
-        <div class="total-row">
-            <span class="total-label">Tổng số lượng:</span>
-            <span class="total-value" id="total-quantity">0 sản phẩm</span>
-        </div>
-        <div class="total-row">
-            <span class="total-label">Tạm tính:</span>
-            <span class="total-value" id="subtotal">0 đ</span>
-        </div>
-        <div class="total-row">
-            <span class="total-label">Phí vận chuyển:</span>
-            <span class="total-value" id="shipping-fee">Miễn phí</span>
-        </div>
-        <div class="total-row grand-total">
-            <span class="total-label">Tổng cộng:</span>
-            <span class="total-value" id="grand-total">0 đ</span>
-        </div>
-    </div>
-
-    <!-- Actions -->
-    <div class="actions">
-        <!-- Nút hủy hàng cho trạng thái "Chờ xác nhận" và "Đã xác nhận" -->
-        <a th:if="${order.status == 'Chờ xác nhận' || order.status == 'Đã xác nhận'}" 
-           href="#" class="action-btn btn-danger" onclick="cancelOrder()">
-            <i class="fas fa-times-circle"></i>
-            Hủy hàng
-        </a>
-        
-        <!-- Nút Trả hàng/Hoàn tiền và Đánh giá sản phẩm cho trạng thái "Đã giao" -->
-        <a th:if="${order.status == 'Đã giao'}" 
-           href="#" class="action-btn btn-warning" onclick="returnOrder()">
-            <i class="fas fa-undo-alt"></i>
-            Trả hàng/Hoàn tiền
-        </a>
-        
-        <a th:if="${order.status == 'Đã giao'}" 
-           href="#" class="action-btn btn-success" onclick="reviewProducts()">
-            <i class="fas fa-star"></i>
-            Đánh giá sản phẩm
-        </a>
-    </div>
-</div>
 </div>
 
 <script>
@@ -1484,114 +1314,9 @@
     // Hàm hủy đơn hàng
     function cancelOrder() {
         if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
-            const orderId = document.querySelector('[data-order-id]')?.getAttribute('data-order-id');
-            if (orderId) {
-                // Hiển thị loading overlay
-                showLoadingOverlay('Đang xử lý hủy đơn hàng...');
-                
-                // Gửi request AJAX
-                fetch('/cancel?id=' + orderId, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        // Thành công - ẩn loading và hiển thị thông báo
-                        hideLoadingOverlay();
-                        showSuccessMessage('Hủy đơn hàng thành công! Đang chuyển hướng...');
-                        
-                        // Chuyển hướng sau 2 giây
-                        setTimeout(() => {
-                            window.location.href = '/orders';
-                        }, 2000);
-                    } else {
-                        // Lỗi
-                        hideLoadingOverlay();
-                        showErrorMessage('Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.');
-                    }
-                })
-                .catch(error => {
-                    // Lỗi network
-                    hideLoadingOverlay();
-                    showErrorMessage('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối internet.');
-                    console.error('Error:', error);
-                });
-            } else {
-                showErrorMessage('Không thể xác định đơn hàng. Vui lòng thử lại.');
-            }
+            // Thêm logic hủy đơn hàng ở đây
+            alert('Đã gửi yêu cầu hủy đơn hàng. Chúng tôi sẽ xử lý trong thời gian sớm nhất.');
         }
-    }
-
-    // Hiển thị loading overlay
-    function showLoadingOverlay(message) {
-        // Tạo overlay nếu chưa có
-        let overlay = document.getElementById('loading-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.id = 'loading-overlay';
-            overlay.innerHTML = `
-                <div class="loading-content">
-                    <div class="loading-spinner"></div>
-                    <div class="loading-text">${message}</div>
-                    <div class="loading-progress">
-                        <div class="progress-bar"></div>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-        } else {
-            overlay.querySelector('.loading-text').textContent = message;
-        }
-        
-        overlay.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-
-    // Ẩn loading overlay
-    function hideLoadingOverlay() {
-        const overlay = document.getElementById('loading-overlay');
-        if (overlay) {
-            overlay.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    }
-
-    // Hiển thị thông báo thành công
-    function showSuccessMessage(message) {
-        showNotification(message, 'success');
-    }
-
-    // Hiển thị thông báo lỗi
-    function showErrorMessage(message) {
-        showNotification(message, 'error');
-    }
-
-    // Hiển thị thông báo
-    function showNotification(message, type) {
-        // Tạo notification nếu chưa có
-        let notification = document.getElementById('notification');
-        if (!notification) {
-            notification = document.createElement('div');
-            notification.id = 'notification';
-            document.body.appendChild(notification);
-        }
-        
-        notification.className = `notification notification-${type}`;
-        notification.innerHTML = `
-            <div class="notification-content">
-                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
-                <span>${message}</span>
-            </div>
-        `;
-        
-        notification.style.display = 'block';
-        
-        // Tự động ẩn sau 5 giây
-        setTimeout(() => {
-            notification.style.display = 'none';
-        }, 5000);
     }
 
     // Hàm trả hàng/hoàn tiền
@@ -1605,7 +1330,7 @@
     // Hàm đánh giá sản phẩm
     function reviewProducts() {
         // Chuyển đến trang đánh giá sản phẩm
-        window.location.href = '/review/form?orderId=' + document.querySelector('[data-order-id]')?.getAttribute('data-order-id') || '';
+        window.location.href = '/review?orderId=' + document.querySelector('[data-order-id]')?.getAttribute('data-order-id') || '';
     }
 
     // Add hover effects to product rows
@@ -1617,6 +1342,48 @@
         row.addEventListener('mouseleave', function() {
             this.style.boxShadow = 'none';
         });
+    });
+
+    // Chỉ cho phép chọn 1 checkbox, các checkbox khác sẽ bị disable khi đã chọn 1 sản phẩm
+    function setupSingleCheckbox() {
+        const checkboxes = document.querySelectorAll('.return-checkbox');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (this.checked) {
+                    checkboxes.forEach(other => {
+                        if (other !== this) other.disabled = true;
+                    });
+                } else {
+                    checkboxes.forEach(other => {
+                        other.disabled = false;
+                    });
+                }
+            });
+        });
+    }
+    if (document.querySelector('.return-checkbox')) setupSingleCheckbox();
+
+    document.getElementById('return-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checked = Array.from(document.querySelectorAll('.return-checkbox:checked'));
+        if (checked.length === 0) {
+            alert('Vui lòng chọn một sản phẩm để trả hàng!');
+            return;
+        }
+        const id = checked[0].value;
+        window.location.href = `/return-request?orderItemsId=${id}`;
+    });
+
+    document.getElementById('review-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checked = Array.from(document.querySelectorAll('.return-checkbox:checked'));
+        if (checked.length === 0) {
+            alert('Vui lòng chọn một sản phẩm để đánh giá!');
+            return;
+        }
+        const productId = checked[0].getAttribute('data-product-id');
+        const orderItemsId = checked[0].value;
+        window.location.href = `/review?productId=${productId}&orderItemsId=${orderItemsId}`;
     });
 </script>
 </body>

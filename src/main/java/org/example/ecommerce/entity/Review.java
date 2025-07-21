@@ -3,6 +3,7 @@ package org.example.ecommerce.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
@@ -16,7 +17,6 @@ import java.util.Set;
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ColumnDefault("nextval('reviews_reviewid_seq'")
     @Column(name = "reviewid", nullable = false)
     private Integer id;
 
@@ -25,8 +25,8 @@ public class Review {
     private Product productid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderid")
-    private Order orderid;
+    @JoinColumn(name = "orderitemsid")
+    private Orderitem orderitemsid;
 
     @Column(name = "rating")
     private Integer rating;
@@ -41,6 +41,12 @@ public class Review {
     @ColumnDefault("false")
     @Column(name = "is_hidden")
     private Boolean isHidden;
+
+    @ManyToMany
+    @JoinTable(name = "complaint_feedback",
+            joinColumns = @JoinColumn(name = "review_id"),
+            inverseJoinColumns = @JoinColumn(name = "complaint_id"))
+    private Set<Complaint> complaints = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "reviewid")
     private Set<ReviewsImage> reviewsImages = new LinkedHashSet<>();

@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 @Entity
@@ -38,5 +40,8 @@ public class Orderitem {
 
     @Column(name = "promotionid")
     private Integer promotionid;
+
+    @OneToMany(mappedBy = "orderitemsid")
+    private Set<Review> reviews = new LinkedHashSet<>();
 
 }

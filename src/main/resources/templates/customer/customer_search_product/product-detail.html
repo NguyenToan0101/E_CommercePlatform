@@ -761,16 +761,16 @@
                     <div class="review-card" th:each="review : ${detail.reviews}">
                         <div class="review-header">
                             <img class="review-avatar"
-                                 th:src="${review.orderid.customerid.image != null ? review.orderid.customerid.image : '/default-avatar.png'}"
+                                 th:src="${review.orderitemsid.orderid.customerid.image != null ? review.orderitemsid.orderid.customerid.image : '/default-avatar.png'}"
                                  alt="avatar"/>
                             <div class="review-meta">
-                                <span class="review-name" th:text="${review.orderid.customerid.firstname + ' ' + review.orderid.customerid.lastname}"></span>
+                                <span class="review-name" th:text="${review.orderitemsid.orderid.customerid.firstname + ' ' + review.orderitemsid.orderid.customerid.lastname}"></span>
                                 <div class="review-rating">
                                     <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fas fa-star" style="color: #ffb400;"></i>
                                     <span class="rating-number" th:text="${review.rating} + '/5'" style="margin-left: 8px; font-size: 0.9rem; color: #666;"></span>
 </div>
                                 <span class="review-date" th:text="${#dates.format(review.createdat, 'yyyy-MM-dd HH:mm')}"></span>
-                                <span class="review-variant" th:each="item : ${review.orderid.orderitems}">
+                                <span class="review-variant" th:each="item : ${review.orderitemsid.orderid.orderitems}">
                                     <th:block th:if="${item.productid.id == review.productid.id}">
                                         <span th:if="${item.inventoryid.color != null}" th:text="' | Màu: ' + ${item.inventoryid.color}"></span>
                                         <span th:if="${item.inventoryid.dimension != null}" th:text="' | Size: ' + ${item.inventoryid.dimension}"></span>

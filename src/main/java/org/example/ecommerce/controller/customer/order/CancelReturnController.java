@@ -67,15 +67,15 @@ public class CancelReturnController {
     }
 
     @GetMapping("/return-request")
-    public String showReturnRequestForm(@RequestParam("orderId") Integer orderId, Model model, HttpSession session) {
+    public String showReturnRequestForm(@RequestParam("orderItemsId") Integer orderItemsId, Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) return "redirect:/login";
         List<ComplaintReason> reasons = cancelReturnService.getAllComplaintReasons();
         List<ComplaintCategory> categories = cancelReturnService.getAllComplaintCategories();
-        model.addAttribute("orderId", orderId);
+        model.addAttribute("orderId", orderItemsId);
         model.addAttribute("reasons", reasons);
         model.addAttribute("categories", categories);
-        return "customer/order/return_request";
+        return "/customer/order/return_request";
     }
 
 }
