@@ -184,7 +184,7 @@ public class CustomerController {
         try {
             if (!imageFile.isEmpty()) {
                 String imageUrl = uploadImageFile.uploadImage(imageFile);
-                customer.setImage(imageUrl);
+                customer1.setImage(imageUrl);
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
