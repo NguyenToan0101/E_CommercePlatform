@@ -95,19 +95,22 @@ public class CancelReturnService {
     }
 
     public List<ComplaintReason> getAllComplaintReasons(){
-        return complaintReasonRepository.findAll();
+        return complaintReasonRepository.findAllByCategory(getAllComplaintCategories());
     }
 
-    public List<ComplaintCategory> getAllComplaintCategories(){
-        return complaintCategoryRepository.findAll();
+    public ComplaintCategory getAllComplaintCategories(){
+        return complaintCategoryRepository.findComplaintCategoriesByCategoryId((short) 3);
     }
 
     @Transactional
     public boolean createReturnRequest(Integer orderItemsId, Integer categoryId, Integer reasonId, String description, MultipartFile[] mediaFiles, Customer customer) {
         try {
             Orderitem orderItem = orderItemsRepository.findById(orderItemsId).orElse(null);
+            if (orderItem == null) {
+                System.out.println("[ERROR] Không tìm thấy orderItem với id=" + orderItemsId);
+                return false;
+            }
             Order oldOrder = orderItem.getOrderid();
-
             List<Orderitem> allItems = orderItemsRepository.findAllByOrderid(oldOrder);
             boolean onlyOne = allItems.size() == 1;
             Complaint complaint = new Complaint();
@@ -125,16 +128,13 @@ public class CancelReturnService {
                 newOrder.setAddress(oldOrder.getAddress());
                 ordersRepository.save(newOrder);
 
-
                 orderItem.setOrderid(newOrder);
                 orderItemsRepository.save(orderItem);
-
 
                 BigDecimal remain = oldOrder.getTotalamount().subtract(newOrder.getTotalamount());
                 oldOrder.setTotalamount(remain);
                 ordersRepository.save(oldOrder);
                 complaint.setOrderId(newOrder.getId());
-
             } else {
                 oldOrder.setStatus("Yêu cầu trả hàng/hoàn tiền");
                 ordersRepository.save(oldOrder);
@@ -144,14 +144,13 @@ public class CancelReturnService {
             ComplaintCategory complaintCategory = complaintCategoryRepository.findById(categoryId).orElse(null);
             ComplaintReason complaintReason = complaintReasonRepository.findById(reasonId).orElse(null);
 
-
             complaint.setCustomer(customer);
             complaint.setCategory(complaintCategory);
             complaint.setReason(complaintReason);
             complaint.setDescription(description);
             complaint.setStatus("pending");
-            complaint.setCreatedAt(LocalDateTime.from(Instant.now()));
-            complaint.setUpdatedAt(LocalDateTime.from(Instant.now()));
+            complaint.setCreatedAt(LocalDateTime.now() );
+            complaint.setUpdatedAt(LocalDateTime.now() );
             complaintRepository.save(complaint);
 
             if (mediaFiles != null) {

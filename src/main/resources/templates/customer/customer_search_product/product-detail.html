@@ -683,6 +683,11 @@
                 padding: 0 18px;
             }
         }
+        #report-btn:hover {
+            background: #fbbf24;
+            color: #fff;
+            border-color: #b45309;
+        }
     </style>
 </head>
 <body>
@@ -774,6 +779,9 @@
                 <span th:text="${detail.reviews.size()} + ' Đánh Giá'">4k Đánh Giá</span>
                 <span style="margin: 0 10px;">|</span>
                 <span th:text="${detail.solditems} + ' Đã Bán'">20k+ Đã Bán</span>
+                <button id="report-btn" title="Báo cáo sản phẩm" style="margin-left:8px; background: #fff3cd; color: #b45309; border: 1px solid #fbbf24; border-radius: 6px; padding: 2px 10px; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; transition: background 0.2s, color 0.2s;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 1rem;"></i> Báo cáo
+                </button>
             </div>
             <div class="product-shipping">
                 <span style="font-weight: bold;">Vận Chuyển</span>
@@ -871,6 +879,10 @@
                                     </th:block>
                                 </span>
                             </div>
+                            <!-- Nút báo cáo review -->
+                            <button class="report-review-btn" th:attr="data-review-id=${review.id}" title="Báo cáo đánh giá" style="margin-left:12px; background: #fff3cd; color: #b45309; border: 1px solid #fbbf24; border-radius: 6px; padding: 2px 10px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; transition: background 0.2s, color 0.2s;">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 0.95rem;"></i> Báo cáo
+                            </button>
                         </div>
                         <div class="review-content" th:text="${review.comment}"></div>
                         <div class="review-media">
@@ -895,7 +907,7 @@
     Đã thêm vào giỏ hàng!
 </div>
 
-<!-- Modal phóng to review media -->
+<!-- Modal phóng to review -->
 <div id="mediaModal" class="media-modal">
     <div class="media-modal-content">
         <button class="media-modal-close" onclick="closeMediaModal()">&times;</button>
@@ -905,6 +917,66 @@
 
 <!-- Thêm hiệu ứng loading toàn màn hình -->
 <div id="fullpage-loading" style="display:none;position:fixed;z-index:99999;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);align-items:center;justify-content:center;"><div style="font-size:2rem;color:#088395;"><i class="fas fa-spinner fa-spin"></i> Đang xử lý...</div></div>
+
+<!-- Modal báo cáo sản phẩm -->
+<div id="report-modal" style="display:none; position:fixed; z-index:99999; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:12px; max-width:400px; width:100%; padding:28px 24px; position:relative;">
+    <button onclick="closeReportModal()" style="position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.5rem; color:#888; cursor:pointer;">&times;</button>
+    <h3 style="margin-bottom:18px; color:#b45309;"><i class="fas fa-exclamation-triangle"></i> Báo cáo sản phẩm</h3>
+    <div id="report-alert" style="display:none; margin-bottom:10px; padding:8px 12px; border-radius:6px; font-weight:600;"></div>
+    <form method="post" th:action="@{/report_product}" id="report-form">
+      <input type="hidden" name="id" th:value="${detail.product.id}" />
+      <div style="margin-bottom:12px;">
+        <label>Danh mục</label>
+        <select name="category" required>
+          <option th:value="${complaintCategoryProduct.categoryId}" th:text="${complaintCategoryProduct.name}"></option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Lý do</label>
+        <select name="reasonId" required>
+          <option value="">-- Chọn lý do --</option>
+          <option th:each="reason : ${complaintReasonProduct}" th:value="${reason.reasonId}" th:text="${reason.description}"></option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Mô tả chi tiết</label>
+        <textarea name="description" rows="3" style="width:100%; border-radius:6px; border:1px solid #eee;"></textarea>
+      </div>
+      <button type="submit" style="background:#fbbf24; color:#fff; border:none; border-radius:6px; padding:8px 24px; font-weight:600; cursor:pointer;">Gửi báo cáo</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal báo cáo review -->
+<div id="report-review-modal" style="display:none; position:fixed; z-index:99999; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:12px; max-width:400px; width:100%; padding:28px 24px; position:relative;">
+    <button onclick="closeReportReviewModal()" style="position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.5rem; color:#888; cursor:pointer;">&times;</button>
+    <h3 style="margin-bottom:18px; color:#b45309;"><i class="fas fa-exclamation-triangle"></i> Báo cáo đánh giá</h3>
+    <div id="report-review-alert" style="display:none; margin-bottom:10px; padding:8px 12px; border-radius:6px; font-weight:600;"></div>
+    <form method="post" th:action="@{/report_review}" id="report-review-form">
+      <input type="hidden" name="id" id="report-review-id" value="" />
+      <div style="margin-bottom:12px;">
+        <label>Danh mục</label>
+        <select name="category" required>
+          <option th:value="${complaintCategoryFeedback.categoryId}" th:text="${complaintCategoryFeedback.name}"></option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Lý do</label>
+        <select name="reasonId" required>
+          <option value="">-- Chọn lý do --</option>
+          <option th:each="reason : ${complaintReason}" th:value="${reason.reasonId}" th:text="${reason.description}"></option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Mô tả chi tiết</label>
+        <textarea name="description" rows="3" style="width:100%; border-radius:6px; border:1px solid #eee;"></textarea>
+      </div>
+      <button type="submit" style="background:#fbbf24; color:#fff; border:none; border-radius:6px; padding:8px 24px; font-weight:600; cursor:pointer;">Gửi báo cáo</button>
+    </form>
+  </div>
+</div>
 
 <script th:inline="javascript">
     // Lấy productId từ Thymeleaf
@@ -956,7 +1028,8 @@
                 };
             }
         });
-        
+        // Debug inventory được chọn
+        console.log('Chọn:', selectedColor, selectedSize, '=>', selectedInventory, 'stock:', stock);
         // Cập nhật hình ảnh chính nếu có inventory được chọn và có hình ảnh
         if (selectedInventory && inventoryImage) {
             const mainImage = document.getElementById('mainProductImage');
@@ -974,6 +1047,42 @@
             }
         }
         renderPriceRange(selectedInvObj);
+        // Cập nhật trạng thái nút và stockInfo tại đây
+        const qtyInput = document.getElementById('quantity');
+        const btnBuy = document.getElementById('btn-buy-now');
+        const btnCart = document.getElementById('btn-add-cart');
+        const btnMinus = document.getElementById('btn-minus');
+        const btnPlus = document.getElementById('btn-plus');
+        const stockInfo = document.getElementById('stock-info');
+        if (selectedInventory && stock > 0) {
+            qtyInput.disabled = false;
+            btnBuy.disabled = false;
+            btnCart.disabled = false;
+            btnMinus.disabled = false;
+            btnPlus.disabled = false;
+            qtyInput.max = stock;
+            stockInfo.textContent = `Kho: ${stock}`;
+            if (parseInt(qtyInput.value) > stock) qtyInput.value = stock;
+        } else if (!selectedInventory) {
+            // Nếu chưa chọn biến thể, hiển thị tổng số lượng tất cả inventory
+            let totalStock = 0;
+            inventories.forEach(inv => {
+                totalStock += parseInt(inv.getAttribute('data-quantity')) || 0;
+            });
+            stockInfo.textContent = `Tổng kho: ${totalStock}`;
+            qtyInput.disabled = true;
+            btnBuy.disabled = true;
+            btnCart.disabled = true;
+            btnMinus.disabled = true;
+            btnPlus.disabled = true;
+        } else {
+            qtyInput.disabled = true;
+            btnBuy.disabled = true;
+            btnCart.disabled = true;
+            btnMinus.disabled = true;
+            btnPlus.disabled = true;
+            stockInfo.textContent = 'Hết hàng';
+        }
     }
 
     const qtyInput = document.getElementById('quantity');
@@ -1086,6 +1195,8 @@
             else seenSizes[size] = true;
         });
         renderPriceRange();
+        // Gọi updateInventorySelection để hiển thị tổng kho khi mới vào trang
+        updateInventorySelection();
     });
 
     // User menu JS from home.html
@@ -1299,6 +1410,106 @@
         const loading = document.getElementById('fullpage-loading');
         if (show) loading.style.display = 'flex';
         else loading.style.display = 'none';
+    }
+
+    document.getElementById('report-btn').onclick = function() {
+        document.getElementById('report-modal').style.display = 'flex';
+    };
+    function closeReportModal() {
+        document.getElementById('report-modal').style.display = 'none';
+    }
+    // Xử lý gửi báo cáo bằng AJAX, hiển thị thông báo, không reload trang
+    document.getElementById('report-form').onsubmit = function(e) {
+        e.preventDefault();
+        const form = this;
+        const alertBox = document.getElementById('report-alert');
+        alertBox.style.display = 'none';
+        alertBox.textContent = '';
+        alertBox.style.background = '';
+        alertBox.style.color = '';
+        const formData = new FormData(form);
+        fetch(form.getAttribute('action'), {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.text())
+        .then(msg => {
+            alertBox.textContent = msg;
+            alertBox.style.display = 'block';
+            if (msg.includes('Báo cáo thành công')) {
+                alertBox.style.background = '#d1fae5';
+                alertBox.style.color = '#047857';
+                setTimeout(() => {
+                    closeReportModal();
+                    alertBox.style.display = 'none';
+                }, 1000);
+            } else {
+                alertBox.style.background = '#fee2e2';
+                alertBox.style.color = '#991b1b';
+            }
+        })
+        .catch(() => {
+            alertBox.textContent = 'Có lỗi xảy ra, vui lòng thử lại!';
+            alertBox.style.display = 'block';
+            alertBox.style.background = '#fee2e2';
+            alertBox.style.color = '#991b1b';
+        });
+    };
+
+    // Xử lý nút báo cáo review
+    let currentReviewId = null;
+    document.querySelectorAll('.review-list').forEach(list => {
+        list.addEventListener('click', function(e) {
+            if (e.target.closest('.report-review-btn')) {
+                const btn = e.target.closest('.report-review-btn');
+                currentReviewId = btn.getAttribute('data-review-id');
+                document.getElementById('report-review-id').value = currentReviewId;
+                document.getElementById('report-review-modal').style.display = 'flex';
+            }
+        });
+    });
+    function closeReportReviewModal() {
+        document.getElementById('report-review-modal').style.display = 'none';
+    }
+    // Xử lý gửi báo cáo review bằng AJAX
+    const reviewForm = document.getElementById('report-review-form');
+    if (reviewForm) {
+        reviewForm.onsubmit = function(e) {
+            e.preventDefault();
+            const form = this;
+            const alertBox = document.getElementById('report-review-alert');
+            alertBox.style.display = 'none';
+            alertBox.textContent = '';
+            alertBox.style.background = '';
+            alertBox.style.color = '';
+            const formData = new FormData(form);
+            fetch(form.getAttribute('action'), {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.text())
+            .then(msg => {
+                alertBox.textContent = msg;
+                alertBox.style.display = 'block';
+                if (msg.includes('Báo cáo thành công')) {
+                    alertBox.style.background = '#d1fae5';
+                    alertBox.style.color = '#047857';
+                    setTimeout(() => {
+                        closeReportReviewModal();
+                        alertBox.style.display = 'none';
+                    }, 1000);
+                } else {
+                    alertBox.style.background = '#fee2e2';
+                    alertBox.style.color = '#991b1b';
+                }
+            })
+            .catch(() => {
+                alertBox.textContent = 'Có lỗi xảy ra, vui lòng thử lại!';
+                alertBox.style.display = 'block';
+                alertBox.style.background = '#fee2e2';
+                alertBox.style.color = '#991b1b';
+            });
+        };
     }
 </script>
 </body>

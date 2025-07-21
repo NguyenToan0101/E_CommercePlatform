@@ -47,7 +47,7 @@ public class CancelReturnController {
 
     @PostMapping("/return-request")
     public String requestReturn(
-            @RequestParam("orderItemsId") Integer orderitemsId,
+            @RequestParam("orderItemsId") Integer orderItemsId,
             @RequestParam("category") Integer category,
             @RequestParam("reasonId") Integer reasonId,
             @RequestParam(value = "description", required = false) String description,
@@ -55,13 +55,15 @@ public class CancelReturnController {
             HttpSession session,
             RedirectAttributes redirectAttributes
     ) {
-        org.example.ecommerce.entity.Customer customer = (org.example.ecommerce.entity.Customer) session.getAttribute("customer");
+        Customer customer = (Customer) session.getAttribute("customer");
+        System.out.println("[DEBUG] orderItemsId=" + orderItemsId + ", category=" + category + ", reasonId=" + reasonId + ", customer=" + (customer != null ? customer.getId() : null));
         if (customer == null) return "redirect:/login";
-        boolean result = cancelReturnService.createReturnRequest(orderitemsId, reasonId, category, description, mediaFiles, customer);
+        boolean result = cancelReturnService.createReturnRequest(orderItemsId, category, reasonId, description, mediaFiles, customer);
+        System.out.println("[DEBUG] Kết quả lưu trả hàng: " + result);
         if (result) {
             redirectAttributes.addFlashAttribute("success", "Gửi yêu cầu trả hàng thành công!");
         } else {
-            redirectAttributes.addFlashAttribute("error", "Không thể gửi yêu cầu trả hàng.");
+            redirectAttributes.addFlashAttribute("error", "Không thể gửi yêu cầu trả hàng. Vui lòng liên hệ hỗ trợ hoặc kiểm tra lại thông tin!");
         }
         return "redirect:/orders";
     }
@@ -70,8 +72,8 @@ public class CancelReturnController {
     public String showReturnRequestForm(@RequestParam("orderItemsId") Integer orderItemsId, Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) return "redirect:/login";
+        ComplaintCategory categories = cancelReturnService.getAllComplaintCategories();
         List<ComplaintReason> reasons = cancelReturnService.getAllComplaintReasons();
-        List<ComplaintCategory> categories = cancelReturnService.getAllComplaintCategories();
         model.addAttribute("orderId", orderItemsId);
         model.addAttribute("reasons", reasons);
         model.addAttribute("categories", categories);
