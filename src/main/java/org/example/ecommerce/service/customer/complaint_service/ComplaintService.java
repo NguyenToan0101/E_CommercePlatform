@@ -18,4 +18,5 @@ public class ComplaintService {
     public List<ComplaintListDTO> getAllComplaints() {
         return complaintRepo.findAllForList();
     }
+
 }

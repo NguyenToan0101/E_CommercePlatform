@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -97,7 +98,7 @@ public class PaymentServiceImpl implements PaymentService {
 
             Order order = new Order();
             order.setCustomerid(customer);
-            order.setOrderdate(Instant.now());
+            order.setOrderdate(LocalDateTime.now());
             order.setTotalamount(totalAmount);
             order.setFullname(fullname);
             order.setPhone(phone);
@@ -173,7 +174,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Order order = new Order();
         order.setCustomerid(customer);
-        order.setOrderdate(Instant.now());
+        order.setOrderdate(LocalDateTime.now());
         order.setTotalamount(totalAmount);
         order.setFullname(fullname);
         order.setPhone(phone);

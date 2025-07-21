@@ -21,12 +21,12 @@ public class ReviewController {
     private ReviewService reviewService;
 
     @GetMapping
-    public String showReviewForm(@ModelAttribute("productId") Product productId,
-                                 @ModelAttribute("orderId") Order orderId,
+    public String showReviewForm(@ModelAttribute("productId") Integer productId,
+                                 @ModelAttribute("orderitemId") Integer orderitemId,
                                  Model model) {
         Review review = new Review();
         review.setProductid(productId);
-        review.setOrderid(orderId);
+        review.setOrderitemid(orderitemId);
         model.addAttribute("review", review);
         return "customer/review/form";
     }

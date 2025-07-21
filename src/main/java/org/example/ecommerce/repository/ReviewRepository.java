@@ -13,7 +13,7 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Query("SELECT AVG(r.rating) FROM Review r WHERE r.productid = :product")
     Float findAverageRatingByProductid(@Param("product") Product product);
-    boolean existsByProductidAndOrderid(Product product, Order order);
+    boolean existsByProductidAndOrderitemid(Integer productid, Integer orderitemid);
     List<Review> findAllByProductidOrderByCreatedatDesc(Product product);
     Integer countByProductid(Product productid);
 

@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-
 import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -20,13 +17,11 @@ public class Review {
     @Column(name = "reviewid", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productid")
-    private Product productid;
+    @Column(name = "productid")
+    private Integer productid;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderid")
-    private Order orderid;
+    @Column(name = "orderitemid")
+    private Integer orderitemid;
 
     @Column(name = "rating")
     private Integer rating;
@@ -41,8 +36,4 @@ public class Review {
     @ColumnDefault("false")
     @Column(name = "is_hidden")
     private Boolean isHidden;
-
-    @OneToMany(mappedBy = "reviewid")
-    private Set<ReviewsImage> reviewsImages = new LinkedHashSet<>();
-
 }

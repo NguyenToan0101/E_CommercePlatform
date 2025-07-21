@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 
 @Entity
@@ -24,7 +24,7 @@ public class Order {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "orderdate")
-    private Instant orderdate;
+    private LocalDateTime orderdate;
 
     @NotNull
     @Column(name = "totalamount", nullable = false)
@@ -37,7 +37,7 @@ public class Order {
     private String paymentStatus;
 
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     @Column(name = "fullname", length = Integer.MAX_VALUE)
     private String fullname;
@@ -64,11 +64,11 @@ public class Order {
         this.customerid = customerid;
     }
 
-    public Instant getOrderdate() {
+    public LocalDateTime getOrderdate() {
         return orderdate;
     }
 
-    public void setOrderdate(Instant orderdate) {
+    public void setOrderdate(LocalDateTime orderdate) {
         this.orderdate = orderdate;
     }
 
@@ -96,11 +96,11 @@ public class Order {
         this.paymentStatus = paymentStatus;
     }
 
-    public Instant getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Instant updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 

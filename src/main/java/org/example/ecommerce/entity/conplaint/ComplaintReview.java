@@ -3,14 +3,18 @@ package org.example.ecommerce.entity.conplaint;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-@Entity
-@Table(name = "complaint_feedback")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ComplaintFeedback {
+@Entity
+@Table(name = "complaint_review")
+public class ComplaintReview {
     @Id
     @Column(name = "complaint_id")
     private Integer complaintId;

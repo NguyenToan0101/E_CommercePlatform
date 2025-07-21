@@ -11,7 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
-
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 @Service
@@ -79,7 +80,7 @@ public class OrderService {
                 .orElseThrow(() -> new RuntimeException("Không tìm thấy đơn hàng với ID: " + orderId));
 
         order.setStatus(newStatus);
-        order.setUpdatedAt(Instant.now());
+        order.setUpdatedAt(LocalDateTime.now());
         orderRepository.save(order);
     }
 
@@ -111,7 +112,8 @@ public class OrderService {
         return shippingService.getRegion(province[province.length - 1]);
     }
     public Instant getOderDate(int orderId) {
-        return orderRepository.findById(orderId).orElseThrow().getOrderdate();
+        LocalDateTime orderDate = orderRepository.findById(orderId).orElseThrow().getOrderdate();
+        return orderDate == null ? null : orderDate.atZone(ZoneId.systemDefault()).toInstant();
     }
     public Integer getQuantity(int orderId) {
         return orderItemRepository.findById(orderId).orElseThrow().getQuantity();
@@ -127,7 +129,8 @@ public class OrderService {
 
     }
     public Instant getCreatedAt(int orderId) {
-        return orderRepository.findById(orderId).orElseThrow().getUpdatedAt();
+        LocalDateTime updatedAt = orderRepository.findById(orderId).orElseThrow().getUpdatedAt();
+        return updatedAt == null ? null : updatedAt.atZone(ZoneId.systemDefault()).toInstant();
     }
     public BigDecimal getCost(int orderId) {
         return orderItemRepository.findById(orderId).orElseThrow().getInventoryid().getPrice();

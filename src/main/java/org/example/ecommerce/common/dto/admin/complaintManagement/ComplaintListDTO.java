@@ -13,8 +13,10 @@ public class ComplaintListDTO {
     private String email;
     private String phone;
     private String reasonDescription;
-    private Integer rawProductId;  // chỉ có khi category = product
-    private Integer rawReviewId;    // khi category ≠ product
+    private Integer rawProductId;
+    private Integer rawReviewId;
+    private Integer rawPaymentId;
+    private Integer rawShippingOrderId;
     private String categoryName;
     private String status;
     private LocalDateTime createdAt;
@@ -28,7 +30,9 @@ public class ComplaintListDTO {
             String phone,
             String reasonDescription,
             Integer rawProductId,
-            Integer rawOrderId,
+            Integer rawReviewId,
+            Integer rawPaymentId,
+            Integer rawShippingOrderId,
             String categoryName,
             String status,
             LocalDateTime createdAt
@@ -41,7 +45,9 @@ public class ComplaintListDTO {
         this.phone             = phone;
         this.reasonDescription = reasonDescription;
         this.rawProductId      = rawProductId;
-        this.rawReviewId        = getRawReviewId();
+        this.rawReviewId       = rawReviewId;
+        this.rawPaymentId      = rawPaymentId;
+        this.rawShippingOrderId= rawShippingOrderId;
         this.categoryName      = categoryName;
         this.status            = status;
         this.createdAt         = createdAt;

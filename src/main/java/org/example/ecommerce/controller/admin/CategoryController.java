@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/categories")
+@RequestMapping("/category")
 public class CategoryController {
     private final CategoryService     categoryService;
     private final CategoryRepository  repo;
@@ -69,7 +69,6 @@ public class CategoryController {
         categoryService.delete(dto.getId());
     }
 
-    /** Lấy danh mục chính (parentid IS NULL) */
     @GetMapping("/main")
     public List<MainCategoryDTO> getMainCategories() {
         return repo.findByParentIsNull().stream()
