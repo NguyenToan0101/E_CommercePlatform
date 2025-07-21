@@ -942,6 +942,174 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* Loading Overlay Styles */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .loading-content {
+            background: var(--white);
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid var(--border-gray);
+            border-top: 4px solid var(--teal-gradient-start);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        .loading-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+        }
+
+        .loading-progress {
+            width: 100%;
+            height: 6px;
+            background: var(--border-gray);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--teal-gradient-start), var(--teal-gradient-end));
+            border-radius: 3px;
+            animation: progressAnimation 2s ease-in-out infinite;
+        }
+
+        @keyframes progressAnimation {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        /* Notification Styles */
+        #notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+            display: none;
+            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .notification {
+            background: var(--white);
+            padding: 16px 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .notification-success {
+            border-left-color: var(--success-green);
+        }
+
+        .notification-error {
+            border-left-color: var(--error-red);
+        }
+
+        .notification-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification-content i {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .notification-success .notification-content i {
+            color: var(--success-green);
+        }
+
+        .notification-error .notification-content i {
+            color: var(--error-red);
+        }
+
+        .notification-content span {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-dark);
+            line-height: 1.4;
+        }
+
+        /* Responsive for loading and notifications */
+        @media (max-width: 768px) {
+            .loading-content {
+                padding: 30px 20px;
+                margin: 20px;
+            }
+
+            .loading-spinner {
+                width: 50px;
+                height: 50px;
+            }
+
+            .loading-text {
+                font-size: 16px;
+            }
+
+            #notification {
+                top: 10px;
+                right: 10px;
+                left: 10px;
+                min-width: auto;
+            }
+
+            .notification {
+                padding: 14px 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -1111,6 +1279,7 @@
                     <th>Số lượng</th>
                     <th>Đơn giá</th>
                     <th>Thành tiền</th>
+                    <th>Hành động</th>
                 </tr>
                 </thead>
                 <tbody id="products-tbody">
@@ -1140,7 +1309,11 @@
                     <td>
                         <span class="price item-total" th:attr="data-quantity=${item.quantity}, data-unit-price=${item.unitPrice}">0 đ</span>
                     </td>
-
+                    <td>
+                        <a th:href="@{/return-request(orderItemsId=${item.orderItemsId})}" class="action-btn btn-warning" style="padding: 8px 16px; font-size: 13px;">
+                            <i class="fas fa-undo-alt"></i> Trả hàng
+                        </a>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -1311,9 +1484,114 @@
     // Hàm hủy đơn hàng
     function cancelOrder() {
         if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
-            // Thêm logic hủy đơn hàng ở đây
-            alert('Đã gửi yêu cầu hủy đơn hàng. Chúng tôi sẽ xử lý trong thời gian sớm nhất.');
+            const orderId = document.querySelector('[data-order-id]')?.getAttribute('data-order-id');
+            if (orderId) {
+                // Hiển thị loading overlay
+                showLoadingOverlay('Đang xử lý hủy đơn hàng...');
+                
+                // Gửi request AJAX
+                fetch('/cancel?id=' + orderId, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        // Thành công - ẩn loading và hiển thị thông báo
+                        hideLoadingOverlay();
+                        showSuccessMessage('Hủy đơn hàng thành công! Đang chuyển hướng...');
+                        
+                        // Chuyển hướng sau 2 giây
+                        setTimeout(() => {
+                            window.location.href = '/orders';
+                        }, 2000);
+                    } else {
+                        // Lỗi
+                        hideLoadingOverlay();
+                        showErrorMessage('Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.');
+                    }
+                })
+                .catch(error => {
+                    // Lỗi network
+                    hideLoadingOverlay();
+                    showErrorMessage('Không thể kết nối đến máy chủ. Vui lòng kiểm tra kết nối internet.');
+                    console.error('Error:', error);
+                });
+            } else {
+                showErrorMessage('Không thể xác định đơn hàng. Vui lòng thử lại.');
+            }
         }
+    }
+
+    // Hiển thị loading overlay
+    function showLoadingOverlay(message) {
+        // Tạo overlay nếu chưa có
+        let overlay = document.getElementById('loading-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'loading-overlay';
+            overlay.innerHTML = `
+                <div class="loading-content">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">${message}</div>
+                    <div class="loading-progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+        } else {
+            overlay.querySelector('.loading-text').textContent = message;
+        }
+        
+        overlay.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Ẩn loading overlay
+    function hideLoadingOverlay() {
+        const overlay = document.getElementById('loading-overlay');
+        if (overlay) {
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    }
+
+    // Hiển thị thông báo thành công
+    function showSuccessMessage(message) {
+        showNotification(message, 'success');
+    }
+
+    // Hiển thị thông báo lỗi
+    function showErrorMessage(message) {
+        showNotification(message, 'error');
+    }
+
+    // Hiển thị thông báo
+    function showNotification(message, type) {
+        // Tạo notification nếu chưa có
+        let notification = document.getElementById('notification');
+        if (!notification) {
+            notification = document.createElement('div');
+            notification.id = 'notification';
+            document.body.appendChild(notification);
+        }
+        
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+            <div class="notification-content">
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        notification.style.display = 'block';
+        
+        // Tự động ẩn sau 5 giây
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 5000);
     }
 
     // Hàm trả hàng/hoàn tiền
