@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "complaint_feedback")
+@Table(name = "complaint_review")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

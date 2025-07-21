@@ -64,9 +64,6 @@ public class Order {
     @OneToMany(mappedBy = "orderid")
     private Set<Payment> payments = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "orderid")
-    private Set<Review> reviews = new LinkedHashSet<>();
-
     public String getStatusClass() {
         if (status == null) return "";
         switch (status) {

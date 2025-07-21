@@ -325,6 +325,9 @@
             color: var(--shopee-orange);
             font-weight: bold;
         }
+        .product-price-value {
+            color: #ff0000 !important;
+        }
         .flash-sale {
             background-color: var(--orange-accent);
             color: white;
@@ -412,39 +415,39 @@
             margin-top: 20px;
         }
         .shop-info {
-            border: 1px solid var(--border-gray);
-            padding: 5px;
-            border-radius: 8px;
             display: flex;
-            flex-direction: row;
             align-items: center;
-            gap: 20px;
-            background: var(--white);
-            box-shadow: 0 2px 12px var(--shadow-light);
+            justify-content: center;
+            gap: 24px;
+            background: #f5fafd;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(16,42,67,0.06);
+            flex-wrap: wrap;
         }
         .shop-info img {
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
             border-radius: 12px;
-            border: 2px solid var(--gradient-mid);
+            border: 1px solid #eee;
         }
         .shop-info .shop-details {
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .shop-info .shop-details div {
-            font-size: 1.1rem;
+            min-width: 200px;
         }
         .shop-info .shop-details .shop-name {
-            font-weight: bold;
-            color: var(--primary-black);
-            font-size: 1.3rem;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #088395;
         }
         .shop-info .shop-details .shop-address {
-            color: var(--text-gray);
+            color: #555;
+            margin: 8px 0;
+        }
+        .shop-info .shop-details .shop-desc {
+            color: #333;
         }
         .product-info-section {
             margin-top: 20px;
@@ -555,7 +558,7 @@
             position: fixed;
             top: 0;
             left: 0;
-                width: 100%;
+            width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.8);
             z-index: 10000;
@@ -578,7 +581,7 @@
             top: -40px;
             right: 0;
             color: white;
-                font-size: 24px;
+            font-size: 24px;
             cursor: pointer;
             background: none;
             border: none;
@@ -586,6 +589,104 @@
         }
         .media-modal-close:hover {
             color: #ddd;
+        }
+        .shop-info-pro {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 32px;
+            background: #fafdff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(16,42,67,0.08);
+            padding: 32px 40px;
+            margin-bottom: 36px;
+            flex-wrap: wrap;
+        }
+        .shop-info-pro .shop-img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #05bfdb;
+            box-shadow: 0 2px 12px #05bfdb22;
+            background: #fff;
+        }
+        .shop-info-pro .shop-details {
+            flex: 1;
+            min-width: 180px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .shop-info-pro .shop-name {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #088395;
+            margin-bottom: 2px;
+        }
+        .shop-info-pro .shop-address {
+            color: #6b7280;
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+        .shop-info-pro .shop-desc {
+            color: #333;
+            font-size: 1rem;
+            opacity: 0.85;
+        }
+        .shop-info-pro .shop-action {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 200px;
+        }
+        .shop-info-pro .btn-shop {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 52px;
+            min-width: 180px;
+            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            color: #fff;
+            border-radius: 28px;
+            font-weight: 700;
+            font-size: 1.15rem;
+            text-decoration: none;
+            border: none;
+            box-shadow: 0 2px 12px #05bfdb33;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+            margin: 0;
+            padding: 0 36px;
+            cursor: pointer;
+        }
+        .shop-info-pro .btn-shop:hover {
+            background: linear-gradient(90deg, #05bfdb 0%, #088395 100%);
+            box-shadow: 0 6px 24px #05bfdb55;
+            transform: translateY(-2px) scale(1.04);
+        }
+        @media (max-width: 700px) {
+            .shop-info-pro {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 18px 10px;
+                gap: 18px;
+            }
+            .shop-info-pro .shop-action {
+                width: 100%;
+                min-width: unset;
+                justify-content: flex-start;
+            }
+            .shop-info-pro .btn-shop {
+                width: 100%;
+                min-width: unset;
+                font-size: 1rem;
+                padding: 0 18px;
+            }
+        }
+        #report-btn:hover {
+            background: #fbbf24;
+            color: #fff;
+            border-color: #b45309;
         }
     </style>
 </head>
@@ -598,14 +699,14 @@
         <span>Kết nối</span>
         <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
         <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-            </div>
+    </div>
     <div class="header-top-right">
         <a href="#"><i class="fas fa-bell"></i> Thông Báo</a>
         <th:block th:if="${customer}">
             <div class="user-info-box">
                 <div class="user-avatar" th:if="${customer.image != null && !#strings.isEmpty(customer.image)}">
                     <img th:src="@{${customer.image}}" alt="avatar" />
-        </div>
+                </div>
                 <span class="user-avatar" th:if="${customer.image == null || #strings.isEmpty(customer.image)}" th:text="${customer.firstname.substring(0,1)}"></span>
                 <a class="account-link" th:text="${customer.firstname + ' ' + customer.lastname}" tabindex="0"></a>
                 <div class="account-menu-list">
@@ -614,19 +715,19 @@
                     <a th:href="@{/wishlist}">Danh sách yêu thích</a>
                     <a th:href="@{/orders}">Đơn mua</a>
                     <a th:href="@{/logout}">Đăng xuất</a>
-        </div>
                 </div>
+            </div>
         </th:block>
         <a th:unless="${customer}" href="/login" class="account-link">Đăng nhập</a>
-            </div>
-        </div>
+    </div>
+</div>
 <!-- Main Header -->
 <header class="main-header">
     <div class="header-left">
         <a th:href="@{/home}" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
             <img src="/logo/logo.png" alt="Logo" class="logo-img" />
-            </a>
-        </div>
+        </a>
+    </div>
     <form class="search-bar" action="/search_name" method="GET">
         <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
         <button type="submit" aria-label="Tìm kiếm">
@@ -649,7 +750,7 @@
                 <img th:each="img,iter : ${detail.images}" th:src="${img.imageurl}" alt="thumb"
                      class="thumbnail" th:classappend="${iter.index == 0} ? 'active'"
                      onclick="changeMainImage(this)">
-        </div>
+            </div>
             <div class="product-share-like">
                 <div class="share-block">
                     <span style="font-weight: bold;">Chia sẻ:</span>
@@ -665,8 +766,8 @@
                     <span id="wishlist-count" th:text="${detail.wishlists.size()}" style="margin-left: 5px; font-weight: bold;">4.6k</span>
                     <span style="margin-left: 5px;">Đã thích</span>
                 </div>
-                </div>
-                </div>
+            </div>
+        </div>
         <div class="product-detail-right">
             <div class="product-title" th:text="${detail.product.name}">
                 Bộ đồ quần áo sơ mi phối đồ cotton đầy cá tính, Áo dài tay lót
@@ -678,20 +779,23 @@
                 <span th:text="${detail.reviews.size()} + ' Đánh Giá'">4k Đánh Giá</span>
                 <span style="margin: 0 10px;">|</span>
                 <span th:text="${detail.solditems} + ' Đã Bán'">20k+ Đã Bán</span>
-                    </div>
+                <button id="report-btn" title="Báo cáo sản phẩm" style="margin-left:8px; background: #fff3cd; color: #b45309; border: 1px solid #fbbf24; border-radius: 6px; padding: 2px 10px; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; transition: background 0.2s, color 0.2s;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 1rem;"></i> Báo cáo
+                </button>
+            </div>
             <div class="product-shipping">
                 <span style="font-weight: bold;">Vận Chuyển</span>
                 <span>Miễn Phí Vận Chuyển</span>
-                </div>
+            </div>
             <div class="product-insurance">
                 <span style="font-weight: bold;">An Tâm Mua Sắm Cùng MUSA</span>
-                    </div>
+            </div>
             <div class="product-price" id="price-range">
-                <!-- Price range will be populated by JavaScript -->
-                </div>
+                <!-- Giá sẽ được render bởi JS -->
+            </div>
             <div class="flash-sale">
                 FLASH SALE
-                    </div>
+            </div>
             <div class="product-attributes">
                 <div class="attribute-label">Màu</div>
                 <div class="attribute-values" id="color-options">
@@ -710,70 +814,75 @@
                 <input type="number" id="quantity" value="1" min="1"/>
                 <button type="button" onclick="changeQty(1)" id="btn-plus">+</button>
                 <span id="stock-info"></span>
-        </div>
+            </div>
             <div class="product-actions">
                 <button class="add-to-cart-btn" id="btn-add-cart">Thêm Vào Giỏ Hàng</button>
                 <button class="buy-now-btn" id="btn-buy-now">Mua Ngay</button>
-    </div>
-        </div>
             </div>
+        </div>
+    </div>
     <div class="shop-section">
-            <div class="shop-info">
-            <img th:src="${detail.shop.imageshop}" alt="Shop Image" />
-                <div class="shop-details">
-                <div class="shop-name" th:text="${detail.shop.shopname}">Vũ Thành</div>
-                <div class="shop-address"
-                     th:text="${detail.shop.fulladdress != null && detail.shop.fulladdress.contains('-') ? detail.shop.fulladdress.substring(detail.shop.fulladdress.lastIndexOf('-') + 1).trim() : 'Địa chỉ không xác định'}">
-                    Hà Nội
-                </div>
+        <div class="shop-info-pro">
+            <img th:src="${detail.shop.imageshop}" alt="Shop Image" class="shop-img" />
+            <div class="shop-details">
+                <div class="shop-name" th:text="${detail.shop.shopname}">Tên shop</div>
+                <div class="shop-address" th:text="${detail.shop.fulladdress}">Địa chỉ shop</div>
+                <div class="shop-desc" th:if="${detail.shop.description != null}" th:text="${detail.shop.description}">Mô tả shop</div>
+            </div>
+            <div class="shop-action">
+                <a th:href="@{/shop_detail(shopid=${detail.shop.id})}" class="btn-shop">Xem shop</a>
             </div>
         </div>
         <div class="product-info-section">
             <div class="product-info-tabs">
                 <div class="tab active">Mô tả sản phẩm</div>
-    </div>
+            </div>
             <div class="product-info-content active" id="description">
                 <div class="product-description">
                     <p th:text="${detail.product.description}"></p>
+                </div>
             </div>
         </div>
-        </div>
-        </div>
+    </div>
 
     <!-- Hidden data -->
-<div id="inventory-data" style="display:none;" th:each="inv : ${detail.inventories}">
-    <span class="inventory-item"
-              th:attr="data-id=${inv.id}, data-color=${inv.color}, data-size=${inv.dimension}, data-quantity=${inv.quantity}, data-sold=${inv.solditems}, data-price=${inv.price}, data-image=${inv.image}">
-    </span>
-</div>
+    <div id="inventory-data" style="display:none;" th:each="inv : ${detail.inventories}">
+        <span class="inventory-item"
+                  th:attr="data-id=${inv.id}, data-color=${inv.color}, data-size=${inv.dimension}, data-quantity=${inv.quantity}, data-sold=${inv.solditems}, data-price=${inv.price}, data-image=${inv.image}">
+        </span>
+    </div>
 
     <!-- Phần đánh giá sản phẩm -->
     <div class="shop-section">
         <div class="product-info-section">
             <div class="product-info-tabs">
                 <div class="tab active">Đánh giá sản phẩm</div>
-    </div>
+            </div>
             <div class="product-info-content active" id="reviews">
                 <div class="review-list">
                     <div class="review-card" th:each="review : ${detail.reviews}">
                         <div class="review-header">
                             <img class="review-avatar"
-                                 th:src="${review.orderid.customerid.image != null ? review.orderid.customerid.image : '/default-avatar.png'}"
+                                 th:src="${review.orderitemsid.orderid.customerid.image != null ? review.orderitemsid.orderid.customerid.image : '/default-avatar.png'}"
                                  alt="avatar"/>
                             <div class="review-meta">
-                                <span class="review-name" th:text="${review.orderid.customerid.firstname + ' ' + review.orderid.customerid.lastname}"></span>
+                                <span class="review-name" th:text="${review.orderitemsid.orderid.customerid.firstname + ' ' + review.orderitemsid.orderid.customerid.lastname}"></span>
                                 <div class="review-rating">
                                     <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fas fa-star" style="color: #ffb400;"></i>
                                     <span class="rating-number" th:text="${review.rating} + '/5'" style="margin-left: 8px; font-size: 0.9rem; color: #666;"></span>
-</div>
+                                </div>
                                 <span class="review-date" th:text="${#dates.format(review.createdat, 'yyyy-MM-dd HH:mm')}"></span>
-                                <span class="review-variant" th:each="item : ${review.orderid.orderitems}">
+                                <span class="review-variant" th:each="item : ${review.orderitemsid.orderid.orderitems}">
                                     <th:block th:if="${item.productid.id == review.productid.id}">
                                         <span th:if="${item.inventoryid.color != null}" th:text="' | Màu: ' + ${item.inventoryid.color}"></span>
                                         <span th:if="${item.inventoryid.dimension != null}" th:text="' | Size: ' + ${item.inventoryid.dimension}"></span>
                                     </th:block>
                                 </span>
                             </div>
+                            <!-- Nút báo cáo review -->
+                            <button class="report-review-btn" th:attr="data-review-id=${review.id}" title="Báo cáo đánh giá" style="margin-left:12px; background: #fff3cd; color: #b45309; border: 1px solid #fbbf24; border-radius: 6px; padding: 2px 10px; font-size: 0.85rem; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; transition: background 0.2s, color 0.2s;">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 0.95rem;"></i> Báo cáo
+                            </button>
                         </div>
                         <div class="review-content" th:text="${review.comment}"></div>
                         <div class="review-media">
@@ -798,12 +907,75 @@
     Đã thêm vào giỏ hàng!
 </div>
 
-<!-- Modal phóng to review media -->
+<!-- Modal phóng to review -->
 <div id="mediaModal" class="media-modal">
     <div class="media-modal-content">
         <button class="media-modal-close" onclick="closeMediaModal()">&times;</button>
         <div id="modalMedia"></div>
     </div>
+</div>
+
+<!-- Thêm hiệu ứng loading toàn màn hình -->
+<div id="fullpage-loading" style="display:none;position:fixed;z-index:99999;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);align-items:center;justify-content:center;"><div style="font-size:2rem;color:#088395;"><i class="fas fa-spinner fa-spin"></i> Đang xử lý...</div></div>
+
+<!-- Modal báo cáo sản phẩm -->
+<div id="report-modal" style="display:none; position:fixed; z-index:99999; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:12px; max-width:400px; width:100%; padding:28px 24px; position:relative;">
+    <button onclick="closeReportModal()" style="position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.5rem; color:#888; cursor:pointer;">&times;</button>
+    <h3 style="margin-bottom:18px; color:#b45309;"><i class="fas fa-exclamation-triangle"></i> Báo cáo sản phẩm</h3>
+    <div id="report-alert" style="display:none; margin-bottom:10px; padding:8px 12px; border-radius:6px; font-weight:600;"></div>
+    <form method="post" th:action="@{/report_product}" id="report-form">
+      <input type="hidden" name="id" th:value="${detail.product.id}" />
+      <div style="margin-bottom:12px;">
+        <label>Danh mục</label>
+        <select name="category" required>
+          <option th:value="${complaintCategoryProduct.categoryId}" th:text="${complaintCategoryProduct.name}"></option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Lý do</label>
+        <select name="reasonId" required>
+          <option value="">-- Chọn lý do --</option>
+          <option th:each="reason : ${complaintReasonProduct}" th:value="${reason.reasonId}" th:text="${reason.description}"></option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Mô tả chi tiết</label>
+        <textarea name="description" rows="3" style="width:100%; border-radius:6px; border:1px solid #eee;"></textarea>
+      </div>
+      <button type="submit" style="background:#fbbf24; color:#fff; border:none; border-radius:6px; padding:8px 24px; font-weight:600; cursor:pointer;">Gửi báo cáo</button>
+    </form>
+  </div>
+</div>
+
+<!-- Modal báo cáo review -->
+<div id="report-review-modal" style="display:none; position:fixed; z-index:99999; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
+  <div style="background:#fff; border-radius:12px; max-width:400px; width:100%; padding:28px 24px; position:relative;">
+    <button onclick="closeReportReviewModal()" style="position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.5rem; color:#888; cursor:pointer;">&times;</button>
+    <h3 style="margin-bottom:18px; color:#b45309;"><i class="fas fa-exclamation-triangle"></i> Báo cáo đánh giá</h3>
+    <div id="report-review-alert" style="display:none; margin-bottom:10px; padding:8px 12px; border-radius:6px; font-weight:600;"></div>
+    <form method="post" th:action="@{/report_review}" id="report-review-form">
+      <input type="hidden" name="id" id="report-review-id" value="" />
+      <div style="margin-bottom:12px;">
+        <label>Danh mục</label>
+        <select name="category" required>
+          <option th:value="${complaintCategoryFeedback.categoryId}" th:text="${complaintCategoryFeedback.name}"></option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Lý do</label>
+        <select name="reasonId" required>
+          <option value="">-- Chọn lý do --</option>
+          <option th:each="reason : ${complaintReason}" th:value="${reason.reasonId}" th:text="${reason.description}"></option>
+        </select>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label>Mô tả chi tiết</label>
+        <textarea name="description" rows="3" style="width:100%; border-radius:6px; border:1px solid #eee;"></textarea>
+      </div>
+      <button type="submit" style="background:#fbbf24; color:#fff; border:none; border-radius:6px; padding:8px 24px; font-weight:600; cursor:pointer;">Gửi báo cáo</button>
+    </form>
+  </div>
 </div>
 
 <script th:inline="javascript">
@@ -842,7 +1014,7 @@
         selectedInventory = null;
         let stock = 0;
         let inventoryImage = null;
-        
+        let selectedInvObj = null;
         inventories.forEach(inv => {
             if (
                 inv.getAttribute('data-color') === selectedColor &&
@@ -851,9 +1023,13 @@
                 selectedInventory = inv;
                 stock = parseInt(inv.getAttribute('data-quantity')) || 0;
                 inventoryImage = inv.getAttribute('data-image');
+                selectedInvObj = {
+                    price: parseFloat(inv.getAttribute('data-price'))
+                };
             }
         });
-        
+        // Debug inventory được chọn
+        console.log('Chọn:', selectedColor, selectedSize, '=>', selectedInventory, 'stock:', stock);
         // Cập nhật hình ảnh chính nếu có inventory được chọn và có hình ảnh
         if (selectedInventory && inventoryImage) {
             const mainImage = document.getElementById('mainProductImage');
@@ -866,11 +1042,12 @@
                 thumbnails.forEach((thumb, index) => {
                     if (thumb.src === inventoryImage) {
                         thumb.classList.add('active');
-                }
-            });
+                    }
+                });
+            }
         }
-    }
-
+        renderPriceRange(selectedInvObj);
+        // Cập nhật trạng thái nút và stockInfo tại đây
         const qtyInput = document.getElementById('quantity');
         const btnBuy = document.getElementById('btn-buy-now');
         const btnCart = document.getElementById('btn-add-cart');
@@ -886,6 +1063,18 @@
             qtyInput.max = stock;
             stockInfo.textContent = `Kho: ${stock}`;
             if (parseInt(qtyInput.value) > stock) qtyInput.value = stock;
+        } else if (!selectedInventory) {
+            // Nếu chưa chọn biến thể, hiển thị tổng số lượng tất cả inventory
+            let totalStock = 0;
+            inventories.forEach(inv => {
+                totalStock += parseInt(inv.getAttribute('data-quantity')) || 0;
+            });
+            stockInfo.textContent = `Tổng kho: ${totalStock}`;
+            qtyInput.disabled = true;
+            btnBuy.disabled = true;
+            btnCart.disabled = true;
+            btnMinus.disabled = true;
+            btnPlus.disabled = true;
         } else {
             qtyInput.disabled = true;
             btnBuy.disabled = true;
@@ -894,6 +1083,30 @@
             btnPlus.disabled = true;
             stockInfo.textContent = 'Hết hàng';
         }
+    }
+
+    const qtyInput = document.getElementById('quantity');
+    const btnBuy = document.getElementById('btn-buy-now');
+    const btnCart = document.getElementById('btn-add-cart');
+    const btnMinus = document.getElementById('btn-minus');
+    const btnPlus = document.getElementById('btn-plus');
+    const stockInfo = document.getElementById('stock-info');
+    if (selectedInventory && stock > 0) {
+        qtyInput.disabled = false;
+        btnBuy.disabled = false;
+        btnCart.disabled = false;
+        btnMinus.disabled = false;
+        btnPlus.disabled = false;
+        qtyInput.max = stock;
+        stockInfo.textContent = `Kho: ${stock}`;
+        if (parseInt(qtyInput.value) > stock) qtyInput.value = stock;
+    } else {
+        qtyInput.disabled = true;
+        btnBuy.disabled = true;
+        btnCart.disabled = true;
+        btnMinus.disabled = true;
+        btnPlus.disabled = true;
+        stockInfo.textContent = 'Hết hàng';
     }
 
     function changeQty(delta) {
@@ -927,22 +1140,24 @@
         }
         if (!selectedInventory) {
             alert('Vui lòng chọn phân loại còn hàng!');
-                return;
-            }
+            return;
+        }
         const inventoryId = selectedInventory.getAttribute('data-id');
         const quantity = document.getElementById('quantity').value;
         if (!productId) {
             alert('Không xác định được sản phẩm!');
             return;
         }
+        showFullPageLoading(true);
         fetch('/cart/add', {
-                method: 'POST',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: `productId=${productId}&inventoryId=${inventoryId}&quantity=${quantity}`
         })
         .then(response => {
+            showFullPageLoading(false);
             if (response.ok) {
                 showAddToCartSuccess();
             } else {
@@ -950,6 +1165,7 @@
             }
         })
         .catch(() => {
+            showFullPageLoading(false);
             alert('Có lỗi xảy ra khi thêm vào giỏ hàng!');
         });
     };
@@ -978,12 +1194,15 @@
             if (seenSizes[size]) el.style.display = 'none';
             else seenSizes[size] = true;
         });
+        renderPriceRange();
+        // Gọi updateInventorySelection để hiển thị tổng kho khi mới vào trang
+        updateInventorySelection();
     });
 
     // User menu JS from home.html
     const userInfoBox = document.querySelector('.user-info-box');
     const menu = document.querySelector('.account-menu-list');
-        let hideTimeout;
+    let hideTimeout;
     if (userInfoBox && menu) {
       userInfoBox.addEventListener('mouseenter', () => {
             clearTimeout(hideTimeout);
@@ -1148,6 +1367,149 @@
             // Re-enable the button
             heartIcon.style.pointerEvents = 'auto';
         });
+    }
+
+    // Lấy danh sách inventory từ DOM
+    function getInventories() {
+        const inventories = [];
+        document.querySelectorAll('#inventory-data .inventory-item').forEach(inv => {
+            inventories.push({
+                id: inv.getAttribute('data-id'),
+                color: inv.getAttribute('data-color'),
+                size: inv.getAttribute('data-size'),
+                quantity: parseInt(inv.getAttribute('data-quantity')),
+                sold: parseInt(inv.getAttribute('data-sold')),
+                price: parseFloat(inv.getAttribute('data-price')),
+                image: inv.getAttribute('data-image')
+            });
+        });
+        return inventories;
+    }
+
+    // Hiển thị giá từ thấp đến cao hoặc 1 giá nếu chỉ có 1
+    function renderPriceRange(selectedInv) {
+        const priceDiv = document.getElementById('price-range');
+        const inventories = getInventories();
+        let html = '';
+        if (selectedInv) {
+            html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${selectedInv.price.toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
+        } else {
+            const prices = inventories.map(i => i.price).sort((a,b)=>a-b);
+            const allEqual = prices.every(p => p === prices[0]);
+            if (allEqual) {
+                html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${prices[0].toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
+            } else {
+                html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${prices[0].toLocaleString('vi-VN', {style:'currency',currency:'VND'})} - ${prices[prices.length-1].toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
+            }
+        }
+        priceDiv.innerHTML = html;
+    }
+
+    // Hiệu ứng loading toàn màn hình khi thêm vào giỏ hàng
+    function showFullPageLoading(show) {
+        const loading = document.getElementById('fullpage-loading');
+        if (show) loading.style.display = 'flex';
+        else loading.style.display = 'none';
+    }
+
+    document.getElementById('report-btn').onclick = function() {
+        document.getElementById('report-modal').style.display = 'flex';
+    };
+    function closeReportModal() {
+        document.getElementById('report-modal').style.display = 'none';
+    }
+    // Xử lý gửi báo cáo bằng AJAX, hiển thị thông báo, không reload trang
+    document.getElementById('report-form').onsubmit = function(e) {
+        e.preventDefault();
+        const form = this;
+        const alertBox = document.getElementById('report-alert');
+        alertBox.style.display = 'none';
+        alertBox.textContent = '';
+        alertBox.style.background = '';
+        alertBox.style.color = '';
+        const formData = new FormData(form);
+        fetch(form.getAttribute('action'), {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.text())
+        .then(msg => {
+            alertBox.textContent = msg;
+            alertBox.style.display = 'block';
+            if (msg.includes('Báo cáo thành công')) {
+                alertBox.style.background = '#d1fae5';
+                alertBox.style.color = '#047857';
+                setTimeout(() => {
+                    closeReportModal();
+                    alertBox.style.display = 'none';
+                }, 1000);
+            } else {
+                alertBox.style.background = '#fee2e2';
+                alertBox.style.color = '#991b1b';
+            }
+        })
+        .catch(() => {
+            alertBox.textContent = 'Có lỗi xảy ra, vui lòng thử lại!';
+            alertBox.style.display = 'block';
+            alertBox.style.background = '#fee2e2';
+            alertBox.style.color = '#991b1b';
+        });
+    };
+
+    // Xử lý nút báo cáo review
+    let currentReviewId = null;
+    document.querySelectorAll('.review-list').forEach(list => {
+        list.addEventListener('click', function(e) {
+            if (e.target.closest('.report-review-btn')) {
+                const btn = e.target.closest('.report-review-btn');
+                currentReviewId = btn.getAttribute('data-review-id');
+                document.getElementById('report-review-id').value = currentReviewId;
+                document.getElementById('report-review-modal').style.display = 'flex';
+            }
+        });
+    });
+    function closeReportReviewModal() {
+        document.getElementById('report-review-modal').style.display = 'none';
+    }
+    // Xử lý gửi báo cáo review bằng AJAX
+    const reviewForm = document.getElementById('report-review-form');
+    if (reviewForm) {
+        reviewForm.onsubmit = function(e) {
+            e.preventDefault();
+            const form = this;
+            const alertBox = document.getElementById('report-review-alert');
+            alertBox.style.display = 'none';
+            alertBox.textContent = '';
+            alertBox.style.background = '';
+            alertBox.style.color = '';
+            const formData = new FormData(form);
+            fetch(form.getAttribute('action'), {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.text())
+            .then(msg => {
+                alertBox.textContent = msg;
+                alertBox.style.display = 'block';
+                if (msg.includes('Báo cáo thành công')) {
+                    alertBox.style.background = '#d1fae5';
+                    alertBox.style.color = '#047857';
+                    setTimeout(() => {
+                        closeReportReviewModal();
+                        alertBox.style.display = 'none';
+                    }, 1000);
+                } else {
+                    alertBox.style.background = '#fee2e2';
+                    alertBox.style.color = '#991b1b';
+                }
+            })
+            .catch(() => {
+                alertBox.textContent = 'Có lỗi xảy ra, vui lòng thử lại!';
+                alertBox.style.display = 'block';
+                alertBox.style.background = '#fee2e2';
+                alertBox.style.color = '#991b1b';
+            });
+        };
     }
 </script>
 </body>

@@ -97,7 +97,7 @@ public class PaymentService {
             order.setFullname(fullname);
             order.setPhone(phone);
             order.setAddress(address);
-            order.setStatus("Chờ lấy hàng");
+            order.setStatus("Chờ xác nhận");
             order.setPaymentStatus("Đã thanh toán");
             ordersRepository.save(order);
 

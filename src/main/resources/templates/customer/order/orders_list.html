@@ -586,6 +586,8 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             transition: color 0.3s ease;
+            max-width: 180px;
+            display: block;
         }
         
         .product-link:hover .product-name {
@@ -647,6 +649,12 @@
             background: #fee2e2;
             color: #991b1b;
             border: 1px solid #fca5a5;
+        }
+
+        .status-return {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fcd34d;
         }
 
         .view-btn {
@@ -1101,7 +1109,7 @@
                         <div class="order-amount" th:text="${#numbers.formatDecimal(order.totalamount, 0, 'COMMA', 0, 'POINT')} + ' đ'">500,000 đ</div>
                     </td>
                     <td>
-                        <span class="status-badge" th:text="${order.status}" th:classappend="${order.status == 'pending' ? 'status-pending' : (order.status == 'processing' ? 'status-processing' : (order.status == 'delivered' ? 'status-delivered' : 'status-cancelled'))}">pending</span>
+                        <span class="status-badge" th:text="${order.status}" th:classappend="${order.status == 'Chờ xác nhận' ? 'status-pending' : (order.status == 'Đã xác nhận' || order.status == 'Chờ lấy hàng' || order.status == 'Đang giao' ? 'status-processing' : (order.status == 'Đã giao' ? 'status-delivered' : (order.status == 'Đã hủy' ? 'status-cancelled' : (order.status == 'Yêu cầu trả hàng/hoàn tiền' ? 'status-return' : 'status-pending'))))}">Chờ xác nhận</span>
                     </td>
                     <td>
                         <a th:href="@{'/orders/' + ${order.id}}" class="view-btn">
@@ -1146,96 +1154,37 @@
         let processingOrders = 0;
         let deliveredOrders = 0;
         let cancelledOrders = 0;
+        let returnOrders = 0;
 
         orderRows.forEach(row => {
             const status = row.getAttribute('data-status');
-            if (status === 'pending') {
+            if (status === 'Chờ xác nhận') {
                 pendingOrders++;
-            } else if (status === 'processing') {
+            } else if (status === 'Đã xác nhận' || status === 'Chờ lấy hàng' || status === 'Đang giao') {
                 processingOrders++;
-            } else if (status === 'delivered') {
+            } else if (status === 'Đã giao') {
                 deliveredOrders++;
-            } else if (status === 'cancelled') {
+            } else if (status === 'Đã hủy') {
                 cancelledOrders++;
+            } else if (status === 'Yêu cầu trả hàng/hoàn tiền') {
+                returnOrders++;
             }
         });
 
-        // Animate counters
-        animateCounter('total-orders', totalOrders);
-        animateCounter('pending-orders', pendingOrders);
-        animateCounter('processing-orders', processingOrders);
-        animateCounter('delivered-orders', deliveredOrders);
-        animateCounter('cancelled-orders', cancelledOrders);
-    }
-
-    function animateCounter(elementId, targetValue) {
-        const element = document.getElementById(elementId);
-        const duration = 1000;
-        const startTime = performance.now();
-
-        function updateCounter(currentTime) {
-            const elapsed = currentTime - startTime;
-            const progress = Math.min(elapsed / duration, 1);
-            const currentValue = Math.floor(targetValue * progress);
-
-            element.textContent = currentValue;
-
-            if (progress < 1) {
-                requestAnimationFrame(updateCounter);
-            }
-        }
-
-        requestAnimationFrame(updateCounter);
+        // Log stats for debugging
+        console.log('Order Stats:', {
+            total: totalOrders,
+            pending: pendingOrders,
+            processing: processingOrders,
+            delivered: deliveredOrders,
+            cancelled: cancelledOrders,
+            return: returnOrders
+        });
     }
 
     function setupFilters() {
-        const statusFilter = document.getElementById('status-filter');
-        const orderRows = document.querySelectorAll('.order-row');
-
-        statusFilter.addEventListener('change', function() {
-            const selectedStatus = this.value;
-
-            orderRows.forEach(row => {
-                const rowStatus = row.getAttribute('data-status');
-
-                if (selectedStatus === '' || rowStatus === selectedStatus) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-
-            // Recalculate visible stats
-            updateVisibleStats();
-        });
-    }
-
-    function updateVisibleStats() {
-        const visibleRows = document.querySelectorAll('.order-row[style=""], .order-row:not([style])');
-        let totalVisible = visibleRows.length;
-        let pendingVisible = 0;
-        let processingVisible = 0;
-        let deliveredVisible = 0;
-        let cancelledVisible = 0;
-
-        visibleRows.forEach(row => {
-            const status = row.getAttribute('data-status');
-            if (status === 'pending') {
-                pendingVisible++;
-            } else if (status === 'processing') {
-                processingVisible++;
-            } else if (status === 'delivered') {
-                deliveredVisible++;
-            } else if (status === 'cancelled') {
-                cancelledVisible++;
-            }
-        });
-
-        document.getElementById('total-orders').textContent = totalVisible;
-        document.getElementById('pending-orders').textContent = pendingVisible;
-        document.getElementById('processing-orders').textContent = processingVisible;
-        document.getElementById('delivered-orders').textContent = deliveredVisible;
-        document.getElementById('cancelled-orders').textContent = cancelledVisible;
+        // Remove the status-filter logic since we're using tabs instead
+        console.log('Filters setup completed');
     }
 
     function animateElements() {
