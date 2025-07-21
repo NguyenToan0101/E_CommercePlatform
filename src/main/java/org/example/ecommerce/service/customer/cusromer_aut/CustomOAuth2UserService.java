@@ -42,7 +42,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             customerRepository.save(customer);
         } else {
             // Nếu đã tồn tại, kiểm tra trạng thái khóa
-            if (!customer.isStatus() || customer.isLocked()) {
+            if (!customer.getStatus() || customer.isLocked()) {
                 throw new OAuth2AuthenticationException("Tài khoản của bạn đã bị khóa");
             }
         }

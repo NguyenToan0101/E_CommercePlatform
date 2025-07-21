@@ -126,24 +126,15 @@ public class CheckoutController {
                         voucherFreeShip.add(promotionDTO);
                     } else if (!promotionDTO.getType().equalsIgnoreCase("SHIPPING")
                             && (category.getValue().equals(ID_OF_ALL_CATEGORY) || (category.getValue().equals(product.getCategoryid().getId())))) {
-                       List<Orderitem> list = oderItemService.getAllOrderItems();
-                       if(promotionDTO.getId() == 17){
-                           for (Orderitem orderitem : list) {
-//                               if(orderitem.getPromotionid() != null){
-                                   if(!orderitem.getOrderid().getCustomerid().getId().equals(customer.getId())
-                                           && (orderitem.getPromotionid() == 17)) {
-//                                       System.out.println("-------ACTIVEEEEE promtion" +promotionDTO);
-                                       voucherDiscount.add(promotionDTO);
-                                   }
-//                               }
-//                           else {
-//                                   voucherDiscount.add(promotionDTO);
-//                               }
-
-                           }
-                       }else {
-                           voucherDiscount.add(promotionDTO);
-                       }
+                        List<Orderitem> list = oderItemService.getAllOrderItems();
+                        if(promotionDTO.getId() == 17){
+                            boolean checkNewUser = isCheckNewUser(list, customer);
+                            if(!checkNewUser){
+                                voucherDiscount.add(promotionDTO);
+                            }
+                        }else {
+                            voucherDiscount.add(promotionDTO);
+                        }
 
 
 
@@ -166,7 +157,21 @@ public class CheckoutController {
         model.addAttribute("customer", customer);
         return "customer/wallet/checkout-preview";
     }
+    private static boolean isCheckNewUser(List<Orderitem> list, Customer customer) {
+        boolean checkNewUser = false;
+        for (Orderitem orderitem : list) {
 
+            if(orderitem.getPromotionid() != null){
+                if(orderitem.getOrderid().getCustomerid().getId().equals(customer.getId())
+                        && (orderitem.getPromotionid() == 17)) {
+
+                    checkNewUser = true;
+
+                }
+            }
+        }
+        return checkNewUser;
+    }
 //    @GetMapping("/preview_realtime_data")
 //    @ResponseBody
 //    public Map<String, Object> getPreviewData(

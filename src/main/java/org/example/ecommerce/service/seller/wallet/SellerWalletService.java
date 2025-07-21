@@ -1,6 +1,6 @@
 package org.example.ecommerce.service.seller.wallet;
 
-import org.example.ecommerce.common.dto.CashflowDTO;
+import org.example.ecommerce.common.dto.seller.CashflowDTO;
 import org.example.ecommerce.entity.Customer;
 import org.example.ecommerce.entity.Seller;
 import org.example.ecommerce.entity.Wallet;

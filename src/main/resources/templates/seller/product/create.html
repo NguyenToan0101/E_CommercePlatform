@@ -50,7 +50,7 @@
                                 <div th:if="${product.id != null and product.productimages != null}">
                                     <p>Ảnh hiện tại:</p>
                                     <div class="current-images">
-                                        <div th:each="img : ${product.productimages}" class="current-image-item">
+                                        <div th:each="img,iterStat : ${product.productimages}" class="current-image-item">
                                             <img th:src="@{${img.imageurl}}" class="product-image-preview"/>
                                         </div>
                                     </div>
@@ -91,95 +91,35 @@
                 <div class="form-group">
                     <label>Thông tin bán hàng:</label>
                     <div style="margin-bottom: 15px; border: 1px solid #ccc; border-radius: 8px; padding: 15px; background: #f6f6f6">
-                        <!-- XÓA checkbox Thêm nhóm phân loại và khối single-inventory-section -->
-                        <!-- Luôn hiển thị phần nhập biến thể -->
-                        <div id="variant-section" class="variant-section">
-                            <div class="variant-input-group">
-                                <label>Kích thước:</label>
-                                <div id="size-inputs">
-                                    <th:block th:if="${sizeSet != null and #lists.size(sizeSet) > 0}">
-                                        <th:block th:each="size : ${sizeSet}">
-                                            <div class="variant-input-wrapper">
-                                                <input type="text" name="sizes[]" th:value="${size}" oninput="addNewInput(this, 'size')">
-                                            </div>
-                                        </th:block>
-                                    </th:block>
-                                    <th:block th:unless="${sizeSet != null and #lists.size(sizeSet) > 0}">
-                                        <div class="variant-input-wrapper">
-                                            <input type="text" name="sizes[]" placeholder="VD: M" oninput="addNewInput(this, 'size')">
-                                        </div>
-                                    </th:block>
-                                </div>
+                        <div class="variant-group">
+                            <label>Màu sắc:</label>
+                            <div id="color-variant-container">
+                                <!-- Dynamic color rows will be injected here by JavaScript -->
                             </div>
-
-                            <div class="variant-input-group">
-                                <label>Màu sắc:</label>
-                                <div id="color-inputs">
-                                    <th:block th:if="${colorSet != null and #lists.size(colorSet) > 0}">
-                                        <th:block th:each="color : ${colorSet}">
-                                            <div class="variant-input-wrapper">
-                                                <input type="text" name="colors[]" th:value="${color}" oninput="addNewInput(this, 'color')">
-                                            </div>
-                                        </th:block>
-                                    </th:block>
-                                    <th:block th:unless="${colorSet != null and #lists.size(colorSet) > 0}">
-                                        <div class="variant-input-wrapper">
-                                            <input type="text" name="colors[]" placeholder="VD: Đỏ" oninput="addNewInput(this, 'color')">
-                                        </div>
-                                    </th:block>
-                                </div>
+                            <button type="button" class="btn-secondary" onclick="addColorVariantRow()">+ Thêm màu</button>
+                        </div>
+                        <div class="variant-group">
+                            <label>Kích thước:</label>
+                             <div id="size-variant-container">
+                                <!-- Dynamic size rows will be injected here by JavaScript -->
                             </div>
-
-                            <div class="variant-table-container">
-                                <div class="variant-table-title">Danh sách phân loại hàng</div>
-                                <table class="variant-table" id="variant-table">
+                            <button type="button" class="btn-secondary" onclick="addSizeVariantRow()">+ Thêm size</button>
+                        </div>
+                        <div class="variant-table-container">
+                            <div class="variant-table-title">Danh sách phân loại hàng</div>
+                            <table class="variant-table" id="variant-table">
                                     <thead>
                                     <tr>
                                         <th class="color-cell">Màu sắc</th>
                                         <th>Size</th>
                                         <th>Giá</th>
-                                        <th>Kho hàng</th>
+                                        <th>Số lượng</th>
                                         <th class="shipping-col" style="display:none;">* Cân nặng (Sau khi đóng gói)</th>
                                         <th class="shipping-col" style="display:none;">Kích thước đóng gói (cm)</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="variant-tbody">
-                                    <th:block th:if="${product.inventories != null}">
-                                        <tr th:each="inv, idx : ${product.inventories}">
-                                            <td class="color-cell">
-                                                <div class="color-image-upload">
-                                                    <div th:if="${inv.image != null}">
-                                                        <img th:src="${inv.image}" style="width:100%;height:100%;object-fit:cover;">
-                                                    </div>
-                                                    <div th:if="${inv.image == null}">
-                                                        <div class="plus-icon">+</div>
-                                                    </div>
-                                                </div>
-                                                <span style="color:red;font-size:12px;" th:text="${inv.image}"></span>
-                                                <input type="file" th:name="'inventoryImages'" style="display:none;">
-                                                <div class="color-name" th:text="${inv.color}"></div>
-                                            </td>
-                                            <td th:text="${inv.dimension}"></td>
-                                            <td>
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].price'" th:value="${inv.price}" placeholder="Giá" min="0.01" step="0.01" required class="variant-input" />
-                                            </td>
-                                            <td>
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].quantity'" th:value="${inv.quantity}" placeholder="Số lượng" min="0" required class="variant-input" />
-                                            </td>
-                                            <td>
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].weight'" th:value="${inv.weight}" placeholder="Cân nặng" min="0.01" required style="width:70px;"> kg
-                                            </td>
-                                            <td>
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].length'" th:value="${inv.length}" placeholder="Dài" min="0" required style="width:50px;"> cm
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].width'" th:value="${inv.width}" placeholder="Rộng" min="0" required style="width:50px;"> cm
-                                                <input type="number" th:name="'inventories[' + ${idx.index} + '].height'" th:value="${inv.height}" placeholder="Cao" min="0" required style="width:50px;"> cm
-                                            </td>
-                                        </tr>
-                                    </th:block>
-                                    <!-- Nếu không có biến thể, JS sẽ render động như cũ -->
-                                    </tbody>
+                                <tbody id="variant-tbody"></tbody>
                                 </table>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -195,7 +135,7 @@
                         <div id="product-shipping-section">
                             <div class="form-group">
                                 <label for="weight">* Cân nặng (Sau khi đóng gói)</label>
-                                <input type="number" id="weight" th:field="*{weight}" placeholder="Nhập cân nặng" min="0.01" required> kg
+                                <input type="number" id="weight" th:field="*{weight}" placeholder="Nhập cân nặng" min="0.01" step='0.01' required> kg
                             </div>
                             <div class="form-group">
                                 <label>Kích thước đóng gói (cm)</label>
@@ -253,6 +193,10 @@
 
 <script src="https://cdn.ckeditor.com/ckeditor5/41.1.0/classic/ckeditor.js"></script>
 <script th:inline="javascript">
+    // Lấy dữ liệu inventories từ backend (nếu có) và parse thành mảng JS
+    let inventoriesJsonString = /*[[${inventoriesJson}]]*/ '[]';
+    let inventories = JSON.parse(inventoriesJsonString);
+
     ClassicEditor.create(document.querySelector('#description'), {
         toolbar: ['heading', '|', 'bold', 'italic', 'underline', '|', 'undo', 'redo']
     }).then(editor => {
@@ -262,128 +206,83 @@
         }
     }).catch(error => console.error(error));
 
-    function addNewInput(inputElem, type) {
-        const wrapper = inputElem.closest(".variant-input-wrapper");
-        if (inputElem.value.trim() !== "" && wrapper.nextElementSibling == null) {
-            const container = document.getElementById(type === 'size' ? 'size-inputs' : 'color-inputs');
-            const newWrapper = document.createElement("div");
-            newWrapper.className = "variant-input-wrapper";
+    let colorInputIdCounter = 0;
 
-            const newInput = document.createElement("input");
-            newInput.type = "text";
-            newInput.placeholder = type === 'size' ? "VD: M" : "VD: Đỏ";
-            newInput.name = type === 'size' ? "sizes[]" : "colors[]";
-            newInput.oninput = () => addNewInput(newInput, type);
-
-            const removeBtn = document.createElement("button");
-            removeBtn.type = "button";
-            removeBtn.className = "variant-remove-btn";
-            removeBtn.innerHTML = '<i class="fas fa-times"></i>';
-            removeBtn.onclick = () => {
-                newWrapper.remove();
-                renderVariantTable();
-            };
-
-            newWrapper.appendChild(newInput);
-            newWrapper.appendChild(removeBtn);
-            container.appendChild(newWrapper);
-        }
+    function addColorVariantRow(value = '', imageUrl = '') {
+        const container = document.getElementById('color-variant-container');
+        const row = document.createElement('div');
+        row.className = 'variant-input-row';
+        colorInputIdCounter++;
+        const fileInputId = 'colorImageInput_' + colorInputIdCounter;
+        row.innerHTML = `
+            <input type="text" name="colorNames" placeholder="Tên màu (VD: Đỏ)" value="${value}" oninput="renderVariantTable()">
+            <button type="button" class="btn-upload" onclick="document.getElementById('${fileInputId}').click()">Upload ảnh</button>
+            <input type="file" name="colorImages" id="${fileInputId}" accept="image/*" style="display:none;" onchange="previewColorImage(this)">
+            <img class="color-image-preview" src="${imageUrl}" alt="Xem trước" style="display:${imageUrl ? 'block' : 'none'};">
+            <button type="button" class="variant-remove-btn" onclick="removeVariantRow(this)"><i class="fas fa-times"></i></button>
+        `;
+        container.appendChild(row);
+    }
+    function addSizeVariantRow(value = '') {
+        const container = document.getElementById('size-variant-container');
+        const row = document.createElement('div');
+        row.className = 'variant-input-row';
+        row.innerHTML = `
+            <input type="text" name="sizeNames" placeholder="Tên size (VD: M)" value="${value}" oninput="renderVariantTable()">
+            <button type="button" class="variant-remove-btn" onclick="removeVariantRow(this)"><i class="fas fa-times"></i></button>
+        `;
+        container.appendChild(row);
+    }
+    function removeVariantRow(button) {
+        button.parentElement.remove();
         renderVariantTable();
     }
-
-    let variantColorImages = new Map();
-    /*[# th:each="inv : ${product.inventories}" ]*/
-        /*[# th:if="${inv.image != null}" ]*/
-            variantColorImages.set('[[${inv.color}]]', '[[${inv.image}]]');
-        /*[/]*/
-    /*[/]*/
-
-    function renderVariantTable() {
-        const sizes = Array.from(document.querySelectorAll("input[name='sizes[]']")).map(i => i.value.trim()).filter(i => i);
-        const colors = Array.from(document.querySelectorAll("input[name='colors[]']")).map(i => i.value.trim()).filter(i => i);
-        const tbody = document.getElementById("variant-tbody");
-
-        // Lưu lại giá trị đã nhập của các trường inventory
-        const inventoryValues = {};
-        tbody.querySelectorAll('tr').forEach((row, idx) => {
-            inventoryValues[idx] = {
-                price: row.querySelector(`input[name='inventories[${idx}].price']`)?.value || '',
-                quantity: row.querySelector(`input[name='inventories[${idx}].quantity']`)?.value || '',
-                weight: row.querySelector(`input[name='inventories[${idx}].weight']`)?.value || '',
-                length: row.querySelector(`input[name='inventories[${idx}].length']`)?.value || '',
-                width: row.querySelector(`input[name='inventories[${idx}].width']`)?.value || '',
-                height: row.querySelector(`input[name='inventories[${idx}].height']`)?.value || ''
-            };
-        });
-
-        tbody.innerHTML = "";
-
-        if (sizes.length === 0 || colors.length === 0) {
-            return;
+    function previewColorImage(input) {
+        const preview = input.nextElementSibling; // The <img> tag
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
         }
-
-        const useVariantShipping = document.getElementById('toggleShippingVariant').checked;
-
+    }
+    function renderVariantTable() {
+        const colors = Array.from(document.querySelectorAll('input[name="colorNames"]')).map(i => i.value.trim()).filter(Boolean);
+        const sizes = Array.from(document.querySelectorAll('input[name="sizeNames"]')).map(i => i.value.trim()).filter(Boolean);
+        const tbody = document.getElementById('variant-tbody');
+        tbody.innerHTML = '';
         let idx = 0;
-        colors.forEach(color => {
-            const existingImage = variantColorImages.get(color);
-            sizes.forEach((size, sizeIndex) => {
-                const row = document.createElement("tr");
-
-                const colorCell = document.createElement("td");
-                colorCell.className = "color-cell";
-                if (sizeIndex === 0) {
-                    let imageUploadHtml = '';
-                    if (existingImage) {
-                        imageUploadHtml = `
-                            <div class="color-image-upload" onclick="document.getElementById('color-upload-${color}-${idx}').click()">
-                                <img src="${existingImage}" style="width:100%;height:100%;object-fit:cover;">
-                            </div>
-                        `;
-                    } else {
-                        imageUploadHtml = `
-                            <div class="color-image-upload" onclick="document.getElementById('color-upload-${color}-${idx}').click()">
-                                <div class="plus-icon">+</div>
-                            </div>
-                        `;
-                    }
-                    imageUploadHtml += `
-                        <input type="file" id="color-upload-${color}-${idx}" name="inventoryImages" accept="image/*" style="display:none" onchange="handleVariantColorUploadPreview(this, '${color}', ${idx})">
-                        <div class="color-name">${color}</div>
-                    `;
-                    colorCell.innerHTML = imageUploadHtml;
-                    colorCell.rowSpan = sizes.length;
-                }
-
-                if (sizeIndex === 0) {
-                    row.appendChild(colorCell);
-                }
-
-                const sizeCell = document.createElement("td");
-                sizeCell.textContent = size;
+        const generateRow = (color, size) => {
+             const row = document.createElement('tr');
+                const colorCell = document.createElement('td');
+                colorCell.className = 'color-cell';
+                colorCell.textContent = color || '-';
+                row.appendChild(colorCell);
+                const sizeCell = document.createElement('td');
+                sizeCell.textContent = size || '-';
                 row.appendChild(sizeCell);
-
-                const priceCell = document.createElement("td");
-                priceCell.innerHTML = `
-                <input type=\"number\" name=\"inventories[${idx}].price\" placeholder=\"Giá\" min=\"0.01\" step=\"0.01\" required class=\"variant-input\">` +
-                `<input type=\"hidden\" name=\"inventories[${idx}].dimension\" value=\"${size}\">` +
-                `<input type=\"hidden\" name=\"inventories[${idx}].color\" value=\"${color}\">` +
-                (existingImage ? `<input type=\"hidden\" name=\"inventories[${idx}].image\" value=\"${existingImage}\">` : '');
+                const priceCell = document.createElement('td');
+                priceCell.innerHTML = `<input type='number' name='inventories[${idx}].price' placeholder='Giá' min='0.01' step='0.01' required class='variant-input'>` +
+                    `<input type='hidden' name='inventories[${idx}].dimension' value='${size || ''}'>` +
+                    `<input type='hidden' name='inventories[${idx}].color' value='${color || ''}'>`;
                 row.appendChild(priceCell);
-
-                const stockCell = document.createElement("td");
-                stockCell.innerHTML = `<input type=\"number\" name=\"inventories[${idx}].quantity\" placeholder=\"Số lượng\" min=\"0\" required class=\"variant-input\">`;
+                const stockCell = document.createElement('td');
+                stockCell.innerHTML = `<input type='number' name='inventories[${idx}].quantity' placeholder='Số lượng' min='0' required class='variant-input'>`;
                 row.appendChild(stockCell);
-
                 // Shipping fields (weight, length, width, height) chỉ hiển thị nếu useVariantShipping=true
+                const useVariantShipping = document.getElementById('toggleShippingVariant').checked;
                 if (useVariantShipping) {
-                    const shippingWeightCell = document.createElement("td");
-                    shippingWeightCell.className = "shipping-col";
-                    shippingWeightCell.innerHTML = `<input type='number' name='inventories[${idx}].weight' placeholder='Cân nặng' min='0' required style='width:70px;'> gr`;
+                    const shippingWeightCell = document.createElement('td');
+                    shippingWeightCell.className = 'shipping-col';
+                    shippingWeightCell.innerHTML = `<input type='number' name='inventories[${idx}].weight' placeholder='Cân nặng' min='0.01' step='0.01' required style='width:70px;'> Kg`;
                     row.appendChild(shippingWeightCell);
-
-                    const shippingSizeCell = document.createElement("td");
-                    shippingSizeCell.className = "shipping-col";
+                    const shippingSizeCell = document.createElement('td');
+                    shippingSizeCell.className = 'shipping-col';
                     shippingSizeCell.innerHTML = `
                         <input type='number' name='inventories[${idx}].length' placeholder='Dài' min='0' required style='width:50px;'> cm
                         <input type='number' name='inventories[${idx}].width' placeholder='Rộng' min='0' required style='width:50px;'> cm
@@ -391,82 +290,26 @@
                     `;
                     row.appendChild(shippingSizeCell);
                 }
-
                 tbody.appendChild(row);
-
-                // Gán lại giá trị đã nhập nếu có
-                const values = inventoryValues[idx] || {};
-                row.querySelector(`input[name='inventories[${idx}].price']`)?.setAttribute('value', values.price);
-                row.querySelector(`input[name='inventories[${idx}].quantity']`)?.setAttribute('value', values.quantity);
-                row.querySelector(`input[name='inventories[${idx}].weight']`)?.setAttribute('value', values.weight);
-                row.querySelector(`input[name='inventories[${idx}].length']`)?.setAttribute('value', values.length);
-                row.querySelector(`input[name='inventories[${idx}].width']`)?.setAttribute('value', values.width);
-                row.querySelector(`input[name='inventories[${idx}].height']`)?.setAttribute('value', values.height);
-
                 idx++;
+        };
+        if (colors.length > 0 && sizes.length > 0) {
+            colors.forEach(color => {
+                sizes.forEach(size => generateRow(color, size));
             });
-        });
-
+        } else if (colors.length > 0) {
+            colors.forEach(color => generateRow(color, null));
+        } else if (sizes.length > 0) {
+            sizes.forEach(size => generateRow(null, size));
+        }
         // Hiển thị/ẩn cột vận chuyển theo trạng thái useVariantShipping
         document.querySelectorAll('.shipping-col').forEach(col => {
-            col.style.display = useVariantShipping ? '' : 'none';
+            col.style.display = document.getElementById('toggleShippingVariant').checked ? '' : 'none';
         });
-        // Hiển thị/ẩn tiêu đề cột
         document.querySelectorAll('.variant-table th.shipping-col').forEach(col => {
-            col.style.display = useVariantShipping ? '' : 'none';
+            col.style.display = document.getElementById('toggleShippingVariant').checked ? '' : 'none';
         });
     }
-
-    function handleVariantColorUploadPreview(input, color, idx) {
-        const file = input.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const uploadDiv = input.previousElementSibling;
-                if (uploadDiv && uploadDiv.classList.contains('color-image-upload')) {
-                    uploadDiv.innerHTML = `<img src='${e.target.result}' alt='${color}' style='width:100%;height:100%;object-fit:cover;'>`;
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    // Form validation
-    document.querySelector('form').addEventListener('submit', function(e) {
-        const fileInputs = document.querySelectorAll('input[type="file"][name="inventoryImages"]');
-        let valid = true;
-        fileInputs.forEach(input => {
-            if (!input.files || input.files.length === 0) valid = false;
-        });
-
-        if (!valid) {
-            alert('Bạn phải chọn ảnh cho tất cả các phân loại!');
-            e.preventDefault();
-            return false;
-        }
-
-        if (document.getElementById('toggleShippingVariant').checked) {
-            const variantRows = document.querySelectorAll('#variant-tbody tr');
-            if (variantRows.length === 0) {
-                alert('Bạn phải thêm ít nhất một phân loại hàng!');
-                e.preventDefault();
-                return false;
-            }
-
-            let valid = true;
-            variantRows.forEach(row => {
-                const price = row.querySelector('input[name$=".price"]');
-                const quantity = row.querySelector('input[name$=".quantity"]');
-                if (!price.value || !quantity.value) valid = false;
-            });
-
-            if (!valid) {
-                alert('Vui lòng nhập đầy đủ giá và kho cho từng phân loại!');
-                e.preventDefault();
-                return false;
-            }
-        }
-    });
 
     // Category Selection Logic
     let selectedPath = [];
@@ -679,8 +522,81 @@
         updateShippingSectionDisplay();
         renderVariantTable();
     });
-    document.addEventListener('DOMContentLoaded', function() {
+
+    // Lấy dữ liệu inventories từ backend (nếu có)
+    // let inventories = /*[[${inventoriesJson}]]*/ []; // This line is removed as per the new_code
+
+    function fillFormFromInventories(inventories) {
+        // Xóa các dòng cũ
+        document.getElementById('color-variant-container').innerHTML = '';
+        document.getElementById('size-variant-container').innerHTML = '';
+
+        // Lấy danh sách màu và ảnh duy nhất
+        const colorMap = new Map();
+        inventories.forEach(inv => {
+            if (inv.color && !colorMap.has(inv.color)) {
+                colorMap.set(inv.color, inv.image);
+            }
+        });
+        const sizes = [...new Set(inventories.map(inv => inv.dimension).filter(Boolean))];
+
+        // Thêm lại các dòng màu sắc với giá trị và ảnh có sẵn
+        colorMap.forEach((imageUrl, color) => {
+            addColorVariantRow(color, imageUrl || '');
+        });
+
+
+        // Thêm lại các dòng size với giá trị có sẵn
+        sizes.forEach(size => addSizeVariantRow(size));
+
+        // Render lại bảng phân loại
         renderVariantTable();
+
+        // Gán giá trị cho từng dòng bảng phân loại
+        inventories.forEach((inv, idx) => {
+            // Giá
+            const priceInput = document.querySelector(`input[name='inventories[${idx}].price']`);
+            if (priceInput) priceInput.value = inv.price;
+            // Kho
+            const quantityInput = document.querySelector(`input[name='inventories[${idx}].quantity']`);
+            if (quantityInput) quantityInput.value = inv.quantity;
+            // Cân nặng, kích thước
+            const weightInput = document.querySelector(`input[name='inventories[${idx}].weight']`);
+            if (weightInput) weightInput.value = inv.weight;
+            const lengthInput = document.querySelector(`input[name='inventories[${idx}].length']`);
+            if (lengthInput) lengthInput.value = inv.length;
+            const widthInput = document.querySelector(`input[name='inventories[${idx}].width']`);
+            if (widthInput) widthInput.value = inv.width;
+            const heightInput = document.querySelector(`input[name='inventories[${idx}].height']`);
+            if (heightInput) heightInput.value = inv.height;
+        });
+    }
+
+    let currentImages = [];
+    // Lấy danh sách ảnh hiện tại từ DOM (nếu có)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.current-image-item img').forEach(img => {
+            currentImages.push(img.getAttribute('src'));
+        });
+        document.getElementById('currentImagesToKeep').value = currentImages.join(',');
+    });
+    function removeCurrentImage(idx) {
+        // Ẩn ảnh khỏi giao diện
+        document.querySelectorAll('.current-image-item')[idx].style.display = 'none';
+        // Loại ảnh khỏi danh sách giữ lại
+        currentImages[idx] = null;
+        // Cập nhật input hidden để gửi lên backend
+        document.getElementById('currentImagesToKeep').value = currentImages.filter(Boolean).join(',');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        if (inventories && inventories.length > 0) {
+            fillFormFromInventories(inventories);
+        } else {
+            addColorVariantRow();
+            addSizeVariantRow();
+            renderVariantTable();
+        }
         updateShippingSectionDisplay();
     });
 </script>

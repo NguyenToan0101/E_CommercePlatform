@@ -88,7 +88,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (hashedPassword == null || hashedPassword.isBlank()) return null;
 
         if (BCrypt.checkpw(password, hashedPassword)
-                && customer.isStatus()
+                && customer.getStatus()
                 && !customer.isLocked()) {
             return customer;
         }

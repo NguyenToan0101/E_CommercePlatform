@@ -63,16 +63,19 @@ public class Inventory {
     private String image;
 
     @Column(name = "weight")
-    private Integer weight;
+    private Double weight;
 
     @Column(name = "length")
-    private Float length;
+    private Double length;
 
     @Column(name = "width")
-    private Integer width;
+    private Double width;
 
     @Column(name = "height")
-    private Integer height;
+    private Double height;
+
+    @Column(name = "alert_quantity")
+    private Integer alertQuantity;
 
     @OneToMany(mappedBy = "inventoryid")
     private Set<Cartitem> cartitems = new LinkedHashSet<>();
