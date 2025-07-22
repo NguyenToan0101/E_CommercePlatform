@@ -71,12 +71,14 @@ public class SellerReviewServiceImpl implements SellerReviewService {
             List<String> reviewImages = r.getReviewsImages() != null ? r.getReviewsImages().stream().map(ReviewsImage::getImageUrl).collect(Collectors.toList()) : Collections.emptyList();
             String customerName = (r.getOrderitemsid() != null && r.getOrderitemsid().getOrderid() != null && r.getOrderitemsid().getOrderid().getCustomerid() != null)
                     ? r.getOrderitemsid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";
+            int safeRating = r.getRating() != null ? Math.min(r.getRating(), 5) : 0;
+            System.out.println("DEBUG rating: " + safeRating);
             return new SellerReviewDTO(
                     r.getId(),
                     p.getId(),
                     p.getName(),
                     productImage,
-                    r.getRating(),
+                    safeRating,
                     r.getComment(),
                     reviewImages,
                     r.getCreatedat(),
@@ -100,12 +102,14 @@ public class SellerReviewServiceImpl implements SellerReviewService {
         List<String> reviewImages = r.getReviewsImages() != null ? r.getReviewsImages().stream().map(ReviewsImage::getImageUrl).toList() : List.of();
         String customerName = (r.getOrderitemsid() != null && r.getOrderitemsid().getOrderid() != null && r.getOrderitemsid().getOrderid().getCustomerid() != null)
                 ? r.getOrderitemsid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";
+        int safeRating = r.getRating() != null ? Math.min(r.getRating(), 5) : 0;
+        System.out.println("DEBUG rating (detail): " + safeRating);
         return new SellerReviewDTO(
                 r.getId(),
                 p.getId(),
                 p.getName(),
                 productImage,
-                r.getRating(),
+                safeRating,
                 r.getComment(),
                 reviewImages,
                 r.getCreatedat(),
