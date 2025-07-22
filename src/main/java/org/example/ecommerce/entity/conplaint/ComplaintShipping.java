@@ -20,6 +20,6 @@ public class ComplaintShipping {
     @JoinColumn(name = "complaint_id")
     private Complaint complaint;
 
-    @Column(name = "orderid", nullable = false)
+    @Column(name = "order_id", nullable = false)
     private Integer orderId;
 }

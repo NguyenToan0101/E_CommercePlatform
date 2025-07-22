@@ -2,7 +2,6 @@ package org.example.ecommerce.service.seller;
 
 import org.example.ecommerce.common.dto.ProductSalesDTO;
 import org.example.ecommerce.common.dto.InventorySalesDTO;
-import org.example.ecommerce.common.dto.ProductSalesDTO;
 import org.example.ecommerce.entity.*;
 import org.example.ecommerce.repository.CategoryRepository;
 import org.example.ecommerce.repository.OrderItemsRepository;
@@ -11,6 +10,9 @@ import org.example.ecommerce.repository.ProductimageRepository;
 import org.example.ecommerce.repository.ShopRepository;
 import org.example.ecommerce.service.UploadImageFile;
 import org.example.ecommerce.service.CategoryService;
+
+import org.example.ecommerce.service.customer.customer_search_products.SearchProductServiceImpl;
+import org.example.ecommerce.service.customer.search.ProductDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -37,6 +39,12 @@ public class ProductService {
     @Autowired private CategoryRepository categoryRepository;
     @Autowired private OrderItemsRepository orderItemsRepository;
     @Autowired private CategoryService categoryService;
+
+    private final ProductDocumentService productDocumentService;
+    public ProductService( ProductDocumentService productDocumentService) {
+        this.productDocumentService = productDocumentService;
+
+    }
 
 
     public Product getById(Integer id) {
@@ -91,7 +99,7 @@ public class ProductService {
         }
 
         Product saved = productRepository.save(product);
-
+        productDocumentService.toDocument(product);
         // Lưu ảnh sản phẩm tổng
         for (MultipartFile image : images) {
             if (!image.isEmpty()) {
@@ -154,7 +162,7 @@ public class ProductService {
         }
 
         Product saved = productRepository.save(existingProduct);
-
+        productDocumentService.toDocument(existingProduct);
         // Lưu ảnh mới nếu có
         for (MultipartFile image : images) {
             if (!image.isEmpty()) {

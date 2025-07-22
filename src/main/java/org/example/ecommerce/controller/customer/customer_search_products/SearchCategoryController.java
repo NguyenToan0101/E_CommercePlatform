@@ -38,6 +38,8 @@ public class SearchCategoryController {
         return "/customer/customer_search_product/search_name";
     }
 
+
+
     @GetMapping("/filter_searchName")
     public String filterByPriceAndRate(@RequestParam("keyword") String keyword,@RequestParam("price_min") BigDecimal priceMin, @RequestParam("price_max") BigDecimal priceMax, @RequestParam("rate") Integer rate, Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
@@ -61,5 +63,12 @@ public class SearchCategoryController {
         model.addAttribute("priceMax", priceMax);
         model.addAttribute("rate", rate);
         return "/customer/customer_search_product/search_category";
+    }
+
+    @GetMapping("/search")
+    public String search(HttpSession session,Model model){
+        Customer customer = (Customer) session.getAttribute("customer");
+        model.addAttribute("customerId", customer.getId());
+        return "/customer/customer_search_product/seach";
     }
 }

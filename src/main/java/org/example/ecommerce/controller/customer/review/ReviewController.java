@@ -1,9 +1,6 @@
 package org.example.ecommerce.controller.customer.review;
 
-import org.example.ecommerce.entity.Order;
-import org.example.ecommerce.entity.Product;
-import org.example.ecommerce.entity.Review;
-import org.example.ecommerce.entity.ReviewsImage;
+import org.example.ecommerce.entity.*;
 import org.example.ecommerce.repository.ReviewsImageRepository;
 import org.example.ecommerce.service.customer.review.ReviewService;
 import org.example.ecommerce.service.UploadImageFile;
@@ -32,11 +29,11 @@ public class ReviewController {
 
     @GetMapping
     public String showReviewForm(@ModelAttribute("productId") Product productId,
-                                 @ModelAttribute("orderId") Order orderId,
+                                 @ModelAttribute("orderId") Orderitem orderId,
                                  Model model) {
         Review review = new Review();
         review.setProductid(productId);
-        review.setOrderid(orderId);
+        review.setOrderitemid(orderId);
         model.addAttribute("review", review);
         return "customer/review/form";
     }

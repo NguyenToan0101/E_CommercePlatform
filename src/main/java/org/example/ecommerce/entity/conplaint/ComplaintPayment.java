@@ -20,6 +20,6 @@ public class ComplaintPayment {
     @JoinColumn(name = "complaint_id")
     private Complaint complaint;
 
-    @Column(name = "paymentid", nullable = false)
+    @Column(name = "payment_id", nullable = false)
     private Integer paymentId;
 }

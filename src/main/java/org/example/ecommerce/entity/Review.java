@@ -25,8 +25,8 @@ public class Review {
     private Product productid;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "orderid")
-    private Order orderid;
+    @JoinColumn(name = "orderitemsid")
+    private Orderitem orderitemid;
 
     @Column(name = "rating")
     private Integer rating;

@@ -13,7 +13,7 @@ public class ReviewServiceImpl implements ReviewService{
     private ReviewRepository reviewRepository;
 
     public boolean submitReview(Review review) {
-        if (reviewRepository.existsByProductidAndOrderid(review.getProductid(), review.getOrderid())) {
+        if (reviewRepository.existsByProductidAndOrderitemid(review.getProductid(), review.getOrderitemid())) {
             return false;
         }
         review.setCreatedat(Instant.now());

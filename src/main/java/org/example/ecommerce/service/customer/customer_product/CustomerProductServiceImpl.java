@@ -70,7 +70,9 @@ public class CustomerProductServiceImpl implements CustomerProductService {
     }
 
     public List<Category> getCategories() {
-        return categoryRepository.findRootCategories();
+
+
+        return categoryRepository.findRootCategories().stream().filter(category -> category.getId() != 313).toList();
     }
 
 }

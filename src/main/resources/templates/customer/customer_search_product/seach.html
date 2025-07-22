@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Combined Search Example</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 50px 20px;
+        }
+
+        .search-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .search-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .search-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .search-header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .search-box {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e1e5e9;
+            border-radius: 50px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+        }
+
+        .results-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .suggestions-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #333;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .history-indicator {
+            background: #ffa726;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .suggestions-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .suggestion-item {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 20px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .suggestion-item:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .history-item {
+            background: #fff3e0;
+            border-color: #ffb74d;
+        }
+
+        .history-item:hover {
+            background: #ff9800;
+            color: white;
+        }
+
+        .remove-history {
+            margin-left: 5px;
+            opacity: 0.7;
+            font-weight: bold;
+        }
+
+        .remove-history:hover {
+            opacity: 1;
+        }
+
+        .products-section {
+            margin-top: 30px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
+        }
+
+        .product-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+
+        .product-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .product-description {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .search-stats {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            color: #1976d2;
+            font-size: 14px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+
+        .clear-history-btn {
+            background: #ff5722;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 12px;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: background 0.2s ease;
+        }
+
+        .clear-history-btn:hover {
+            background: #d84315;
+        }
+    </style>
+</head>
+<body>
+<div class="search-container">
+    <div class="search-header">
+        <h1>🔍 Smart Search</h1>
+        <p>Tìm kiếm thông minh với suggestion và fuzzy search</p>
+    </div>
+    <label for="customerId"></label><input type=text id="customerId" th:value="${customerId}" />
+    <div class="search-box">
+        <input
+                type="text"
+                id="searchInput"
+                class="search-input"
+                placeholder="Nhập từ khóa tìm kiếm... (để trống để xem lịch sử)"
+                autocomplete="off"
+        >
+        <span class="search-icon">🔍</span>
+    </div>
+
+    <div id="resultsContainer" class="results-container">
+        <div id="loadingIndicator" class="loading">
+            <p>Đang tìm kiếm...</p>
+        </div>
+
+        <div id="searchStats" class="search-stats" style="display: none;"></div>
+
+        <div id="suggestionsSection" class="suggestions-section" style="display: none;">
+            <div class="section-title">
+                <span id="suggestionsTitle">💡 Gợi ý</span>
+                <span id="historyIndicator" class="history-indicator" style="display: none;">Lịch sử</span>
+                <button id="clearHistoryBtn" class="clear-history-btn" style="display: none;">Xóa lịch sử</button>
+            </div>
+            <div id="suggestionsList" class="suggestions-list"></div>
+        </div>
+
+        <div id="productsSection" class="products-section" style="display: none;">
+            <div class="section-title">
+                <span>🛍️ Sản phẩm</span>
+            </div>
+            <div id="productsGrid" class="products-grid"></div>
+        </div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            <p>Không tìm thấy kết quả nào</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    class SearchApp {
+        constructor() {
+            this.searchInput = document.getElementById('searchInput');
+            this.resultsContainer = document.getElementById('resultsContainer');
+            this.loadingIndicator = document.getElementById('loadingIndicator');
+            this.searchStats = document.getElementById('searchStats');
+            this.suggestionsSection = document.getElementById('suggestionsSection');
+            this.suggestionsList = document.getElementById('suggestionsList');
+            this.productsSection = document.getElementById('productsSection');
+            this.productsGrid = document.getElementById('productsGrid');
+            this.noResults = document.getElementById('noResults');
+            this.suggestionsTitle = document.getElementById('suggestionsTitle');
+            this.historyIndicator = document.getElementById('historyIndicator');
+            this.clearHistoryBtn = document.getElementById('clearHistoryBtn');
+
+            this.apiBaseUrl = 'http://localhost:8080/search';
+            this.userId = document.getElementById('customerId').value;
+            this.searchTimeout = null;
+
+            this.init();
+        }
+
+        init() {
+            // Show history on page load
+            this.performSearch('');
+
+            this.searchInput.addEventListener('input', (e) => {
+                clearTimeout(this.searchTimeout);
+                this.searchTimeout = setTimeout(() => {
+                    this.performSearch(e.target.value, false); // không lưu
+                }, 300);
+            });
+
+
+            this.searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    clearTimeout(this.searchTimeout);
+                    this.performSearch(e.target.value, true); // lưu vào DB
+                }
+            });
+
+
+            this.clearHistoryBtn.addEventListener('click', () => {
+                this.clearHistory();
+            });
+        }
+
+
+        async performSearch(query, shouldSave = false) {
+            this.showLoading();
+            const input = query.trim();
+            try {
+                const response = await fetch(`${this.apiBaseUrl}/combined?input=${encodeURIComponent(input)}&userId=${encodeURIComponent(this.userId)}&save=${shouldSave}`, {
+                    method: 'GET'
+                });
+
+                if (!response.ok) {
+                    throw new Error("Search failed");
+                }
+
+                const result = await response.json();
+                const isHistory = input === "";
+
+                this.displayResults({
+                    suggestions: result.suggestions || [],
+                    products: result.products || [],
+                    isHistory,
+                    totalHits: result.totalHits || 0,
+                    searchTime: result.searchTime || 0
+                });
+            } catch (error) {
+                console.error('Search error:', error);
+                this.showNoResults();
+            }
+        }
+
+
+
+        // getMockSearchResult(query) {
+        //     if (!query.trim()) {
+        //         // Return mock history
+        //         return {
+        //             suggestions: ['iPhone 14', 'Samsung Galaxy', 'MacBook Pro', 'AirPods', 'iPad Air'],
+        //             products: [],
+        //             isHistory: true,
+        //             totalHits: 0,
+        //             searchTime: 50
+        //         };
+        //     }
+        //
+        //     // Mock search results
+        //     const mockProducts = [
+        //         { name: 'iPhone 14 Pro', description: 'Smartphone cao cấp với camera 48MP' },
+        //         { name: 'Samsung Galaxy S23', description: 'Android flagship với hiệu năng mạnh mẽ' },
+        //         { name: 'MacBook Pro M2', description: 'Laptop chuyên nghiệp cho developer' }
+        //     ];
+        //
+        //     const mockSuggestions = [
+        //         query + ' pro',
+        //         query + ' plus',
+        //         query + ' mini',
+        //         query + ' 2024'
+        //     ];
+        //
+        //     return {
+        //         suggestions: mockSuggestions,
+        //         products: mockProducts.filter(p =>
+        //             p.name.toLowerCase().includes(query.toLowerCase())
+        //         ),
+        //         isHistory: false,
+        //         totalHits: 15,
+        //         searchTime: 120
+        //     };
+        // }
+
+        displayResults(result) {
+            this.hideLoading();
+            this.resultsContainer.style.display = 'block';
+
+            // Update search stats
+            if (!result.isHistory && result.totalHits > 0) {
+                this.searchStats.innerHTML = `
+                        🎯 Tìm thấy ${result.totalHits} kết quả trong ${result.searchTime}ms
+                    `;
+                this.searchStats.style.display = 'block';
+            } else {
+                this.searchStats.style.display = 'none';
+            }
+
+            // Display suggestions
+            if (result.suggestions && result.suggestions.length > 0) {
+                this.displaySuggestions(result.suggestions, result.isHistory);
+                this.suggestionsSection.style.display = 'block';
+            } else {
+                this.suggestionsSection.style.display = 'none';
+            }
+
+            // Display products
+            if (result.products && result.products.length > 0) {
+                this.displayProducts(result.products);
+                this.productsSection.style.display = 'block';
+            } else {
+                this.productsSection.style.display = 'none';
+            }
+
+            // Show no results if needed
+            if ((!result.suggestions || result.suggestions.length === 0) &&
+                (!result.products || result.products.length === 0)) {
+                this.noResults.style.display = 'block';
+            } else {
+                this.noResults.style.display = 'none';
+            }
+        }
+
+        displaySuggestions(suggestions, isHistory) {
+            this.suggestionsList.innerHTML = '';
+
+            if (isHistory) {
+                this.suggestionsTitle.textContent = '📖 Lịch sử tìm kiếm';
+                this.historyIndicator.style.display = 'inline-block';
+                this.clearHistoryBtn.style.display = 'inline-block';
+            } else {
+                this.suggestionsTitle.textContent = '💡 Gợi ý';
+                this.historyIndicator.style.display = 'none';
+                this.clearHistoryBtn.style.display = 'none';
+            }
+
+            suggestions.forEach(suggestion => {
+                const item = document.createElement('div');
+                item.className = `suggestion-item ${isHistory ? 'history-item' : ''}`;
+
+                if (isHistory) {
+                    item.innerHTML = `
+                            ${suggestion}
+                            <span class="remove-history" data-suggestion="${suggestion}">×</span>
+
+                        `;
+                } else {
+                    item.textContent = suggestion;
+                }
+
+                item.addEventListener('click', () => {
+                    this.searchInput.value = suggestion;
+                    this.performSearch(suggestion, true); // lưu
+                });
+
+                item.querySelector('.remove-history')?.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.removeHistoryItem(suggestion);
+                });
+
+                this.suggestionsList.appendChild(item);
+            });
+        }
+
+        displayProducts(products) {
+            this.productsGrid.innerHTML = '';
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                    `;
+                this.productsGrid.appendChild(card);
+            });
+        }
+
+        showLoading() {
+            this.loadingIndicator.style.display = 'block';
+            this.suggestionsSection.style.display = 'none';
+            this.productsSection.style.display = 'none';
+            this.noResults.style.display = 'none';
+            this.searchStats.style.display = 'none';
+        }
+
+        hideLoading() {
+            this.loadingIndicator.style.display = 'none';
+        }
+
+        showNoResults() {
+            this.hideLoading();
+            this.resultsContainer.style.display = 'block';
+            this.noResults.style.display = 'block';
+            this.suggestionsSection.style.display = 'none';
+            this.productsSection.style.display = 'none';
+            this.searchStats.style.display = 'none';
+        }
+
+        // async clearHistory() {
+        //     // Simulate API call
+        //     await new Promise(resolve => setTimeout(resolve, 200));
+        //
+        //     // Refresh to show empty history
+        //     if (!this.searchInput.value.trim()) {
+        //         this.performSearch('');
+        //     }
+        // }
+        async clearHistory() {
+            try {
+                await fetch(`${this.apiBaseUrl}/history/${this.userId}`, {
+                    method: 'DELETE'
+                });
+                this.performSearch('');
+            } catch (error) {
+                console.error('Clear history failed', error);
+            }
+        }
+
+
+        // removeHistoryItem(item) {
+        //     // This would call API to remove specific item
+        //     console.log('Remove history item:', item);
+        // }
+        async removeHistoryItem(item) {
+            try {
+                await fetch(`${this.apiBaseUrl}/history/${this.userId}/item?keyword=${encodeURIComponent(item)}`, {
+                    method: 'DELETE'
+                });
+                this.performSearch(''); // Refresh lại
+            } catch (error) {
+                console.error('Remove item failed:', error);
+            }
+        }
+
+    }
+
+    // Initialize app when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        new SearchApp();
+    });
+</script>
+</body>
+</html>

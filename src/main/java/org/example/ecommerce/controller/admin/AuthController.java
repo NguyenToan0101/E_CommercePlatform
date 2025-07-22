@@ -3,6 +3,7 @@ package org.example.ecommerce.controller.admin;
 import org.example.ecommerce.common.dto.AdminLoginRequest;
 
 import org.example.ecommerce.common.dto.admin.permission.AdminDTO;
+import org.example.ecommerce.entity.admin.Admin;
 import org.example.ecommerce.service.admin.AdminService;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -38,6 +40,13 @@ public class AuthController {
             if (adminService.isAdmin(adminLoginRequest.getEmail(), adminLoginRequest.getPassword())) {
                 Map<String, Object> responseBody = new HashMap<>();
                 responseBody.put("email", adminLoginRequest.getEmail());
+                List<Admin>  adminList = adminService.getAdmin();
+                for (Admin admin : adminList) {
+                    if (admin.getEmail().equals(adminLoginRequest.getEmail())) {
+                        responseBody.put("id", admin.getAdminid());
+                    }
+                }
+
                 return ResponseEntity.ok(responseBody);
             }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email hoặc mật khẩu không đúng");

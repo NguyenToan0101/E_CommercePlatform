@@ -67,7 +67,7 @@ public class Customer {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "version")
+    @Version
     private Integer version;
 
     @OneToMany(mappedBy = "customerid")
