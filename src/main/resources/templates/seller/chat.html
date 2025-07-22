@@ -25,6 +25,11 @@
         <div class="seller-chat-sidebar-header">
             <h3>Khách đã chat</h3>
         </div>
+        <!-- Ô tìm shop để tạo cuộc trò chuyện mới -->
+        <div class="seller-chat-search-box" style="margin-bottom: 10px;">
+            <input type="text" id="shop-search-input" placeholder="Tìm shop để bắt đầu chat mới..." autocomplete="off">
+            <div id="shop-search-results" class="search-results" style="display:block;"></div>
+        </div>
         <div class="seller-chat-search-box">
             <input type="text" id="customer-search-input" placeholder="Tìm khách hàng hoặc bắt đầu chat mới...">
         </div>
@@ -113,6 +118,7 @@
 </script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Tìm khách hàng (giữ nguyên)
   const input = document.getElementById('customer-search-input');
   const results = document.getElementById('customer-search-results');
   let timeout = null;
@@ -153,6 +159,50 @@ document.addEventListener('DOMContentLoaded', function() {
   document.addEventListener('click', function(e) {
     if (!input.contains(e.target) && !results.contains(e.target)) {
       results.innerHTML = '';
+    }
+  });
+
+  // Tìm shop để tạo cuộc trò chuyện mới
+  const shopInput = document.getElementById('shop-search-input');
+  const shopResults = document.getElementById('shop-search-results');
+  let shopTimeout = null;
+  shopInput.addEventListener('input', function() {
+    clearTimeout(shopTimeout);
+    const query = shopInput.value.trim();
+    if (query.length < 2) {
+      shopResults.innerHTML = '';
+      return;
+    }
+    shopTimeout = setTimeout(() => {
+      fetch(`/seller/chat/find-shop?shopName=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(data => {
+          shopResults.innerHTML = '';
+          if (data.length === 0) {
+            shopResults.innerHTML = '<div>Không tìm thấy shop phù hợp</div>';
+            return;
+          }
+          data.forEach(shop => {
+            const div = document.createElement('div');
+            div.textContent = shop.shopname + (shop.status === 'ACTIVE' ? '' : ' (không hoạt động)');
+            div.style.cursor = 'pointer';
+            div.onclick = () => {
+              fetch('/seller/chat/start-shop', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `shopId=${shop.id}`
+              }).then(() => {
+                window.location.reload();
+              });
+            };
+            shopResults.appendChild(div);
+          });
+        });
+    }, 300);
+  });
+  document.addEventListener('click', function(e) {
+    if (!shopInput.contains(e.target) && !shopResults.contains(e.target)) {
+      shopResults.innerHTML = '';
     }
   });
 });
