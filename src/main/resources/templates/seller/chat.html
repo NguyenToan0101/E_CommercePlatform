@@ -68,6 +68,8 @@
   <div id="customer-search-results" class="search-results" style="display:block;"></div>
 </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script th:inline="javascript">
     // Realtime chỉ khởi tạo nếu có hội thoại đang chọn
     const conversationId = /*[[${conversation != null} ? ${conversation.id} : 0]]*/ 0;
