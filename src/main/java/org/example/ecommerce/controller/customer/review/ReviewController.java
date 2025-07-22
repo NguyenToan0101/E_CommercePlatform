@@ -46,23 +46,7 @@ public class ReviewController {
     public String submitReview(@ModelAttribute("review") Review review,
                                @RequestParam(value = "mediaFiles", required = false) MultipartFile[] mediaFiles,
                                RedirectAttributes redirectAttributes) {
-        if (reviewService.submitReview(review)) {
-            // Xử lý upload file
-            if (mediaFiles != null && mediaFiles.length > 0) {
-                for (MultipartFile file : mediaFiles) {
-                    if (!file.isEmpty()) {
-                        try {
-                            String url = uploadImageFile.uploadImage(file); // upload lên Cloudinary
-                            ReviewsImage img = new ReviewsImage();
-                            img.setReviewid(review);
-                            img.setImageUrl(url);
-                            reviewsImageRepository.save(img);
-                        } catch (IOException e) {
-                            // Có thể log lỗi hoặc bỏ qua file lỗi
-                        }
-                    }
-                }
-            }
+        if (reviewService.submitReview(review, mediaFiles)) {
             redirectAttributes.addFlashAttribute("message", "Đánh giá sản phẩm thành công");
             return "redirect:/review";
         } else {

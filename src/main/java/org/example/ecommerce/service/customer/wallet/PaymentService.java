@@ -46,7 +46,8 @@ public class PaymentService {
         }
 
         Cart cart = cartsRepository.findByCustomerid(customer);
-        List<Cartitem> selectedCartItems = cartItemsRepository.findByCartidAndIdIn(cart, cartItemIds);
+        List<Cartitem> selectedCartItems = cart.getCartitems().stream().filter(item -> cartItemIds.contains(item.getId())).toList();
+
 
         Map<Integer, List<Cartitem>> itemsByShop = new HashMap<>();
         for (Cartitem ci : selectedCartItems) {
@@ -256,7 +257,7 @@ public class PaymentService {
 
     public List<CartPreviewDTO> getCheckoutPreview(Customer customer, List<Integer> cartItemIds) {
         Cart cart = cartsRepository.findByCustomerid(customer);
-        List<Cartitem> selectedCartItems = cartItemsRepository.findByCartidAndIdIn(cart, cartItemIds);
+        List<Cartitem> selectedCartItems = cart.getCartitems().stream().filter(item -> cartItemIds.contains(item.getId())).toList();
 
         List<CartPreviewDTO> previewItems = new ArrayList<>();
         for (Cartitem ci : selectedCartItems) {
@@ -280,8 +281,8 @@ public class PaymentService {
     }
 
     public CartPreviewDTO getCheckoutPreviewRealtime(Customer customer, Integer inventoryId, Integer quantity) {
-        Product product = inventoryRepository.findById(inventoryId).map(Inventory::getProductid).orElse(null);
         Inventory inventory = inventoryRepository.findById(inventoryId).orElse(null);
+        Product product = inventory.getProductid();
         if (product != null && inventory != null) {
             CartPreviewDTO dto = new CartPreviewDTO();
             dto.setId(null);
