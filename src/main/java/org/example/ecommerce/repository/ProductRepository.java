@@ -71,4 +71,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     List<Product> findByStatusAndLockedUntilBefore(String status, Instant time);
 
 
+    List<Product> findAllByShopid_Id(Integer shopidId);
 }

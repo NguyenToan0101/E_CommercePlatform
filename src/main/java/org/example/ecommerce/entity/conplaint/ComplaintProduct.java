@@ -19,6 +19,6 @@ public class ComplaintProduct {
     @JoinColumn(name = "complaint_id")
     private Complaint complaint;
 
-    @Column(name="product_id", insertable=false, updatable=false)
+    @Column(name="product_id", nullable = false)
     private Integer product_id;
 }

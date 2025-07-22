@@ -3,6 +3,7 @@ package org.example.ecommerce.service.customer.order;
 import java.math.BigDecimal;
 
 public class OrderItemDTO {
+    private Integer orderitemid;
     private Integer productId;
     private String productName;
     private String imageUrl;
@@ -11,7 +12,8 @@ public class OrderItemDTO {
     private int quantity;
     private BigDecimal unitPrice;
 
-    public OrderItemDTO(Integer productId, String productName, String imageUrl, String color, String dimension, int quantity, BigDecimal unitPrice) {
+    public OrderItemDTO(Integer orderitemid, Integer productId, String productName, String imageUrl, String color, String dimension, int quantity, BigDecimal unitPrice) {
+        this.orderitemid = orderitemid;
         this.productId = productId;
         this.productName = productName;
         this.imageUrl = imageUrl;
@@ -19,6 +21,14 @@ public class OrderItemDTO {
         this.dimension = dimension;
         this.quantity = quantity;
         this.unitPrice = unitPrice;
+    }
+
+    public Integer getOrderitemid() {
+        return orderitemid;
+    }
+
+    public void setOrderitemid(Integer orderitemid) {
+        this.orderitemid = orderitemid;
     }
 
     public Integer getProductId() {
