@@ -35,7 +35,7 @@ public class ReviewController {
         Customer customer = (Customer) session.getAttribute("customer");
         Review review = new Review();
         review.setProductid(productId);
-        review.setOrderitemsid(orderitemsId);
+        review.setOrderitemid(orderitemsId);
         model.addAttribute("review", review);
         model.addAttribute("customer", customer);
         return "customer/review/form";
