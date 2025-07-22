@@ -47,6 +47,7 @@ public class OrderService {
 
 
             OrderItemDTO dto = new OrderItemDTO(
+                    item.getId(),
                     product.getId(),
                     product.getName(),
                     imageUrl,

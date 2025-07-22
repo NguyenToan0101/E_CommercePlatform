@@ -1104,6 +1104,7 @@
             <table class="products-table">
                 <thead>
                 <tr>
+                        <th th:if="${order.status == 'Đã giao'}">Chọn</th>
                     <th>Hình ảnh</th>
                     <th>Tên sản phẩm</th>
                     <th>Màu</th>
@@ -1115,6 +1116,9 @@
                 </thead>
                 <tbody id="products-tbody">
                 <tr th:each="item : ${items}" class="product-row">
+                        <td th:if="${order.status == 'Đã giao'}">
+                            <input type="checkbox" class="return-checkbox" th:value="${item.orderitemid}" th:attr="data-product-id=${item.productId}" />
+                        </td>
                     <td>
                         <a th:href="@{/detailproduct(id=${item.productId})}" class="product-link">
                             <img th:src="@{${item.imageUrl}}" alt="Product Image" class="product-image"/>
@@ -1140,7 +1144,6 @@
                     <td>
                         <span class="price item-total" th:attr="data-quantity=${item.quantity}, data-unit-price=${item.unitPrice}">0 đ</span>
                     </td>
-
                 </tr>
                 </tbody>
             </table>
@@ -1183,13 +1186,13 @@
         
         <!-- Nút Trả hàng/Hoàn tiền và Đánh giá sản phẩm cho trạng thái "Đã giao" -->
         <a th:if="${order.status == 'Đã giao'}" 
-           href="#" class="action-btn btn-warning" onclick="returnOrder()">
+               href="#" class="action-btn btn-warning" id="return-btn">
             <i class="fas fa-undo-alt"></i>
             Trả hàng/Hoàn tiền
         </a>
         
         <a th:if="${order.status == 'Đã giao'}" 
-           href="#" class="action-btn btn-success" onclick="reviewProducts()">
+               href="#" class="action-btn btn-success" id="review-btn">
             <i class="fas fa-star"></i>
             Đánh giá sản phẩm
         </a>
@@ -1327,7 +1330,7 @@
     // Hàm đánh giá sản phẩm
     function reviewProducts() {
         // Chuyển đến trang đánh giá sản phẩm
-        window.location.href = '/review/form?orderId=' + document.querySelector('[data-order-id]')?.getAttribute('data-order-id') || '';
+        window.location.href = '/review?orderId=' + document.querySelector('[data-order-id]')?.getAttribute('data-order-id') || '';
     }
 
     // Add hover effects to product rows
@@ -1339,6 +1342,48 @@
         row.addEventListener('mouseleave', function() {
             this.style.boxShadow = 'none';
         });
+    });
+
+    // Chỉ cho phép chọn 1 checkbox, các checkbox khác sẽ bị disable khi đã chọn 1 sản phẩm
+    function setupSingleCheckbox() {
+        const checkboxes = document.querySelectorAll('.return-checkbox');
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if (this.checked) {
+                    checkboxes.forEach(other => {
+                        if (other !== this) other.disabled = true;
+                    });
+                } else {
+                    checkboxes.forEach(other => {
+                        other.disabled = false;
+                    });
+                }
+            });
+        });
+    }
+    if (document.querySelector('.return-checkbox')) setupSingleCheckbox();
+
+    document.getElementById('return-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checked = Array.from(document.querySelectorAll('.return-checkbox:checked'));
+        if (checked.length === 0) {
+            alert('Vui lòng chọn một sản phẩm để trả hàng!');
+            return;
+        }
+        const id = checked[0].value;
+        window.location.href = `/return-request?orderItemsId=${id}`;
+    });
+
+    document.getElementById('review-btn')?.addEventListener('click', function(e) {
+        e.preventDefault();
+        const checked = Array.from(document.querySelectorAll('.return-checkbox:checked'));
+        if (checked.length === 0) {
+            alert('Vui lòng chọn một sản phẩm để đánh giá!');
+            return;
+        }
+        const productId = checked[0].getAttribute('data-product-id');
+        const orderItemsId = checked[0].value;
+        window.location.href = `/review?productId=${productId}&orderItemsId=${orderItemsId}`;
     });
 </script>
 </body>

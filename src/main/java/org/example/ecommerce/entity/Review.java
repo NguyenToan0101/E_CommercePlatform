@@ -3,6 +3,7 @@ package org.example.ecommerce.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
@@ -41,6 +42,12 @@ public class Review {
     @ColumnDefault("false")
     @Column(name = "is_hidden")
     private Boolean isHidden;
+
+    @ManyToMany
+    @JoinTable(name = "complaint_feedback",
+            joinColumns = @JoinColumn(name = "review_id"),
+            inverseJoinColumns = @JoinColumn(name = "complaint_id"))
+    private Set<Complaint> complaints = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "reviewid")
     private Set<ReviewsImage> reviewsImages = new LinkedHashSet<>();

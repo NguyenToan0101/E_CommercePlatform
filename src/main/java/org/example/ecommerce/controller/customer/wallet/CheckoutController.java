@@ -55,9 +55,11 @@ public class CheckoutController {
         String result = paymentService.checkout(customer1, cartItemIds, customer.getFirstname() + " " + customer.getLastname(), customer.getPhone(), customer.getAddress());
         if ("Thanh toán thành công".equals(result)) {
             model.addAttribute("message", result);
+            model.addAttribute("customer", customer1);
             return "/customer/wallet/checkout-success";
         } else {
             model.addAttribute("error", result);
+            model.addAttribute("customer", customer1);
             return "/customer/wallet/checkout-fail";
         }
     }
