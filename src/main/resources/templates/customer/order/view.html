@@ -442,7 +442,7 @@
         .products-section {
             background: var(--white);
             padding: 30px;
-            border-radius: 20px;
+            borderpatial: 20px;
             box-shadow: 0 8px 32px var(--shadow-medium);
             margin-bottom: 20px;
             border: 2px solid var(--border-gray);
@@ -1064,7 +1064,6 @@
     <!-- Main Content Area -->
     <div class="main-content" th:attr="data-order-id=${order.id}">
 
-
         <!-- Customer Information Section -->
         <div class="customer-info">
             <h2>
@@ -1179,7 +1178,7 @@
         <div class="actions">
             <!-- Nút hủy hàng cho trạng thái "Chờ xác nhận" và "Đã xác nhận" -->
             <a th:if="${order.status == 'Chờ xác nhận' || order.status == 'Đã xác nhận'}"
-               href="#" class="action-btn btn-danger" onclick="cancelOrder()">
+               th:href="@{/cancel(id=${order.id})}" class="action-btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')">
                 <i class="fas fa-times-circle"></i>
                 Hủy hàng
             </a>
@@ -1310,14 +1309,6 @@
             }, 2000);
         });
     });
-
-    // Hàm hủy đơn hàng
-    function cancelOrder() {
-        if (confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
-            // Thêm logic hủy đơn hàng ở đây
-            alert('Đã gửi yêu cầu hủy đơn hàng. Chúng tôi sẽ xử lý trong thời gian sớm nhất.');
-        }
-    }
 
     // Hàm trả hàng/hoàn tiền
     function returnOrder() {
