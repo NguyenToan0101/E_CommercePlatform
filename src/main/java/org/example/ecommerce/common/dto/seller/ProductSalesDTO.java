@@ -1,4 +1,4 @@
-package org.example.ecommerce.common.dto;
+package org.example.ecommerce.common.dto.seller;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

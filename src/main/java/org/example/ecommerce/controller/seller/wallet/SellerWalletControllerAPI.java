@@ -1,7 +1,7 @@
 package org.example.ecommerce.controller.seller.wallet;
 
 import jakarta.servlet.http.HttpSession;
-import org.example.ecommerce.common.dto.CashflowDTO;
+import org.example.ecommerce.common.dto.seller.CashflowDTO;
 import org.example.ecommerce.service.seller.wallet.SellerWalletService;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
