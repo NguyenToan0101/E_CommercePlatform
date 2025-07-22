@@ -64,6 +64,8 @@
 </head>
 
 <body>
+<div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
 <div class="dashboard-container">
     <!-- Sidebar -->
     <div th:replace="seller/fragments/sidebar :: sidebar"></div>
@@ -167,9 +169,6 @@
                             <form id="bulkHideForm" th:action="@{/seller/products/hide}" method="post" style="display:inline;">
                                 <button type="button" class="bulk-btn hide" id="bulkHideBtn" onclick="submitBulkAction('hide')" style="display:none;">Ẩn</button>
                             </form>
-                            <button type="button" class="bulk-btn stock-alert" id="bulkStockAlertBtn" style="display:none; margin-left:8px; background:#f7b731; color:#fff;" onclick="openStockAlertModal()">
-                                Nhắc nhở Tồn kho
-                            </button>
                         </div>
                     </div>
                     <div class="table-header-right">
@@ -194,7 +193,7 @@
                             <th class="col-price">Giá bán</th>
                             <th class="col-sales">Doanh số</th>
                             <th class="col-revenue">Doanh thu</th>
-                            <th class="col-stock">Kho Hàng</th>
+                            <th class="col-stock">Số lượng</th>
                             <th class="col-actions">Thao tác</th>
                         </tr>
                         </thead>
@@ -219,6 +218,10 @@
                                 </td>
                                 <td class="col-name">
                                     <h3 class="product-name" th:text="${product.productName}">Tên sản phẩm</h3>
+                                    <div class="product-status-label"
+                                         th:classappend="' status-' + ${product.productStatus}"
+                                         th:text="${product.productStatus == 'available' ? 'Đang hoạt động' : (product.productStatus == 'hidding' ? 'Đã ẩn' : (product.productStatus == 'locked' ? 'Bị khóa' : (product.productStatus == 'pending_approval' ? 'Chờ duyệt' : product.productStatus)))}">
+                                    </div>
                                 </td>
                                 <td class="col-category">
                                     <span class="category-badge" th:text="${product.categoryName}">Danh mục</span>
@@ -242,11 +245,11 @@
                                         <div class="dropdown-action" style="display:inline-block; position:relative;">
                                             <button type="button" class="action-text more" onclick="toggleDropdown(this)">Xem thêm</button>
                                             <div class="dropdown-menu-action" style="display:none; position:absolute; left:0; top:100%; background:#fff; border:1px solid #ccc; z-index:10; min-width:140px;">
-                                                <form th:if="${product.productStatus == 'INACTIVE'}" th:action="@{/seller/products/show}" method="post" style="margin:0;">
+                                                <form th:if="${product.productStatus == 'hidding'}" th:action="@{/seller/products/show}" method="post" style="margin:0;">
                                                     <input type="hidden" name="ids" th:value="${product.productId}" />
                                                     <button type="submit" class="dropdown-item-action" style="width:100%; text-align:left; background:none; border:none; padding:8px 12px;">Hiển thị</button>
                                                 </form>
-                                                <form th:if="${product.productStatus != 'INACTIVE'}" th:action="@{/seller/products/hide}" method="post" style="margin:0;">
+                                                <form th:if="${product.productStatus != 'hidding'}" th:action="@{/seller/products/hide}" method="post" style="margin:0;">
                                                     <input type="hidden" name="ids" th:value="${product.productId}" />
                                                     <button type="submit" class="dropdown-item-action" style="width:100%; text-align:left; background:none; border:none; padding:8px 12px;">Ẩn</button>
                                                 </form>
@@ -255,9 +258,14 @@
                                                 <button type="button"
                                                         class="dropdown-item-action"
                                                         style="width:100%; text-align:left; background:none; border:none; padding:8px 12px;"
-                                                        th:attr="onclick=|document.getElementById('stockAlertModal_' + ${product.productId}).style.display='block'|">
+                                                        onclick="openStockAlertModal(this.closest('tr').getAttribute('data-product-id')*1)">
                                                     Nhắc nhở Tồn kho
                                                 </button>
+                                                <!-- Trong dropdown-menu-action của từng sản phẩm -->
+                                                <form th:if="${product.productStatus == 'pending_approval'}" th:action="@{/seller/products/delete}" method="post" style="margin:0;">
+                                                    <input type="hidden" name="id" th:value="${product.productId}" />
+                                                    <button type="submit" class="dropdown-item-action" style="width:100%; text-align:left; background:none; border:none; padding:8px 12px; color:#e74c3c;">Xóa</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -280,7 +288,9 @@
                                     <span th:text="${#numbers.formatDecimal(variant.revenue, 0, 'POINT', 0, 'COMMA')} + '₫'">0₫</span>
                                 </td>
                                 <td>
-                                    <span th:text="${#numbers.formatDecimal(variant.stockQuantity, 0, 'POINT', 0, 'COMMA')}">0</span>
+                                    <span th:if="${variant.stockQuantity != null and variant.stockQuantity == 0}" style="color:#e74c3c;font-weight:600">Hết hàng</span>
+                                    <span th:if="${variant.stockQuantity != null and variant.stockQuantity > 0}" th:text="${#numbers.formatDecimal(variant.stockQuantity, 0, 'POINT', 0, 'COMMA')}" style="display:block"></span>
+                                    <span th:if="${variant.stockQuantity != null and variant.stockQuantity > 0 and variant.alertQuantity != null and variant.stockQuantity <= variant.alertQuantity}" style="color:#f39c12;font-weight:600;display:block">Sắp hết hàng</span>
                                 </td>
                             </tr>
                         </th:block>
@@ -322,46 +332,48 @@
     </main>
 </div>
 
-<!-- Modal tổng hợp cảnh báo tồn kho (render bằng Thymeleaf, không dùng JS động) -->
-<div id="stockAlertModal" class="modal" th:if="${showStockAlertModal}" style="display:block; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:1000;">
-  <div class="modal-content" style="background:#fff; margin:40px auto; padding:20px; border-radius:8px; width:90%; max-width:700px; position:relative; max-height:80vh; overflow:auto;">
-    <span class="close" style="position:absolute; right:10px; top:10px; cursor:pointer; font-size:24px;" onclick="window.location.href='@{/seller/products}'">&times;</span>
+<!-- Modal Nhắc nhở tồn kho (nổi) -->
+<div id="stockAlertModal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); z-index:10000;">
+  <div class="modal-content" style="background:#fff; margin:40px auto; padding:20px; border-radius:8px; width:90%; max-width:500px; position:relative; max-height:80vh; overflow:auto;">
+    <span class="close" style="position:absolute; right:10px; top:10px; cursor:pointer; font-size:24px;" onclick="closeStockAlertModal()">&times;</span>
     <h3 style="margin-bottom:16px;">Nhắc nhở Tồn kho</h3>
-    <form th:action="@{/seller/products/stock-alert}" method="post">
-      <table style="width:100%">
+
+      <div class="stock-modal-header">
+          <img id="stockModalProductImg" class="stock-modal-product-img" src="" alt="Ảnh sản phẩm" />
+          <div class="stock-modal-product-name" id="stockModalProductName"></div>
+      </div>
+    <form id="stockAlertForm" method="post" th:action="@{/seller/products/inventory/alert}">
+      <input type="hidden" name="productId" id="stockAlertProductId" value="" />
+      <input type="hidden" name="setAllAlertQuantity" id="setAllAlertQuantityHidden" value="" />
+      <div style="margin-bottom: 12px; text-align: right;">
+        <input type="number" id="setAllAlertInput" class="stock-alert-input stock-alert-input-all" placeholder="Nhập số lượng cho tất cả" style="width: 200px; margin-right: 8px;" min="1" oninput="window.setAllAlertQuantity()" />
+      </div>
+      <table class="stock-alert-table">
         <thead>
           <tr>
-            <th style="min-width:120px;">Tên sản phẩm</th>
-            <th style="min-width:120px;">Biến thể</th>
-            <th style="min-width:120px;">Hạn mức tồn kho cần lưu ý</th>
+            <th>Phân loại</th>
+            <th>Hạn mức tồn kho cần lưu ý</th>
           </tr>
         </thead>
-        <tbody>
-          <tr th:each="product : ${selectedProducts}">
-            <td th:text="${product.productName}" th:rowspan="${#lists.size(product.inventorySales)}"></td>
-            <td colspan="2">
-              <table style="width:100%">
-                <tr th:each="inv : ${product.inventorySales}">
-                  <td th:text="${inv.color} + ' / ' + ${inv.dimension}"></td>
-                  <td>
-                    <input type="hidden" name="inventoryId" th:value="${inv.inventoryId}" />
-                    <input type="number" name="alertQuantity" min="1" style="width:80px" th:value="${session.stockAlertMap != null ? session.stockAlertMap[inv.inventoryId] : ''}" placeholder="Nhập số lượng cảnh báo" />
-                  </td>
-                </tr>
-              </table>
-            </td>
-          </tr>
+        <tbody id="stockAlertTbody">
+          <!-- JS sẽ render các dòng inventory ở đây -->
         </tbody>
       </table>
-      <div style="text-align:right; margin-top:10px;">
-        <button type="button" onclick="window.location.href='@{/seller/products}'" style="margin-right:8px;">Hủy</button>
-        <button type="submit" style="background:#ee4d2d; color:#fff; border:none; padding:6px 18px; border-radius:4px;">Lưu</button>
+      <div style="text-align:right; margin-top:16px;">
+        <button type="button" class="btn btn-secondary" onclick="closeStockAlertModal()">Hủy</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
       </div>
     </form>
   </div>
 </div>
 
 <!-- Hiển thị cảnh báo ở cột kho hàng -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    window.productsData = /*[[${products}]]*/ [];
+    /*]]>*/
+</script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Selection functions
@@ -384,7 +396,6 @@
             const bulkActions = document.getElementById('bulkActions');
             const bulkShowBtn = document.getElementById('bulkShowBtn');
             const bulkHideBtn = document.getElementById('bulkHideBtn');
-            const bulkStockAlertBtn = document.getElementById('bulkStockAlertBtn');
 
             // Update select all checkbox
             if (selectAll) {
@@ -402,7 +413,7 @@
                 let allInactive = true;
                 let allActive = true;
                 selectedCheckboxes.forEach(cb => {
-                    if (cb.getAttribute('data-status') === 'INACTIVE') {
+                    if (cb.getAttribute('data-status') === 'hidding') {
                         allActive = false;
                     } else {
                         allInactive = false;
@@ -418,13 +429,11 @@
                     bulkShowBtn.style.display = '';
                     bulkHideBtn.style.display = '';
                 }
-                bulkStockAlertBtn.style.display = '';
             } else {
                 selectedCount.style.display = 'none';
                     bulkActions.classList.remove('show');
                 bulkShowBtn.style.display = 'none';
                 bulkHideBtn.style.display = 'none';
-                bulkStockAlertBtn.style.display = 'none';
             }
         };
 
@@ -470,39 +479,52 @@
             });
         };
 
-        // Mở modal tổng hợp
-        window.openStockAlertModal = function() {
-            const selectedCheckboxes = document.querySelectorAll('.product-select:checked');
-            if (selectedCheckboxes.length === 0) {
-                alert('Vui lòng chọn ít nhất một sản phẩm');
+        // Mở modal nổi cho từng sản phẩm
+        window.openStockAlertModal = function(productId) {
+            // Lấy dữ liệu sản phẩm từ biến JS toàn cục
+            const products = window.productsData || [];
+            const product = products.find(p => p.productId === productId);
+
+            if (!product) {
+                alert('Không tìm thấy sản phẩm với ID: ' + productId);
                 return;
             }
-            // Lấy dữ liệu sản phẩm từ biến Thymeleaf
-            const products = /*[[${products}]]*/ [];
-            const selectedIds = Array.from(selectedCheckboxes).map(cb => parseInt(cb.value));
-            const selectedProducts = products.filter(p => selectedIds.includes(p.productId));
+
+            // Hiển thị ảnh và tên sản phẩm
+            document.getElementById('stockModalProductImg').src = product.imageUrl || '';
+            document.getElementById('stockModalProductName').textContent = product.productName || '';
             // Render bảng trong modal
-            const tbody = document.querySelector('#stockAlertTable tbody');
+            const tbody = document.querySelector('#stockAlertTbody');
             tbody.innerHTML = '';
-            selectedProducts.forEach(product => {
-                if (product.inventorySales && product.inventorySales.length > 0) {
-                    product.inventorySales.forEach(inv => {
-                        const tr = document.createElement('tr');
-                        const tdName = document.createElement('td');
-                        tdName.textContent = product.productName;
-                        const tdVariant = document.createElement('td');
-                        tdVariant.textContent = (inv.color || '') + ' / ' + (inv.dimension || '');
-                        const tdAlert = document.createElement('td');
-                        tdAlert.innerHTML = `<input type="hidden" name="inventoryId" value="${inv.inventoryId}" />
-                            <input type="number" name="alertQuantity" min="1" style="width:80px" value="" placeholder="Nhập số lượng cảnh báo" />`;
-                        tr.appendChild(tdName);
-                        tr.appendChild(tdVariant);
-                        tr.appendChild(tdAlert);
-                        tbody.appendChild(tr);
-                    });
-                }
-            });
+
+            if (product.inventorySales && product.inventorySales.length > 0) {
+                product.inventorySales.forEach(inv => {
+                    const tr = document.createElement('tr');
+                    const tdVariant = document.createElement('td');
+                    // Hiển thị ảnh Phân loại (nếu có), tên Phân loại: color.dimension
+                    const imgSrc = inv.imageUrl && inv.imageUrl !== '' ? inv.imageUrl : '/assets/images/no-image.png';
+                    const variantName = (inv.color || '') + (inv.dimension ? '.' + inv.dimension : '');
+                    tdVariant.innerHTML = `<img src="${imgSrc}" class="stock-variant-img"> <span>${variantName}</span>`;
+                    const tdAlert = document.createElement('td');
+                    tdAlert.innerHTML = `<input type="hidden" name="inventoryId" value="${inv.inventoryId}" />
+                        <input type="number" name="alertQuantity" class="stock-alert-input" min="1" style="width:200px" value="${inv.alertQuantity !== undefined && inv.alertQuantity !== null ? inv.alertQuantity : ''}" placeholder="Nhập số lượng cảnh báo" />`;
+                    tr.appendChild(tdVariant);
+                    tr.appendChild(tdAlert);
+                    tbody.appendChild(tr);
+                });
+            }
             document.getElementById('stockAlertModal').style.display = 'block';
+            document.getElementById('stockAlertProductId').value = productId;
+            document.getElementById('setAllAlertInput').value = '';
+            document.getElementById('setAllAlertQuantityHidden').value = '';
+        };
+
+        window.setAllAlertQuantity = function() {
+            var val = document.getElementById('setAllAlertInput').value;
+            document.getElementById('setAllAlertQuantityHidden').value = val;
+            document.querySelectorAll('#stockAlertTbody .stock-alert-input').forEach(function(input) {
+                input.value = val;
+            });
         };
 
         window.closeStockAlertModal = function() {
@@ -511,5 +533,36 @@
     });
 </script>
 
-</body>f
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const alertBox = document.querySelector('.alert');
+    if (alertBox) {
+        setTimeout(() => {
+            alertBox.style.transition = 'opacity 0.5s';
+            alertBox.style.opacity = '0';
+            setTimeout(() => alertBox.remove(), 500);
+        }, 4000); // 4 giây
+    }
+    const alertSuccess = document.querySelector('.alert-success');
+    if (alertSuccess) {
+        setTimeout(() => {
+            alertSuccess.style.transition = 'opacity 0.5s';
+            alertSuccess.style.opacity = '0';
+            setTimeout(() => alertSuccess.remove(), 500);
+        }, 4000);
+    }
+});
+</script>
+
+<script>
+window.setAllAlertQuantity = function() {
+    var val = document.getElementById('setAllAlertInput').value;
+    document.getElementById('setAllAlertQuantityHidden').value = val;
+    document.querySelectorAll('#stockAlertTbody .stock-alert-input').forEach(function(input) {
+        input.value = val;
+    });
+};
+</script>
+
+</body>
 </html>

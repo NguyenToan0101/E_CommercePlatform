@@ -1,5 +1,6 @@
 package org.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,8 +18,9 @@ public class Seller {
     @Column(name = "sellerid", nullable = false)
     private Integer id;
 
-    @OneToOne()
-    @JoinColumn(name = "sellerid")
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sellerid", referencedColumnName = "customerid", insertable = false, updatable = false)
+    @JsonIgnore
     @MapsId
     private Customer customer;
 
@@ -37,7 +39,7 @@ public class Seller {
     @OneToMany(mappedBy = "sellerid")
     private Set<Conversation> conversations = new LinkedHashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "sellerid")
+    @OneToOne(mappedBy = "sellerid", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private Shop shop;
 
     public Seller() {

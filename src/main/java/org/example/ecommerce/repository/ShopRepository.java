@@ -9,13 +9,17 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
+
+import java.time.LocalDateTime;
+
 import java.util.Optional;
 
 @Repository
 @EnableJpaRepositories
 public interface ShopRepository extends JpaRepository<Shop, Integer> {
+    List<Shop> findByShopnameContainingIgnoreCase(String shopname);
 
     @Query("""
     SELECT new org.example.ecommerce.common.dto.shopManagement.ShopDTO(
@@ -74,4 +78,6 @@ WHERE s.id = :shopId
     List<Shop> findByLockedTrueAndLockedUntilBefore(LocalDateTime now);
 
     Shop findShopsById(Integer shopid);
+
+    Optional<Shop> findBySellerid_Id(Integer sellerId);
 }

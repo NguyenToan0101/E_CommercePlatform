@@ -1,92 +1,107 @@
 package org.example.ecommerce.service;
 
-import lombok.RequiredArgsConstructor;
 import org.example.ecommerce.entity.Conversation;
-import org.example.ecommerce.entity.Message;
 import org.example.ecommerce.entity.Customer;
+import org.example.ecommerce.entity.Message;
 import org.example.ecommerce.entity.Seller;
 import org.example.ecommerce.repository.ConversationRepository;
-import org.example.ecommerce.repository.MessageRepository;
 import org.example.ecommerce.repository.CustomerRepository;
+import org.example.ecommerce.repository.MessageRepository;
 import org.example.ecommerce.repository.seller.SellerRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
 import java.time.Instant;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
-    private final ConversationRepository conversationRepository;
-    private final MessageRepository messageRepository;
-    private final CustomerRepository customerRepository;
-    private final SellerRepo sellerRepo;
+    @Autowired
+    private ConversationRepository conversationRepository;
+    
+    @Autowired
+    private MessageRepository messageRepository;
+    
+    @Autowired
+    private CustomerRepository customerRepository;
+    
+    @Autowired
+    private SellerRepo sellerRepository;
 
     @Override
-    public Conversation createConversation(Integer customerId, Integer sellerId) {
-        List<Conversation> existing = conversationRepository.findByCustomerid_IdAndSellerid_Id(customerId, sellerId);
-        if (!existing.isEmpty()) return existing.get(0);
-        Customer customer = customerRepository.findById(customerId).orElseThrow();
-        Seller seller = sellerRepo.findById(sellerId).orElseThrow();
-        Conversation conv = new Conversation();
-        conv.setCustomerid(customer);
-        conv.setSellerid(seller);
-        conv.setCreatedat(Instant.now());
-        conv.setLastmessageat(Instant.now());
-        conv.setStatus("active");
-        return conversationRepository.save(conv);
+    public Conversation getOrCreateConversation(Integer customerId, Integer sellerId) {
+        // Tìm conversation hiện có
+        return conversationRepository.findByCustomerIdAndSellerId(customerId, sellerId)
+                .orElseGet(() -> {
+                    // Tạo conversation mới nếu chưa có
+                    Customer customer = customerRepository.findById(customerId)
+                            .orElseThrow(() -> new RuntimeException("Customer not found"));
+                    Seller seller = sellerRepository.findById(sellerId)
+                            .orElseThrow(() -> new RuntimeException("Seller not found"));
+                    
+                    Conversation conversation = new Conversation();
+                    conversation.setCustomerid(customer);
+                    conversation.setSellerid(seller);
+                    conversation.setCreatedat(Instant.now());
+                    conversation.setLastmessageat(Instant.now());
+                    conversation.setStatus("ACTIVE");
+                    
+                    return conversationRepository.save(conversation);
+                });
     }
 
     @Override
-    public List<Conversation> getConversationsForSeller(Integer sellerId) {
-        return conversationRepository.findBySellerid_Id(sellerId);
+    public List<Conversation> getCustomerConversations(Integer customerId) {
+        return conversationRepository.findByCustomerId(customerId);
     }
 
     @Override
-    public List<Conversation> getConversationsForCustomer(Integer customerId) {
-        return conversationRepository.findByCustomerid_Id(customerId);
+    public List<Conversation> getSellerConversations(Integer sellerId) {
+        return conversationRepository.findBySellerId(sellerId);
     }
 
     @Override
-    public List<Conversation> searchConversationsForSeller(Integer sellerId, String keyword) {
-        return conversationRepository.searchConversationsForSeller(sellerId, keyword);
+    public List<Conversation> searchCustomerConversationsByShopName(Integer customerId, String shopName) {
+        return conversationRepository.findByCustomerIdAndShopNameContaining(customerId, shopName);
     }
 
     @Override
-    public List<Conversation> searchConversationsForCustomer(Integer customerId, String keyword) {
-        return conversationRepository.searchConversationsForCustomer(customerId, keyword);
+    public List<Conversation> searchSellerConversationsByCustomerEmail(Integer sellerId, String customerEmail) {
+        return conversationRepository.findBySellerIdAndCustomerEmailContaining(sellerId, customerEmail);
     }
 
     @Override
-    @Transactional
+    public List<Message> getConversationMessages(Integer conversationId) {
+        return messageRepository.findByConversationIdOrderBySentAtAsc(conversationId);
+    }
+
+    @Override
     public Message sendMessage(Integer conversationId, Integer senderId, Integer receiverId, String content) {
-        Conversation conv = conversationRepository.findById(conversationId).orElseThrow();
-        Message msg = new Message();
-        msg.setConversationid(conv);
-        msg.setSenderid(senderId);
-        msg.setReceiverid(receiverId);
-        msg.setContent(content);
-        msg.setSentat(Instant.now());
-        msg.setIsread(false);
-        messageRepository.save(msg);
-        conv.setLastmessageat(Instant.now());
-        conversationRepository.save(conv);
-        return msg;
+        Conversation conversation = conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new RuntimeException("Conversation not found"));
+        
+        Message message = new Message();
+        message.setConversationid(conversation);
+        message.setSenderid(senderId);
+        message.setReceiverid(receiverId);
+        message.setContent(content);
+        message.setSentat(Instant.now());
+        message.setIsread(false);
+        
+        // Cập nhật thời gian tin nhắn cuối
+        conversation.setLastmessageat(Instant.now());
+        conversationRepository.save(conversation);
+        
+        return messageRepository.save(message);
     }
 
     @Override
-    public List<Message> getMessages(Integer conversationId) {
-        return messageRepository.findByConversationid_IdOrderBySentatAsc(conversationId);
+    public void markMessagesAsRead(Integer conversationId, Integer receiverId) {
+        messageRepository.markMessagesAsRead(conversationId, receiverId);
     }
 
     @Override
-    @Transactional
-    public void markMessagesAsRead(Integer conversationId, Integer userId) {
-        messageRepository.markMessagesAsRead(conversationId, userId);
-    }
-
-    @Override
-    public int countUnreadMessages(Integer conversationId, Integer userId) {
-        return messageRepository.countUnreadMessages(conversationId, userId);
+    public long countUnreadMessages(Integer conversationId, Integer receiverId) {
+        return messageRepository.countUnreadMessages(conversationId, receiverId);
     }
 } 
