@@ -831,6 +831,9 @@
             </div>
             <div class="shop-action">
                 <a th:href="@{/shop_detail(shopid=${detail.shop.id})}" class="btn-shop">Xem shop</a>
+                <a th:href="@{/customer/chat/start(shopId=${detail.shop.id})}" class="btn-chat-seller" style="margin-left: 10px; background: #1976d2; color: #fff; border-radius: 6px; padding: 8px 18px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; text-decoration: none;">
+                  <i class="fas fa-comments"></i> Chat với người bán
+                </a>
             </div>
         </div>
         <div class="product-info-section">
