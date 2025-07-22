@@ -41,16 +41,16 @@ public class ProductDocument {
     private Instant createdAt;
 
     @Field(type = FieldType.Integer)
-    private Integer weight;
+    private Double weight;
 
     @Field(type = FieldType.Integer)
-    private Integer length;
+    private Double length;
 
     @Field(type = FieldType.Integer)
-    private Integer width;
+    private Double width;
 
     @Field(type = FieldType.Integer)
-    private Integer height;
+    private Double height;
 
     @Field(type = FieldType.Boolean)
     private Boolean useVariantShipping;
