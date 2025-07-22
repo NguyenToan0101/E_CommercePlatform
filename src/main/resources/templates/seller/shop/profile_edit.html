@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="seller/fragments/head :: head">
+    <title>Chỉnh sửa Hồ sơ Shop</title>
+</head>
+<body>
+<div class="dashboard-container">
+    <div th:replace="seller/fragments/sidebar :: sidebar"></div>
+    <main class="main-content">
+        <div th:replace="seller/fragments/header :: header"></div>
+        <div class="shop-profile-container">
+            <div th:if="${errorMessage}" class="shop-profile-alert alert alert-danger" th:text="${errorMessage}"></div>
+            <div th:if="${successMessage}" class="shop-profile-alert alert alert-success" th:text="${successMessage}"></div>
+            <div class="shop-profile-header">
+                <div class="shop-profile-header-left">
+                    <i class="fas fa-store shop-profile-header-icon"></i>
+                    <div>
+                        <div class="shop-profile-header-title">Chỉnh sửa Hồ sơ Shop</div>
+                        <div class="shop-profile-header-desc">Cập nhật thông tin cửa hàng và chủ shop của bạn</div>
+                    </div>
+                </div>
+            </div>
+            <div class="shop-profile-card">
+                <form th:action="@{/seller/shop/profile}" method="post" th:object="${shop}" enctype="multipart/form-data">
+                    <div class="shop-profile-image-upload">
+                        <img th:if="${shop.imageshop != null}" th:src="${shop.imageshop}" class="shop-profile-avatar" alt="Ảnh shop" id="shopImagePreview" />
+                        <input type="file" id="shopImageInput" name="imageFile" accept="image/*" onchange="previewShopImage(event)" style="display:none;" />
+                        <label for="shopImageInput" class="shop-profile-image-btn">
+                            <i class="fas fa-camera"></i> Chọn ảnh shop
+                        </label>
+                        <div id="shopImageFileName" class="shop-profile-image-filename"></div>
+                    </div>
+                    <div class="shop-profile-row">
+                        <div class="shop-profile-col-half shop-profile-section">
+                            <div class="shop-profile-block">
+                                <h4>Thông tin Shop</h4>
+                                <label class="shop-profile-label">Tên shop</label>
+                                <input type="text" class="shop-profile-input" th:field="*{shopname}" required />
+                                <label class="shop-profile-label">Mô tả</label>
+                                <textarea class="shop-profile-textarea" th:field="*{description}" rows="3"></textarea>
+                                <label class="shop-profile-label">Địa chỉ</label>
+                                <input type="text" class="shop-profile-input" th:field="*{fulladdress}" />
+                                <label class="shop-profile-label">Số điện thoại</label>
+                                <input type="text" class="shop-profile-input" th:field="*{phone}" />
+                                <label class="shop-profile-label">Email hóa đơn</label>
+                                <input type="email" class="shop-profile-input" th:field="*{invoiceEmail}" />
+                                <label class="shop-profile-label">Loại hình kinh doanh</label>
+                                <input type="text" class="shop-profile-input" th:field="*{businessType}" />
+                            </div>
+                        </div>
+                        <div class="shop-profile-col-half shop-profile-section">
+                            <div class="shop-profile-block">
+                                <h4>Thông tin Chủ Shop</h4>
+                                <label class="shop-profile-label">Họ tên</label>
+                                <input type="text" class="shop-profile-input" th:value="${seller.customer.firstname + ' ' + seller.customer.lastname}" readonly />
+                                <label class="shop-profile-label">Email</label>
+                                <input type="text" class="shop-profile-input" th:value="${seller.customer.email}" readonly />
+                                <label class="shop-profile-label">Số điện thoại</label>
+                                <input type="text" class="shop-profile-input" th:value="${seller.customer.phone}" readonly />
+                                <label class="shop-profile-label">Giới tính</label>
+                                <input type="text" class="shop-profile-input" th:value="${seller.customer.gender == 'M' ? 'Nam' : (seller.customer.gender == 'F' ? 'Nữ' : seller.customer.gender)}" readonly />
+                                <label class="shop-profile-label">Ngày sinh</label>
+                                <input type="text" class="shop-profile-input" th:value="${seller.customer.dateofbirth}" readonly />
+                                <label class="shop-profile-label">Địa chỉ</label>
+                                <input type="text" class="shop-profile-input" th:value="${seller.customer.address}" readonly />
+                            </div>
+                        </div>
+                    </div>
+                    <div style="text-align:right; margin-top:24px;">
+                        <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                        <a th:href="@{/seller/shop/profile}" class="btn btn-secondary" style="margin-left:8px;">Hủy</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+<script>
+function previewShopImage(event) {
+    const [file] = event.target.files;
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('shopImagePreview').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+    // Hiển thị tên file
+    const fileName = file ? file.name : '';
+    document.getElementById('shopImageFileName').textContent = fileName;
+}
+</script>
+</body>
+</html> 

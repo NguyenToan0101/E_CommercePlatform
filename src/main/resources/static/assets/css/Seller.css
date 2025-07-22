@@ -273,16 +273,42 @@ body {
 }
 
 .user-avatar {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, #4ecdc4, #44a08d);
-    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-weight: 600;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #4f8cff 0%, #a78bfa 100%);
+    box-shadow: 0 2px 8px rgba(79, 140, 255, 0.15);
+    transition: box-shadow 0.2s, transform 0.2s;
+    overflow: hidden;
+    border: 2.5px solid #fff;
+    margin-left: 18px;
     cursor: pointer;
+}
+.user-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    border: none;
+    transition: transform 0.2s;
+}
+.user-avatar i {
+    font-size: 1.7rem;
+    color: #fff;
+    transition: transform 0.2s;
+}
+.user-avatar:hover {
+    box-shadow: 0 4px 16px rgba(79, 140, 255, 0.25);
+    transform: scale(1.08);
+    background: linear-gradient(135deg, #a78bfa 0%, #4f8cff 100%);
+}
+.user-avatar:hover img,
+.user-avatar:hover i {
+    transform: scale(1.12);
 }
 
 /* Mobile Responsiveness */
@@ -2738,5 +2764,145 @@ body { background: #f7fafd; font-family: 'Inter', Arial, sans-serif; margin: 0; 
 .dropdown-item-action[style*="color:#e74c3c"]:hover {
   background: #fdeaea;
   color: #c0392b !important;
+}
+
+/* Shop Profile Page */
+.shop-profile-container { max-width: 100%; margin: 32px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 12px #eee; padding: 32px; }
+.shop-profile-title { font-size: 22px; font-weight: 600; margin-bottom: 24px; }
+.shop-profile-section { margin-bottom: 32px; }
+.shop-profile-section h4 { font-size: 18px; font-weight: 600; margin-bottom: 18px; color: #1976d2; }
+.shop-profile-label { font-weight: 500; margin-bottom: 4px; }
+.shop-profile-input, .shop-profile-textarea { margin-bottom: 16px; width: 100%; border-radius: 5px; border: 1px solid #ddd; padding: 8px 12px; font-size: 15px; }
+.shop-profile-img-preview { width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #eee; margin-bottom: 12px; }
+.shop-profile-alert { margin-bottom: 18px; }
+.shop-profile-row { display: flex; flex-wrap: wrap; gap: 24px; }
+.shop-profile-col-half { flex: 1 1 350px; min-width: 320px; }
+@media (max-width: 900px) { .shop-profile-container { padding: 12px; } }
+
+.shop-profile-block {
+  border: 1.5px solid #e0e7ef;
+  border-radius: 8px;
+  background: #f9fbfd;
+  padding: 20px 18px 16px 18px;
+  margin-bottom: 18px;
+  box-shadow: 0 1px 4px #f2f4f8;
+}
+
+.shop-profile-avatar {
+  width: 160px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 4px solid #fff;
+  box-shadow: 0 2px 8px rgba(44, 62, 80, 0.08);
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+}
+.shop-profile-avatar:hover {
+    border-color: #3498db;
+}
+.shop-profile-image-upload {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.shop-profile-image-upload input[type="file"] {
+    margin-top: 10px;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: 1px solid #e3f0fa;
+    background: #f4faff;
+    color: #3498db;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.04);
+    width: 220px;
+    text-align: center;
+}
+.shop-profile-image-upload input[type="file"]:hover {
+    border-color: #3498db;
+    background: #eaf6fb;
+}
+
+.shop-profile-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px #e0e7ef;
+  border: 2px solid #e3f0fa;
+  padding: 36px 32px 32px 32px;
+  margin-top: 18px;
+}
+
+.shop-profile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 2px 16px #e0e7ef;
+    padding: 28px 32px 22px 32px;
+    border: 2px solid #e3f0fa;
+}
+.shop-profile-header-right {
+  flex-shrink: 0;
+}
+.shop-profile-edit-btn {
+    padding: 8px 20px;
+    font-size: 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.06);
+    text-decoration: none;
+}
+
+.shop-profile-header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.shop-profile-header-icon {
+  font-size: 38px;
+  color: #1976d2;
+  margin-right: 8px;
+}
+.shop-profile-header-title {
+  font-size: 26px;
+  font-weight: 700;
+  color: #1976d2;
+  margin-bottom: 2px;
+}
+.shop-profile-header-desc {
+  font-size: 15px;
+  color: #6b7a90;
+  margin-top: 2px;
+}
+
+.shop-profile-image-btn {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 20px;
+    background: linear-gradient(90deg, #4fd1c5, #38a1db);
+    color: #fff;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+    border: none;
+    transition: background 0.2s;
+}
+.shop-profile-image-btn:hover {
+    background: linear-gradient(90deg, #38a1db, #4fd1c5);
+}
+.shop-profile-image-btn i {
+    margin-right: 8px;
+}
+.shop-profile-image-filename {
+    margin-top: 6px;
+    color: #888;
+    font-size: 14px;
 }
 

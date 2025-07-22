@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+
 import java.util.List;
 
 import java.time.LocalDateTime;
@@ -77,4 +78,6 @@ WHERE s.id = :shopId
     List<Shop> findByLockedTrueAndLockedUntilBefore(LocalDateTime now);
 
     Shop findShopsById(Integer shopid);
+
+    Optional<Shop> findBySellerid_Id(Integer sellerId);
 }
