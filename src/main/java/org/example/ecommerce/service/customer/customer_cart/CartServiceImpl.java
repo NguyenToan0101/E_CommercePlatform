@@ -64,8 +64,8 @@ public class CartServiceImpl implements CartService {
         }
 
         Product product = productRepository.findById(productId);
-        Inventory inventory = inventoryRepository.findInventoriesById(inventoryId);
-        Cartitem existingItem = cartitemRepository.findCartitemByProductidAndInventoryidAndCartid(product, inventory,cart);
+        Inventory inventory = product.getInventories().stream().filter(i -> i.getId().equals(inventoryId)).findAny().orElse(null);
+        Cartitem existingItem = cart.getCartitems().stream().filter(item -> item.getProductid().equals(product) && item.getInventoryid().equals(inventory)).findAny().orElse(null);
 
         if (existingItem != null) {
             int newQuantity = existingItem.getQuantity() + quantity;

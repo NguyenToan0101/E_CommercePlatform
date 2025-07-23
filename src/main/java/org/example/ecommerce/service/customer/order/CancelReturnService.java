@@ -46,7 +46,7 @@ public class CancelReturnService {
         Order order = ordersRepository.findOrderById(orderId);
         BigDecimal totalAmount = order.getTotalamount();
 
-        List<Orderitem> orderItems = orderItemsRepository.findAllByOrderid(order);
+        List<Orderitem> orderItems = new ArrayList<>(order.getOrderitems());
         for (Orderitem oi : orderItems) {
             Inventory inventory = oi.getInventoryid();
             int quantity = oi.getQuantity();
@@ -60,7 +60,7 @@ public class CancelReturnService {
 
         Product product = order.getOrderitems().stream().findFirst().get().getProductid();
         Customer seller = product.getShopid().getSellerid().getCustomer();
-        Wallet sellerWallet = walletRepository.findByCustomerid(seller);
+        Wallet sellerWallet = seller.getWallet();
         if (sellerWallet == null) {
             sellerWallet = new Wallet();
             sellerWallet.setCustomerid(seller);
@@ -107,12 +107,10 @@ public class CancelReturnService {
         try {
             Orderitem orderItem = orderItemsRepository.findById(orderItemsId).orElse(null);
             if (orderItem == null) {
-                System.out.println("[ERROR] Không tìm thấy orderItem với id=" + orderItemsId);
                 return false;
             }
             Order oldOrder = orderItem.getOrderid();
-            List<Orderitem> allItems = orderItemsRepository.findAllByOrderid(oldOrder);
-            boolean onlyOne = allItems.size() == 1;
+            boolean onlyOne = oldOrder.getOrderitems().size() == 1;
             Complaint complaint = new Complaint();
 
             if (!onlyOne) {

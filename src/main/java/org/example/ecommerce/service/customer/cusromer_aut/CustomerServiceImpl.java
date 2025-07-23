@@ -45,10 +45,6 @@ public class CustomerServiceImpl implements CustomerService {
             throw new RuntimeException("Email đã tồn tại");
         }
 
-        if (customerRepository.existsByPhone(customer.getPhone())) {
-            throw new RuntimeException("Số điện thoại đã tồn tại");
-        }
-
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.setRole("Customer");
         customer.setStatus(true);
