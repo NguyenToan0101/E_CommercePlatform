@@ -5,8 +5,10 @@ import org.example.ecommerce.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerProductServiceImpl implements CustomerProductService {
@@ -38,36 +40,35 @@ public class CustomerProductServiceImpl implements CustomerProductService {
         for (Product p : products) {
             if (p.getStatus().equals("available")) {
 
-                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
-                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
+                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
 
-                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
+                String fullAddress = p.getShopid().getFulladdress();
                 int index = fullAddress.lastIndexOf("-");
                 String shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
 
 
-                Float avgRating = reviewRepository.findAverageRatingByProductid(p);
-                float rate = (avgRating != null) ? avgRating : 0f;
 
-                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
-                int solditems = (sumSold != null) ? sumSold : 0;
+                float rate = (float) p.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
 
+                int solditems = p.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
 
-                Integer categoryId = null;
-                String categoryName = null;
-                if (p.getCategoryid() != null) {
-                    categoryId = p.getCategoryid().getId();
-                    categoryName= categoryRepository.findById(categoryId).get().getCategoryname();
-                }
+                BigDecimal price = p.getInventoriesView().stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
 
-                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), imageUrl, shopaddress, rate, categoryId, categoryName,solditems));
+                views.add(new ProductView(p.getId(), p.getName(), price, imageUrl, shopaddress, rate, solditems));
             }
         }
         return views;
     }
 
     public List<Category> getCategories() {
-        return categoryRepository.findRootCategories();
+        List<Category> categoryList = new ArrayList<>();
+        for (Category c : categoryRepository.findRootCategories()) {
+            if (c.getId()==313){
+                continue;
+            }
+            categoryList.add(c);
+        }
+        return categoryList;
     }
 
     public Shop getShops(Integer shopid) {
@@ -80,29 +81,21 @@ public class CustomerProductServiceImpl implements CustomerProductService {
         for (Product p : products) {
             if (p.getStatus().equals("available")) {
 
-                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
-                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
+                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
 
-                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
+                String fullAddress = p.getShopid().getFulladdress();
                 int index = fullAddress.lastIndexOf("-");
                 String shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
 
 
-                Float avgRating = reviewRepository.findAverageRatingByProductid(p);
-                float rate = (avgRating != null) ? avgRating : 0f;
 
-                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
-                int solditems = (sumSold != null) ? sumSold : 0;
+                float rate = (float) p.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
 
+                int solditems = p.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
 
-                Integer categoryId = null;
-                String categoryName = null;
-                if (p.getCategoryid() != null) {
-                    categoryId = p.getCategoryid().getId();
-                    categoryName= categoryRepository.findById(categoryId).get().getCategoryname();
-                }
+                BigDecimal price = p.getInventoriesView().stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
 
-                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), imageUrl, shopaddress, rate, categoryId, categoryName,solditems));
+                views.add(new ProductView(p.getId(), p.getName(), price, imageUrl, shopaddress, rate, solditems));
             }
         }
         return views;
