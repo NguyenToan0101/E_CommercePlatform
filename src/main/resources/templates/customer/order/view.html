@@ -571,8 +571,9 @@
             color: var(--text-dark);
             max-width: 200px;
             text-align: left;
-            word-wrap: break-word;
-            white-space: normal;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
             transition: color 0.3s ease;
         }
 
@@ -1167,6 +1168,10 @@
             <div class="total-row">
                 <span class="total-label">Phí vận chuyển:</span>
                 <span class="total-value" id="shipping-fee">Miễn phí</span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Thanh toán:</span>
+                <span class="total-value" th:text="${order.paymentStatus}"></span>
             </div>
             <div class="total-row grand-total">
                 <span class="total-label">Tổng cộng:</span>
