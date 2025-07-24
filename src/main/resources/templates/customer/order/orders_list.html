@@ -419,7 +419,7 @@
         }
 
         .stat-card.cancelled .stat-icon {
-            background: linear-gradient(135deg, var(--error-red), #b91c1c);
+            background: linear-gradient(135deg, var(--error-red), #b91c1b);
         }
 
         .stat-number {
@@ -949,7 +949,7 @@
         <a href="#" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/></svg> Thông Báo</a>
         <th:block th:if="${customer}">
             <div class="user-info-box">
-                <div class="user-avatar" th:if="${customer.image != null && !#strings.isEmpty(customer.image)}" style="background: none;">
+                <div class="user-avatar" th:if="${customer.image != null and !#strings.isEmpty(customer.image)}" style="background: none;">
                     <img th:src="@{${customer.image}}" alt="avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" />
                 </div>
                 <span class="user-avatar" th:if="${customer.image == null || #strings.isEmpty(customer.image)}" th:text="${customer.firstname.substring(0,1)}"></span>
@@ -1059,7 +1059,7 @@
             <button class="order-tab" onclick="filterByStatus('Chờ xác nhận')">Chờ xác nhận</button>
             <button class="order-tab" onclick="filterByStatus('Đã xác nhận')">Đã xác nhận</button>
             <button class="order-tab" onclick="filterByStatus('Chờ lấy hàng')">Chờ lấy hàng</button>
-            <button class="order-tab" onclick="filterByStatus('Đang giao')">Đang giao</button>
+            <button class="order-tab" onclick="filterByStatus('Đang giao hàng')">Đang giao hàng</button>
             <button class="order-tab" onclick="filterByStatus('Đã giao')">Đã giao</button>
             <button class="order-tab" onclick="filterByStatus('Đã hủy')">Đã hủy</button>
             <button class="order-tab" onclick="filterByStatus('Yêu cầu trả hàng/hoàn tiền')">Yêu cầu trả hàng/hoàn tiền</button>
@@ -1109,7 +1109,7 @@
                         <div class="order-amount" th:text="${#numbers.formatDecimal(order.totalamount, 0, 'COMMA', 0, 'POINT')} + ' đ'">500,000 đ</div>
                     </td>
                     <td>
-                        <span class="status-badge" th:text="${order.status}" th:classappend="${order.status == 'Chờ xác nhận' ? 'status-pending' : (order.status == 'Đã xác nhận' || order.status == 'Chờ lấy hàng' || order.status == 'Đang giao' ? 'status-processing' : (order.status == 'Đã giao' ? 'status-delivered' : (order.status == 'Đã hủy' ? 'status-cancelled' : (order.status == 'Yêu cầu trả hàng/hoàn tiền' ? 'status-return' : 'status-pending'))))}">Chờ xác nhận</span>
+                        <span class="status-badge" th:text="${order.status}" th:classappend="${order.status == 'Chờ xác nhận' ? 'status-pending' : (order.status == 'Đã xác nhận' || order.status == 'Chờ lấy hàng' || order.status == 'Đang giao hàng' ? 'status-processing' : (order.status == 'Đã giao' ? 'status-delivered' : (order.status == 'Đã hủy' ? 'status-cancelled' : (order.status == 'Yêu cầu trả hàng/hoàn tiền' ? 'status-return' : 'status-pending'))))}">Chờ xác nhận</span>
                     </td>
                     <td>
                         <a th:href="@{'/orders/' + ${order.id}}" class="view-btn">
@@ -1160,7 +1160,7 @@
             const status = row.getAttribute('data-status');
             if (status === 'Chờ xác nhận') {
                 pendingOrders++;
-            } else if (status === 'Đã xác nhận' || status === 'Chờ lấy hàng' || status === 'Đang giao') {
+            } else if (status === 'Đã xác nhận' || status === 'Chờ lấy hàng' || status === 'Đang giao hàng') {
                 processingOrders++;
             } else if (status === 'Đã giao') {
                 deliveredOrders++;
