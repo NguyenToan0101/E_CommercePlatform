@@ -42,6 +42,8 @@ public class ComplaintDetailService {
         dto.setDescription(complaint.getDescription());
         dto.setCreatedAt(complaint.getCreatedAt());
         dto.setUpdatedAt(complaint.getUpdatedAt());
+        dto.setCategoryName(complaint.getCategory().getName());
+        dto.setStatus( complaint.getStatus() );
 
         String category = complaint.getCategory().getName();
         switch (category.toLowerCase()) {
@@ -81,7 +83,7 @@ public class ComplaintDetailService {
                                 productName,
                                 review.getRating(),
                                 review.getComment(),
-                                null // reviewImages nếu có
+                                null
                         );
                         dto.setReview(reviewInfo);
                     }

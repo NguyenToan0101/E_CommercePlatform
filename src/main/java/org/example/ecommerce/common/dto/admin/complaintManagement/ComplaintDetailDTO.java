@@ -25,6 +25,9 @@ public class ComplaintDetailDTO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    private String categoryName;
+    private String status;
+
     // từng nhóm
     private ProductInfo product;      // nếu category=product
     private ReviewInfo review;        // nếu category=review

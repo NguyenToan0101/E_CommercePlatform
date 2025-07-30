@@ -20,7 +20,7 @@ public class Review {
     @Column(name = "productid")
     private Integer productid;
 
-    @Column(name = "orderitemid")
+    @Column(name = "orderitemsid")
     private Integer orderitemid;
 
     @Column(name = "rating")
