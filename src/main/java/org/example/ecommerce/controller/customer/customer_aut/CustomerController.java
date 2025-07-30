@@ -198,14 +198,5 @@ public class CustomerController {
         session.setAttribute("customer", customer1);
         return "redirect:/customers/profile";
     }
-// phong
-    @GetMapping("/chat")
-    public String chatPage(Model model, HttpSession session) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        if (customer == null) {
-            return "redirect:/login";
-        }
-        model.addAttribute("customerId", customer.getId());
-        return "customer/chat";
-    }
+
 }

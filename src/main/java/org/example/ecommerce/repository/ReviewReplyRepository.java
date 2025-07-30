@@ -7,4 +7,4 @@ import java.util.Optional;
 
 public interface ReviewReplyRepository extends JpaRepository<ReviewReply, Integer> {
     Optional<ReviewReply> findByReview(Review review);
-} 
+}

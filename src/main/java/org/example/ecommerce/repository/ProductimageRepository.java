@@ -12,4 +12,7 @@ public interface ProductimageRepository extends JpaRepository<Productimage, Inte
 
     Optional<Productimage> findFirstByProductidOrderByIdAsc(Product productid);
 
+    @org.springframework.data.jpa.repository.Query("SELECT pi.imageurl FROM Productimage pi WHERE pi.productid.id = :productId ORDER BY pi.id ASC LIMIT 1")
+    String findFirstImageUrlByProductId(@org.springframework.data.repository.query.Param("productId") Integer productId);
+
 }

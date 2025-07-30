@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -33,6 +34,6 @@ public class ReviewReply {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
-    private Instant createdAt;
+    private LocalDate createdAt;
 
 }

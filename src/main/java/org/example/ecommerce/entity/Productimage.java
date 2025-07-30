@@ -22,6 +22,10 @@ public class Productimage {
     @Column(name = "imageurl", nullable = false, length = Integer.MAX_VALUE)
     private String imageurl;
 
+    @Column(name = "embedding", columnDefinition = "TEXT")
+    private String embedding;
+
+
     public Integer getId() {
         return id;
     }
@@ -45,4 +49,8 @@ public class Productimage {
     public void setImageurl(String imageurl) {
         this.imageurl = imageurl;
     }
+
+    public String getEmbedding() {return embedding;}
+
+    public void setEmbedding(String embedding) {this.embedding = embedding;}
 }

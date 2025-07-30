@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search by Image</title>
+</head>
+<body>
+<h2>Search similar products by image</h2>
+<form th:action="@{/admin/search-image}" method="post" enctype="multipart/form-data">
+    <input type="file" name="image" accept="image/*" required />
+    <button type="submit">Search</button>
+</form>
+
+
+<div th:if="${products}">
+    <h3>Top 10 Similar Products</h3>
+    <p th:text="'Found ' + ${resultCount} + ' results'">Found 0 results</p>
+    <ul>
+        <li th:each="p : ${products}">
+            <div>
+                <img th:src="${p.imageUrl}" width="80"/>
+                <span th:text="${p.product.name}">Product Name</span>
+                (<span th:text="${#numbers.formatDecimal(p.score, 1, 'POINT', 2, 'NONE')}">0.00</span>)
+            </div>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

@@ -23,5 +23,8 @@ public class QuarterlyRevenueDTO {
         this.orders = orders;
         this.avgOrder = avgOrder;
     }
+
+    public QuarterlyRevenueDTO(String quarter, long l, double growth, int orders, int i) {
+    }
 }
 

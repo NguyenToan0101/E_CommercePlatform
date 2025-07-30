@@ -1,7 +1,8 @@
 package org.example.ecommerce.repository;
 
-import org.example.ecommerce.entity.conplaint.ComplaintFeedback;
+
+import org.example.ecommerce.entity.conplaint.ComplaintReview;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ComplaintFeedbackRepository extends JpaRepository<ComplaintFeedback, Integer> {
+public interface ComplaintFeedbackRepository extends JpaRepository<ComplaintReview, Integer> {
 }

@@ -14,6 +14,7 @@ import org.example.ecommerce.service.customer.order.ShippingService;
 import org.example.ecommerce.service.customer.wallet.CartPreviewDTO;
 import org.example.ecommerce.service.customer.wallet.PaymentService;
 import jakarta.servlet.http.HttpSession;
+import org.example.ecommerce.service.customer.wallet.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,8 +34,9 @@ public class CheckoutController {
     private final OderLogService oderLogService;
     private final OderItemService oderItemService;
     private final AddressDTO addressDTOs;
+    private final WalletService walletService;
 
-    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs) {
+    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs, WalletService walletService) {
         this.paymentService = paymentService;
         this.promotionService = promotionService;
         this.shippingService = shippingService;
@@ -42,17 +44,19 @@ public class CheckoutController {
         this.oderLogService = oderLogService;
         this.oderItemService = oderItemService;
         this.addressDTOs = addressDTOs;
+        this.walletService = walletService;
     }
 
     @PostMapping
     public String processCheckout(@RequestParam(value = "cartItemIds", required = false) List<Integer> cartItemIds,
                                   @ModelAttribute Customer customer,
+                                  @RequestParam(value = "walletId", required = false) Integer walletId,
                                   HttpSession session, Model model) {
         Customer customer1 = (Customer) session.getAttribute("customer");
         if (customer1 == null) {
             return "redirect:/login";
         }
-        String result = paymentService.checkout(customer1, cartItemIds, customer.getFirstname() + " " + customer.getLastname(), customer.getPhone(), customer.getAddress());
+        String result = paymentService.checkout(customer1, cartItemIds, customer.getFirstname() + " " + customer.getLastname(), customer.getPhone(), customer.getAddress(), walletId);
         if ("Thanh toán thành công".equals(result)) {
             model.addAttribute("message", result);
             model.addAttribute("customer", customer1);
@@ -110,16 +114,7 @@ public class CheckoutController {
         List<PromotionDTO> voucherDiscount = new ArrayList<>();
         List<PromotionDTO> voucherFreeShip = new ArrayList<>();
         for (PromotionDTO promotionDTO : promotionDTOS) {
-            System.out.println("----------total promtion");
-            System.out.println( promotionDTO.getName()+ "Per Usage limi"+  promotionDTO.getPerUserLimit()+ "----------Count promotion used------------" + oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId()));
-            System.out.println(promotionDTO.getName()+"Usage limit" +  promotionDTO.getUsageLimit() + "Usage Count" + promotionDTO.getUsageCount());
-            if (promotionDTO.getStatus().equalsIgnoreCase("ACTIVE")
-                    && promotionDTO.getPerUserLimit() >= oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId())
-                    && promotionDTO.getUsageLimit() >= promotionDTO.getUsageCount()
-            ) {
-                System.out.println(" --------------Active promotion");
-                System.out.println( promotionDTO.getName()+ "Per Usage limi"+  promotionDTO.getPerUserLimit()+ "----------Count promotion used------------" + oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId()));
-                System.out.println(promotionDTO.getName()+"Usage limit" +  promotionDTO.getUsageLimit() + "Usage Count" + promotionDTO.getUsageCount());
+            if (promotionDTO.getStatus().equalsIgnoreCase("ACTIVE")) {
                 for (CategoryDTO category : promotionDTO.getCategories()) {
                     Integer ID_OF_ALL_CATEGORY = 313;
                     if (promotionDTO.getType().equalsIgnoreCase("SHIPPING")
@@ -128,15 +123,18 @@ public class CheckoutController {
                         voucherFreeShip.add(promotionDTO);
                     } else if (!promotionDTO.getType().equalsIgnoreCase("SHIPPING")
                             && (category.getValue().equals(ID_OF_ALL_CATEGORY) || (category.getValue().equals(product.getCategoryid().getId())))) {
-                        List<Orderitem> list = oderItemService.getAllOrderItems();
-                        if(promotionDTO.getId() == 17){
-                            boolean checkNewUser = isCheckNewUser(list, customer);
-                            if(!checkNewUser){
-                                voucherDiscount.add(promotionDTO);
-                            }
-                        }else {
-                            voucherDiscount.add(promotionDTO);
-                        }
+                       List<Orderitem> list = oderItemService.getAllOrderItems();
+                       if(promotionDTO.getId() == 17){
+                           for (Orderitem orderitem : list) {
+                               if(!orderitem.getOrderid().getCustomerid().getId().equals(customer.getId())
+                                       && orderitem.getPromotionid() == 17
+                               ) {
+                                   voucherDiscount.add(promotionDTO);
+                               }
+                           }
+                       }else {
+                           voucherDiscount.add(promotionDTO);
+                       }
 
 
 
@@ -151,12 +149,16 @@ public class CheckoutController {
         System.out.println("dis" + voucherDiscount);
         System.out.println("free" + voucherFreeShip);
 
+        // Get wallet for customer
+        Wallet wallet = walletService.getOrCreateWallet(customer);
+
         model.addAttribute("voucherDiscount", voucherDiscount);
         model.addAttribute("voucherFreeShip", voucherFreeShip);
-        model.addAttribute("price", preview.getPrice().intValueExact() * preview.getQuantity());
+        model.addAttribute("price", preview.getPrice().intValueExact());
 
         model.addAttribute("items", preview);
         model.addAttribute("customer", customer);
+        model.addAttribute("wallet", wallet);
         return "customer/wallet/checkout-preview";
     }
     private static boolean isCheckNewUser(List<Orderitem> list, Customer customer) {
@@ -265,7 +267,7 @@ public Map<String, Object> getPreviewData(
         if(feeShip.compareTo(BigDecimal.ZERO) <= 0) {
             feeShip = BigDecimal.ZERO;
         }
-        totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity())).add(feeShip);
+        totalPrice = inventoryPayment.getPrice().add(feeShip).multiply(BigDecimal.valueOf(preview.getQuantity()));
         feeShipVoucher = feeShipVoucher.subtract(totalPrice);
 //        if(feeShipVoucher.compareTo(BigDecimal.ZERO) <= 0) {
 //            feeShipVoucher = feeShip;

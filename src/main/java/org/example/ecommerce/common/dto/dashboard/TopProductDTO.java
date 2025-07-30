@@ -15,5 +15,7 @@ public class TopProductDTO {
     private String category;
 
 
+    public TopProductDTO(String name, long l, String điệnTử) {
+    }
 }
 

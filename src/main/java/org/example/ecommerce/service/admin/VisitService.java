@@ -24,13 +24,5 @@ public class VisitService {
     public long getVisitHome() {
         return logRepository.countHomeVisits();
     }
-
-    public Integer countPageVisit(String path) {
-        return logRepository.countPageVisitByPath(path);
-    }
-
-    public Integer countAllPageVisit() {
-        return logRepository.countAllPageVisitLog();
-    }
 }
 

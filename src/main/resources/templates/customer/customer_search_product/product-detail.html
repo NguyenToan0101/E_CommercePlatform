@@ -688,6 +688,137 @@
             color: #fff;
             border-color: #b45309;
         }
+        
+        /* CSS cho seller reply */
+        .seller-reply {
+            margin-top: 16px;
+            padding: 20px;
+            background: #fafdff;
+            border: 1px solid #e0e7ef;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(16, 42, 67, 0.06);
+            position: relative;
+            margin-left: 20px;
+        }
+        
+        .seller-reply::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid #e0e7ef;
+        }
+        
+        .seller-reply::after {
+            content: '';
+            position: absolute;
+            left: -7px;
+            top: 20px;
+            width: 0;
+            height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-right: 8px solid #fafdff;
+        }
+        
+        .reply-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .reply-header img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #05bfdb;
+            box-shadow: 0 2px 8px rgba(5, 191, 219, 0.2);
+        }
+        
+        .reply-seller-name {
+            font-weight: 600;
+            color: #088395;
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .reply-date {
+            color: #6b7280;
+            font-size: 0.9rem;
+            font-family: 'Inter', sans-serif;
+            margin-left: auto;
+        }
+        
+        .reply-content {
+            color: #1a2233;
+            font-size: 1rem;
+            line-height: 1.6;
+            font-family: 'Inter', sans-serif;
+            font-weight: 400;
+        }
+        
+        .reply-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            margin-bottom: 12px;
+        }
+        
+        .reply-badge i {
+            font-size: 0.75rem;
+        }
+        
+        /* Responsive cho mobile */
+        @media (max-width: 768px) {
+            .seller-reply {
+                margin-left: 10px;
+                padding: 16px;
+            }
+            
+            .seller-reply::before {
+                left: -6px;
+            }
+            
+            .seller-reply::after {
+                left: -5px;
+            }
+            
+            .reply-header img {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .reply-seller-name {
+                font-size: 0.9rem;
+            }
+            
+            .reply-date {
+                font-size: 0.8rem;
+            }
+            
+            .reply-content {
+                font-size: 0.95rem;
+            }
+            
+            .reply-badge {
+                font-size: 0.75rem;
+                padding: 3px 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -778,7 +909,7 @@
                 <span style="margin: 0 10px;">|</span>
                 <span th:text="${detail.reviews.size()} + ' Đánh Giá'">4k Đánh Giá</span>
                 <span style="margin: 0 10px;">|</span>
-                <span th:text="${detail.solditems} + ' Đã Bán'">20k+ Đã Bán</span>
+                <span th:text="${detail.solditems != null ? detail.solditems : 0} + ' Đã Bán'">20k+ Đã Bán</span>
                 <button id="report-btn" title="Báo cáo sản phẩm" style="margin-left:8px; background: #fff3cd; color: #b45309; border: 1px solid #fbbf24; border-radius: 6px; padding: 2px 10px; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; transition: background 0.2s, color 0.2s;">
                     <i class="fas fa-exclamation-triangle" style="font-size: 1rem;"></i> Báo cáo
                 </button>
@@ -874,7 +1005,7 @@
                                     <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fas fa-star" style="color: #ffb400;"></i>
                                     <span class="rating-number" th:text="${review.rating} + '/5'" style="margin-left: 8px; font-size: 0.9rem; color: #666;"></span>
 </div>
-                                <span class="review-date" th:text="${#dates.format(review.createdat, 'yyyy-MM-dd HH:mm')}"></span>
+                                <span class="review-date" th:text="${review.createdat}"></span>
                                 <span class="review-variant" th:each="item : ${review.orderitemsid.orderid.orderitems}">
                                     <th:block th:if="${item.productid.id == review.productid.id}">
                                         <span th:if="${item.inventoryid.color != null}" th:text="' | Màu: ' + ${item.inventoryid.color}"></span>
@@ -897,6 +1028,21 @@
                                     <img th:src="${img.imageUrl}" alt="Ảnh review" style="width:80px;height:80px;border-radius:4px;object-fit:cover;" onclick="openMediaModal(this.src, 'image')"/>
                                 </th:block>
                             </div>
+                        </div>
+                        
+                        <!-- Hiển thị reply của seller -->
+                        <div class="seller-reply" th:if="${!review.reviewReplies.isEmpty()}">
+                            <div class="reply-badge">
+                                <i class="fas fa-store"></i>
+                                <span>Phản hồi từ shop</span>
+                            </div>
+                            <div class="reply-header">
+                                <img th:src="${review.reviewReplies.iterator().next().seller.shop.imageshop != null ? review.reviewReplies.iterator().next().seller.shop.imageshop : '/default-avatar.png'}" 
+                                     alt="Shop avatar" />
+                                <span class="reply-seller-name" th:text="${review.reviewReplies.iterator().next().seller.shop.shopname}">Shop Name</span>
+                                <span class="reply-date" th:text="${review.reviewReplies.iterator().next().createdAt}">Reply Date</span>
+                            </div>
+                            <div class="reply-content" th:text="${review.reviewReplies.iterator().next().reply}">Shop reply content</div>
                         </div>
                     </div>
                 </div>
@@ -1238,21 +1384,21 @@
     function getSelectedProductInfo() {
         // Lấy inventory đã chọn
         const inventories = document.querySelectorAll('#inventory-data .inventory-item');
-        let selectedInventory = null;
         let selectedColor = document.querySelector('.color-option.selected')?.getAttribute('data-color');
         let selectedSize = document.querySelector('.size-option.selected')?.getAttribute('data-size');
+        let foundInventory = null;
         inventories.forEach(inv => {
             if (
                 inv.getAttribute('data-color') === selectedColor &&
                 inv.getAttribute('data-size') === selectedSize
             ) {
-                selectedInventory = inv;
+                foundInventory = inv;
             }
         });
-        if (!selectedInventory) {
+        if (!foundInventory) {
             return null; // hoặc trả về thông báo lỗi
         }
-        const inventoryId = selectedInventory.getAttribute('data-id');
+        const inventoryId = foundInventory.getAttribute('data-id');
         const quantity = document.getElementById('quantity').value;
         return {
             inventoryId,

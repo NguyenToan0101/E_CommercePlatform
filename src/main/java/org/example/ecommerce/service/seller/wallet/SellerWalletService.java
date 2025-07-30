@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
@@ -53,7 +54,7 @@ public class SellerWalletService {
         history.setWalletid(wallet);
         history.setAmount(amount);
         history.setStatus("Increase");
-        history.setCreatedAt(Instant.now());
+        history.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(history);
     }
     // Lấy cashflow 30 ngày gần nhất cho seller
@@ -90,7 +91,7 @@ public class SellerWalletService {
         history.setWalletid(wallet);
         history.setAmount(amount);
         history.setStatus("Decrease");
-        history.setCreatedAt(java.time.Instant.now());
+        history.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(history);
         return true;
     }

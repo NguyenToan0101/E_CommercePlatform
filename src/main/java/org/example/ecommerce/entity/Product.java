@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -21,8 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "products")
 public class Product {
@@ -81,6 +78,9 @@ public class Product {
     @Valid
     @OneToMany(mappedBy = "productid", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Inventory> inventories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "productid")
+    private Set<Inventory> inventoriesView = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "productid")
     private Set<Orderitem> orderitems = new LinkedHashSet<>();

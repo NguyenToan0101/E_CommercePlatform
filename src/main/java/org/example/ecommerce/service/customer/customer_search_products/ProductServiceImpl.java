@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,23 +53,43 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductDetail getProductDetail(Integer productId) {
-        Product product = productRepo.findById(productId).orElse(null);
-        Shop shop = shopRepo.findById(product.getShopid().getId()).orElse(null);
-        List<Inventory> inventories = inventoryRepo.findAllByProductid(product);
-        List<Productimage> images = imageRepo.findAllByProductid(product);
-        List<Review> reviews = reviewRepo.findAllByProductidOrderByCreatedatDesc(product);
-        List<Wishlist> wishlists = wishlistRepo.findAllByProductid(product);
+        // Try optimized query first to get solditems
+        List<Object[]> detailResults = productRepo.findProductDetailOptimized(productId);
+        if (detailResults.isEmpty()) {
+            return null;
+        }
+        
+        Object[] detailRow = detailResults.get(0);
+        Long solditems = (Long) detailRow[12]; // solditems is at index 12
+        
+        // Get full product with relations for other data
+        Product product = productRepo.findWithAllRelationsById(productId).orElse(null);
+        if (product == null) {
+            return null;
+        }
+        
+        Shop shop = product.getShopid();
+        // Create defensive copies to avoid ConcurrentModificationException
+        List<Inventory> inventories = new ArrayList<>();
+        for (Inventory inv : product.getInventories()) {
+            if (!inventories.contains(inv)) {
+                inventories.add(inv);
+            }
+        }
+        List<Productimage> images = new ArrayList<>(product.getProductimages());
+        List<Review> reviews = new ArrayList<>(product.getReviews());
+        List<Wishlist> wishlists = new ArrayList<>(product.getWishlists());
 
-        Float avgRating = reviewRepo.findAverageRatingByProductid(product);
-        float rate = (avgRating != null) ? avgRating : 0f;
+        float rate = (float) reviews.stream().mapToDouble(Review::getRating).average().orElse(0);
 
-        Integer sumSold = inventoryRepo.findSumsolditemsByProductid(product);
-        int solditems = (sumSold != null) ? sumSold : 0;
+        // Use solditems from optimized query
+        int solditemsInt = solditems != null ? solditems.intValue() : 0;
 
-        Integer sumReview = reviewRepo.countByProductid(product);
-        int sumReviewRating = (sumReview != null) ? sumReview : 0;
+        int sumReviewRating = reviews.stream().mapToInt(Review::getRating).sum();
 
-        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, inventoryRepo.findFirstByProductidOrderByPriceAsc(product).getPrice(), rate, solditems, sumReviewRating);
+        BigDecimal price = inventories.stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+
+        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, price, rate, solditemsInt, sumReviewRating);
     }
 
     //Admin Product Management
