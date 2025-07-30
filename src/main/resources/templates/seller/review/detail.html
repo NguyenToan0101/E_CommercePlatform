@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="seller/fragments/head :: head">
+    <title>Chi tiết đánh giá sản phẩm</title>
+    <link rel="stylesheet" th:href="@{/assets/css/SellerReview.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        .review-detail-container { max-width: 700px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 2px 16px rgba(0,0,0,0.08); padding: 32px; }
+        .review-detail-header { font-size: 1.3em; font-weight: 600; margin-bottom: 18px; }
+        .review-detail-product { display: flex; align-items: center; margin-bottom: 18px; }
+        .review-detail-product img { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; margin-right: 18px; }
+        .review-detail-stars i { color: #FFD600; margin-right: 2px; }
+        .review-detail-images { margin: 12px 0; }
+        .review-detail-img-thumb { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; margin-right: 8px; cursor: pointer; transition: transform 0.2s; }
+        .review-detail-img-thumb:hover { transform: scale(1.2); }
+        .review-detail-meta { color: #888; font-size: 0.98em; margin-top: 8px; }
+        .review-detail-comment { margin: 16px 0; font-size: 1.08em; }
+        .btn-back { background: #1976d2; color: #fff; border: none; border-radius: 4px; padding: 6px 16px; cursor: pointer; transition: background 0.2s; text-decoration: none; }
+        .btn-back:hover { background: #125ea2; }
+    </style>
+</head>
+<body>
+<div class="dashboard-container">
+    <div th:replace="seller/fragments/sidebar :: sidebar"></div>
+    <main class="main-content">
+        <div th:replace="seller/fragments/header :: header"></div>
+        <div class="seller-review-detail-page">
+            <div class="seller-page-header" style="margin-bottom:32px;">
+                <div class="header-icon"><i class="fa-solid fa-star"></i></div>
+                <div class="header-title-group">
+                    <div class="header-title">Chi tiết đánh giá sản phẩm</div>
+                    <div class="header-subtitle">Xem chi tiết, hình ảnh và phản hồi đánh giá của khách hàng</div>
+                </div>
+            </div>
+            <div class="seller-review-detail-card">
+                <div class="seller-review-detail-product">
+                    <img th:src="${review.productImage}" alt="Ảnh sản phẩm"/>
+                    <div>
+                        <div class="seller-review-detail-product-name" th:text="${review.productName}"></div>
+                        <div class="seller-review-detail-rating">
+                            <span th:each="i : ${#numbers.sequence(1, review.rating)}">
+                                <i class="fa-solid fa-star" style="color:#FFD600;"></i>
+                            </span>
+                            <span th:each="i : ${#numbers.sequence(review.rating+1, 5)}">
+                                <i class="fa-regular fa-star" style="color:#FFD600;"></i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="seller-review-detail-comment" th:text="${review.comment}"></div>
+                <div class="seller-review-detail-img-list" th:if="${review.reviewImages != null && !#lists.isEmpty(review.reviewImages)}">
+                    <img th:each="img : ${review.reviewImages}" th:src="${img}" class="seller-review-detail-img-thumb" alt="Ảnh đánh giá">
+                </div>
+                <div class="seller-review-detail-meta">
+                    Người đánh giá: <span th:text="${review.customerName}"></span> | Ngày: <span th:text="${#dates.format(review.createdAt, 'dd/MM/yyyy')}"></span>
+                </div>
+                <div class="seller-review-reply-block">
+                    <h4>Phản hồi của shop:</h4>
+                    <div th:if="${replyContent != null}">
+                        <div class="seller-review-reply-content">[[${replyContent}]]</div>
+                        <form th:action="@{'/seller/reviews/' + ${review.reviewId} + '/reply'}" method="post">
+                            <textarea name="replyContent">[[${replyContent}]]</textarea>
+                            <button type="submit" class="btn-primary">Sửa phản hồi</button>
+                        </form>
+                    </div>
+                    <div th:if="${replyContent == null}">
+                        <form th:action="@{'/seller/reviews/' + ${review.reviewId} + '/reply'}" method="post">
+                            <textarea name="replyContent"></textarea>
+                            <button type="submit" class="btn-primary">Gửi phản hồi</button>
+                        </form>
+                    </div>
+                </div>
+                <a th:href="@{/seller/reviews}" class="btn-secondary seller-review-btn-back">&larr; Quay lại danh sách</a>
+            </div>
+        </div>
+    </main>
+</div>
+</body>
+</html> 

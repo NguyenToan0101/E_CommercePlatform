@@ -36,7 +36,7 @@ public class CheckoutController {
     private final AddressDTO addressDTOs;
     private final WalletService walletService;
 
-    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs, WalletService walletService) {
+    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs) {
         this.paymentService = paymentService;
         this.promotionService = promotionService;
         this.shippingService = shippingService;
@@ -95,11 +95,9 @@ public class CheckoutController {
             @RequestParam List<Integer> cartItemIds,
             Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
-        Wallet wallet = walletService.getOrCreateWallet(customer);
         List<CartPreviewDTO> preview = paymentService.getCheckoutPreview(customer, cartItemIds);
         model.addAttribute("customer", customer);
         model.addAttribute("items", preview);
-        model.addAttribute("wallet", wallet);
         return "customer/wallet/checkout-preview";
     }
 
@@ -153,7 +151,7 @@ public class CheckoutController {
 
         // Get wallet for customer
         Wallet wallet = walletService.getOrCreateWallet(customer);
-        
+
         model.addAttribute("voucherDiscount", voucherDiscount);
         model.addAttribute("voucherFreeShip", voucherFreeShip);
         model.addAttribute("price", preview.getPrice().intValueExact());
@@ -163,7 +161,21 @@ public class CheckoutController {
         model.addAttribute("wallet", wallet);
         return "customer/wallet/checkout-preview";
     }
+    private static boolean isCheckNewUser(List<Orderitem> list, Customer customer) {
+        boolean checkNewUser = false;
+        for (Orderitem orderitem : list) {
 
+            if(orderitem.getPromotionid() != null){
+                if(orderitem.getOrderid().getCustomerid().getId().equals(customer.getId())
+                        && (orderitem.getPromotionid() == 17)) {
+
+                    checkNewUser = true;
+
+                }
+            }
+        }
+        return checkNewUser;
+    }
 //    @GetMapping("/preview_realtime_data")
 //    @ResponseBody
 //    public Map<String, Object> getPreviewData(
@@ -243,7 +255,7 @@ public Map<String, Object> getPreviewData(
 
 
     BigDecimal feeShip = BigDecimal.valueOf(shippingService.calculateShippingFee(shippingRequest));
-    BigDecimal totalPrice = inventoryPayment.getPrice().add(feeShip).multiply(BigDecimal.valueOf(preview.getQuantity()));
+    BigDecimal totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity())) .add(feeShip);
     BigDecimal feeShipVoucher = totalPrice;
     BigDecimal discountVoucher = BigDecimal.ZERO;
     BigDecimal feeShipDefault = feeShip;
@@ -257,6 +269,9 @@ public Map<String, Object> getPreviewData(
         }
         totalPrice = inventoryPayment.getPrice().add(feeShip).multiply(BigDecimal.valueOf(preview.getQuantity()));
         feeShipVoucher = feeShipVoucher.subtract(totalPrice);
+//        if(feeShipVoucher.compareTo(BigDecimal.ZERO) <= 0) {
+//            feeShipVoucher = feeShip;
+//        }
     }
 
     if (discountId != null ) {

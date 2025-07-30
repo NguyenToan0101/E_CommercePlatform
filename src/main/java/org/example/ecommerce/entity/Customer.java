@@ -1,5 +1,6 @@
 package org.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -52,9 +53,8 @@ public class Customer {
     @Column(name = "role", length = Integer.MAX_VALUE)
     private String role;
 
-
-    @Column(nullable = false)
-    private boolean status;
+    @Column(name = "status" ,nullable = false)
+    private Boolean status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
@@ -87,7 +87,9 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")  // mappedBy trùng với tên biến Customer trong Order
     private Set<Order> orders = new LinkedHashSet<>();
 
-    @OneToOne(mappedBy = "customer")
+
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customer")
     private Seller seller;
 
     @OneToOne(mappedBy = "customerid")

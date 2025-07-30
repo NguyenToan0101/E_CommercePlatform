@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import org.hibernate.annotations.Nationalized;
 import lombok.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "shop")
@@ -18,6 +19,7 @@ public class Shop {
     @OneToOne()
     @JoinColumn(name = "shopid", nullable = false, unique = true)
     @MapsId
+    @JsonIgnore
     private Seller sellerid;
 
     @Version

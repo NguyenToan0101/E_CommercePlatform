@@ -55,16 +55,16 @@ public class Product {
     private Instant createdat;
 
     @Column(name = "weight")
-    private Integer weight;
+    private Double weight;
 
     @Column(name = "length")
-    private Integer length;
+    private Double length;
 
     @Column(name = "width")
-    private Integer width;
+    private Double width;
 
     @Column(name = "height")
-    private Integer height;
+    private Double height;
 
     @Column(name = "use_variant_shipping")
     private Boolean useVariantShipping = false;

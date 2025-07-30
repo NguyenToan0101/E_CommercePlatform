@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Trang chủ - E-Commerce Platform</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
     :root {
       --primary-black: #1a2233;
@@ -488,6 +489,9 @@
   <div class="header-top-right" style="display: flex; align-items: center; gap: 18px;">
       <a th:href="@{/policies}" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"></svg> Chính sách sử dụng</a>
     <a href="#" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/></svg> Thông Báo</a>
+    <a href="/customer/chat" class="header-chat-link" title="Chat với shop" style="font-size: 2rem; color: #1976d2; display: inline-flex; align-items: center;">
+      <i class="fas fa-comments"></i>
+    </a>
     <th:block th:if="${customer}">
       <div class="user-info-box">
         <div class="user-avatar" th:if="${customer.image != null && !#strings.isEmpty(customer.image)}" style="background: none;">

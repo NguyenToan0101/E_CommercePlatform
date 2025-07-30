@@ -64,8 +64,8 @@
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <ul class="sidebar-submenu" style="display:block;">
-                    <li class="nav-item"><a href="#">Quản lý Chat</a></li>
-                    <li class="nav-item"><a href="#">Quản lý Đánh Giá</a></li>
+                    <li class="nav-item"><a th:href="@{/seller/chat}">Quản lý Chat</a></li>
+                    <li class="nav-item"><a href="/seller/reviews">Quản lý Đánh Giá</a></li>
                 </ul>
             </li>
             <!-- Tài Chính -->
@@ -87,7 +87,12 @@
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <ul class="sidebar-submenu" style="display:block;">
-                    <li class="nav-item"><a href="#">Hồ Sơ Shop</a></li>
+                    <li class="nav-item"><a href="/seller/shop/profile">
+                        <i class="fas fa-id-card"></i> Hồ sơ Shop
+                    </a></li>
+                    <li class="nav-item"><a href="/seller/shop/profile/edit">
+                        <i class="fas fa-pen"></i> Chỉnh sửa hồ sơ Shop
+                    </a></li>
 <!--                    <li class="nav-item"><a href="#">Trang Trí Shop</a></li>-->
 <!--                    <li class="nav-item"><a href="#">Thiết Lập Shop</a></li>-->
                 </ul>

@@ -1,4 +1,4 @@
-package org.example.ecommerce.common.dto;
+package org.example.ecommerce.common.dto.seller;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,4 +17,7 @@ public class InventorySalesDTO {
     private Integer soldQuantity;
     private BigDecimal revenue;
     private BigDecimal price;
+    private Integer alertQuantity;
+    private String imageUrl;
+    
 } 

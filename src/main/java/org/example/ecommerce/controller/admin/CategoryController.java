@@ -1,6 +1,5 @@
 package org.example.ecommerce.controller.admin;
 
-import org.example.ecommerce.common.dto.CategoryDTO;
 import org.example.ecommerce.common.dto.admin.productManagement.MainCategoryDTO;
 import org.example.ecommerce.common.dto.category_content.CategoryManagementDTO;
 
