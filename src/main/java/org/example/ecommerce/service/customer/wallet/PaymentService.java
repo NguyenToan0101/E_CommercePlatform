@@ -35,28 +35,22 @@ public class PaymentService {
         this.promotionRepository = promotionRepository;
     }
 
-    public String checkout(Customer customer, List<Integer> cartItemIds, String fullname, String phone, String address) {
+    public String checkout(Customer customer, List<Integer> cartItemIds, String fullname, String phone, String address, Integer walletId) {
         Wallet wallet = walletRepository.findByCustomerid(customer);
-        if (wallet == null) {
-            wallet = new Wallet();
-            wallet.setCustomerid(customer);
-            wallet.setBalance(BigDecimal.ZERO);
-            walletRepository.save(wallet);
-            return "Vui lòng nạp tiền vào ví trước khi thanh toán";
-        }
 
         Cart cart = cartsRepository.findByCustomerid(customer);
-        List<Cartitem> selectedCartItems = cartItemsRepository.findByCartidAndIdIn(cart, cartItemIds);
+
+        List<Cartitem> selectedCartItems = cart.getCartitems().stream()
+                .filter(item -> cartItemIds.contains(item.getId()))
+                .toList();
 
         Map<Integer, List<Cartitem>> itemsByShop = new HashMap<>();
         for (Cartitem ci : selectedCartItems) {
             Integer shopId = ci.getProductid().getShopid().getId();
-            if (!itemsByShop.containsKey(shopId)) {
-                itemsByShop.put(shopId, new ArrayList<>());
-            }
-            itemsByShop.get(shopId).add(ci);
+            itemsByShop.computeIfAbsent(shopId, k -> new ArrayList<>()).add(ci);
         }
 
+        // Tính tổng tiền của tất cả sản phẩm được chọn
         BigDecimal totalAmountAllOrders = BigDecimal.ZERO;
         for (List<Cartitem> items : itemsByShop.values()) {
             for (Cartitem ci : items) {
@@ -66,23 +60,31 @@ public class PaymentService {
             }
         }
 
-        if (wallet.getBalance().compareTo(totalAmountAllOrders) < 0) {
-            return "Số dư ví không đủ, vui lòng nạp thêm tiền";
+        // Nếu người dùng chọn ví để thanh toán
+        if (walletId != null) {
+            // Kiểm tra số dư có đủ không
+            if (wallet.getBalance().compareTo(totalAmountAllOrders) < 0) {
+                return "Số dư ví không đủ, vui lòng nạp thêm tiền";
+            }
+
+            // Trừ tiền trong ví khách
+            wallet.setBalance(wallet.getBalance().subtract(totalAmountAllOrders));
+            walletRepository.save(wallet);
+
+            // Ghi lại lịch sử trừ tiền
+            WalletHistory history = new WalletHistory();
+            history.setWalletid(wallet);
+            history.setAmount(totalAmountAllOrders);
+            history.setStatus("Decrease");
+            history.setCreatedAt(Instant.now());
+            walletHistoryRepository.save(history);
         }
 
-        wallet.setBalance(wallet.getBalance().subtract(totalAmountAllOrders));
-        walletRepository.save(wallet);
-
-        WalletHistory history = new WalletHistory();
-        history.setWalletid(wallet);
-        history.setAmount(totalAmountAllOrders);
-        history.setStatus("Decrease");
-        history.setCreatedAt(Instant.now());
-        walletHistoryRepository.save(history);
-
+        // Tạo đơn hàng cho từng shop
         for (Map.Entry<Integer, List<Cartitem>> entry : itemsByShop.entrySet()) {
             List<Cartitem> items = entry.getValue();
 
+            // Tính tổng tiền từng đơn hàng
             BigDecimal totalAmount = BigDecimal.ZERO;
             for (Cartitem ci : items) {
                 BigDecimal price = ci.getInventoryid().getPrice();
@@ -90,6 +92,7 @@ public class PaymentService {
                 totalAmount = totalAmount.add(itemTotal);
             }
 
+            // Tạo đơn hàng
             Order order = new Order();
             order.setCustomerid(customer);
             order.setOrderdate(Instant.now());
@@ -98,10 +101,19 @@ public class PaymentService {
             order.setPhone(phone);
             order.setAddress(address);
             order.setStatus("Chờ xác nhận");
-            order.setPaymentStatus("Đã thanh toán");
+
+            // Nếu thanh toán qua ví, đã thanh toán
+            if (walletId != null) {
+                order.setPaymentStatus("Đã thanh toán");
+            } else {
+                order.setPaymentStatus("Chưa thanh toán");
+            }
+
             ordersRepository.save(order);
 
+            // Xử lý từng sản phẩm trong đơn hàng
             for (Cartitem ci : items) {
+                // Tạo OrderItem
                 Orderitem oi = new Orderitem();
                 oi.setOrderid(order);
                 oi.setProductid(ci.getProductid());
@@ -110,37 +122,44 @@ public class PaymentService {
                 oi.setUnitprice(ci.getInventoryid().getPrice());
                 orderItemsRepository.save(oi);
 
-                Customer seller = ci.getProductid().getShopid().getSellerid().getCustomer();
-                Wallet sellerWallet = walletRepository.findByCustomerid(seller);
-                if (sellerWallet == null) {
-                    sellerWallet = new Wallet();
-                    sellerWallet.setCustomerid(seller);
-                    sellerWallet.setBalance(BigDecimal.ZERO);
+                // Nếu thanh toán qua ví thì cộng tiền cho người bán
+                if (walletId != null) {
+                    Customer seller = ci.getProductid().getShopid().getSellerid().getCustomer();
+                    Wallet sellerWallet = seller.getWallet();
+                    if (sellerWallet == null) {
+                        sellerWallet = new Wallet();
+                        sellerWallet.setCustomerid(seller);
+                        sellerWallet.setBalance(BigDecimal.ZERO);
+                        walletRepository.save(sellerWallet);
+                    }
+
+                    BigDecimal sellerAmount = ci.getInventoryid().getPrice().multiply(BigDecimal.valueOf(ci.getQuantity()));
+                    sellerWallet.setBalance(sellerWallet.getBalance().add(sellerAmount));
                     walletRepository.save(sellerWallet);
+
+                    // Ghi lại lịch sử cộng tiền
+                    WalletHistory sellerHistory = new WalletHistory();
+                    sellerHistory.setWalletid(sellerWallet);
+                    sellerHistory.setAmount(sellerAmount);
+                    sellerHistory.setStatus("Increase");
+                    sellerHistory.setCreatedAt(Instant.now());
+                    walletHistoryRepository.save(sellerHistory);
                 }
-                BigDecimal sellerAmount = ci.getInventoryid().getPrice().multiply(BigDecimal.valueOf(ci.getQuantity()));
-                sellerWallet.setBalance(sellerWallet.getBalance().add(sellerAmount));
-                walletRepository.save(sellerWallet);
 
-                WalletHistory sellerHistory = new WalletHistory();
-                sellerHistory.setWalletid(sellerWallet);
-                sellerHistory.setAmount(sellerAmount);
-                sellerHistory.setStatus("Increase");
-                sellerHistory.setCreatedAt(Instant.now());
-                walletHistoryRepository.save(sellerHistory);
-
+                // Cập nhật kho: giảm tồn kho, tăng số lượng đã bán
                 Inventory inventory = ci.getInventoryid();
-                int newQuantity = inventory.getQuantity() - ci.getQuantity();
-                inventory.setQuantity(newQuantity);
+                inventory.setQuantity(inventory.getQuantity() - ci.getQuantity());
                 inventory.setSolditems(inventory.getSolditems() + ci.getQuantity());
                 inventoryRepository.save(inventory);
 
+                // Xóa sản phẩm khỏi giỏ hàng
                 cartItemsRepository.delete(ci);
             }
         }
 
         return "Thanh toán thành công";
     }
+
 
 
     public String checkoutRealtime(Integer freeship,Integer discount ,BigDecimal price ,Customer customer, Integer inventoryId, Integer quantity, String fullname, String phone, String address) {
@@ -256,7 +275,7 @@ public class PaymentService {
 
     public List<CartPreviewDTO> getCheckoutPreview(Customer customer, List<Integer> cartItemIds) {
         Cart cart = cartsRepository.findByCustomerid(customer);
-        List<Cartitem> selectedCartItems = cartItemsRepository.findByCartidAndIdIn(cart, cartItemIds);
+        List<Cartitem> selectedCartItems = cart.getCartitems().stream().filter(item -> cartItemIds.contains(item.getId())).toList();
 
         List<CartPreviewDTO> previewItems = new ArrayList<>();
         for (Cartitem ci : selectedCartItems) {
@@ -280,8 +299,8 @@ public class PaymentService {
     }
 
     public CartPreviewDTO getCheckoutPreviewRealtime(Customer customer, Integer inventoryId, Integer quantity) {
-        Product product = inventoryRepository.findById(inventoryId).map(Inventory::getProductid).orElse(null);
         Inventory inventory = inventoryRepository.findById(inventoryId).orElse(null);
+        Product product = inventory.getProductid();
         if (product != null && inventory != null) {
             CartPreviewDTO dto = new CartPreviewDTO();
             dto.setId(null);

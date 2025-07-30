@@ -74,6 +74,7 @@ public class CancelReturnController {
         if (customer == null) return "redirect:/login";
         ComplaintCategory categories = cancelReturnService.getAllComplaintCategories();
         List<ComplaintReason> reasons = cancelReturnService.getAllComplaintReasons();
+        model.addAttribute("customer", customer);
         model.addAttribute("orderId", orderItemsId);
         model.addAttribute("reasons", reasons);
         model.addAttribute("categories", categories);
