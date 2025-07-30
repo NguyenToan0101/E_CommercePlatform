@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Service
 public class ReviewServiceImpl implements ReviewService{
@@ -27,7 +28,7 @@ public class ReviewServiceImpl implements ReviewService{
         if (reviewRepository.existsByProductidAndOrderitemsid(review.getProductid(), review.getOrderitemsid())) {
             return false;
         }
-        review.setCreatedat(Instant.now());
+        review.setCreatedat(LocalDate.now());
         reviewRepository.save(review);
         // Xử lý upload file
         if (mediaFiles != null && mediaFiles.length > 0) {

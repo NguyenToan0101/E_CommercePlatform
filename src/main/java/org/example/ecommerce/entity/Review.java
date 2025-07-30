@@ -7,6 +7,7 @@ import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -36,17 +37,17 @@ public class Review {
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdat")
-    private Instant createdat;
+    private LocalDate createdat;
 
     @ColumnDefault("false")
     @Column(name = "is_hidden")
     private Boolean isHidden;
 
     @ManyToMany
-    @JoinTable(name = "complaint_feedback",
-            joinColumns = @JoinColumn(name = "review_id"),
-            inverseJoinColumns = @JoinColumn(name = "complaint_id"))
     private Set<Complaint> complaints = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "review")
+    private Set<ReviewReply> reviewReplies = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "reviewid")
     private Set<ReviewsImage> reviewsImages = new LinkedHashSet<>();
