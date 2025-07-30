@@ -68,7 +68,7 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")
     private Set<Cart> carts = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "customerid")
+    @OneToMany(mappedBy = "customer")
     private Set<Complaint> complaints = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "customerid")
@@ -86,7 +86,7 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")
     private Set<Order> orders = new LinkedHashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "customer")
+    @OneToOne(mappedBy = "customer")
     private Seller seller;
 
     @OneToOne(mappedBy = "customerid")

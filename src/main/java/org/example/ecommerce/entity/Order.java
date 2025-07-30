@@ -8,9 +8,6 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 
 @Entity
@@ -40,7 +37,7 @@ public class Order {
     private String paymentStatus;
 
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     @Column(name = "fullname", length = Integer.MAX_VALUE)
     private String fullname;
@@ -106,32 +103,28 @@ public class Order {
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
-    @OneToMany(mappedBy = "orderid")
-    private Set<Complaint> complaints = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "orderid")
-    private Set<Orderitem> orderitems = new LinkedHashSet<>();
+    public String getFullname() {
+        return fullname;
+    }
 
-    @OneToMany(mappedBy = "orderid")
-    private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
+    }
 
-    @OneToMany(mappedBy = "orderid")
-    private Set<Payment> payments = new LinkedHashSet<>();
+    public String getPhone() {
+        return phone;
+    }
 
-    @OneToMany(mappedBy = "orderid")
-    private Set<Review> reviews = new LinkedHashSet<>();
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-    public String getStatusClass() {
-        if (status == null) return "";
-        switch (status) {
-            case "Chờ xác nhận": return "seller-status-cho_xac_nhan";
-            case "Đã xác nhận": return "seller-status-da_xac_nhan";
-            case "Chờ lấy hàng": return "seller-status-cho_lay_hang";
-            case "Đã hủy": return "seller-status-da_huy";
-            case "Yêu cầu trả hàng/hoàn tiền": return "seller-status-yeu_cau_tra_hang_hoan_tien";
-            case "Đang giao": return "seller-status-dang_giao";
-            case "Đã giao": return "seller-status-da_giao";
-            default: return "";
-        }
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }

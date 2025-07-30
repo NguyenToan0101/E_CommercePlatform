@@ -57,7 +57,6 @@ public class Shop {
     @Column(name = "managename", nullable = false)
     private String manageName;
 
-
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
@@ -108,7 +107,6 @@ public class Shop {
     }
 
     public Shop() {
-
     }
 
     public enum Status {

@@ -16,5 +16,7 @@ public class RealTimeActivityDTO {
     private BigDecimal revenue;
 
 
+    public RealTimeActivityDTO(String time, int users, int orders, long l) {
+    }
 }
 

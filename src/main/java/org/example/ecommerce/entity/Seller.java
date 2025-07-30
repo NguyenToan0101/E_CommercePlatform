@@ -17,9 +17,8 @@ public class Seller {
     @Column(name = "sellerid", nullable = false)
     private Integer id;
 
-    @OneToOne()
-    @JoinColumn(name = "sellerid")
-    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "sellerid", referencedColumnName = "customerid", insertable = false, updatable = false)
     private Customer customer;
 
     @Column(name = "idnumber")
@@ -31,13 +30,13 @@ public class Seller {
     @Column(name = "backidimage")
     private String backidimage;
 
-    @Version
-    private Integer version;
+    @Column(name = "version")
+    private Long version;
 
     @OneToMany(mappedBy = "sellerid")
     private Set<Conversation> conversations = new LinkedHashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL,mappedBy = "sellerid")
+    @OneToOne(mappedBy = "sellerid", cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
     private Shop shop;
 
     public Seller() {

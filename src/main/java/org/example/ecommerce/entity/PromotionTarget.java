@@ -27,6 +27,9 @@ public class PromotionTarget {
     @JoinColumn(name = "productid")
     private Product productid;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryid")
+    private Category categoryid;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "shopid")

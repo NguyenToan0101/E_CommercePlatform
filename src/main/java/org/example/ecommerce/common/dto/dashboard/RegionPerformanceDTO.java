@@ -15,5 +15,6 @@ public class RegionPerformanceDTO {
     private int orders;
 
 
-
+    public RegionPerformanceDTO(String hàNội, long l, int i, int i1) {
+    }
 }
