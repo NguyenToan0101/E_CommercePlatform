@@ -117,6 +117,10 @@ public class SearchProductServiceImpl implements SearchProductService {
 
                 float rate = (float) p.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
 
+                if(rate<rates){
+                    continue;
+                }
+
                 int solditems = p.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
 
                 List<Inventory> inventories = p.getInventories().stream()
@@ -154,6 +158,10 @@ public class SearchProductServiceImpl implements SearchProductService {
 
 
                 float rate = (float) p.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
+
+                if(rate<rates){
+                    continue;
+                }
 
                 int solditems = p.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
 
