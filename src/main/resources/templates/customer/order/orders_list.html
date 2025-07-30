@@ -563,20 +563,22 @@
 
     <!-- Orders Section -->
     <div class="orders-section">
+        <div class="order-tabs" style="padding: 20px 30px 0 30px;">
+            <button class="order-tab" onclick="filterByStatus('')">Tất cả</button>
+            <button class="order-tab" onclick="filterByStatus('Chờ xác nhận')">Chờ xác nhận</button>
+            <button class="order-tab" onclick="filterByStatus('Đã xác nhận')">Đã xác nhận</button>
+            <button class="order-tab" onclick="filterByStatus('Chờ lấy hàng')">Chờ lấy hàng</button>
+            <button class="order-tab" onclick="filterByStatus('Đang giao')">Đang giao</button>
+            <button class="order-tab" onclick="filterByStatus('Đã giao')">Đã giao</button>
+            <button class="order-tab" onclick="filterByStatus('Đã hủy')">Đã hủy</button>
+            <button class="order-tab" onclick="filterByStatus('Yêu cầu trả hàng/hoàn tiền')">Yêu cầu trả hàng/hoàn tiền</button>
+        </div>
         <div class="section-header">
             <div class="section-title">
                 <i class="fas fa-list icon"></i>
                 Danh sách đơn hàng
             </div>
-            <div class="filter-controls">
-                <select class="filter-select" id="status-filter">
-                    <option value="">Tất cả trạng thái</option>
-                    <option value="pending">Chờ xử lý</option>
-                    <option value="processing">Đang xử lý</option>
-                    <option value="delivered">Đã giao</option>
-                    <option value="cancelled">Đã hủy</option>
-                </select>
-            </div>
+            <!-- Filter controls removed as per edit hint -->
         </div>
 
         <div class="table-container">
@@ -768,6 +770,26 @@
                 row.style.opacity = '1';
                 row.style.transform = 'translateX(0)';
             }, 800 + (index * 50));
+        });
+    }
+
+    function filterByStatus(status) {
+        const rows = document.querySelectorAll('.order-row');
+        rows.forEach(row => {
+            const rowStatus = row.getAttribute('data-status');
+            if (!status || rowStatus === status) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        // Cập nhật trạng thái active cho nút
+        document.querySelectorAll('.order-tab').forEach(btn => {
+            if (btn.textContent.trim() === status || (status === '' && btn.textContent.trim() === 'Tất cả')) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
         });
     }
 

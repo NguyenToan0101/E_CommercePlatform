@@ -4,14 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RegionPerformanceDTO {
     private String region;
-    private long revenue;
+    private BigDecimal revenue;
     private int orders;
-    private int customers;
+
 
 
 }
