@@ -1,7 +1,9 @@
 package org.example.ecommerce.repository;
 
 
+import org.example.ecommerce.entity.Category;
 import org.example.ecommerce.entity.Product;
+import org.example.ecommerce.entity.Shop;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -70,6 +73,8 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     List<Product> findByStatusAndLockedUntilBefore(String status, Instant time);
 
+
+    List<Product> findByShopidAndCategoryidIn(Shop shopid, Collection<Category> categoryids);
 
     List<Product> findAllByShopid_Id(Integer shopidId);
 }
