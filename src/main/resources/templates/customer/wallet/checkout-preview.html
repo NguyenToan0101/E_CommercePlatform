@@ -1194,14 +1194,117 @@
         </div>
 
         <!-- Wallet Payment Notification -->
-        <div class="wallet-notification">
-            <h3><i class="fas fa-wallet"></i> Thanh toán bằng Ví của bạn</h3>
-            <p>Sử dụng số dư trong ví điện tử để thanh toán đơn hàng một cách nhanh chóng và an toàn</p>
-            <a href="/wallet" class="wallet-btn">
-                <i class="fas fa-eye"></i>
-                Xem ví
-            </a>
+        <div class="wallet-notification" style="padding: 24px 24px 18px 24px;">
+            <div id="payment-method-summary" style="display: flex; align-items: center; justify-content: space-between;">
+                <div style="font-size: 20px; font-weight: 600;">Phương thức thanh toán</div>
+                <div style="display: flex; align-items: center; gap: 32px;">
+                    <span id="selected-method-label" style="font-size: 16px; font-weight: 500;">Thanh toán khi nhận hàng</span>
+                    <a href="#" id="change-method-btn" style="color: #1976d2; font-weight: 600; text-decoration: none; font-size: 15px;">THAY ĐỔI</a>
+                </div>
+            </div>
+            <div id="payment-method-tabs-container" style="display: none; margin-top: 18px;">
+                <div id="payment-method-tabs" style="display: flex; gap: 8px; margin-bottom: 16px;">
+                    <button type="button" class="payment-tab active" data-method="MUSA">Ví MUSA</button>
+                    <button type="button" class="payment-tab" data-method="COD">Thanh toán khi nhận hàng</button>
+                </div>
+                <div id="payment-method-desc" style="font-size: 15px; color: #222; background: #fff; border-radius: 8px; padding: 10px 16px; border: 1px solid #f59e0b;">
+                    <b>Ví MUSA</b> &nbsp; Thanh toán nhanh chóng, an toàn qua ví điện tử MUSA.<br>
+                    <span id="wallet-balance-info">
+                        Số dư ví: <span id="wallet-balance-value" th:text="${wallet != null ? #numbers.formatDecimal(wallet.balance, 0, 'COMMA', 0, 'POINT') + ' đ' : '0 đ'}"></span>
+                    </span>
+                </div>
+                <div style="text-align: right; margin-top: 10px;">
+                    <button id="confirm-method-btn" type="button" style="background: #1976d2; color: #fff; border: none; border-radius: 6px; padding: 7px 18px; font-weight: 600; font-size: 15px; cursor: pointer;">XÁC NHẬN</button>
+                </div>
+            </div>
         </div>
+        <style>
+            .payment-tab {
+                border: 1.5px solid #eee;
+                background: #fff;
+                color: #222;
+                padding: 8px 18px;
+                border-radius: 4px;
+                font-size: 15px;
+                font-weight: 500;
+                cursor: pointer;
+                outline: none;
+                transition: all 0.2s;
+            }
+            .payment-tab.active {
+                border: 2px solid #ff5722;
+                color: #ff5722;
+                background: #fff;
+                position: relative;
+            }
+            .payment-tab.active::after {
+                content: "";
+                position: absolute;
+                right: 0; bottom: 0;
+                width: 18px; height: 18px;
+                border-bottom: 3px solid #ff5722;
+                border-right: 3px solid #ff5722;
+                border-radius: 0 0 4px 0;
+            }
+        </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const changeBtn = document.getElementById('change-method-btn');
+                const tabsContainer = document.getElementById('payment-method-tabs-container');
+                const summary = document.getElementById('payment-method-summary');
+                const tabs = document.querySelectorAll('.payment-tab');
+                const desc = document.getElementById('payment-method-desc');
+                const selectedLabel = document.getElementById('selected-method-label');
+                const confirmBtn = document.getElementById('confirm-method-btn');
+                const walletBalanceValue = document.getElementById('wallet-balance-value');
+                let selectedMethod = 'COD';
+                let selectedText = 'Thanh toán khi nhận hàng';
+                changeBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    tabsContainer.style.display = 'block';
+                    summary.style.display = 'none';
+                });
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', function() {
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        selectedMethod = tab.dataset.method;
+                        switch(tab.dataset.method) {
+                            case 'MUSA':
+                                desc.innerHTML = '<b>Ví MUSA</b> &nbsp; Thanh toán nhanh chóng, an toàn qua ví điện tử MUSA.<br>' +
+                                    '<span id="wallet-balance-info">Số dư ví: <span id="wallet-balance-value"></span></span>';
+                                // Copy balance value from initial span
+                                const balance = walletBalanceValue ? walletBalanceValue.textContent : '';
+                                setTimeout(function() {
+                                    const newBalanceSpan = document.getElementById('wallet-balance-value');
+                                    if (newBalanceSpan) newBalanceSpan.textContent = balance;
+                                }, 0);
+                                selectedText = 'Ví MUSA';
+                                break;
+                            case 'COD':
+                            default:
+                                desc.innerHTML = '<b>Thanh toán khi nhận hàng</b> &nbsp; Phí thu hộ: <b>₫0 VNĐ</b>. Ưu đãi về phí vận chuyển (nếu có) áp dụng cả với phí thu hộ.';
+                                selectedText = 'Thanh toán khi nhận hàng';
+                        }
+                    });
+                });
+                if (confirmBtn) {
+                    confirmBtn.addEventListener('click', function() {
+                        selectedLabel.textContent = selectedText;
+                        tabsContainer.style.display = 'none';
+                        summary.style.display = 'flex';
+                        // Cập nhật giá trị walletIdInput dựa trên phương thức thanh toán
+                        const walletIdInput = document.getElementById('walletIdInput');
+                        if (selectedMethod === 'MUSA') {
+                            const musaWalletId = document.getElementById('musaWalletId').textContent;
+                            if (walletIdInput) walletIdInput.value = musaWalletId;
+                        } else {
+                            if (walletIdInput) walletIdInput.value = '';
+                        }
+                    });
+                }
+            });
+        </script>
 
         <!-- Cart Items Section -->
         <div id="cartItemsContainer" class="section">
@@ -1223,6 +1326,8 @@
                     <input type="hidden" id="cartLastName" name="lastname"/>
                     <input type="hidden" id="cartPhone" name="phone"/>
                     <input type="hidden" id="cartAddress" name="address"/>
+                    <input type="hidden" id="walletIdInput" name="walletId" value=""/>
+                    <span id="musaWalletId" th:text="${wallet.id}" style="display:none"></span>
 
                     <table id="cartItemsTable">
                         <thead>

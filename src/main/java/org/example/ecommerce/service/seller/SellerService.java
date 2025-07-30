@@ -12,7 +12,7 @@ public class SellerService {
     }
     public void saveSeller(Seller seller) {
 
-        sellerRepo.save(seller);
+            sellerRepo.save(seller);
 
 
     }

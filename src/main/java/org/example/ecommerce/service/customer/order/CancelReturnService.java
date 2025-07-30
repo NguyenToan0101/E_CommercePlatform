@@ -46,7 +46,7 @@ public class CancelReturnService {
         Order order = ordersRepository.findOrderById(orderId);
         BigDecimal totalAmount = order.getTotalamount();
 
-        List<Orderitem> orderItems = orderItemsRepository.findAllByOrderid(order);
+        List<Orderitem> orderItems = new ArrayList<>(order.getOrderitems());
         for (Orderitem oi : orderItems) {
             Inventory inventory = oi.getInventoryid();
             int quantity = oi.getQuantity();
@@ -60,7 +60,7 @@ public class CancelReturnService {
 
         Product product = order.getOrderitems().stream().findFirst().get().getProductid();
         Customer seller = product.getShopid().getSellerid().getCustomer();
-        Wallet sellerWallet = walletRepository.findByCustomerid(seller);
+        Wallet sellerWallet = seller.getWallet();
         if (sellerWallet == null) {
             sellerWallet = new Wallet();
             sellerWallet.setCustomerid(seller);
@@ -73,7 +73,7 @@ public class CancelReturnService {
         sellerHistory.setWalletid(sellerWallet);
         sellerHistory.setAmount(totalAmount);
         sellerHistory.setStatus("Decrease");
-        sellerHistory.setCreatedAt(Instant.now());
+        sellerHistory.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(sellerHistory);
 
         Wallet customerWallet = walletRepository.findByCustomerid(customer);
@@ -89,7 +89,7 @@ public class CancelReturnService {
         customerHistory.setWalletid(customerWallet);
         customerHistory.setAmount(totalAmount);
         customerHistory.setStatus("Increase");
-        customerHistory.setCreatedAt(Instant.now());
+        customerHistory.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(customerHistory);
         return true;
     }
@@ -107,22 +107,20 @@ public class CancelReturnService {
         try {
             Orderitem orderItem = orderItemsRepository.findById(orderItemsId).orElse(null);
             if (orderItem == null) {
-                System.out.println("[ERROR] Không tìm thấy orderItem với id=" + orderItemsId);
                 return false;
             }
             Order oldOrder = orderItem.getOrderid();
-            List<Orderitem> allItems = orderItemsRepository.findAllByOrderid(oldOrder);
-            boolean onlyOne = allItems.size() == 1;
+            boolean onlyOne = oldOrder.getOrderitems().size() == 1;
             Complaint complaint = new Complaint();
 
             if (!onlyOne) {
                 Order newOrder = new Order();
                 newOrder.setCustomerid(oldOrder.getCustomerid());
-                newOrder.setOrderdate(Instant.now());
+                newOrder.setOrderdate(LocalDateTime.now());
                 newOrder.setTotalamount(orderItem.getUnitprice().multiply(BigDecimal.valueOf((orderItem.getQuantity()))));
                 newOrder.setStatus("Yêu cầu trả hàng/hoàn tiền");
                 newOrder.setPaymentStatus(oldOrder.getPaymentStatus());
-                newOrder.setUpdatedAt(Instant.now());
+                newOrder.setUpdatedAt(LocalDateTime.now());
                 newOrder.setFullname(oldOrder.getFullname());
                 newOrder.setPhone(oldOrder.getPhone());
                 newOrder.setAddress(oldOrder.getAddress());
@@ -160,7 +158,7 @@ public class CancelReturnService {
                         ComplaintImg img = new ComplaintImg();
                         img.setComplaint(complaint);
                         img.setImageUrl(url);
-                        img.setCreatedAt(java.time.Instant.now());
+                        img.setCreatedAt(LocalDateTime.now());
                         complaintImgRepository.save(img);
                     }
                 }

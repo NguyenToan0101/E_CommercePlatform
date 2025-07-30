@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Service
 public class WalletService {
@@ -31,7 +32,7 @@ public class WalletService {
             wallet = new Wallet();
             wallet.setCustomerid(customer);
             wallet.setBalance(BigDecimal.ZERO);
-            wallet = walletRepository.save(wallet);
+            walletRepository.save(wallet);
         }
         return wallet;
     }
@@ -45,14 +46,14 @@ public class WalletService {
         history.setWalletid(wallet);
         history.setAmount(amount);
         history.setStatus("Increase");
-        history.setCreatedAt(Instant.now());
+        history.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(history);
 
         Payment payment = new Payment();
         payment.setWalletid(wallet);
         payment.setMethod("PayOS");
         payment.setPaymentstatus("PAID");
-        payment.setPaidat(Instant.now());
+        payment.setPaidat(LocalDateTime.now());
         paymentRepository.save(payment);
     }
 }

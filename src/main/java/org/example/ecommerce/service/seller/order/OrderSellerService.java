@@ -75,7 +75,7 @@ public class OrderSellerService {
         if (orderOpt.isPresent()) {
             Order order = orderOpt.get();
             order.setStatus(status);
-            order.setUpdatedAt(Instant.now());
+            order.setUpdatedAt(LocalDateTime.now());
             ordersRepository.save(order);
             return true;
         }
@@ -83,7 +83,7 @@ public class OrderSellerService {
     }
 
     // 4. Tìm kiếm và lọc đơn hàng (theo trạng thái, ngày, tên khách, mã đơn)
-    public List<Order> searchOrders(Integer shopId, String status, String keyword, Instant from, Instant to) {
+    public List<Order> searchOrders(Integer shopId, String status, String keyword, LocalDateTime from, LocalDateTime to) {
         String filterStatus = null;
         if (status != null && !status.isEmpty()) {
             filterStatus = status;

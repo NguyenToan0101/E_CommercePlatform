@@ -2,16 +2,18 @@ package org.example.ecommerce.entity.conplaint;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
-@Entity
-@Table(name = "complaint_category")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "complaint_category")
 public class ComplaintCategory {
     @Id
     @Column(name = "category_id")

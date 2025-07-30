@@ -68,7 +68,6 @@ public class CategoryController {
         categoryService.delete(dto.getId());
     }
 
-    /** Lấy danh mục chính (parentid IS NULL) */
     @GetMapping("/main")
     public List<MainCategoryDTO> getMainCategories() {
         return repo.findByParentIsNull().stream()

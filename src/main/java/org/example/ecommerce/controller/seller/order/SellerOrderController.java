@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
@@ -98,8 +99,8 @@ public class    SellerOrderController {
         if (customer == null || customer.getSeller() == null || customer.getSeller().getShop() == null)
             return "redirect:/login";
         Integer shopId = customer.getSeller().getShop().getId();
-        Instant fromDate = (from != null && !from.isEmpty()) ? Instant.parse(from) : null;
-        Instant toDate = (to != null && !to.isEmpty()) ? Instant.parse(to) : null;
+        LocalDateTime fromDate = (from != null && !from.isEmpty()) ? LocalDateTime.parse(from) : null;
+        LocalDateTime toDate = (to != null && !to.isEmpty()) ? LocalDateTime.parse(to) : null;
         List<Order> orders = orderSellerService.searchOrders(shopId, status, keyword, fromDate, toDate);
         model.addAttribute("orders", orders);
         // Thêm các biến thống kê cho dashboard

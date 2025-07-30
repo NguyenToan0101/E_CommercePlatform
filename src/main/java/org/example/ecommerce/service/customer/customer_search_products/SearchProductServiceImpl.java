@@ -45,30 +45,33 @@ public class SearchProductServiceImpl implements SearchProductService {
         List<Integer> allCategoryIds = new ArrayList<>();
         collectCategoryAndChildren(categoryId, allCategoryIds);
 
-        List<Product> products = productRepository.findAll();
-
-        for (Product p : products) {
-            if (p.getStatus().equals("available") && p.getCategoryid() != null && allCategoryIds.contains(p.getCategoryid().getId())) {
-                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
-                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
-
-                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                String keyword = "-";
-                int index = fullAddress.indexOf(keyword);
-                String shopaddress = (index != -1) ? fullAddress.substring(index + keyword.length()).trim() : fullAddress;
-
-                Float avgRating = reviewRepository.findAverageRatingByProductid(p);
-                float rate = (avgRating != null) ? avgRating : 0f;
-
-                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
-                int solditems = (sumSold != null) ? sumSold : 0;
-
-                String categoryName = categoryRepository.findById(p.getCategoryid().getId()).get().getCategoryname();
-
-                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), imageUrl, shopaddress, rate, p.getCategoryid().getId(), categoryName, solditems));
+        // Use optimized query to avoid ConcurrentModificationException
+        List<Object[]> results = productRepository.findAvailableProductsByCategoryIdsOptimized(allCategoryIds);
+        
+        for (Object[] row : results) {
+            Integer productId = (Integer) row[0];
+            String productName = (String) row[1];
+            String fullAddress = (String) row[4];
+            BigDecimal price = (BigDecimal) row[5];
+            Long solditems = (Long) row[6];
+            
+            // Process shop address
+            String shopaddress = "";
+            if (fullAddress != null) {
+                int index = fullAddress.lastIndexOf("-");
+                shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
             }
+            
+            // Handle null values
+            if (price == null) price = BigDecimal.ZERO;
+            if (solditems == null) solditems = 0L;
+            
+            // Get image URL separately
+            String imageUrl = productimageRepository.findFirstImageUrlByProductId(productId);
+            
+            views.add(new ProductView(productId, productName, price, imageUrl, shopaddress, 0.0f, solditems.intValue()));
         }
-
+        
         return views;
     }
 
@@ -82,37 +85,35 @@ public class SearchProductServiceImpl implements SearchProductService {
     }
 
     public List<ProductView> searchByName(String keyword) {
-        List<Product> products = productRepository.findByNameContainingIgnoreCase(keyword);
         List<ProductView> views = new ArrayList<>();
-        for (Product p : products) {
-            if (p.getStatus().equals("available")) {
-
-                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
-                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
-
-                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                String key = "-";
-                int index = fullAddress.indexOf(key);
-                String shopaddress = (index != -1) ? fullAddress.substring(index + key.length()).trim() : fullAddress;
-
-
-                Float avgRating = reviewRepository.findAverageRatingByProductid(p);
-                float rate = (avgRating != null) ? avgRating : 0f;
-
-                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
-                int solditems = (sumSold != null) ? sumSold : 0;
-
-
-                Integer categoryId = null;
-                String categoryName = null;
-                if (p.getCategoryid() != null) {
-                    categoryId = p.getCategoryid().getId();
-                    categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
-                }
-
-                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), imageUrl, shopaddress, rate, categoryId, categoryName, solditems));
+        
+        // Use optimized query to avoid ConcurrentModificationException
+        List<Object[]> results = productRepository.findAvailableProductsByNameOptimized(keyword);
+        
+        for (Object[] row : results) {
+            Integer productId = (Integer) row[0];
+            String productName = (String) row[1];
+            String fullAddress = (String) row[4];
+            BigDecimal price = (BigDecimal) row[5];
+            Long solditems = (Long) row[6];
+            
+            // Process shop address
+            String shopaddress = "";
+            if (fullAddress != null) {
+                int index = fullAddress.lastIndexOf("-");
+                shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
             }
+            
+            // Handle null values
+            if (price == null) price = BigDecimal.ZERO;
+            if (solditems == null) solditems = 0L;
+            
+            // Get image URL separately
+            String imageUrl = productimageRepository.findFirstImageUrlByProductId(productId);
+            
+            views.add(new ProductView(productId, productName, price, imageUrl, shopaddress, 0.0f, solditems.intValue()));
         }
+        
         return views;
     }
 
@@ -122,36 +123,32 @@ public class SearchProductServiceImpl implements SearchProductService {
         for (Product p : products) {
             if (p.getStatus().equals("available")) {
 
-                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
-                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
+                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
 
-                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                String key = "-";
-                int index = fullAddress.indexOf(key);
-                String shopaddress = (index != -1) ? fullAddress.substring(index + key.length()).trim() : fullAddress;
+                String fullAddress = p.getShopid().getFulladdress();
+                int index = fullAddress.lastIndexOf("-");
+                String shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
 
 
-                Float avgRating = reviewRepository.findAverageRatingByProductidAndRatingGreaterThan(p,rates);
-                float rate = (avgRating != null) ? avgRating : 0f;
+                float rate = (float) p.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
 
-                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
-                int solditems = (sumSold != null) ? sumSold : 0;
-
-                List<Inventory> inventories = inventoryRepository.findAllByProductidAndPriceBetweenOrderByPriceAsc(p, priceMin, priceMax);
-
-                if (inventories == null || inventories.isEmpty()) {
+                if(rate<rates){
                     continue;
                 }
 
-                Inventory inventory = inventories.get(0);
-                Integer categoryId = null;
-                String categoryName = null;
-                if (p.getCategoryid() != null) {
-                    categoryId = p.getCategoryid().getId();
-                    categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
+                int solditems = p.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
+
+                List<Inventory> inventories = p.getInventories().stream()
+                        .filter(i -> i.getPrice().compareTo(priceMin) >= 0 && i.getPrice().compareTo(priceMax) <= 0)
+                        .toList();
+
+                if (inventories.isEmpty()) {
+                    continue;
                 }
 
-                views.add(new ProductView(p.getId(), p.getName(), inventory.getPrice(), imageUrl, shopaddress, rate, categoryId, categoryName, solditems));
+                BigDecimal price = inventories.stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+
+                views.add(new ProductView(p.getId(), p.getName(),price , imageUrl, shopaddress, rate, solditems));
             }
         }
         return views;
@@ -166,33 +163,34 @@ public class SearchProductServiceImpl implements SearchProductService {
 
         List<Product> products = productRepository.findAll();
         for (Product p : products) {
-            if (p.getStatus().equals("available")&& p.getCategoryid() != null && allCategoryIds.contains(p.getCategoryid().getId())) {
+            if (p.getStatus().equals("available")&& allCategoryIds.contains(p.getCategoryid().getId())) {
 
-                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
-                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
+                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
 
-                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                String key = "-";
-                int index = fullAddress.indexOf(key);
-                String shopaddress = (index != -1) ? fullAddress.substring(index + key.length()).trim() : fullAddress;
+                String fullAddress = p.getShopid().getFulladdress();
+                int index = fullAddress.lastIndexOf("-");
+                String shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
 
 
-                Float avgRating = reviewRepository.findAverageRatingByProductidAndRatingGreaterThan(p,rates);
-                float rate = (avgRating != null) ? avgRating : 0f;
+                float rate = (float) p.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
 
-                Integer sumSold = inventoryRepository.findSumsolditemsByProductid(p);
-                int solditems = (sumSold != null) ? sumSold : 0;
-
-                List<Inventory> inventories = inventoryRepository.findAllByProductidAndPriceBetweenOrderByPriceAsc(p, priceMin, priceMax);
-
-                if (inventories == null || inventories.isEmpty()) {
+                if(rate<rates){
                     continue;
                 }
 
-                Inventory inventory = inventories.get(0);
-                String categoryName = categoryRepository.findById(p.getCategoryid().getId()).get().getCategoryname();
+                int solditems = p.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
 
-                views.add(new ProductView(p.getId(), p.getName(), inventory.getPrice(), imageUrl, shopaddress, rate, categoryId, categoryName, solditems));
+                List<Inventory> inventories = p.getInventories().stream()
+                        .filter(i -> i.getPrice().compareTo(priceMin) >= 0 && i.getPrice().compareTo(priceMax) <= 0)
+                        .toList();
+
+                if (inventories.isEmpty()) {
+                    continue;
+                }
+
+                BigDecimal price = inventories.stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+
+                views.add(new ProductView(p.getId(), p.getName(),price , imageUrl, shopaddress, rate, solditems));
             }
         }
         return views;

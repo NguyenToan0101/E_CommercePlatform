@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.example.ecommerce.common.dto.seller.SellerReviewStatsDTO;
@@ -58,11 +59,11 @@ public class SellerReviewServiceImpl implements SellerReviewService {
         // Filter theo ngày
         if (fromDate != null && !fromDate.isEmpty()) {
             Instant from = LocalDate.parse(fromDate).atStartOfDay(ZoneId.systemDefault()).toInstant();
-            reviews = reviews.stream().filter(r -> r.getCreatedat() != null && r.getCreatedat().isAfter(from)).collect(Collectors.toList());
+            reviews = reviews.stream().filter(r -> r.getCreatedat() != null && r.getCreatedat().isAfter(ChronoLocalDateTime.from(from))).collect(Collectors.toList());
         }
         if (toDate != null && !toDate.isEmpty()) {
             Instant to = LocalDate.parse(toDate).plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
-            reviews = reviews.stream().filter(r -> r.getCreatedat() != null && r.getCreatedat().isBefore(to)).collect(Collectors.toList());
+            reviews = reviews.stream().filter(r -> r.getCreatedat() != null && r.getCreatedat().isBefore(ChronoLocalDateTime.from(to))).collect(Collectors.toList());
         }
         // Map sang DTO
         return reviews.stream().map(r -> {
@@ -158,7 +159,7 @@ public class SellerReviewServiceImpl implements SellerReviewService {
         reply.setReview(review);
         reply.setSeller(seller);
         reply.setReply(replyContent);
-        reply.setCreatedAt(java.time.Instant.now());
+        reply.setCreatedAt(LocalDate.now());
         reviewReplyRepository.save(reply);
     }
 

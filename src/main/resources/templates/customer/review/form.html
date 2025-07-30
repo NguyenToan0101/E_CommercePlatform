@@ -65,17 +65,17 @@
             z-index: 100;
         }
 
-        .header-left { 
-            display: flex; 
-            align-items: center; 
-            gap: 18px; 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
         }
 
-        .logo { 
-            font-size: 2.6rem; 
-            font-weight: 700; 
-            color: #111 !important; 
-            letter-spacing: 1px; 
+        .logo {
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #111 !important;
+            letter-spacing: 1px;
         }
 
         .logo-img {
@@ -125,17 +125,17 @@
             box-shadow: 0 2px 8px var(--shadow-light);
         }
 
-        .search-bar button:hover { 
-            background: #0a4d68; 
+        .search-bar button:hover {
+            background: #0a4d68;
         }
 
-        .header-right { 
-            display: flex; 
-            align-items: center; 
-            gap: 18px; 
-            overflow-x: auto; 
-            white-space: nowrap; 
-            max-width: 250px; 
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            overflow-x: auto;
+            white-space: nowrap;
+            max-width: 250px;
         }
 
         .account-link {
@@ -149,11 +149,11 @@
             cursor: pointer;
         }
 
-        .user-info-box { 
-            position: relative; 
-            display: flex; 
-            align-items: center; 
-            gap: 4px; 
+        .user-info-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .user-info-box:hover .account-menu-list,
@@ -593,24 +593,24 @@
 
         /* Responsive Design */
         @media (max-width: 900px) {
-            .main-header { 
-                padding: 0 8px; 
+            .main-header {
+                padding: 0 8px;
             }
-            .search-bar { 
-                width: 100%; 
-                max-width: 400px; 
+            .search-bar {
+                width: 100%;
+                max-width: 400px;
             }
         }
 
         @media (max-width: 600px) {
-            .main-header { 
-                flex-direction: column; 
-                height: auto; 
-                gap: 8px; 
+            .main-header {
+                flex-direction: column;
+                height: auto;
+                gap: 8px;
                 padding: 10px;
             }
-            .search-bar { 
-                margin: 8px 0; 
+            .search-bar {
+                margin: 8px 0;
             }
         }
 
@@ -721,7 +721,7 @@
                 <label for="media" class="form-label">Ảnh/Video:</label>
                     <input type="file" id="media" name="mediaFiles" multiple accept="image/*,video/*">
                 <small>Chọn tối đa 5 ảnh hoặc video (mỗi file tối đa 10MB).</small>
-                    
+
                     <!-- Preview Container -->
                     <div id="preview-container" class="preview-container" style="display: none;">
                         <h4 class="preview-title">Xem trước:</h4>
@@ -754,7 +754,7 @@
 
         fileInput.addEventListener('change', function(e) {
             const files = Array.from(e.target.files);
-            
+
             // Validate file count
             if (selectedFiles.length + files.length > maxFiles) {
                 alert(`Bạn chỉ có thể chọn tối đa ${maxFiles} file.`);
@@ -858,7 +858,7 @@
         function removeFile(filename) {
             // Remove from selected files
             selectedFiles = selectedFiles.filter(file => file.name !== filename);
-            
+
             // Remove preview item
             const previewItem = document.querySelector(`[data-filename="${filename}"]`);
             if (previewItem) {
@@ -897,7 +897,7 @@
 
         // Add drag and drop functionality
         const dropZone = document.querySelector('.form-group');
-        
+
         ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
             dropZone.addEventListener(eventName, preventDefaults, false);
         });
@@ -930,12 +930,12 @@
         function handleDrop(e) {
             const dt = e.dataTransfer;
             const files = Array.from(dt.files);
-            
+
             // Simulate file input change
             const event = new Event('change', { bubbles: true });
             Object.defineProperty(event, 'target', { value: fileInput });
             Object.defineProperty(event, 'files', { value: files });
-            
+
             fileInput.dispatchEvent(event);
         }
     </script>

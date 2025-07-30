@@ -35,18 +35,6 @@ public class VisitInterceptor implements HandlerInterceptor {
         if ("/home".equals(path)) {
             visitService.logVisit(path, device);
         }
-        if ("/detailproduct".equals(path)) {
-            visitService.logVisit(path, device);
-        }
-        if ("/checkout/preview_realtime".equals(path)) {
-            visitService.logVisit(path, device);
-        }
-        if ("/cart".equals(path)) {
-            visitService.logVisit(path, device);
-        }
-        if ("/checkout/realtime".equals(path)) {
-            visitService.logVisit(path, device);
-        }
 
         return true;
     }
