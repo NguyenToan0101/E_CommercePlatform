@@ -6,7 +6,7 @@
     <title>Chi tiết đơn hàng</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -48,50 +48,86 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
             min-height: 100vh;
-            color: #111 !important;
-            margin: 0;
-            padding: 0;
+            color: #111;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* Header */
+        /* Header Top Bar */
+        .header-top-bar {
+            background: var(--white);
+            color: #111;
+            font-size: 1rem;
+            padding: 0 16px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-gray);
+            width: 100%;
+            box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 101;
+        }
+
+        /* Main Header */
         .main-header {
-            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
             box-shadow: 0 2px 16px var(--shadow-light);
-            border-radius: 0 0 18px 18px;
-            padding: 0 32px;
+            padding: 0 16px;
             height: 88px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             position: sticky;
-            top: 0;
+            top: 38px;
             z-index: 100;
+            width: 100%;
+            box-sizing: border-box;
         }
-        .header-left { display: flex; align-items: center; gap: 18px; }
-        .logo { font-size: 2.6rem; font-weight: 700; color: #111 !important; letter-spacing: 1px; }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
         .logo-img {
-            height: 80px !important;
-            width: auto !important;
+            height: 80px;
+            width: auto;
             display: block;
             margin-right: 8px;
             filter: drop-shadow(0 2px 8px #05bfdb33);
         }
+
         .search-bar {
-            flex: unset;
-            margin: 0 auto;
+            flex: 1;
+            margin: 0 16px;
             display: flex;
             align-items: center;
-            background: #fff;
+            background: var(--white);
             border-radius: 12px;
             box-shadow: 0 2px 12px var(--shadow-light);
             padding: 0 16px;
-            width: 900px;
+            max-width: 900px;
+            width: 100%;
             border: 2px solid #05bfdb22;
         }
+
         .search-bar input {
             border: none;
             background: transparent;
@@ -99,11 +135,12 @@
             flex: 1;
             padding: 12px 0;
             outline: none;
-            color: #111 !important;
+            color: #111;
         }
+
         .search-bar button {
-            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
-            color: #fff;
+            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
+            color: var(--white);
             border: none;
             border-radius: 8px;
             width: 44px;
@@ -116,35 +153,61 @@
             transition: background 0.2s;
             box-shadow: 0 2px 8px var(--shadow-light);
         }
-        .search-bar button:hover { background: #0a4d68; }
-        .header-right { display: flex; align-items: center; gap: 18px; overflow-x: auto; white-space: nowrap; max-width: 250px; }
+
+        .search-bar button:hover {
+            background: var(--gradient-start);
+        }
+
+        .search-bar button:focus,
+        .header-cart-link:focus {
+            outline: 2px solid var(--gradient-end);
+            outline-offset: 2px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            overflow-x: auto;
+            white-space: nowrap;
+            max-width: 250px;
+        }
+
         .account-link {
             font-size: 1rem;
             font-weight: 600;
-            color: #111 !important;
+            color: #111;
             background: none;
             padding: 0 0 0 2px;
             text-decoration: none;
             position: relative;
             cursor: pointer;
         }
-        .user-info-box { position: relative; display: flex; align-items: center; gap: 4px; }
+
+        .user-info-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
         .user-info-box:hover .account-menu-list,
         .user-info-box:focus-within .account-menu-list {
             display: block;
             opacity: 1;
             visibility: visible;
         }
+
         .account-menu-list {
             display: none;
             position: fixed;
             top: 72px;
             right: 32px;
-            background: #fff;
+            background: var(--white);
             min-width: 200px;
             border-radius: 16px;
             box-shadow: 0 16px 48px rgba(16,42,67,0.13);
-            border: 1px solid #e0e7ef;
+            border: 1px solid var(--accent-gray);
             overflow: visible;
             z-index: 9999;
             animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -152,10 +215,12 @@
             visibility: hidden;
             transition: opacity 0.2s, visibility 0.2s;
         }
+
         @keyframes slideDown {
             from { opacity: 0; transform: translateY(-8px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
+
         .account-menu-list::before {
             content: '';
             position: absolute;
@@ -163,12 +228,13 @@
             right: 20px;
             width: 12px;
             height: 12px;
-            background: #fff;
-            border: 1px solid #e0e7ef;
+            background: var(--white);
+            border: 1px solid var(--accent-gray);
             border-bottom: none;
             border-right: none;
             transform: rotate(45deg);
         }
+
         .account-menu-list a {
             color: var(--primary-black);
             padding: 12px 20px;
@@ -183,20 +249,23 @@
             white-space: normal;
             word-break: break-word;
         }
+
         .account-menu-list a:hover {
             background: var(--accent-gray);
             border-left-color: var(--gradient-mid);
             color: var(--gradient-mid);
             transform: translateX(4px);
         }
+
         .account-menu-list a:not(:last-child) {
-            border-bottom: 1px solid #e0e7ef;
+            border-bottom: 1px solid var(--accent-gray);
         }
+
         .user-avatar {
             width: auto;
             height: auto;
             background: none;
-            color: #fff;
+            color: var(--white);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -206,6 +275,7 @@
             overflow: visible;
             padding: 0;
         }
+
         .user-avatar img {
             width: 32px;
             height: 32px;
@@ -213,6 +283,7 @@
             border-radius: 50%;
             display: block;
         }
+
         .header-cart-link {
             display: flex;
             align-items: center;
@@ -222,44 +293,35 @@
             cursor: pointer;
             text-decoration: none;
         }
+
         .header-cart-link img {
             height: 40px;
             width: 40px;
             filter: drop-shadow(0 2px 8px #05bfdb33);
         }
+
         .header-cart-link:hover img {
             transform: scale(1.08) rotate(-8deg);
             filter: drop-shadow(0 4px 16px #08839566);
         }
 
-        /* Header Top Bar */
-        .header-top-bar {
-            background: #fff;
-            color: #111;
-            font-size: 1rem;
-            padding: 0 32px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #e5eaf2;
-        }
-
         /* Layout */
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-            padding: 40px 20px;
+            max-width: 100vw;
+            width: 100%;
+            margin: 0;
+            padding: 40px 16px;
             display: flex;
             gap: 30px;
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            flex: 1;
+            min-height: calc(100vh - 126px);
+            box-sizing: border-box;
         }
 
         /* Sidebar Navigation */
         .sidebar-nav {
             width: 20%;
+            min-width: 200px;
             background: var(--white);
             border-radius: 16px;
             box-shadow: 0 8px 32px var(--shadow-light);
@@ -313,6 +375,11 @@
             border-left-color: var(--white);
         }
 
+        .nav-item:focus {
+            outline: 2px solid var(--gradient-end);
+            outline-offset: 2px;
+        }
+
         .nav-item svg {
             width: 18px;
             height: 18px;
@@ -323,77 +390,56 @@
         /* Main Content Area */
         .main-content {
             width: 80%;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header {
-            background: var(--white);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 4px 20px var(--shadow-light);
-            border-bottom: 3px solid var(--teal-gradient-start);
-            margin-bottom: 20px;
-        }
-
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            color: var(--teal-gradient-end);
-            text-align: center;
-            margin-bottom: 10px;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .header .icon {
-            color: var(--teal-gradient-start);
-            font-size: 36px;
-        }
-
-        .header p {
-            text-align: center;
-            color: var(--text-gray);
-            font-size: 16px;
-            font-weight: 500;
         }
 
         /* Customer Info Section */
         .customer-info {
+            max-width: 1200px;
+            width: 100%;
             background: var(--white);
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 8px 32px var(--shadow-medium);
             margin-bottom: 20px;
             border: 2px solid var(--border-gray);
+            position: relative;
+        }
+
+        .customer-info::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 50%, var(--gradient-start) 100%);
         }
 
         .customer-info h2 {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-dark);
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gradient-start);
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
             padding-bottom: 10px;
             border-bottom: 2px solid var(--teal-gradient-start);
+            position: relative;
         }
 
-        .customer-info .section-icon {
-            color: var(--teal-gradient-start);
-            font-size: 20px;
+        .customer-info h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--gradient-end);
         }
 
         .info-grid {
@@ -419,6 +465,11 @@
             box-shadow: 0 4px 16px var(--shadow-medium);
         }
 
+        .info-item:focus {
+            outline: 2px solid var(--gradient-end);
+            outline-offset: 2px;
+        }
+
         .info-item .item-icon {
             color: var(--teal-gradient-start);
             font-size: 18px;
@@ -440,24 +491,49 @@
 
         /* Products Section */
         .products-section {
+            max-width: 1200px;
+            width: 100%;
             background: var(--white);
             padding: 30px;
-            borderpatial: 20px;
+            border-radius: 20px;
             box-shadow: 0 8px 32px var(--shadow-medium);
             margin-bottom: 20px;
             border: 2px solid var(--border-gray);
+            position: relative;
+        }
+
+        .products-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 50%, var(--gradient-start) 100%);
         }
 
         .products-section h2 {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-dark);
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gradient-start);
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
             padding-bottom: 10px;
             border-bottom: 2px solid var(--teal-gradient-start);
+            position: relative;
+        }
+
+        .products-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--gradient-end);
         }
 
         .table-container {
@@ -501,35 +577,34 @@
             padding: 16px 12px;
             border-bottom: 1px solid var(--border-gray);
             vertical-align: middle;
-            white-space: nowrap;
             text-align: center;
         }
 
         .products-table td:nth-child(1) {
             text-align: center;
-            width: 100px;
+            min-width: 50px;
         }
 
         .products-table td:nth-child(2) {
             text-align: left;
-            width: 200px;
+            min-width: 200px;
         }
 
         .products-table td:nth-child(3),
         .products-table td:nth-child(4) {
             text-align: center;
-            width: 80px;
+            min-width: 80px;
         }
 
         .products-table td:nth-child(5) {
             text-align: center;
-            width: 80px;
+            min-width: 80px;
         }
 
         .products-table td:nth-child(6),
         .products-table td:nth-child(7) {
             text-align: right;
-            width: 120px;
+            min-width: 120px;
         }
 
         .products-table tbody tr {
@@ -571,7 +646,6 @@
             color: var(--text-dark);
             max-width: 200px;
             text-align: left;
-            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             transition: color 0.3s ease;
@@ -615,6 +689,18 @@
             min-width: 100px;
         }
 
+        .return-checkbox {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--gradient-end);
+        }
+
+        .return-checkbox:focus {
+            outline: 2px solid var(--gradient-end);
+            outline-offset: 2px;
+        }
+
         .review-btn {
             display: inline-flex;
             align-items: center;
@@ -637,30 +723,56 @@
             box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
         }
 
-        .review-btn.loading::after {
-            border-top: 2px solid var(--white);
+        .review-btn:focus {
+            outline: 2px solid var(--gradient-end);
+            outline-offset: 2px;
         }
 
         /* Total Section */
         .total-section {
+            max-width: 1200px;
+            width: 100%;
             background: var(--white);
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 8px 32px var(--shadow-medium);
             border: 2px solid var(--success-border);
             margin-bottom: 20px;
+            position: relative;
+        }
+
+        .total-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 50%, var(--gradient-start) 100%);
         }
 
         .total-section h2 {
-            font-size: 24px;
-            font-weight: 600;
-            color: var(--text-dark);
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gradient-start);
             margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
             padding-bottom: 10px;
             border-bottom: 2px solid var(--teal-gradient-start);
+            position: relative;
+        }
+
+        .total-section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--gradient-end);
         }
 
         .total-row {
@@ -709,6 +821,8 @@
         }
 
         .actions {
+            max-width: 1200px;
+            width: 100%;
             display: flex;
             gap: 15px;
             justify-content: center;
@@ -726,6 +840,11 @@
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             border: 2px solid transparent;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .action-btn:focus {
+            outline: 2px solid var(--gradient-end);
+            outline-offset: 2px;
         }
 
         .btn-danger {
@@ -791,11 +910,24 @@
             box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
         }
 
-        .products-table td:nth-child(6),
-        .products-table td:nth-child(7),
-        .products-table td:nth-child(8) {
-            text-align: right;
-            min-width: 100px;
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
         /* Responsive Design */
@@ -803,31 +935,31 @@
             .container {
                 flex-direction: column;
                 gap: 20px;
-                padding: 0 10px;
+                padding: 20px 10px;
             }
+
             .sidebar-nav {
                 width: 100%;
+                min-width: unset;
                 position: static;
+                order: 2;
             }
+
             .main-content {
                 width: 100%;
-            }
-
-            .header {
-                padding: 20px;
-                border-radius: 16px;
-            }
-
-            .header h1 {
-                font-size: 24px;
-                flex-direction: column;
-                gap: 10px;
+                order: 1;
             }
 
             .customer-info,
             .products-section,
             .total-section {
                 padding: 20px;
+            }
+
+            .customer-info h2,
+            .products-section h2,
+            .total-section h2 {
+                font-size: 24px;
             }
 
             .info-grid {
@@ -840,9 +972,32 @@
                 font-size: 14px;
             }
 
+            .products-table td:nth-child(1) {
+                min-width: 40px;
+            }
+
+            .products-table td:nth-child(2) {
+                min-width: 150px;
+            }
+
+            .products-table td:nth-child(3),
+            .products-table td:nth-child(4),
+            .products-table td:nth-child(5) {
+                min-width: 60px;
+            }
+
+            .products-table td:nth-child(6),
+            .products-table td:nth-child(7) {
+                min-width: 80px;
+            }
+
             .product-image {
                 width: 60px;
                 height: 60px;
+            }
+
+            .product-name {
+                max-width: 150px;
             }
 
             .actions {
@@ -851,37 +1006,50 @@
 
             .action-btn {
                 justify-content: center;
-            }
-
-            .products-table td {
-                white-space: normal;
-                word-break: break-word;
-            }
-
-            .products-table td:nth-child(6),
-            .products-table td:nth-child(7),
-            .products-table td:nth-child(8) {
-                min-width: 80px;
+                padding: 10px 20px;
                 font-size: 14px;
-            }
-
-            .total-value {
-                min-width: 100px;
-                font-size: 14px;
-            }
-
-            .grand-total .total-value {
-                font-size: 20px;
-                min-width: 120px;
             }
 
             .review-btn {
                 padding: 6px 12px;
                 font-size: 12px;
             }
+
+            .search-bar {
+                margin: 0 8px;
+                padding: 0 12px;
+            }
+
+            .search-bar input {
+                font-size: 1rem;
+            }
+
+            .main-header {
+                padding: 0 8px;
+            }
+
+            .header-top-bar {
+                padding: 0 8px;
+            }
         }
 
         @media (max-width: 480px) {
+            .container {
+                padding: 10px 5px;
+            }
+
+            .customer-info,
+            .products-section,
+            .total-section {
+                padding: 15px;
+            }
+
+            .customer-info h2,
+            .products-section h2,
+            .total-section h2 {
+                font-size: 20px;
+            }
+
             .products-table {
                 font-size: 12px;
             }
@@ -891,16 +1059,34 @@
                 padding: 8px 4px;
             }
 
+            .products-table td:nth-child(1) {
+                min-width: 30px;
+            }
+
+            .products-table td:nth-child(2) {
+                min-width: 120px;
+            }
+
+            .products-table td:nth-child(3),
+            .products-table td:nth-child(4),
+            .products-table td:nth-child(5) {
+                min-width: 50px;
+            }
+
+            .products-table td:nth-child(6),
+            .products-table td:nth-child(7) {
+                min-width: 70px;
+                font-size: 12px;
+            }
+
             .product-name {
                 max-width: 120px;
                 font-size: 12px;
             }
 
-            .products-table td:nth-child(6),
-            .products-table td:nth-child(7),
-            .products-table td:nth-child(8) {
-                min-width: 70px;
-                font-size: 12px;
+            .product-image {
+                width: 50px;
+                height: 50px;
             }
 
             .total-value {
@@ -913,9 +1099,58 @@
                 min-width: 100px;
             }
 
+            .action-btn {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+
             .review-btn {
                 padding: 4px 8px;
                 font-size: 10px;
+            }
+
+            .search-bar {
+                margin: 0 4px;
+                padding: 0 8px;
+            }
+
+            .main-header {
+                padding: 0 4px;
+            }
+
+            .header-top-bar {
+                padding: 0 4px;
+            }
+        }
+
+        /* Focus states for accessibility */
+        .nav-item:focus,
+        .info-item:focus,
+        .product-row:focus,
+        .action-btn:focus,
+        .review-btn:focus,
+        .return-checkbox:focus {
+            outline: 2px solid var(--gradient-end);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .customer-info,
+            .products-section,
+            .total-section,
+            .action-btn,
+            .review-btn {
+                border: 3px solid var(--primary-black);
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
 
@@ -923,6 +1158,7 @@
         .loading {
             opacity: 0.7;
             pointer-events: none;
+            position: relative;
         }
 
         .loading::after {
@@ -934,7 +1170,7 @@
             height: 20px;
             margin: -10px 0 0 -10px;
             border: 2px solid transparent;
-            border-top: 2px solid currentColor;
+            border-top: 2px solid var(--white);
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
@@ -947,7 +1183,7 @@
 </head>
 <body>
 <!-- Header Top Bar -->
-<div class="header-top-bar" style="background: #fff; color: #111; font-size: 1rem; padding: 0 32px; height: 38px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5eaf2;">
+<div class="header-top-bar">
     <div class="header-top-left" style="display: flex; align-items: center; gap: 18px;">
         <a th:href="@{/seller}" style="color: #111; text-decoration: none; font-weight: 600;">Kênh Người Bán</a>
         <span style="color: #bbb;">|</span>
@@ -960,7 +1196,12 @@
         </a>
     </div>
     <div class="header-top-right" style="display: flex; align-items: center; gap: 18px;">
-        <a href="#" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/></svg> Thông Báo</a>
+        <a href="#" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/>
+            </svg>
+            Thông Báo
+        </a>
         <th:block th:if="${customer}">
             <div class="user-info-box">
                 <div class="user-avatar" th:if="${customer.image != null && !#strings.isEmpty(customer.image)}" style="background: none;">
@@ -982,15 +1223,18 @@
 </div>
 <!-- Main Header -->
 <header class="main-header">
-    <div class="header-left" style="display: flex; align-items: center; gap: 18px;">
+    <div class="header-left">
         <a th:href="@{/home}" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
             <img src="/logo/logo.png" alt="Logo" class="logo-img" />
         </a>
     </div>
-    <form class="search-bar" action="/search_name" method="GET" style="max-width: 900px; margin: 0 auto;">
-        <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
+    <form class="search-bar" action="/search_name" method="GET">
+        <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." th:value="${keyword}" />
         <button type="submit" aria-label="Tìm kiếm">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
+            </svg>
         </button>
     </form>
     <a href="/cart" class="header-cart-link" title="Giỏ hàng">
@@ -1005,8 +1249,8 @@
             <div class="nav-title">Tài khoản</div>
             <a th:href="@{/customers/profile}" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12.5 19H5C5 19 5 16 5 15C5 14 6 13 7 13H17C18 13 19 14 19 15C19 16 19 19 19 19H16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 Thông tin cá nhân
             </a>
@@ -1019,13 +1263,13 @@
             </a>
             <a th:href="@{/customers/change-password}" class="nav-item">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M15 7C15 7.53043 14.7893 8.03914 14.4142 8.41421C14.0391 8.78929 13.5304 9 13 9C12.4696 9 11.9609 8.78929 11.5858 8.41421C11.2107 8.03914 11 7.53043 11 7C11 6.46957 11.2107 5.96086 11.5858 5.58579C11.9609 5.21071 12.4696 5 13 5C13.5304 5 14.0391 5.21071 14.4142 5.58579C14.7893 5.96086 15 6.46957 15 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M10 14C9.20435 14 8.44129 14.3161 7.87868 14.8787C7.31607 15.4413 7 16.2044 7 17V19C7 19.5304 7.21071 20.0391 7.58579 20.4142C7.96086 20.7893 8.46957 21 9 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V17C19 16.2044 18.6839 15.4413 18.1213 14.8787C17.5587 14.3161 16.7956 14 16 14H10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 15V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 Đổi mật khẩu
             </a>
         </div>
-
         <div class="nav-section">
             <div class="nav-title">Dịch vụ</div>
             <a th:href="@{/wallet}" class="nav-item">
@@ -1049,7 +1293,6 @@
                 Đơn mua
             </a>
         </div>
-
         <div class="nav-section">
             <div class="nav-title">Khác</div>
             <a th:href="@{/home}" class="nav-item">
@@ -1064,28 +1307,24 @@
 
     <!-- Main Content Area -->
     <div class="main-content" th:attr="data-order-id=${order.id}">
-
         <!-- Customer Information Section -->
         <div class="customer-info">
             <h2>
                 <i class="fas fa-user section-icon"></i>
                 Thông tin khách hàng
             </h2>
-
             <div class="info-grid">
-                <div class="info-item">
+                <div class="info-item" tabindex="0">
                     <i class="fas fa-user item-icon"></i>
                     <span class="label">Họ tên:</span>
                     <span class="value" th:text="${order.fullname}">Nguyễn Văn A</span>
                 </div>
-
-                <div class="info-item">
+                <div class="info-item" tabindex="0">
                     <i class="fas fa-phone item-icon"></i>
                     <span class="label">Số điện thoại:</span>
                     <span class="value" th:text="${order.phone}">0123456789</span>
                 </div>
-
-                <div class="info-item">
+                <div class="info-item" tabindex="0">
                     <i class="fas fa-map-marker-alt item-icon"></i>
                     <span class="label">Địa chỉ:</span>
                     <span class="value" th:text="${order.address}">123 Đường ABC, Quận XYZ, TP.HCM</span>
@@ -1099,7 +1338,6 @@
                 <i class="fas fa-shopping-bag section-icon"></i>
                 Danh sách sản phẩm
             </h2>
-
             <div class="table-container">
                 <table class="products-table">
                     <thead>
@@ -1115,7 +1353,7 @@
                     </tr>
                     </thead>
                     <tbody id="products-tbody">
-                    <tr th:each="item : ${items}" class="product-row">
+                    <tr th:each="item : ${items}" class="product-row" tabindex="0">
                         <td th:if="${order.status == 'Đã giao'}">
                             <input type="checkbox" class="return-checkbox" th:value="${item.orderitemid}" th:attr="data-product-id=${item.productId}" />
                         </td>
@@ -1156,7 +1394,6 @@
                 <i class="fas fa-calculator section-icon"></i>
                 Tổng số lượng
             </h2>
-
             <div class="total-row">
                 <span class="total-label">Tổng số lượng:</span>
                 <span class="total-value" id="total-quantity">0 sản phẩm</span>
@@ -1181,20 +1418,16 @@
 
         <!-- Actions -->
         <div class="actions">
-            <!-- Nút hủy hàng cho trạng thái "Chờ xác nhận" và "Đã xác nhận" -->
             <a th:if="${order.status == 'Chờ xác nhận' || order.status == 'Đã xác nhận'}"
                th:href="@{/cancel(id=${order.id})}" class="action-btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')">
                 <i class="fas fa-times-circle"></i>
                 Hủy hàng
             </a>
-
-            <!-- Nút Trả hàng/Hoàn tiền và Đánh giá sản phẩm cho trạng thái "Đã giao" -->
             <a th:if="${order.status == 'Đã giao'}"
                href="#" class="action-btn btn-warning" id="return-btn">
                 <i class="fas fa-undo-alt"></i>
                 Trả hàng/Hoàn tiền
             </a>
-
             <a th:if="${order.status == 'Đã giao'}"
                href="#" class="action-btn btn-success" id="review-btn">
                 <i class="fas fa-star"></i>
@@ -1205,17 +1438,108 @@
 </div>
 
 <script>
-    // Calculate totals when page loads
     document.addEventListener('DOMContentLoaded', function() {
         calculateTotals();
         animateElements();
+        setupSingleCheckbox();
+
+        // Enhance nav items with hover effects
+        const navItems = document.querySelectorAll('.nav-item');
+        navItems.forEach(item => {
+            const svg = item.querySelector('svg');
+            item.addEventListener('mouseenter', function() {
+                if (svg) svg.style.transform = 'scale(1.1)';
+            });
+            item.addEventListener('mouseleave', function() {
+                if (svg) svg.style.transform = '';
+            });
+        });
+
+        // Add keyboard navigation for nav items
+        const navLinks = document.querySelectorAll('.nav-item');
+        navLinks.forEach((link, index) => {
+            link.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const nextLink = navLinks[index + 1] || navLinks[0];
+                    nextLink.focus();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const prevLink = navLinks[index - 1] || navLinks[navLinks.length - 1];
+                    prevLink.focus();
+                }
+            });
+        });
+
+        // Add keyboard navigation for product rows
+        const productRows = document.querySelectorAll('.product-row');
+        productRows.forEach((row, index) => {
+            row.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const nextRow = productRows[index + 1] || productRows[0];
+                    nextRow.focus();
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const prevRow = productRows[index - 1] || productRows[productRows.length - 1];
+                    prevRow.focus();
+                } else if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    const checkbox = row.querySelector('.return-checkbox');
+                    if (checkbox) checkbox.click();
+                }
+            });
+        });
+
+        // Header menu functionality
+        const userInfoBox = document.querySelector('.user-info-box');
+        const menu = document.querySelector('.account-menu-list');
+        let hideTimeout;
+        if (userInfoBox && menu) {
+            userInfoBox.addEventListener('mouseenter', () => {
+                clearTimeout(hideTimeout);
+                menu.style.display = 'block';
+                menu.style.opacity = '1';
+                menu.style.visibility = 'visible';
+            });
+            userInfoBox.addEventListener('mouseleave', () => {
+                hideTimeout = setTimeout(() => {
+                    menu.style.display = '';
+                    menu.style.opacity = '';
+                    menu.style.visibility = '';
+                }, 400);
+            });
+            menu.addEventListener('mouseenter', () => {
+                clearTimeout(hideTimeout);
+                menu.style.display = 'block';
+                menu.style.opacity = '1';
+                menu.style.visibility = 'visible';
+            });
+            menu.addEventListener('mouseleave', () => {
+                hideTimeout = setTimeout(() => {
+                    menu.style.display = '';
+                    menu.style.opacity = '';
+                    menu.style.visibility = '';
+                }, 400);
+            });
+        }
+
+        // Add loading animation to action buttons and review buttons
+        document.querySelectorAll('.action-btn, .review-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                this.classList.add('loading');
+                setTimeout(() => {
+                    this.classList.remove('loading');
+                }, 2000);
+            });
+        });
     });
 
     function calculateTotals() {
         const productRows = document.querySelectorAll('.product-row');
         let totalQuantity = 0;
         let subtotal = 0;
-        const shippingFee = 0; // Free shipping
+        const shippingFee = 0;
 
         productRows.forEach(row => {
             const quantityElement = row.querySelector('.quantity-badge');
@@ -1227,10 +1551,8 @@
                 const unitPrice = parseInt(unitPriceElement.getAttribute('data-price')) || 0;
                 const itemTotal = quantity * unitPrice;
 
-                // Update item total in the table
                 itemTotalElement.textContent = formatCurrency(itemTotal);
 
-                // Add to totals
                 totalQuantity += quantity;
                 subtotal += itemTotal;
             }
@@ -1238,13 +1560,11 @@
 
         const grandTotal = subtotal + shippingFee;
 
-        // Update total displays
         document.getElementById('total-quantity').textContent = totalQuantity + ' sản phẩm';
         document.getElementById('subtotal').textContent = formatCurrency(subtotal);
         document.getElementById('shipping-fee').textContent = 'Miễn phí';
         document.getElementById('grand-total').textContent = formatCurrency(grandTotal);
 
-        // Animate the grand total
         animateValue('grand-total', 0, grandTotal, 1000);
     }
 
@@ -1259,8 +1579,6 @@
         function updateValue(currentTime) {
             const elapsed = currentTime - startTime;
             const progress = Math.min(elapsed / duration, 1);
-
-            // Easing function for smooth animation
             const easeOutCubic = 1 - Math.pow(1 - progress, 3);
             const currentValue = Math.floor(start + (end - start) * easeOutCubic);
 
@@ -1275,14 +1593,11 @@
     }
 
     function animateElements() {
-        // Animate sections in sequence
-        const sections = ['.customer-info', '.products-section', '.total-section'];
-
+        const sections = ['.customer-info', '.products-section', '.total-section', '.actions'];
         sections.forEach((selector, index) => {
             const section = document.querySelector(selector);
             section.style.opacity = '0';
             section.style.transform = 'translateY(30px)';
-
             setTimeout(() => {
                 section.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
                 section.style.opacity = '1';
@@ -1290,12 +1605,10 @@
             }, 200 + (index * 200));
         });
 
-        // Animate product rows
         const productRows = document.querySelectorAll('.product-row');
         productRows.forEach((row, index) => {
             row.style.opacity = '0';
             row.style.transform = 'translateX(-20px)';
-
             setTimeout(() => {
                 row.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
                 row.style.opacity = '1';
@@ -1304,43 +1617,6 @@
         });
     }
 
-    // Add loading animation to action buttons and review buttons
-    document.querySelectorAll('.action-btn, .review-btn').forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            this.classList.add('loading');
-
-            setTimeout(() => {
-                this.classList.remove('loading');
-            }, 2000);
-        });
-    });
-
-    // Hàm trả hàng/hoàn tiền
-    function returnOrder() {
-        if (confirm('Bạn có muốn yêu cầu trả hàng/hoàn tiền cho đơn hàng này?')) {
-            // Thêm logic trả hàng/hoàn tiền ở đây
-            alert('Đã gửi yêu cầu trả hàng/hoàn tiền. Chúng tôi sẽ liên hệ với bạn sớm nhất.');
-        }
-    }
-
-    // Hàm đánh giá sản phẩm
-    function reviewProducts() {
-        // Chuyển đến trang đánh giá sản phẩm
-        window.location.href = '/review?orderId=' + document.querySelector('[data-order-id]')?.getAttribute('data-order-id') || '';
-    }
-
-    // Add hover effects to product rows
-    document.querySelectorAll('.product-row').forEach(row => {
-        row.addEventListener('mouseenter', function() {
-            this.style.boxShadow = '0 4px 20px rgba(74, 155, 155, 0.2)';
-        });
-
-        row.addEventListener('mouseleave', function() {
-            this.style.boxShadow = 'none';
-        });
-    });
-
-    // Chỉ cho phép chọn 1 checkbox, các checkbox khác sẽ bị disable khi đã chọn 1 sản phẩm
     function setupSingleCheckbox() {
         const checkboxes = document.querySelectorAll('.return-checkbox');
         checkboxes.forEach(cb => {
@@ -1357,7 +1633,6 @@
             });
         });
     }
-    if (document.querySelector('.return-checkbox')) setupSingleCheckbox();
 
     document.getElementById('return-btn')?.addEventListener('click', function(e) {
         e.preventDefault();

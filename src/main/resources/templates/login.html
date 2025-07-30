@@ -377,9 +377,9 @@
                             </svg>
                         </button>
                     </div>
-                    
+
                     <div class="input-group">
-                        <input class="input-field" type="text" name="email" placeholder="Email/Số điện thoại/Tên đăng nhập" required autocomplete="username">
+                        <input class="input-field" type="text" name="email" placeholder="Email" required autocomplete="username">
                 </div>
 
                     <div class="input-group">
@@ -390,9 +390,9 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <div th:if="${errorMessage}" class="error-message" th:text="${errorMessage}"></div>
-                    
+
                     <button class="login-button" type="submit">ĐĂNG NHẬP</button>
 
                 <div class="forgot-password">
@@ -419,7 +419,7 @@
                             Google
                         </a>
                     </div>
-                    
+
                     <div class="register-section">
                         Bạn mới biết đến MUSA?
                         <a th:href="@{/customers/register}">Đăng ký</a>
@@ -433,7 +433,7 @@
         function togglePassword() {
         const passwordInput = document.getElementById('password');
             const toggleBtn = document.querySelector('.password-toggle i');
-            
+
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 toggleBtn.className = 'fas fa-eye-slash';
