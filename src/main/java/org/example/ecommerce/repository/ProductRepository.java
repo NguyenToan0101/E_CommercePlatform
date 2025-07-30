@@ -68,8 +68,88 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     """)
     Optional<Product> findWithAllById(@Param("id") Integer id);
 
+    @EntityGraph(attributePaths = {
+            "shopid",
+            "categoryid",
+            "inventories",
+            "productimages",
+            "reviews",
+            "wishlists"
+    })
+    @Query("""
+      SELECT DISTINCT p FROM Product p
+      LEFT JOIN FETCH p.inventories
+      LEFT JOIN FETCH p.productimages
+      LEFT JOIN FETCH p.shopid
+      LEFT JOIN FETCH p.categoryid
+      LEFT JOIN FETCH p.reviews
+      LEFT JOIN FETCH p.wishlists
+      WHERE p.id = :id
+    """)
+    Optional<Product> findWithAllRelationsById(@Param("id") Integer id);
+
     List<Product> findByStatusAndLockedUntilBefore(String status, Instant time);
 
 
     List<Product> findAllByShopid_Id(Integer shopidId);
+
+    @Query("""
+        SELECT p.id, p.name, p.status, p.createdat,
+               s.fulladdress,
+               (SELECT MIN(i.price) FROM Inventory i WHERE i.productid.id = p.id),
+               (SELECT COALESCE(SUM(i.solditems), 0) FROM Inventory i WHERE i.productid.id = p.id AND i.solditems IS NOT NULL)
+        FROM Product p
+        LEFT JOIN p.shopid s
+        WHERE p.status = 'available'
+        ORDER BY p.createdat DESC
+    """)
+    List<Object[]> findAvailableProductsOptimized();
+
+    @Query("""
+        SELECT p.id, p.name, p.description, p.status, p.createdat,
+               s.id as shopId, s.shopname, s.fulladdress, s.description as shopDescription, s.imageshop,
+               c.id as categoryId, c.categoryname,
+               (SELECT COALESCE(SUM(i.solditems), 0) FROM Inventory i WHERE i.productid.id = p.id AND i.solditems IS NOT NULL)
+        FROM Product p
+        LEFT JOIN p.shopid s
+        LEFT JOIN p.categoryid c
+        WHERE p.id = :productId
+    """)
+    List<Object[]> findProductDetailOptimized(@Param("productId") Integer productId);
+
+    @Query("""
+        SELECT p.id, p.name, p.status, p.createdat,
+               s.fulladdress,
+               (SELECT MIN(i.price) FROM Inventory i WHERE i.productid.id = p.id),
+               (SELECT COALESCE(SUM(i.solditems), 0) FROM Inventory i WHERE i.productid.id = p.id AND i.solditems IS NOT NULL)
+        FROM Product p
+        LEFT JOIN p.shopid s
+        WHERE p.status = 'available' AND s.id = :shopId
+        ORDER BY p.createdat DESC
+    """)
+    List<Object[]> findAvailableProductsByShopIdOptimized(@Param("shopId") Integer shopId);
+
+    @Query("""
+        SELECT p.id, p.name, p.status, p.createdat,
+               s.fulladdress,
+               (SELECT MIN(i.price) FROM Inventory i WHERE i.productid.id = p.id),
+               (SELECT COALESCE(SUM(i.solditems), 0) FROM Inventory i WHERE i.productid.id = p.id AND i.solditems IS NOT NULL)
+        FROM Product p
+        LEFT JOIN p.shopid s
+        WHERE p.status = 'available' AND p.categoryid.id IN :categoryIds
+        ORDER BY p.createdat DESC
+    """)
+    List<Object[]> findAvailableProductsByCategoryIdsOptimized(@Param("categoryIds") List<Integer> categoryIds);
+
+    @Query("""
+        SELECT p.id, p.name, p.status, p.createdat,
+               s.fulladdress,
+               (SELECT MIN(i.price) FROM Inventory i WHERE i.productid.id = p.id),
+               (SELECT COALESCE(SUM(i.solditems), 0) FROM Inventory i WHERE i.productid.id = p.id AND i.solditems IS NOT NULL)
+        FROM Product p
+        LEFT JOIN p.shopid s
+        WHERE p.status = 'available' AND LOWER(p.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        ORDER BY p.createdat DESC
+    """)
+    List<Object[]> findAvailableProductsByNameOptimized(@Param("keyword") String keyword);
 }

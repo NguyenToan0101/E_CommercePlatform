@@ -30,9 +30,9 @@ public class ComplaintDetailDTO {
 
     // từng nhóm
     private ProductInfo product;      // nếu category=product
-    private ReviewInfo review;        // nếu category=review
-    private PaymentInfo payment;      // nếu category=payment
-    private ShippingInfo shipping;    // nếu category=shipping
+    private ReviewInfo review;
+    private PaymentInfo payment;
+    private ShippingInfo shipping;
 
     // ảnh chung (payment & shipping)
     private List<String> complaintImages;

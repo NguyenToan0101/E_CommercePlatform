@@ -151,12 +151,16 @@ public class CheckoutController {
         System.out.println("dis" + voucherDiscount);
         System.out.println("free" + voucherFreeShip);
 
+        // Get wallet for customer
+        Wallet wallet = walletService.getOrCreateWallet(customer);
+        
         model.addAttribute("voucherDiscount", voucherDiscount);
         model.addAttribute("voucherFreeShip", voucherFreeShip);
         model.addAttribute("price", preview.getPrice().intValueExact());
 
         model.addAttribute("items", preview);
         model.addAttribute("customer", customer);
+        model.addAttribute("wallet", wallet);
         return "customer/wallet/checkout-preview";
     }
 

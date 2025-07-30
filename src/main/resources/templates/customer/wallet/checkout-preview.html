@@ -1190,7 +1190,7 @@
                 <div id="payment-method-desc" style="font-size: 15px; color: #222; background: #fff; border-radius: 8px; padding: 10px 16px; border: 1px solid #f59e0b;">
                     <b>Ví MUSA</b> &nbsp; Thanh toán nhanh chóng, an toàn qua ví điện tử MUSA.<br>
                     <span id="wallet-balance-info">
-                        Số dư ví: <span id="wallet-balance-value" th:text="${#numbers.formatDecimal(wallet.balance, 0, 'COMMA', 0, 'POINT')} + ' đ'"></span>
+                        Số dư ví: <span id="wallet-balance-value" th:text="${wallet != null ? #numbers.formatDecimal(wallet.balance, 0, 'COMMA', 0, 'POINT') + ' đ' : '0 đ'}"></span>
                     </span>
                 </div>
                 <div style="text-align: right; margin-top: 10px;">
