@@ -36,7 +36,7 @@ public class CheckoutController {
     private final AddressDTO addressDTOs;
     private final WalletService walletService;
 
-    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs) {
+    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs, WalletService walletService) {
         this.paymentService = paymentService;
         this.promotionService = promotionService;
         this.shippingService = shippingService;
