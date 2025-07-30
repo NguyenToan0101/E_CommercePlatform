@@ -15,6 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -53,12 +54,21 @@ public class ProductServiceImpl implements ProductService {
 
     public ProductDetail getProductDetail(Integer productId) {
         Product product = productRepo.findById(productId).orElse(null);
-        Shop shop = shopRepo.findById(product.getShopid().getId()).orElse(null);
-        List<Inventory> inventories = inventoryRepo.findAllByProductid(product);
-        List<Productimage> images = imageRepo.findAllByProductid(product);
-        List<Review> reviews = reviewRepo.findAllByProductidOrderByCreatedatDesc(product);
-        List<Wishlist> wishlists = wishlistRepo.findAllByProductid(product);
-        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, inventoryRepo.findFirstByProductidOrderByPriceAsc(product).getPrice());
+        Shop shop = product.getShopid();
+        List<Inventory> inventories = product.getInventories();
+        List<Productimage> images = new ArrayList<>(product.getProductimages());
+        List<Review> reviews = new ArrayList<>(product.getReviews());
+        List<Wishlist> wishlists = new ArrayList<>(product.getWishlists());
+
+        float rate = (float) product.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
+
+        int solditems = product.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
+
+        int sumReviewRating = product.getReviews().stream().mapToInt(Review::getRating).sum();
+
+        BigDecimal price = product.getInventoriesView().stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+
+        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, price, rate, solditems, sumReviewRating);
     }
 
     //Admin Product Management

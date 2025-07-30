@@ -45,10 +45,6 @@ public class CustomerServiceImpl implements CustomerService {
             throw new RuntimeException("Email đã tồn tại");
         }
 
-        if (customerRepository.existsByPhone(customer.getPhone())) {
-            throw new RuntimeException("Số điện thoại đã tồn tại");
-        }
-
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         customer.setRole("Customer");
         customer.setStatus(true);
@@ -80,12 +76,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer login(String email, String password) {
         Customer customer = customerRepository.findByEmail(email);
-        if (customer != null
-                && BCrypt.checkpw(password, customer.getPassword())
+
+        if (customer == null) return null;
+
+        String hashedPassword = customer.getPassword();
+
+        if (hashedPassword == null || hashedPassword.isBlank()) return null;
+
+        if (BCrypt.checkpw(password, hashedPassword)
                 && customer.isStatus()
                 && !customer.isLocked()) {
             return customer;
         }
+
         return null;
     }
 
@@ -145,19 +148,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void updateProfile(Customer updatedCustomer) {
-        // lấy customer_aut từ DB
         Customer customer = customerRepository.findById(updatedCustomer.getId()).orElse(null);
         if (customer != null) {
             customer.setFirstname(updatedCustomer.getFirstname());
             customer.setLastname(updatedCustomer.getLastname());
-            if (updatedCustomer.getImage() != null && updatedCustomer.getImage().length > 0) {
+            if (updatedCustomer.getImage() != null) {
                 customer.setImage(updatedCustomer.getImage());
             }
             customer.setPhone(updatedCustomer.getPhone());
             customer.setAddress(updatedCustomer.getAddress());
             customer.setDateofbirth(updatedCustomer.getDateofbirth());
             customer.setGender(updatedCustomer.getGender());
-
             customerRepository.save(customer);
         }
     }

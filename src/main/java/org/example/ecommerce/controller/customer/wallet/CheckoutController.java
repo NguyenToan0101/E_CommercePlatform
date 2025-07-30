@@ -14,6 +14,7 @@ import org.example.ecommerce.service.customer.order.ShippingService;
 import org.example.ecommerce.service.customer.wallet.CartPreviewDTO;
 import org.example.ecommerce.service.customer.wallet.PaymentService;
 import jakarta.servlet.http.HttpSession;
+import org.example.ecommerce.service.customer.wallet.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,8 +34,9 @@ public class CheckoutController {
     private final OderLogService oderLogService;
     private final OderItemService oderItemService;
     private final AddressDTO addressDTOs;
+    private final WalletService walletService;
 
-    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs) {
+    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs, WalletService walletService) {
         this.paymentService = paymentService;
         this.promotionService = promotionService;
         this.shippingService = shippingService;
@@ -42,22 +44,26 @@ public class CheckoutController {
         this.oderLogService = oderLogService;
         this.oderItemService = oderItemService;
         this.addressDTOs = addressDTOs;
+        this.walletService = walletService;
     }
 
     @PostMapping
     public String processCheckout(@RequestParam(value = "cartItemIds", required = false) List<Integer> cartItemIds,
                                   @ModelAttribute Customer customer,
+                                  @RequestParam(value = "walletId", required = false) Integer walletId,
                                   HttpSession session, Model model) {
         Customer customer1 = (Customer) session.getAttribute("customer");
         if (customer1 == null) {
             return "redirect:/login";
         }
-        String result = paymentService.checkout(customer1, cartItemIds, customer.getFirstname() + " " + customer.getLastname(), customer.getPhone(), customer.getAddress());
+        String result = paymentService.checkout(customer1, cartItemIds, customer.getFirstname() + " " + customer.getLastname(), customer.getPhone(), customer.getAddress(), walletId);
         if ("Thanh toán thành công".equals(result)) {
             model.addAttribute("message", result);
+            model.addAttribute("customer", customer1);
             return "/customer/wallet/checkout-success";
         } else {
             model.addAttribute("error", result);
+            model.addAttribute("customer", customer1);
             return "/customer/wallet/checkout-fail";
         }
     }
@@ -66,7 +72,7 @@ public class CheckoutController {
     public String checkoutRealtime(@RequestParam Integer inventory, @RequestParam Integer quantity,
                                    @RequestParam(required = false) Integer freeshipId,
                                    @RequestParam(required = false) Integer discountId,
-                                   @RequestParam BigDecimal  totalPrice,
+                                   @RequestParam(required = false) BigDecimal  totalPrice,
 
                                    @ModelAttribute Customer customer,
                                    HttpSession session, Model model) {
@@ -89,9 +95,11 @@ public class CheckoutController {
             @RequestParam List<Integer> cartItemIds,
             Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
+        Wallet wallet = walletService.getOrCreateWallet(customer);
         List<CartPreviewDTO> preview = paymentService.getCheckoutPreview(customer, cartItemIds);
         model.addAttribute("customer", customer);
         model.addAttribute("items", preview);
+        model.addAttribute("wallet", wallet);
         return "customer/wallet/checkout-preview";
     }
 

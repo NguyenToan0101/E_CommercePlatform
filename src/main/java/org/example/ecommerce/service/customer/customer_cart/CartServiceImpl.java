@@ -45,14 +45,11 @@ public class CartServiceImpl implements CartService {
             dto.setQuantity(item.getQuantity());
             dto.setColor(item.getInventoryid().getColor());
             dto.setDimension(item.getInventoryid().getDimension());
-
-            List<Productimage> images =productimageRepository.findAllByProductid(item.getProductid()) ;
-            if (images != null && images.size() > 0) {
-                dto.setImageUrl(images.get(0).getImageurl());
-            } else {
-                dto.setImageUrl(null);
+            dto.setImageUrl(item.getInventoryid().getImage());
+            if (item.getProductid().getShopid() != null) {
+                dto.setShopId(item.getProductid().getShopid().getId());
+                dto.setShopName(item.getProductid().getShopid().getShopname());
             }
-
             result.add(dto);
         }
         return result;
@@ -67,8 +64,8 @@ public class CartServiceImpl implements CartService {
         }
 
         Product product = productRepository.findById(productId);
-        Inventory inventory = inventoryRepository.findInventoriesById(inventoryId);
-        Cartitem existingItem = cartitemRepository.findCartitemByProductidAndInventoryidAndCartid(product, inventory,cart);
+        Inventory inventory = product.getInventories().stream().filter(i -> i.getId().equals(inventoryId)).findAny().orElse(null);
+        Cartitem existingItem = cart.getCartitems().stream().filter(item -> item.getProductid().equals(product) && item.getInventoryid().equals(inventory)).findAny().orElse(null);
 
         if (existingItem != null) {
             int newQuantity = existingItem.getQuantity() + quantity;

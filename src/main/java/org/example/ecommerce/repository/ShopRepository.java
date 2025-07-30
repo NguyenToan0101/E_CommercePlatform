@@ -72,4 +72,6 @@ WHERE s.id = :shopId
 
     //mo khoa
     List<Shop> findByLockedTrueAndLockedUntilBefore(LocalDateTime now);
+
+    Shop findShopsById(Integer shopid);
 }

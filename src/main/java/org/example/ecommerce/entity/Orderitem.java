@@ -1,16 +1,19 @@
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 @Entity
 @Table(name = "orderitems")
-@Data
+@Getter
+@Setter
 public class Orderitem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,7 +38,10 @@ public class Orderitem {
     @JoinColumn(name = "inventoryid")
     private Inventory inventoryid;
 
+    @Column(name = "promotionid")
     private Integer promotionid;
 
+    @OneToMany(mappedBy = "orderitemsid")
+    private Set<Review> reviews = new LinkedHashSet<>();
 
 }

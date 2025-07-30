@@ -6,6 +6,7 @@ import org.example.ecommerce.service.customer.customer_product.ProductView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,43 +67,23 @@ public class WishlistServiceImpl implements WishlistService {
             Product p = w.getProductid();
 
             if ("available".equals(p.getStatus())) {
+                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
 
-                if (inventoryRepository.findAllByProductid(p).size()>0) {
+                String fullAddress = p.getShopid().getFulladdress();
+                int index = fullAddress.lastIndexOf("-");
+                String shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
 
-                    int totalSold = inventoryRepository.findAllByProductid(p)
-                            .stream()
-                            .mapToInt(Inventory::getSolditems)
-                            .sum();
 
-                    List<Productimage> imgs = productimageRepository.findAllByProductid(p);
-                    String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
-                    String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                    String shopaddress = fullAddress.substring(fullAddress.lastIndexOf(",") + 1).trim();
+                float rate = (float) p.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
 
-                    List<Integer> rates = reviewRepository.findRateById(p.getId());
-                    float rate = 0f;
-                    if (!rates.isEmpty()) {
-                        float sum = 0f;
-                        for (int r : rates) sum += r;
-                        rate = Math.round((sum / rates.size()) * 10f) / 10f;
-                    }
+                int solditems = p.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
 
-                    Integer categoryId = null;
-                    String categoryName = null;
-                    if (p.getCategoryid() != null) {
-                        categoryId = p.getCategoryid().getId();
-                        categoryName = categoryRepository.findById(categoryId).get().getCategoryname();
-                    }
+                BigDecimal price = p.getInventoriesView().stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
 
-                    views.add(new ProductView(
-                            p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold,
-                            imageUrl, shopaddress, rate, categoryId, categoryName
-                    ));
-                }
+                views.add(new ProductView(p.getId(), p.getName(), price, imageUrl, shopaddress, rate, solditems));
             }
         }
         return views;
     }
-
 }

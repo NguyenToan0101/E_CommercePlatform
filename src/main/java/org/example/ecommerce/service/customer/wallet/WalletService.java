@@ -32,7 +32,7 @@ public class WalletService {
             wallet = new Wallet();
             wallet.setCustomerid(customer);
             wallet.setBalance(BigDecimal.ZERO);
-            wallet = walletRepository.save(wallet);
+            walletRepository.save(wallet);
         }
         return wallet;
     }

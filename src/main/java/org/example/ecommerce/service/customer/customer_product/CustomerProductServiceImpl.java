@@ -1,14 +1,14 @@
 package org.example.ecommerce.service.customer.customer_product;
 
-import org.example.ecommerce.entity.Inventory;
-import org.example.ecommerce.entity.Product;
-import org.example.ecommerce.entity.Productimage;
+import org.example.ecommerce.entity.*;
 import org.example.ecommerce.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerProductServiceImpl implements CustomerProductService {
@@ -39,43 +39,65 @@ public class CustomerProductServiceImpl implements CustomerProductService {
         List<ProductView> views = new ArrayList<>();
         for (Product p : products) {
             if (p.getStatus().equals("available")) {
-                List<Inventory> inventories = inventoryRepository.findAllByProductid(p);
-                int totalSold = (inventories == null || inventories.isEmpty())
-                        ? 0
-                        : inventories.stream()
-                        .mapToInt(inv -> inv.getSolditems() != null ? inv.getSolditems() : 0)
-                        .sum();
+
+                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
+
+                String fullAddress = p.getShopid().getFulladdress();
+                int index = fullAddress.lastIndexOf("-");
+                String shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
 
 
-                List<Productimage> imgs = productimageRepository.findAllByProductid(p);
-                String imageUrl = imgs.isEmpty() ? null : imgs.get(0).getImageurl();
 
-                String fullAddress = shopRepository.findById(p.getShopid().getId()).get().getFulladdress();
-                String keyword = "Tỉnh";
-                int index = fullAddress.indexOf(keyword);
-                String shopaddress = (index != -1) ? fullAddress.substring(index + keyword.length()).trim() : fullAddress;
+                float rate = (float) p.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
 
-                List<Integer> rates = reviewRepository.findRateById(p.getId());
-                float rate = 0f;
-                if (!rates.isEmpty()) {
-                    float sum = 0f;
-                    for (int r : rates) {
-                        sum += r;
-                    }
-                    rate = Math.round((sum / rates.size()) * 10f) / 10f;
-                }
+                int solditems = p.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
 
-                Integer categoryId = null;
-                String categoryName = null;
-                if (p.getCategoryid() != null) {
-                    categoryId = p.getCategoryid().getId();
-                    categoryName= categoryRepository.findById(categoryId).get().getCategoryname();
-                }
+                BigDecimal price = p.getInventoriesView().stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
 
-                views.add(new ProductView(p.getId(), p.getName(), (inventoryRepository.findFirstByProductidOrderByPriceAsc(p).getPrice()), totalSold, imageUrl, shopaddress, rate, categoryId, categoryName));
+                views.add(new ProductView(p.getId(), p.getName(), price, imageUrl, shopaddress, rate, solditems));
             }
         }
         return views;
     }
 
+    public List<Category> getCategories() {
+        List<Category> categoryList = new ArrayList<>();
+        for (Category c : categoryRepository.findRootCategories()) {
+            if (c.getId()==313){
+                continue;
+            }
+            categoryList.add(c);
+        }
+        return categoryList;
+    }
+
+    public Shop getShops(Integer shopid) {
+        return shopRepository.findShopsById(shopid);
+    }
+
+    public List<ProductView> getProductViewsByShopId(Integer shopid) {
+        List<Product> products = productRepository.findAllByShopid_Id(shopid);
+        List<ProductView> views = new ArrayList<>();
+        for (Product p : products) {
+            if (p.getStatus().equals("available")) {
+
+                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
+
+                String fullAddress = p.getShopid().getFulladdress();
+                int index = fullAddress.lastIndexOf("-");
+                String shopaddress = (index != -1) ? fullAddress.substring(index + 1).trim() : fullAddress;
+
+
+
+                float rate = (float) p.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
+
+                int solditems = p.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
+
+                BigDecimal price = p.getInventoriesView().stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+
+                views.add(new ProductView(p.getId(), p.getName(), price, imageUrl, shopaddress, rate, solditems));
+            }
+        }
+        return views;
+    }
 }

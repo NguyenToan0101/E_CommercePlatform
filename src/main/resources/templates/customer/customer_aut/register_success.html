@@ -8,254 +8,139 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-blue: #0a4d68;
-            --secondary-blue: #088395;
-            --accent-teal: #05bfdb;
-            --light-green: #8de0a6;
-            --light-gray: #f8f8f8;
-            --border-gray: #e5e5e5;
-            --text-gray: #666666;
-            --white: #ffffff;
-            --gold-accent: #d4af37;
-            --success-green: #10b981;
-            --gmail-red: #ea4335;
-            --shadow-light: rgba(10, 77, 104, 0.05);
-            --shadow-medium: rgba(10, 77, 104, 0.1);
-            --shadow-heavy: rgba(10, 77, 104, 0.15);
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --primary-blue: #0a4d68;
+            --secondary-blue: #088395;
+            --gradient-start: #0a4d68;
+            --gradient-end: #05bfdb;
+            --white: #ffffff;
+            --text-gray: #666666;
+            --border-gray: #e5e5e5;
+            --light-gray: #f8f8f8;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--light-green) 100%);
+            background: var(--white);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
             color: var(--primary-blue);
-            line-height: 1.6;
-            padding: 40px 20px;
             position: relative;
         }
 
-        /* Animated background elements */
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.5;
-            animation: float 20s ease-in-out infinite;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        .container {
-            max-width: 700px;
+        .header {
             width: 100%;
-            position: relative;
-            z-index: 1;
-            margin: 0 auto;
-        }
-
-        /* Logo Section */
-        .logo-section {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            background: var(--white);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-gray);
         }
 
         .logo-container {
-            display: inline-block;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .logo-container:hover {
-            transform: translateY(-2px);
-        }
-
-        .logo-placeholder {
-            width: 140px;
-            height: 60px;
-            background: var(--white);
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-            border-radius: 12px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            justify-content: center;
+        }
+
+        .logo-placeholder, .logo-container img {
+            height: 100px;
+            width: auto;
+            display: block;
+        }
+
+        .help-link {
+            color: var(--secondary-blue);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+        .help-link:hover {
             color: var(--primary-blue);
-            font-size: 11px;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px var(--shadow-light);
         }
 
-        .logo-placeholder:hover {
-            border-color: var(--accent-teal);
-            background: var(--white);
-            transform: scale(1.05);
-        }
-
-        /* Success Container */
         .success-container {
+            width: 100%;
+            max-width: 400px;
             background: var(--white);
-            border-radius: 24px;
-            box-shadow:
-                    0 32px 64px var(--shadow-light),
-                    0 16px 32px var(--shadow-medium),
-                    0 0 0 1px rgba(255, 255, 255, 0.1);
-            overflow: hidden;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .success-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--success-green) 0%, var(--accent-teal) 50%, var(--success-green) 100%);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
         }
 
         .success-header {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            color: var(--white);
-            padding: 50px 40px;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .success-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
+            margin-bottom: 20px;
         }
 
         .success-icon {
-            width: 120px;
-            height: 120px;
-            background: var(--success-green);
+            width: 60px;
+            height: 60px;
+            background: var(--primary-blue);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 30px;
-            position: relative;
-            overflow: hidden;
-            animation: pulse 2s ease-in-out infinite;
-            box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
-        }
-
-        .success-icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at center, rgba(255,255,255,0.2) 0%, transparent 70%);
-            animation: shimmer 3s ease-in-out infinite;
+            margin: 0 auto 16px;
         }
 
         .success-icon svg {
-            width: 60px;
-            height: 60px;
+            width: 24px;
+            height: 24px;
             color: var(--white);
-            position: relative;
-            z-index: 1;
-            animation: checkmark 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
         }
 
         .success-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 42px;
-            font-weight: 600;
-            letter-spacing: -0.5px;
-            margin-bottom: 16px;
-            position: relative;
-            z-index: 1;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-fill-color: transparent;
+            margin-bottom: 8px;
         }
 
         .success-subtitle {
-            font-size: 16px;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-            max-width: 400px;
-            margin: 0 auto;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
-        }
-
-        .success-body {
-            padding: 50px 40px;
-        }
-
-        /* Dynamic Message */
-        .dynamic-message {
-            background: rgba(8, 131, 149, 0.1);
-            color: var(--secondary-blue);
-            padding: 20px 24px;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            border-left: 4px solid var(--secondary-blue);
-            font-weight: 500;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
-        }
-
-        .message-text {
-            font-size: 18px;
+            font-size: 14px;
             color: var(--text-gray);
-            line-height: 1.7;
-            margin-bottom: 40px;
-            text-align: center;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
+            line-height: 1.5;
+            max-width: 300px;
+            margin: 0 auto;
         }
 
-        /* Email Icon Animation */
         .email-animation {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
+            margin-bottom: 20px;
         }
 
         .email-icon {
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             background: var(--light-gray);
-            border-radius: 16px;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            position: relative;
-            overflow: hidden;
-            animation: emailBounce 2s ease-in-out infinite;
-            border: 2px solid var(--border-gray);
+            margin: 0 auto 12px;
+            border: 1px solid var(--border-gray);
         }
 
         .email-icon svg {
-            width: 40px;
-            height: 40px;
-            color: var(--secondary-blue);
-            animation: emailPulse 2s ease-in-out infinite;
+            width: 24px;
+            height: 24px;
+            color: var(--primary-blue);
         }
 
         .email-status {
@@ -264,675 +149,157 @@
             font-weight: 500;
         }
 
-        /* Verification Steps */
-        .verification-steps {
-            background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 40px;
-            border-left: 4px solid var(--accent-teal);
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
-        }
-
-        .steps-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--primary-blue);
-            margin-bottom: 24px;
-            text-align: center;
-            letter-spacing: -0.5px;
-            position: relative;
-        }
-
-        .steps-title::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 40px;
-            height: 2px;
-            background: var(--accent-teal);
-        }
-
-        .step {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 16px;
-            padding: 12px 0;
-            transition: all 0.3s ease;
-            border-radius: 8px;
-        }
-
-        .step:hover {
-            background: rgba(255, 255, 255, 0.7);
-            padding-left: 12px;
-            padding-right: 12px;
-        }
-
-        .step:last-child {
-            margin-bottom: 0;
-        }
-
-        .step-number {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            color: var(--white);
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .message-text {
             font-size: 14px;
-            font-weight: 700;
-            margin-right: 16px;
-            flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .step-number::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: var(--accent-teal);
-            transform: scale(0);
-            transition: transform 0.3s ease;
-            border-radius: 50%;
-        }
-
-        .step:hover .step-number::before {
-            transform: scale(1);
-        }
-
-        .step-number span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .step-content {
-            flex: 1;
-        }
-
-        .step-text {
-            color: var(--primary-blue);
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 4px;
-        }
-
-        .step-description {
             color: var(--text-gray);
-            font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
-        /* Action Buttons */
         .action-buttons {
             display: flex;
-            gap: 16px;
+            gap: 12px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-bottom: 40px;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.9s both;
+            margin-bottom: 20px;
         }
 
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
-            padding: 16px 24px;
-            border-radius: 12px;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 4px;
             text-decoration: none;
             font-weight: 600;
             font-size: 14px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-            min-width: 160px;
+            transition: all 0.3s ease;
+            min-width: 140px;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-teal) 100%);
-            color: var(--white);
-            box-shadow: 0 8px 25px rgba(8, 131, 149, 0.3);
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: #fff;
+            border: none;
+            font-weight: 700;
+            box-shadow: 0 2px 8px #05bfdb22;
         }
-
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 16px 32px rgba(8, 131, 149, 0.4);
+            background: linear-gradient(90deg, var(--secondary-blue) 0%, var(--primary-blue) 100%);
+            color: #fff;
         }
 
         .btn-gmail {
-            background: var(--gmail-red);
+            background: #ea4335;
             color: var(--white);
-            box-shadow: 0 8px 25px rgba(234, 67, 53, 0.3);
         }
 
         .btn-gmail:hover {
             background: #d33b2c;
-            transform: translateY(-2px);
-            box-shadow: 0 16px 32px rgba(234, 67, 53, 0.4);
         }
 
         .btn-secondary {
-            background: var(--white);
-            color: var(--primary-blue);
-            border: 2px solid var(--primary-blue);
+            background: #fff;
+            color: var(--secondary-blue);
+            border: 1.5px solid var(--secondary-blue);
+            font-weight: 700;
+            transition: background 0.2s, color 0.2s;
         }
-
         .btn-secondary:hover {
-            background: var(--primary-blue);
-            color: var(--white);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px var(--shadow-medium);
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-            transition: left 0.6s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            color: #fff;
+            border: none;
         }
 
         .btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Timer Section */
-        .timer-section {
-            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
-            color: var(--white);
-            padding: 30px 40px;
-            text-align: center;
-            position: relative;
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1s both;
-        }
-
-        .timer-text {
-            font-size: 14px;
-            margin-bottom: 16px;
-            opacity: 0.9;
-        }
-
-        .timer-display {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--light-green);
-            margin-bottom: 12px;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .timer-action {
-            font-size: 12px;
-            opacity: 0.8;
-        }
-
-        /* Footer Notes */
-        .footer-notes {
-            background: var(--light-gray);
-            padding: 24px 40px;
-            border-top: 1px solid var(--border-gray);
-            animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 1.1s both;
-        }
-
-        .note-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 12px;
-            font-size: 13px;
-            color: var(--text-gray);
-        }
-
-        .note-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .note-icon {
             width: 16px;
             height: 16px;
-            margin-right: 8px;
-            margin-top: 2px;
-            flex-shrink: 0;
-            color: var(--accent-teal);
-        }
-
-        /* Animations */
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        @keyframes shimmer {
-            0%, 100% {
-                opacity: 0.2;
-            }
-            50% {
-                opacity: 0.8;
-            }
-        }
-
-        @keyframes checkmark {
-            0% {
-                transform: scale(0) rotate(45deg);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.2) rotate(45deg);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes emailBounce {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-5px);
-            }
-        }
-
-        @keyframes emailPulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.7;
-            }
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
         }
 
         /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 20px 15px;
-                min-height: auto;
+        @media (max-width: 480px) {
+            .success-container {
+                max-width: 100%;
             }
-
-            .success-header {
-                padding: 40px 24px;
-            }
-
-            .success-body {
-                padding: 40px 24px;
-            }
-
-            .timer-section {
-                padding: 24px;
-            }
-
-            .footer-notes {
-                padding: 20px 24px;
-            }
-
             .success-title {
-                font-size: 32px;
+                font-size: 20px;
             }
-
-            .success-icon {
-                width: 100px;
-                height: 100px;
-                margin-bottom: 24px;
-            }
-
-            .success-icon svg {
-                width: 50px;
-                height: 50px;
-            }
-
             .action-buttons {
                 flex-direction: column;
                 align-items: center;
             }
-
             .btn {
                 width: 100%;
-                max-width: 280px;
-            }
-
-            .verification-steps {
-                padding: 24px 20px;
-            }
-
-            .logo-placeholder {
-                width: 120px;
-                height: 50px;
-                font-size: 10px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .success-title {
-                font-size: 28px;
-            }
-
-            .message-text {
-                font-size: 16px;
-            }
-
-            .email-icon {
-                width: 60px;
-                height: 60px;
-            }
-
-            .email-icon svg {
-                width: 30px;
-                height: 30px;
-            }
-
-            .step {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-
-            .step-number {
-                margin-right: 0;
-                margin-bottom: 8px;
-            }
-        }
-
-        /* Focus states for accessibility */
-        .btn:focus,
-        .logo-container:focus {
-            outline: 2px solid var(--accent-teal);
-            outline-offset: 2px;
-        }
-
-        /* High contrast mode support */
-        @media (prefers-contrast: high) {
-            .btn {
-                border-width: 3px;
-            }
-        }
-
-        /* Reduced motion support */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
+                max-width: 250px;
             }
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- Logo Section -->
-    <div class="logo-section">
-        <a href="/home" class="logo-container" aria-label="Về trang chủ">
-            <div class="logo-placeholder">
-                <!-- Replace this div with your logo image -->
-                <span>Your Logo</span>
-            </div>
-        </a>
+<div class="header">
+    <a href="/home" class="logo-container" aria-label="Về trang chủ">
+        <img src="/logo/logo.png" alt="Logo" />
+    </a>
+    <a href="/help" class="help-link">Bạn cần giúp đỡ?</a>
+</div>
+<div class="success-container">
+    <div class="success-header">
+        <!-- Success icon is now empty as per request to remove the icon -->
     </div>
-
-    <div class="success-container">
-        <div class="success-header">
-            <div class="success-icon">
+    <div class="success-body">
+        <div class="email-animation">
+            <div class="email-icon">
                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 6L9 17L4 12" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <h1 class="success-title">Đăng ký thành công!</h1>
-            <p class="success-subtitle">Tài khoản của bạn đã được tạo thành công</p>
+            <p class="email-status">Email xác thực đã được gửi</p>
         </div>
-
-        <div class="success-body">
-            <!-- Dynamic Message -->
-            <div class="dynamic-message" th:if="${message}" th:text="${message}"></div>
-
-            <div class="email-animation">
-                <div class="email-icon">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <p class="email-status">Email xác thực đã được gửi</p>
-            </div>
-
-            <p class="message-text">
-                Để hoàn tất quá trình đăng ký và kích hoạt tài khoản, vui lòng kiểm tra email và nhấp vào liên kết xác thực.
-                Email có thể mất vài phút để đến hộp thư của bạn.
-            </p>
-
-            <div class="verification-steps">
-                <h3 class="steps-title">Hướng dẫn xác thực</h3>
-
-                <div class="step">
-                    <div class="step-number">
-                        <span>1</span>
-                    </div>
-                    <div class="step-content">
-                        <div class="step-text">Kiểm tra hộp thư đến</div>
-                        <div class="step-description">Mở ứng dụng email hoặc truy cập webmail của bạn</div>
-                    </div>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">
-                        <span>2</span>
-                    </div>
-                    <div class="step-content">
-                        <div class="step-text">Tìm email từ hệ thống</div>
-                        <div class="step-description">Email có tiêu đề "Xác thực tài khoản" từ chúng tôi</div>
-                    </div>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">
-                        <span>3</span>
-                    </div>
-                    <div class="step-content">
-                        <div class="step-text">Nhấp vào liên kết xác thực</div>
-                        <div class="step-description">Liên kết sẽ kích hoạt tài khoản của bạn ngay lập tức</div>
-                    </div>
-                </div>
-
-                <div class="step">
-                    <div class="step-number">
-                        <span>4</span>
-                    </div>
-                    <div class="step-content">
-                        <div class="step-text">Đăng nhập và sử dụng</div>
-                        <div class="step-description">Tài khoản đã sẵn sàng để bạn khám phá các tính năng</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="action-buttons">
-                <a href="https://mail.google.com" target="_blank" class="btn btn-gmail" id="gmailBtn">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Mở Gmail
-                </a>
-                <a th:href="@{/login}" class="btn btn-primary">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M10 17L15 12L10 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Đăng nhập
-                </a>
-                <a th:href="@{/customers/register}" class="btn btn-secondary">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Đăng ký lại
-                </a>
-            </div>
-        </div>
-
-        <div class="timer-section">
-            <p class="timer-text">Tự động mở Gmail sau</p>
-            <div class="timer-display" id="timerDisplay">10</div>
-            <p class="timer-action">giây (nhấp để hủy)</p>
-        </div>
-
-        <div class="footer-notes">
-            <div class="note-item">
-                <svg class="note-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                    <path d="M12 16V12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    <path d="M12 8H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        <p class="message-text">
+            Để hoàn tất quá trình đăng ký và kích hoạt tài khoản, vui lòng kiểm tra email và nhấp vào liên kết xác thực.
+            Email có thể mất vài phút để đến hộp thư của bạn.
+        </p>
+        <div class="action-buttons">
+            <a href="https://mail.google.com" target="_blank" class="btn btn-gmail" id="gmailBtn">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>Không nhận được email? Kiểm tra thư mục spam hoặc liên hệ hỗ trợ khách hàng</span>
-            </div>
-            <div class="note-item">
-                <svg class="note-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                    <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                Mở Gmail
+            </a>
+            <a th:href="@{/login}" class="btn btn-primary">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 17L15 12L10 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M15 12H3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>Liên kết xác thực có hiệu lực trong 24 giờ kể từ khi gửi</span>
-            </div>
-            <div class="note-item">
-                <svg class="note-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2"/>
+                Đăng nhập
+            </a>
+            <a th:href="@{/customers/register}" class="btn btn-secondary">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-                <span>Tài khoản sẽ được kích hoạt ngay sau khi xác thực thành công</span>
-            </div>
+                Đăng ký lại
+            </a>
         </div>
     </div>
 </div>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let timeLeft = 10;
-        const timerDisplay = document.getElementById('timerDisplay');
         const timerSection = document.querySelector('.timer-section');
-        let redirectTimer;
-        let countdownInterval;
 
-        // Start countdown
-        function startCountdown() {
-            countdownInterval = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = timeLeft;
+        // No timer functionality since text is removed
+        timerSection.style.background = 'rgba(8, 131, 149, 0.05)';
+        timerSection.style.border = '1px solid rgba(8, 131, 149, 0.2)';
 
-                // Add pulse animation
-                timerDisplay.style.animation = 'none';
-                setTimeout(() => {
-                    timerDisplay.style.animation = 'pulse 1s ease-in-out infinite';
-                }, 10);
-
-                if (timeLeft <= 0) {
-                    clearInterval(countdownInterval);
-                    openGmail();
-                }
-            }, 1000);
-
-            // Set redirect timer
-            redirectTimer = setTimeout(() => {
-                openGmail();
-            }, 10000);
-        }
-
-        // Open Gmail function
-        function openGmail() {
-            clearInterval(countdownInterval);
-            clearTimeout(redirectTimer);
-
-            // Update timer display
-            timerDisplay.textContent = '0';
-            timerSection.style.background = 'linear-gradient(135deg, var(--success-green) 0%, var(--light-green) 100%)';
-
-            // Open Gmail
-            window.open('https://mail.google.com', '_blank');
-
-            // Update timer text
-            document.querySelector('.timer-text').textContent = 'Gmail đã được mở';
-            document.querySelector('.timer-action').textContent = 'Kiểm tra email của bạn';
-        }
-
-        // Cancel timer function
-        function cancelTimer() {
-            clearInterval(countdownInterval);
-            clearTimeout(redirectTimer);
-
-            timerSection.style.background = 'linear-gradient(135deg, var(--text-gray) 0%, var(--border-gray) 100%)';
-            document.querySelector('.timer-text').textContent = 'Tự động mở Gmail đã bị hủy';
-            document.querySelector('.timer-action').textContent = 'Bạn có thể mở Gmail thủ công';
-            timerDisplay.textContent = '✓';
-        }
-
-        // Start the countdown
-        startCountdown();
-
-        // Click to cancel timer
-        timerSection.addEventListener('click', cancelTimer);
-
-        // Clear timer when any button is clicked
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                clearInterval(countdownInterval);
-                clearTimeout(redirectTimer);
-            });
-        });
-
-        // Gmail button click tracking
+        // Open Gmail on button click
         document.getElementById('gmailBtn').addEventListener('click', () => {
-            cancelTimer();
+            window.open('https://mail.google.com', '_blank');
             console.log('User manually opened Gmail');
         });
 
@@ -940,17 +307,14 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'g' || e.key === 'G') {
                 e.preventDefault();
-                openGmail();
-            } else if (e.key === 'Escape') {
-                e.preventDefault();
-                cancelTimer();
+                window.open('https://mail.google.com', '_blank');
             } else if (e.key === 'Enter') {
                 e.preventDefault();
                 window.location.href = '/login';
             }
         });
 
-        // Add hover effect for timer
+        // Hover effect for timer section (optional, kept for consistency)
         timerSection.addEventListener('mouseenter', function() {
             this.style.cursor = 'pointer';
             this.style.transform = 'scale(1.02)';

@@ -1,5 +1,6 @@
 package org.example.ecommerce.controller.customer.customer_aut;
 
+import org.example.ecommerce.entity.Category;
 import org.example.ecommerce.entity.Customer;
 import org.example.ecommerce.entity.Seller;
 import org.example.ecommerce.entity.Shop;
@@ -15,11 +16,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.Serializable;
 import java.net.URI;
 import java.util.Base64;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.example.ecommerce.repository.seller.SellerRepo;
+import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
 public class HomeController {
@@ -38,22 +45,28 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String home(Model model, HttpSession session) {
+    public String home(Model model, HttpSession session, @RequestParam(value = "categoryPage", defaultValue = "1") int categoryPage) {
         Customer customer = (Customer) session.getAttribute("customer");
+        List<Category> categories = productService.getCategories();
+
+        int categoriesPerPage = 20;
+        int totalCategories = categories.size();
+        int totalCategoryPages = (int) Math.ceil((double) totalCategories / categoriesPerPage);
+        if (categoryPage < 1) categoryPage = 1;
+        if (categoryPage > totalCategoryPages) categoryPage = totalCategoryPages;
+        int startIdx = (categoryPage - 1) * categoriesPerPage;
+        int endIdx = Math.min(startIdx + categoriesPerPage, totalCategories);
+        List<Category> pagedCategories = categories.subList(startIdx, endIdx);
+
+        model.addAttribute("categories", pagedCategories);
+        model.addAttribute("categoryPage", categoryPage);
+        model.addAttribute("totalCategoryPages", totalCategoryPages);
         if (customer == null) {
             model.addAttribute("products", productService.getProductViews());
             return "customer/customer_aut/home";
         }
-
-        if (customer.getImage() != null) {
-            String base64Image = Base64.getEncoder().encodeToString(customer.getImage());
-            model.addAttribute("base64Image", base64Image);
-        }
-
         model.addAttribute("customer", customer);
-
         model.addAttribute("products", productService.getProductViews());
-
         return "customer/customer_aut/home";
     }
     @GetMapping("/sellerChannel")

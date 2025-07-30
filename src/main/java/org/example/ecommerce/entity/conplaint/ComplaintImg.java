@@ -4,9 +4,18 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
+import java.time.Instant;
 
+@Getter
+@Setter
 @Entity
 @Table(name = "complaint_img")
 @Data
@@ -21,9 +30,12 @@ public class ComplaintImg {
     @JoinColumn(name = "complaint_id", nullable = false)
     private Complaint complaint;
 
-    @Column(name = "image_url", nullable = false, columnDefinition = "TEXT")
+    @NotNull
+    @Column(name = "image_url", nullable = false, length = Integer.MAX_VALUE)
     private String imageUrl;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+}
+
 }

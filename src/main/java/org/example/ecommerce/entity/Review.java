@@ -3,8 +3,12 @@ package org.example.ecommerce.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -17,11 +21,13 @@ public class Review {
     @Column(name = "reviewid", nullable = false)
     private Integer id;
 
-    @Column(name = "productid")
-    private Integer productid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productid")
+    private Product productid;
 
-    @Column(name = "orderitemsid")
-    private Integer orderitemid;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orderitemsid")
+    private Orderitem orderitemsid;
 
     @Column(name = "rating")
     private Integer rating;
@@ -36,4 +42,14 @@ public class Review {
     @ColumnDefault("false")
     @Column(name = "is_hidden")
     private Boolean isHidden;
+
+    @ManyToMany
+    private Set<Complaint> complaints = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "review")
+    private Set<ReviewReply> reviewReplies = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "reviewid")
+    private Set<ReviewsImage> reviewsImages = new LinkedHashSet<>();
+
 }

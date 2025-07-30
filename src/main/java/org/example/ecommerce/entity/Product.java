@@ -80,6 +80,9 @@ public class Product {
     private List<Inventory> inventories = new ArrayList<>();
 
     @OneToMany(mappedBy = "productid")
+    private Set<Inventory> inventoriesView = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "productid")
     private Set<Orderitem> orderitems = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "productid")

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -11,6 +12,8 @@ import java.time.LocalDateTime;
 
 
 @Entity
+@Getter
+@Setter
 @Table(name = "orders")
 public class Order {
     @Id
@@ -48,6 +51,8 @@ public class Order {
     @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
 
+    @OneToMany(mappedBy = "orderId")
+    private Set<Complaint> complaints = new LinkedHashSet<>();
     public Integer getId() {
         return id;
     }
@@ -116,6 +121,19 @@ public class Order {
         return phone;
     }
 
+    public String getStatusClass() {
+        if (status == null) return "";
+        switch (status) {
+            case "Chờ xác nhận": return "seller-status-cho_xac_nhan";
+            case "Đã xác nhận": return "seller-status-da_xac_nhan";
+            case "Chờ lấy hàng": return "seller-status-cho_lay_hang";
+            case "Đã hủy": return "seller-status-da_huy";
+            case "Yêu cầu trả hàng/hoàn tiền": return "seller-status-yeu_cau_tra_hang_hoan_tien";
+            case "Đang giao": return "seller-status-dang_giao";
+            case "Đã giao": return "seller-status-da_giao";
+            default: return "";
+        }
+    }
     public void setPhone(String phone) {
         this.phone = phone;
     }

@@ -44,13 +44,11 @@ public class OrderService {
             Product product = item.getProductid();
             Inventory inventory = item.getInventoryid();
 
-            String imageUrl = "";
-            List<Productimage> images = productimageRepository.findAllByProductid(product);
-            if (images != null && !images.isEmpty()) {
-                imageUrl = images.get(0).getImageurl();
-            }
+            String imageUrl = inventory.getImage();
+
 
             OrderItemDTO dto = new OrderItemDTO(
+                    item.getId(),
                     product.getId(),
                     product.getName(),
                     imageUrl,
