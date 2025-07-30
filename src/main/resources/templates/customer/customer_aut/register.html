@@ -366,7 +366,6 @@
             </div>
             <div class="brand-slogan">
                 Nền tảng thương mại điện tử<br>
-                yêu thích ở Đông Nam Á & Đài Loan
     </div>
         </div>
 
@@ -376,6 +375,9 @@
                     <div class="form-header">
                         <div class="form-title">Đăng ký tài khoản</div>
                         <div class="form-subtitle">Tạo tài khoản mới để trải nghiệm dịch vụ của chúng tôi</div>
+                    </div>
+                    <div th:if="${errorMessage}" style="color: red; text-align: center; margin-bottom: 16px; font-weight: 600;">
+                        <span th:text="${errorMessage}"></span>
                     </div>
 
                 <!-- Avatar Section -->
@@ -567,6 +569,7 @@
         document.querySelectorAll('input, select').forEach(input => {
             input.addEventListener('blur', function() {
                 const formGroup = this.closest('.form-group');
+                if (!formGroup) return; // Thêm kiểm tra null để tránh lỗi
                 if (this.hasAttribute('required') && !this.value.trim()) {
                     formGroup.classList.add('error');
                     formGroup.classList.remove('success');
