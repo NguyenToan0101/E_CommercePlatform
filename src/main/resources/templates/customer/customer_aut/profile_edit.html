@@ -1209,13 +1209,13 @@
     // Enhanced image preview functionality
     document.addEventListener('DOMContentLoaded', function() {
         const imageFile = document.getElementById('imageFile');
-        const currentAvatar = document.getElementById('currentAvatar');
+        const currentImageContainer = document.querySelector('.current-image');
+        let currentAvatar = document.getElementById('currentAvatar');
         const avatarPlaceholder = document.getElementById('avatarPlaceholder');
         const previewOverlay = document.getElementById('previewOverlay');
         let originalImageSrc = '';
-        let newImageSrc = '';
 
-        // Store original image source
+        // Store original image source if it exists
         if (currentAvatar) {
             originalImageSrc = currentAvatar.src;
         }
@@ -1243,17 +1243,32 @@
 
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    newImageSrc = e.target.result;
+                    const newImageSrc = e.target.result;
 
-                    // Show new image over current image
-                    if (currentAvatar) {
-                        currentAvatar.src = newImageSrc;
-                    } else {
-                        // Hide placeholder and show new image
+                    // Hide placeholder
+                    if (avatarPlaceholder) {
                         avatarPlaceholder.style.display = 'none';
-                        currentAvatar.style.display = 'block';
-                        currentAvatar.src = newImageSrc;
                     }
+
+                    // If currentAvatar doesn't exist, create it
+                    if (!currentAvatar) {
+                        currentAvatar = document.createElement('img');
+                        currentAvatar.id = 'currentAvatar';
+                        currentAvatar.alt = 'Ảnh đại diện hiện tại';
+                        currentAvatar.style.width = '120px';
+                        currentAvatar.style.height = '120px';
+                        currentAvatar.style.borderRadius = '50%';
+                        currentAvatar.style.objectFit = 'cover';
+                        currentAvatar.style.border = '4px solid var(--white)';
+                        currentAvatar.style.boxShadow = '0 10px 20px var(--shadow-medium)';
+                        currentAvatar.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+                        // Insert the new image before the preview overlay
+                        currentImageContainer.insertBefore(currentAvatar, previewOverlay);
+                    }
+
+                    // Set the new image source
+                    currentAvatar.src = newImageSrc;
+                    currentAvatar.style.display = 'block';
 
                     // Show preview overlay with close button
                     showPreviewOverlay();
@@ -1273,24 +1288,25 @@
         function hidePreviewOverlay() {
             previewOverlay.classList.remove('show');
 
-            // Restore original image
-            if (originalImageSrc) {
-                if (currentAvatar) {
-                    currentAvatar.src = originalImageSrc;
+            // Restore original state
+            if (originalImageSrc && currentAvatar) {
+                currentAvatar.src = originalImageSrc;
+                currentAvatar.style.display = 'block';
+                if (avatarPlaceholder) {
+                    avatarPlaceholder.style.display = 'none';
                 }
             } else {
-                // Show placeholder if no original image
-                if (avatarPlaceholder) {
-                    avatarPlaceholder.style.display = 'flex';
-                }
+                // If no original image, hide currentAvatar and show placeholder
                 if (currentAvatar) {
                     currentAvatar.style.display = 'none';
+                }
+                if (avatarPlaceholder) {
+                    avatarPlaceholder.style.display = 'flex';
                 }
             }
 
             // Clear file input
             imageFile.value = '';
-            newImageSrc = '';
         }
 
         // Close button click handler
@@ -1319,7 +1335,7 @@
         // Enhanced phone validation function
         function isValidPhone(phone) {
             // Remove spaces, dashes, and parentheses
-            const cleanPhone = phone.replace(/[\s\-$$$$]/g, '');
+            const cleanPhone = phone.replace(/[\s\-()]/g, '');
             const phoneRegex = /^[0-9]{10,11}$/;
             return phoneRegex.test(cleanPhone);
         }

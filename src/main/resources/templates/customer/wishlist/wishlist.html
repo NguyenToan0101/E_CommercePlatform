@@ -43,11 +43,21 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
             color: #111;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
         }
 
         /* Header Top Bar */
@@ -55,7 +65,8 @@
             background: var(--white);
             color: #111;
             font-size: 1rem;
-            padding: 8px 16px;
+            padding: 0 16px;
+            height: 38px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -63,6 +74,8 @@
             position: sticky;
             top: 0;
             z-index: 101;
+            width: 100vw;
+            box-sizing: border-box;
         }
 
         .header-top-left,
@@ -83,13 +96,16 @@
         .main-header {
             background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
             box-shadow: 0 2px 16px var(--shadow-light);
-            padding: 16px;
+            padding: 0 16px;
+            height: 88px;
             display: flex;
             align-items: center;
-            gap: 16px;
+            justify-content: space-between;
             position: sticky;
             top: 38px;
             z-index: 100;
+            width: 100vw;
+            box-sizing: border-box;
         }
 
         .header-left {
@@ -98,29 +114,30 @@
         }
 
         .logo-img {
-            height: 60px;
+            height: 80px;
             width: auto;
             filter: drop-shadow(0 2px 8px #05bfdb33);
         }
 
         .search-bar {
             flex: 1;
+            margin: 0 16px;
             display: flex;
             align-items: center;
             background: var(--white);
             border-radius: 12px;
             box-shadow: 0 2px 12px var(--shadow-light);
-            padding: 8px 16px;
-            margin: 0 16px;
+            padding: 0 16px;
+            max-width: 900px;
             border: 2px solid #05bfdb22;
         }
 
         .search-bar input {
             border: none;
             background: transparent;
-            font-size: 1rem;
+            font-size: 1.1rem;
             flex: 1;
-            padding: 8px 0;
+            padding: 12px 0;
             outline: none;
             color: #111;
         }
@@ -130,14 +147,15 @@
             color: var(--white);
             border: none;
             border-radius: 8px;
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             margin-left: 8px;
             transition: background 0.2s;
+            box-shadow: 0 2px 8px var(--shadow-light);
         }
 
         .search-bar button:hover {
@@ -147,7 +165,10 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 18px;
+            overflow-x: auto;
+            white-space: nowrap;
+            max-width: 250px;
         }
 
         .user-info-box {
@@ -157,7 +178,8 @@
             gap: 8px;
         }
 
-        .user-info-box:hover .account-menu-list {
+        .user-info-box:hover .account-menu-list,
+        .user-info-box:focus-within .account-menu-list {
             display: block;
             opacity: 1;
             visibility: visible;
@@ -165,34 +187,65 @@
 
         .account-menu-list {
             display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
+            position: fixed;
+            top: 72px;
+            right: 16px;
             background: var(--white);
             min-width: 200px;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(16,42,67,0.15);
+            border-radius: 16px;
+            box-shadow: 0 16px 48px rgba(16,42,67,0.13);
             border: 1px solid var(--accent-gray);
-            z-index: 1000;
-            margin-top: 8px;
+            overflow: visible;
+            z-index: 9999;
+            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             opacity: 0;
             visibility: hidden;
-            transition: all 0.2s ease;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .account-menu-list::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: var(--white);
+            border: 1px solid var(--accent-gray);
+            border-bottom: none;
+            border-right: none;
+            transform: rotate(45deg);
         }
 
         .account-menu-list a {
             color: var(--primary-black);
-            padding: 12px 16px;
+            padding: 12px 20px;
             text-decoration: none;
-            display: block;
-            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
             font-weight: 500;
-            transition: background 0.15s;
+            transition: background 0.15s, color 0.15s, transform 0.15s;
+            border-left: 3px solid transparent;
+            white-space: normal;
+            word-break: break-word;
         }
 
         .account-menu-list a:hover {
             background: var(--accent-gray);
+            border-left-color: var(--gradient-mid);
             color: var(--gradient-mid);
+            transform: translateX(4px);
+        }
+
+        .account-menu-list a:not(:last-child) {
+            border-bottom: 1px solid var(--accent-gray);
         }
 
         .user-avatar {
@@ -225,39 +278,40 @@
         }
 
         .header-cart-link img {
-            height: 36px;
-            width: 36px;
+            height: 40px;
+            width: 40px;
             filter: drop-shadow(0 2px 8px #05bfdb33);
             transition: transform 0.2s;
         }
 
         .header-cart-link:hover img {
-            transform: scale(1.1);
+            transform: scale(1.08) rotate(-8deg);
+            filter: drop-shadow(0 4px 16px #08839566);
         }
 
         /* Main Layout */
-        .page-wrapper {
-            padding: 20px;
-        }
-
-        .main-container {
+        .container {
+            max-width: 100vw;
+            width: 100%;
+            margin: 0;
+            padding: 40px 16px;
             display: flex;
-            gap: 24px;
-            max-width: 1400px;
-            margin: 0 auto;
+            gap: 30px;
+            flex: 1;
+            box-sizing: border-box;
         }
 
         /* Sidebar */
         .sidebar-nav {
-            width: 250px;
+            width: 20%;
+            min-width: 200px;
             background: var(--white);
             border-radius: 16px;
-            box-shadow: 0 4px 20px var(--shadow-light);
-            padding: 24px;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            padding: 24px 0;
             height: fit-content;
             position: sticky;
-            top: 120px;
-            flex-shrink: 0;
+            top: 140px;
         }
 
         .nav-section {
@@ -269,56 +323,58 @@
         }
 
         .nav-title {
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 600;
             color: var(--text-gray);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
+            padding: 0 24px 12px 24px;
             border-bottom: 1px solid var(--border-gray);
+            margin-bottom: 12px;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px 16px;
+            padding: 12px 24px;
             color: var(--text-dark);
             text-decoration: none;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 500;
-            border-radius: 8px;
-            margin-bottom: 4px;
+            border-left: 3px solid transparent;
             transition: all 0.2s ease;
         }
 
         .nav-item:hover {
             background: var(--accent-gray);
             color: var(--gradient-mid);
+            border-left-color: var(--gradient-end);
             transform: translateX(4px);
         }
 
         .nav-item.active {
             background: linear-gradient(90deg, var(--gradient-end) 0%, var(--gradient-mid) 100%);
             color: var(--white);
+            border-left-color: var(--white);
         }
 
         .nav-item svg {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             flex-shrink: 0;
         }
 
         /* Main Content */
         .main-content {
+            width: 80%;
             flex: 1;
         }
 
         .products-section {
             background: var(--white);
             border-radius: 16px;
-            box-shadow: 0 4px 20px var(--shadow-light);
+            box-shadow: 0 16px 32px var(--shadow-light), 0 8px 16px var(--shadow-medium);
             padding: 32px;
             position: relative;
         }
@@ -600,6 +656,30 @@
             box-shadow: 0 4px 16px rgba(74, 155, 155, 0.3);
         }
 
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .products-grid.grid-6 {
@@ -611,7 +691,7 @@
         }
 
         @media (max-width: 992px) {
-            .main-container {
+            .container {
                 gap: 20px;
             }
 
@@ -625,22 +705,21 @@
         }
 
         @media (max-width: 768px) {
-            .page-wrapper {
-                padding: 16px;
-            }
-
-            .main-container {
+            .container {
                 flex-direction: column;
-                gap: 16px;
+                gap: 20px;
+                padding: 20px 10px;
             }
 
             .sidebar-nav {
                 width: 100%;
+                min-width: unset;
                 position: static;
                 order: 2;
             }
 
             .main-content {
+                width: 100%;
                 order: 1;
             }
 
@@ -660,14 +739,37 @@
             }
 
             .main-header {
-                flex-wrap: wrap;
-                gap: 12px;
+                padding: 0 8px;
+                height: 70px;
+            }
+
+            .header-top-bar {
+                padding: 0 8px;
+                height: 32px;
+                font-size: 0.9rem;
             }
 
             .search-bar {
-                order: 3;
-                flex-basis: 100%;
-                margin: 0;
+                margin: 0 8px;
+                width: calc(100% - 16px);
+                padding: 0 10px;
+            }
+
+            .search-bar input {
+                font-size: 1rem;
+            }
+
+            .search-bar button {
+                width: 36px;
+                height: 36px;
+            }
+
+            .logo-img {
+                height: 60px;
+            }
+
+            .header-right {
+                max-width: 200px;
             }
 
             .view-controls {
@@ -684,8 +786,8 @@
         }
 
         @media (max-width: 480px) {
-            .page-wrapper {
-                padding: 12px;
+            .container {
+                padding: 10px 5px;
             }
 
             .products-section {
@@ -722,11 +824,11 @@
             }
 
             .main-header {
-                padding: 12px;
+                padding: 0 4px;
             }
 
             .header-top-bar {
-                padding: 6px 12px;
+                padding: 0 4px;
             }
         }
 
@@ -738,6 +840,22 @@
         .view-btn:focus {
             outline: 2px solid var(--gradient-end);
             outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .cta-btn {
+                border-width: 2px;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
@@ -819,148 +937,146 @@
 </header>
 
 <!-- Main Content -->
-<div class="page-wrapper">
-    <div class="main-container">
-        <!-- Sidebar Navigation -->
-        <nav class="sidebar-nav">
-            <div class="nav-section">
-                <div class="nav-title">Tài khoản</div>
-                <a th:href="@{/customers/profile}" class="nav-item">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12.5 19H5C5 19 5 16 5 15C5 14 6 13 7 13H17C18 13 19 14 19 15C19 16 19 19 19 19H16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Thông tin cá nhân
-                </a>
-                <a th:href="@{/customers/editprofile}" class="nav-item">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Chỉnh sửa thông tin
-                </a>
-                <a th:href="@{/customers/change-password}" class="nav-item">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 15V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Đổi mật khẩu
-                </a>
-            </div>
-            <div class="nav-section">
-                <div class="nav-title">Dịch vụ</div>
-                <a th:href="@{/wallet}" class="nav-item">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 7V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Ví của tôi
-                </a>
-                <a th:href="@{/wishlist}" class="nav-item active">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.04097 1.5487 8.5C1.5487 9.95903 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.879 21.7564 11.2726 22.0329 10.6051C22.3095 9.93767 22.4518 9.22225 22.4518 8.5C22.4518 7.77775 22.3095 7.06233 22.0329 6.39489C21.7564 5.72745 21.351 5.121 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+<div class="container">
+    <!-- Sidebar Navigation -->
+    <nav class="sidebar-nav">
+        <div class="nav-section">
+            <div class="nav-title">Tài khoản</div>
+            <a th:href="@{/customers/profile}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12.5 19H5C5 19 5 16 5 15C5 14 6 13 7 13H17C18 13 19 14 19 15C19 16 19 19 19 19H16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Thông tin cá nhân
+            </a>
+            <a th:href="@{/customers/editprofile}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18.5 2.5C18.8978 2.10217 19.4374 1.87868 20 1.87868C20.5626 1.87868 21.1022 2.10217 21.5 2.5C21.8978 2.89782 22.1213 3.43739 22.1213 4C22.1213 4.56261 21.8978 5.10217 21.5 5.5L12 15L8 16L9 12L18.5 2.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Chỉnh sửa thông tin
+            </a>
+            <a th:href="@{/customers/change-password}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 15V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Đổi mật khẩu
+            </a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-title">Dịch vụ</div>
+            <a th:href="@{/wallet}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 7V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Ví của tôi
+            </a>
+            <a th:href="@{/wishlist}" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.04097 1.5487 8.5C1.5487 9.95903 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.879 21.7564 11.2726 22.0329 10.6051C22.3095 9.93767 22.4518 9.22225 22.4518 8.5C22.4518 7.77775 22.3095 7.06233 22.0329 6.39489C21.7564 5.72745 21.351 5.121 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Danh sách yêu thích
+            </a>
+            <a th:href="@{/orders}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Đơn mua
+            </a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-title">Khác</div>
+            <a th:href="@{/home}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Về trang chủ
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        <section class="products-section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-heart icon"></i>
                     Danh sách yêu thích
-                </a>
-                <a th:href="@{/orders}" class="nav-item">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Đơn mua
-                </a>
-            </div>
-            <div class="nav-section">
-                <div class="nav-title">Khác</div>
-                <a th:href="@{/home}" class="nav-item">
-                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    Về trang chủ
-                </a>
-            </div>
-        </nav>
-
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <section class="products-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-heart icon"></i>
-                        Danh sách yêu thích
-                    </h2>
-                    <div class="view-controls">
-                        <span class="view-control-label">Hiển thị:</span>
-                        <div class="view-buttons">
-                            <button class="view-btn" data-grid="2">
-                                <i class="fas fa-th-large"></i>
-                                2/hàng
-                            </button>
-                            <button class="view-btn" data-grid="3">
-                                <i class="fas fa-th"></i>
-                                3/hàng
-                            </button>
-                            <button class="view-btn active" data-grid="4">
-                                <i class="fas fa-th"></i>
-                                4/hàng
-                            </button>
-                            <button class="view-btn" data-grid="5">
-                                <i class="fas fa-th"></i>
-                                5/hàng
-                            </button>
-                            <button class="view-btn" data-grid="6">
-                                <i class="fas fa-th"></i>
-                                6/hàng
-                            </button>
-                            <button class="view-btn" data-grid="auto">
-                                <i class="fas fa-expand-arrows-alt"></i>
-                                Auto
-                            </button>
-                        </div>
+                </h2>
+                <div class="view-controls">
+                    <span class="view-control-label">Hiển thị:</span>
+                    <div class="view-buttons">
+                        <button class="view-btn" data-grid="2">
+                            <i class="fas fa-th-large"></i>
+                            2/hàng
+                        </button>
+                        <button class="view-btn" data-grid="3">
+                            <i class="fas fa-th"></i>
+                            3/hàng
+                        </button>
+                        <button class="view-btn active" data-grid="4">
+                            <i class="fas fa-th"></i>
+                            4/hàng
+                        </button>
+                        <button class="view-btn" data-grid="5">
+                            <i class="fas fa-th"></i>
+                            5/hàng
+                        </button>
+                        <button class="view-btn" data-grid="6">
+                            <i class="fas fa-th"></i>
+                            6/hàng
+                        </button>
+                        <button class="view-btn" data-grid="auto">
+                            <i class="fas fa-expand-arrows-alt"></i>
+                            Auto
+                        </button>
                     </div>
                 </div>
-                <div class="products-grid grid-4" id="productsGrid">
-                    <article class="product-card" th:each="product : ${wishlistProducts}" th:attr="data-id=${product.productId}" tabindex="0">
-                        <div class="product-img-wrap">
-                            <img th:if="${product.imageUrl != null && !#strings.isEmpty(product.imageUrl)}"
-                                 th:src="@{${product.imageUrl}}"
-                                 alt="Ảnh sản phẩm"
-                                 class="product-img" />
-                            <div th:if="${product.imageUrl == null || #strings.isEmpty(product.imageUrl)}" class="no-image">
-                                <i class="fas fa-image"></i>
-                                <span>Không có ảnh</span>
-                            </div>
+            </div>
+            <div class="products-grid grid-4" id="productsGrid">
+                <article class="product-card" th:each="product : ${wishlistProducts}" th:attr="data-id=${product.productId}" tabindex="0">
+                    <div class="product-img-wrap">
+                        <img th:if="${product.imageUrl != null && !#strings.isEmpty(product.imageUrl)}"
+                             th:src="@{${product.imageUrl}}"
+                             alt="Ảnh sản phẩm"
+                             class="product-img" />
+                        <div th:if="${product.imageUrl == null || #strings.isEmpty(product.imageUrl)}" class="no-image">
+                            <i class="fas fa-image"></i>
+                            <span>Không có ảnh</span>
                         </div>
-                        <div class="product-info">
-                            <h3 class="product-name" th:text="${product.name}">Tên sản phẩm</h3>
-                            <div class="product-price" th:text="'₫' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₫0</div>
-                            <div class="product-meta">
-                                <span th:text="'Đã bán ' + ${product.solditems}">Đã bán 0</span>
-                                <span class="product-rating">
-                                        <span th:text="${product.rate}">0</span>★
-                                    </span>
-                            </div>
-                            <div class="product-address" th:text="${product.shopaddress}">Địa chỉ</div>
-                        </div>
-                    </article>
-
-                    <div th:if="${wishlistProducts == null or #lists.isEmpty(wishlistProducts)}" class="empty-state">
-                        <div class="empty-icon">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <h3>Chưa có sản phẩm nào</h3>
-                        <p>Bạn chưa thêm sản phẩm nào vào danh sách yêu thích. Hãy bắt đầu khám phá ngay!</p>
-                        <a href="/home" class="cta-btn">
-                            <i class="fas fa-shopping-cart"></i>
-                            Bắt đầu mua sắm
-                        </a>
                     </div>
+                    <div class="product-info">
+                        <h3 class="product-name" th:text="${product.name}">Tên sản phẩm</h3>
+                        <div class="product-price" th:text="'₫' + ${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')}">₫0</div>
+                        <div class="product-meta">
+                            <span th:text="'Đã bán ' + ${product.solditems}">Đã bán 0</span>
+                            <span class="product-rating">
+                                <span th:text="${product.rate}">0</span>★
+                            </span>
+                        </div>
+                        <div class="product-address" th:text="${product.shopaddress}">Địa chỉ</div>
+                    </div>
+                </article>
+
+                <div th:if="${wishlistProducts == null or #lists.isEmpty(wishlistProducts)}" class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Chưa có sản phẩm nào</h3>
+                    <p>Bạn chưa thêm sản phẩm nào vào danh sách yêu thích. Hãy bắt đầu khám phá ngay!</p>
+                    <a href="/home" class="cta-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        Bắt đầu mua sắm
+                    </a>
                 </div>
-            </section>
-        </main>
-    </div>
+            </div>
+        </section>
+    </main>
 </div>
 
 <script>
