@@ -70,7 +70,7 @@ public class ComplaintDetailService {
                     Review review = reviewRepository.findById(reviewId).orElse(null);
                     if (review != null) {
                         String productName = null;
-                        Integer productId1 = review.getProductid();
+                        Integer productId1 = review.getProductid().getId();
                         if (productId1 != null) {
                             Product product1 = productRepository.findById(productId1).orElse(null);
                             if (product1 != null) {
@@ -79,7 +79,7 @@ public class ComplaintDetailService {
                         }
                         ReviewInfo reviewInfo = new ReviewInfo(
                                 review.getId(),
-                                review.getProductid(),
+                                review.getProductid().getId(),
                                 productName,
                                 review.getRating(),
                                 review.getComment(),

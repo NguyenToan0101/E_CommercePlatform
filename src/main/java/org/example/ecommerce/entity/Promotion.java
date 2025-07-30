@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Nationalized;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import java.util.List;
@@ -49,7 +50,7 @@ public class Promotion {
     @Column(name = "per_user_limit")
     private Integer perUserLimit;
     private Double value;
-    private Double revenue;
+    private BigDecimal revenue;
     private String status;
     private Integer orders;
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})

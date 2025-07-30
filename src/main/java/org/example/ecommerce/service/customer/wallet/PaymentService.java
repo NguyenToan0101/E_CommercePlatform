@@ -1,11 +1,12 @@
 package org.example.ecommerce.service.customer.wallet;
 
-import org.example.ecommerce.entity.Customer;
-import org.example.ecommerce.entity.Inventory;
-import org.example.ecommerce.entity.Product;
-import org.example.ecommerce.entity.Promotion;
+import org.example.ecommerce.entity.*;
+import org.example.ecommerce.repository.*;
+import org.example.ecommerce.service.PromotionService;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.time.Instant;
@@ -78,7 +79,7 @@ public class PaymentService {
             history.setWalletid(wallet);
             history.setAmount(totalAmountAllOrders);
             history.setStatus("Decrease");
-            history.setCreatedAt(Instant.now());
+            history.setCreatedAt(LocalDateTime.now());
             walletHistoryRepository.save(history);
         }
 
@@ -97,7 +98,7 @@ public class PaymentService {
             // Tạo đơn hàng
             Order order = new Order();
             order.setCustomerid(customer);
-            order.setOrderdate(Instant.now());
+            order.setOrderdate(LocalDateTime.now());
             order.setTotalamount(totalAmount);
             order.setFullname(fullname);
             order.setPhone(phone);
@@ -144,7 +145,7 @@ public class PaymentService {
                     sellerHistory.setWalletid(sellerWallet);
                     sellerHistory.setAmount(sellerAmount);
                     sellerHistory.setStatus("Increase");
-                    sellerHistory.setCreatedAt(Instant.now());
+                    sellerHistory.setCreatedAt(LocalDateTime.now());
                     walletHistoryRepository.save(sellerHistory);
                 }
 
@@ -191,7 +192,7 @@ public class PaymentService {
 
         Order order = new Order();
         order.setCustomerid(customer);
-        order.setOrderdate(Instant.now());
+        order.setOrderdate(LocalDateTime.now());
         order.setTotalamount(totalAmount);
         order.setFullname(fullname);
         order.setPhone(phone);
@@ -207,7 +208,7 @@ public class PaymentService {
         history.setWalletid(wallet);
         history.setAmount(totalAmount);
         history.setStatus("Decrease");
-        history.setCreatedAt(Instant.now());
+        history.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(history);
 
         if (freeship != null) {
@@ -260,7 +261,7 @@ public class PaymentService {
         sellerHistory.setWalletid(sellerWallet);
         sellerHistory.setAmount(sellerAmount);
         sellerHistory.setStatus("Increase");
-        sellerHistory.setCreatedAt(Instant.now());
+        sellerHistory.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(sellerHistory);
 
         inventory.setQuantity(inventory.getQuantity() - quantity);

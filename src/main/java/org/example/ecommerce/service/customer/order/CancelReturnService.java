@@ -73,7 +73,7 @@ public class CancelReturnService {
         sellerHistory.setWalletid(sellerWallet);
         sellerHistory.setAmount(totalAmount);
         sellerHistory.setStatus("Decrease");
-        sellerHistory.setCreatedAt(Instant.now());
+        sellerHistory.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(sellerHistory);
 
         Wallet customerWallet = walletRepository.findByCustomerid(customer);
@@ -89,7 +89,7 @@ public class CancelReturnService {
         customerHistory.setWalletid(customerWallet);
         customerHistory.setAmount(totalAmount);
         customerHistory.setStatus("Increase");
-        customerHistory.setCreatedAt(Instant.now());
+        customerHistory.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(customerHistory);
         return true;
     }
@@ -116,11 +116,11 @@ public class CancelReturnService {
             if (!onlyOne) {
                 Order newOrder = new Order();
                 newOrder.setCustomerid(oldOrder.getCustomerid());
-                newOrder.setOrderdate(Instant.now());
+                newOrder.setOrderdate(LocalDateTime.now());
                 newOrder.setTotalamount(orderItem.getUnitprice().multiply(BigDecimal.valueOf((orderItem.getQuantity()))));
                 newOrder.setStatus("Yêu cầu trả hàng/hoàn tiền");
                 newOrder.setPaymentStatus(oldOrder.getPaymentStatus());
-                newOrder.setUpdatedAt(Instant.now());
+                newOrder.setUpdatedAt(LocalDateTime.now());
                 newOrder.setFullname(oldOrder.getFullname());
                 newOrder.setPhone(oldOrder.getPhone());
                 newOrder.setAddress(oldOrder.getAddress());
@@ -158,7 +158,7 @@ public class CancelReturnService {
                         ComplaintImg img = new ComplaintImg();
                         img.setComplaint(complaint);
                         img.setImageUrl(url);
-                        img.setCreatedAt(java.time.Instant.now());
+                        img.setCreatedAt(LocalDateTime.now());
                         complaintImgRepository.save(img);
                     }
                 }

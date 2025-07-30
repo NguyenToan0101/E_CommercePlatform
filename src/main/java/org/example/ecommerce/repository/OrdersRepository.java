@@ -33,4 +33,19 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
     BigDecimal sumTotalAmountByCustomerid(Customer customer);
 
     Order findOrderById(Integer id);
+
+
+    @Query("SELECT DISTINCT o FROM Order o " +
+           "JOIN o.orderitems oi " +
+           "JOIN oi.productid p " +
+           "WHERE p.shopid.id = :shopId " +
+           "AND (:status IS NULL OR o.status = :status)")
+    List<Order> findAllByShopIdAndStatus(@Param("shopId") Integer shopId, @Param("status") String status);
+
+    @Query("SELECT o.status, COUNT(DISTINCT o) FROM Order o " +
+           "JOIN o.orderitems oi " +
+           "JOIN oi.productid p " +
+           "WHERE p.shopid.id = :shopId " +
+           "GROUP BY o.status")
+    List<Object[]> countOrdersByStatusForShop(@Param("shopId") Integer shopId);
 }

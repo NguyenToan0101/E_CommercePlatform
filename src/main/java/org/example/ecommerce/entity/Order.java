@@ -9,6 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 
 @Entity
@@ -51,11 +53,9 @@ public class Order {
     @Column(name = "address", length = Integer.MAX_VALUE)
     private String address;
 
-    @OneToMany(mappedBy = "orderId")
-    private Set<Complaint> complaints = new LinkedHashSet<>();
-    public Integer getId() {
-        return id;
-    }
+
+    @OneToMany(mappedBy = "orderid")
+    private Set<Orderitem> orderitems = new LinkedHashSet<>();
 
     public void setId(Integer id) {
         this.id = id;
@@ -124,16 +124,26 @@ public class Order {
     public String getStatusClass() {
         if (status == null) return "";
         switch (status) {
-            case "Chờ xác nhận": return "seller-status-cho_xac_nhan";
-            case "Đã xác nhận": return "seller-status-da_xac_nhan";
-            case "Chờ lấy hàng": return "seller-status-cho_lay_hang";
-            case "Đã hủy": return "seller-status-da_huy";
-            case "Yêu cầu trả hàng/hoàn tiền": return "seller-status-yeu_cau_tra_hang_hoan_tien";
-            case "Đang giao": return "seller-status-dang_giao";
-            case "Đã giao": return "seller-status-da_giao";
-            default: return "";
+            case "Chờ xác nhận":
+                return "seller-status-cho_xac_nhan";
+            case "Đã xác nhận":
+                return "seller-status-da_xac_nhan";
+            case "Chờ lấy hàng":
+                return "seller-status-cho_lay_hang";
+            case "Đã hủy":
+                return "seller-status-da_huy";
+            case "Yêu cầu trả hàng/hoàn tiền":
+                return "seller-status-yeu_cau_tra_hang_hoan_tien";
+            case "Đang giao":
+                return "seller-status-dang_giao";
+            case "Đã giao":
+                return "seller-status-da_giao";
+            default:
+                return "";
         }
     }
+
+
     public void setPhone(String phone) {
         this.phone = phone;
     }

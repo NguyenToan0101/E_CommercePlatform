@@ -909,7 +909,7 @@
                 <span style="margin: 0 10px;">|</span>
                 <span th:text="${detail.reviews.size()} + ' Đánh Giá'">4k Đánh Giá</span>
                 <span style="margin: 0 10px;">|</span>
-                <span th:text="${detail.solditems} + ' Đã Bán'">20k+ Đã Bán</span>
+                <span th:text="${detail.solditems != null ? detail.solditems : 0} + ' Đã Bán'">20k+ Đã Bán</span>
                 <button id="report-btn" title="Báo cáo sản phẩm" style="margin-left:8px; background: #fff3cd; color: #b45309; border: 1px solid #fbbf24; border-radius: 6px; padding: 2px 10px; font-size: 0.95rem; display: inline-flex; align-items: center; gap: 4px; cursor: pointer; transition: background 0.2s, color 0.2s;">
                     <i class="fas fa-exclamation-triangle" style="font-size: 1rem;"></i> Báo cáo
                 </button>
@@ -1381,21 +1381,21 @@
     function getSelectedProductInfo() {
         // Lấy inventory đã chọn
         const inventories = document.querySelectorAll('#inventory-data .inventory-item');
-        let selectedInventory = null;
         let selectedColor = document.querySelector('.color-option.selected')?.getAttribute('data-color');
         let selectedSize = document.querySelector('.size-option.selected')?.getAttribute('data-size');
+        let foundInventory = null;
         inventories.forEach(inv => {
             if (
                 inv.getAttribute('data-color') === selectedColor &&
                 inv.getAttribute('data-size') === selectedSize
             ) {
-                selectedInventory = inv;
+                foundInventory = inv;
             }
         });
-        if (!selectedInventory) {
+        if (!foundInventory) {
             return null; // hoặc trả về thông báo lỗi
         }
-        const inventoryId = selectedInventory.getAttribute('data-id');
+        const inventoryId = foundInventory.getAttribute('data-id');
         const quantity = document.getElementById('quantity').value;
         return {
             inventoryId,

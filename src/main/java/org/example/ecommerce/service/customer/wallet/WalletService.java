@@ -46,7 +46,7 @@ public class WalletService {
         history.setWalletid(wallet);
         history.setAmount(amount);
         history.setStatus("Increase");
-        history.setCreatedAt(Instant.now());
+        history.setCreatedAt(LocalDateTime.now());
         walletHistoryRepository.save(history);
 
         Payment payment = new Payment();
