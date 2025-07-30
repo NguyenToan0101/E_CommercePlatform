@@ -1,16 +1,15 @@
-services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.4
-    container_name: elasticsearch
-    environment:
-      - discovery.type= single-node
-      - xpack.security.enabled=false
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-    ports:
-      - "9200:9200"
-    networks:
-      - elastic
+version: '3.8'
 
-networks:
-  elastic:
-    driver: bridge
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springboot-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0&user=postgres.skwpdekgaovwlxqiknpx&password=congtoan123@
+      SPRING_DATASOURCE_USERNAME: postgres.skwpdekgaovwlxqiknpx
+      SPRING_DATASOURCE_PASSWORD: congtoan123@
+    restart: always

@@ -18,4 +18,5 @@ public class PageVisitLog {
     private String path;
     private String device;
     private LocalDateTime created_at;
+
 }

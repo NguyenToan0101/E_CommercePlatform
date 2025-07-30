@@ -87,25 +87,23 @@ public interface ComplaintRepository extends JpaRepository<Complaint, Integer> {
 //    List<ComplaintListDTO> findAllForList();
 
     //test 2
-    @Query("""
-  SELECT new org.example.ecommerce.common.dto.admin.complaintManagement.ComplaintListDTO(
-    c.complaintId,
-    c.customer.id,
-    c.customer.firstname,
-    c.customer.lastname,
-    c.customer.email,
-    c.customer.phone,
-    c.reason.description,
-    cp.product_id,
-    cf.reviewId,
-    c.category.name,
-    c.status,
-    c.createdAt
-  )
-  FROM Complaint c
-    LEFT JOIN c.product cp
-    LEFT JOIN c.feedback cf
-  ORDER BY c.createdAt DESC
-""")
+    @Query("SELECT new org.example.ecommerce.common.dto.admin.complaintManagement.ComplaintListDTO(" +
+            "c.complaintId, " +
+            "c.customer.id, " +
+            "c.customer.firstname, " +
+            "c.customer.lastname, " +
+            "c.customer.email, " +
+            "c.customer.phone, " +
+            "c.reason.description, " +
+            "cp.product_id, " +
+            "cf.reviewId, " +
+            "c.category.name, " +
+            "c.status, " +
+            "c.createdAt) " +
+            "FROM Complaint c " +
+            "LEFT JOIN c.product cp " +
+            "LEFT JOIN c.feedback cf " +
+            "ORDER BY c.createdAt DESC")
     List<ComplaintListDTO> findAllForList();
+
 }

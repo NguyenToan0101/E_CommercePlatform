@@ -219,11 +219,16 @@ public class PaymentService {
             oi2.setUnitprice(price);
             oi2.setPromotionid(discount);
             orderItemsRepository.save(oi2);
-            Optional<Promotion> promotion = getPromotionById(discount);
-            promotion.orElseThrow().setRevenue(promotion.orElseThrow().getRevenue().add(price));
-            promotion.orElseThrow().setOrders(promotion.orElseThrow().getOrders()+1);
-            promotion.orElseThrow().setUsageCount(promotion.orElseThrow().getUsageCount()+1);
-            promotionRepository.save(promotion.orElseThrow());
+//            Optional<Promotion> promotion = getPromotionById(discount);
+//            promotion.orElseThrow().setRevenue(promotion.orElseThrow().getRevenue().add(price));
+            Promotion promotion = getPromotionById(discount).orElseThrow();
+            promotion.setRevenue(
+                    Optional.ofNullable(promotion.getRevenue()).orElse(BigDecimal.ZERO).add(price)
+            );
+            
+            promotion.setOrders(promotion.getOrders()+1);
+            promotion.setUsageCount(promotion.getUsageCount()+1);
+            promotionRepository.save(promotion);
         }
         Activity activity;
         if(customer.getLastname() != null){

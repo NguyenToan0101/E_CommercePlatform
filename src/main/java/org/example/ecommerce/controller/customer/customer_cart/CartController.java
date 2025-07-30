@@ -30,7 +30,7 @@ public class CartController {
 
         List<CartItemDTO> cartItems = cartService.getCartItemsByCustomer(customer);
         model.addAttribute("cartItems", cartItems);
-        return "/customer/cart/items";
+        return "customer/cart/items";
     }
 
     @PostMapping("/add")

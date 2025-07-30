@@ -24,15 +24,17 @@ public class SearchProductServiceImpl implements SearchProductService {
     private final ShopRepository shopRepository;
     @Autowired
     private final ReviewRepository reviewRepository;
-    private final ProductDocumentRepo productDocumentRepo;
-    public SearchProductServiceImpl(CategoryRepository categoryRepository, ProductRepository productRepository, ProductimageRepository productimageRepository, InventoryRepository inventoryRepository, ShopRepository shopRepository, ReviewRepository reviewRepository, ProductDocumentRepo productDocumentRepo) {
+//    private final ProductDocumentRepo productDocumentRepo;
+    public SearchProductServiceImpl(CategoryRepository categoryRepository, ProductRepository productRepository, ProductimageRepository productimageRepository, InventoryRepository inventoryRepository, ShopRepository shopRepository, ReviewRepository reviewRepository
+//                                    ProductDocumentRepo productDocumentRepo
+    ) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.productimageRepository = productimageRepository;
         this.inventoryRepository = inventoryRepository;
         this.shopRepository = shopRepository;
         this.reviewRepository = reviewRepository;
-        this.productDocumentRepo = productDocumentRepo;
+//        this.productDocumentRepo = productDocumentRepo;
     }
 
     @Override

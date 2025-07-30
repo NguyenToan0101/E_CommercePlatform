@@ -56,11 +56,11 @@ public class CheckoutController {
         if ("Thanh toán thành công".equals(result)) {
             model.addAttribute("message", result);
             model.addAttribute("customer", customer1);
-            return "/customer/wallet/checkout-success";
+            return "customer/wallet/checkout-success";
         } else {
             model.addAttribute("error", result);
             model.addAttribute("customer", customer1);
-            return "/customer/wallet/checkout-fail";
+            return "customer/wallet/checkout-fail";
         }
     }
 
@@ -79,10 +79,10 @@ public class CheckoutController {
         String result = paymentService.checkoutRealtime(freeshipId,discountId,totalPrice,customer1, inventory, quantity, customer.getFirstname() + " " + customer.getLastname(), customer.getPhone(), customer.getAddress());
         if ("Thanh toán thành công".equals(result)) {
             model.addAttribute("message", result);
-            return "/customer/wallet/checkout-success";
+            return "customer/wallet/checkout-success";
         } else {
             model.addAttribute("error", result);
-            return "/customer/wallet/checkout-fail";
+            return "customer/wallet/checkout-fail";
         }
     }
 
@@ -115,7 +115,7 @@ public class CheckoutController {
             System.out.println(promotionDTO.getName()+"Usage limit" +  promotionDTO.getUsageLimit() + "Usage Count" + promotionDTO.getUsageCount());
             if (promotionDTO.getStatus().equalsIgnoreCase("ACTIVE")
                     && promotionDTO.getPerUserLimit() >= oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId())
-                    && promotionDTO.getUsageLimit() >= promotionDTO.getUsageCount()
+//                    && promotionDTO.getUsageLimit() >= promotionDTO.getUsageCount()
             ) {
                 System.out.println(" --------------Active promotion");
                 System.out.println( promotionDTO.getName()+ "Per Usage limi"+  promotionDTO.getPerUserLimit()+ "----------Count promotion used------------" + oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId()));

@@ -6,5 +6,4 @@ public record ContentCreateDTO(
         String type,
         String content,
         String status,
-        Integer adminId
-){}
+        Integer adminId){}
