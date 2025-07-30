@@ -54,4 +54,37 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
     BigDecimal sumTotalAmountByCustomerid(Customer customer);
 
     Order findOrderById(Integer id);
+
+    // Dashboard methods
+    @Query("SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o " +
+            "JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId AND o.status = 'Đã giao'")
+    BigDecimal sumRevenueByShopId(@Param("shopId") Integer shopId);
+
+    @Query("SELECT COALESCE(COUNT(o.id), 0) FROM Order o " +
+            "JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId")
+    Long countOrdersByShopId(@Param("shopId") Integer shopId);
+
+    @Query("SELECT COALESCE(COUNT(DISTINCT o.customerid.id), 0) FROM Order o " +
+            "JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId")
+    Long countDistinctCustomersByShopId(@Param("shopId") Integer shopId);
+
+    @Query("SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o " +
+            "JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId " +
+            "AND EXTRACT(YEAR FROM o.orderdate) = :year AND EXTRACT(MONTH FROM o.orderdate) = :month " +
+            "AND o.status = 'Đã giao'")
+    BigDecimal sumRevenueByShopIdAndMonth(@Param("shopId") Integer shopId, @Param("year") int year, @Param("month") int month);
+
+    @Query("SELECT c.categoryname, COALESCE(SUM(o.totalamount), 0) FROM Order o " +
+            "JOIN o.orderitems oi JOIN oi.productid p JOIN p.categoryid c " +
+            "WHERE p.shopid.id = :shopId AND o.status = 'Đã giao' " +
+            "GROUP BY c.categoryname ORDER BY SUM(o.totalamount) DESC")
+    List<Object[]> sumRevenueByCategoryAndShopId(@Param("shopId") Integer shopId);
+
+    @Query(value = "SELECT o.* FROM orders o " +
+            "JOIN orderitems oi ON o.orderid = oi.orderid " +
+            "JOIN products p ON oi.productid = p.productid " +
+            "WHERE p.shopid = :shopId " +
+            "ORDER BY o.orderdate DESC " +
+            "LIMIT :limit", nativeQuery = true)
+    List<Order> findRecentOrdersByShopId(@Param("shopId") Integer shopId, @Param("limit") int limit);
 }

@@ -8,16 +8,21 @@
     <nav class="sidebar-nav">
         <ul class="sidebar-menu">
 
-            <!-- Dữ Liệu -->
+            <!-- Dashboard -->
             <li class="sidebar-section">
                 <div class="sidebar-section-header" onclick="toggleSidebarSection(this)">
-                    <span>Phân Tích Dữ Liệu</span>
+                    <span>Dashboard</span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <ul class="sidebar-submenu" style="display:block;">
-                    <li class="nav-item"><a href="#">Dữ Liệu</a></li>
+                    <li class="nav-item" th:classappend="${activePage == 'dashboard'} ? 'active'">
+                        <a th:href="@{/seller/dashboard}">
+                            <i class="fas fa-chart-line me-2"></i>Tổng Quan
+                        </a>
+                    </li>
                 </ul>
             </li>
+
             <!-- Quản Lý Đơn Hàng -->
             <li class="sidebar-section">
                 <div class="sidebar-section-header" onclick="toggleSidebarSection(this)">
@@ -52,9 +57,12 @@
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <ul class="sidebar-submenu" style="display:block;">
-                    <li class="nav-item"><a href="#">Khuyến Mãi của Shop</a></li>
-                    <li class="nav-item"><a href="#">Flash Sale Của Shop</a></li>
-                    <li class="nav-item"><a href="#">Mã Giảm Giá Của Shop</a></li>
+                    <li class="nav-item" th:classappend="${activePage == 'promotions'} ? 'active'">
+                        <a th:href="@{/seller/promotions}">
+                            <i class="fas fa-gift me-2"></i>Khuyến Mãi của Shop
+                        </a>
+                    </li>
+
                 </ul>
             </li>
             <!-- Chăm sóc khách hàng -->
@@ -75,7 +83,6 @@
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <ul class="sidebar-submenu" style="display:block;">
-                    <li class="nav-item"><a href="#">Doanh Thu</a></li>
                     <li class="nav-item"><a href="/seller/wallet">Số dư TK Musa</a></li>
 <!--                    <li class="nav-item"><a href="#">Tài Khoản Ngân Hàng</a></li>-->
                 </ul>
@@ -93,8 +100,7 @@
                     <li class="nav-item"><a href="/seller/shop/profile/edit">
                         <i class="fas fa-pen"></i> Chỉnh sửa hồ sơ Shop
                     </a></li>
-<!--                    <li class="nav-item"><a href="#">Trang Trí Shop</a></li>-->
-<!--                    <li class="nav-item"><a href="#">Thiết Lập Shop</a></li>-->
+
                 </ul>
             </li>
         </ul>

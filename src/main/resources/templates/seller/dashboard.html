@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="seller/fragments/head :: head">
+    <title>Dashboard - Seller</title>
+</head>
+<body>
+
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div th:replace="seller/fragments/sidebar :: sidebar"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div th:replace="seller/fragments/header :: header"></div>
+
+        <!-- Dashboard Page -->
+        <div class="seller-dashboard-wrapper">
+            <div class="seller-dashboard-data">
+                <!-- Page Header -->
+                <div class="seller-dashboard-header">
+                    <div>
+                        <h1>Dashboard</h1>
+                        <p>Tổng quan hoạt động kinh doanh của bạn</p>
+                    </div>
+                </div>
+
+                <!-- Overview Cards -->
+                <div class="seller-dashboard-overview">
+                    <!-- Total Revenue -->
+                    <div class="seller-dashboard-card seller-dashboard-card-revenue">
+                        <div class="seller-dashboard-card-icon">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="seller-dashboard-card-content">
+                            <p class="seller-dashboard-card-title">Tổng Doanh Thu</p>
+                            <p class="seller-dashboard-card-value" th:text="${#numbers.formatDecimal(dashboardData.overview.totalRevenue, 1, 'COMMA', 1, 'POINT')} + ' ₫'">0 ₫</p>
+                        </div>
+                    </div>
+
+                    <!-- Total Orders -->
+                    <div class="seller-dashboard-card seller-dashboard-card-orders">
+                        <div class="seller-dashboard-card-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <div class="seller-dashboard-card-content">
+                            <p class="seller-dashboard-card-title">Tổng Đơn Hàng</p>
+                            <p class="seller-dashboard-card-value" th:text="${dashboardData.overview.totalOrders}">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Total Products -->
+                    <div class="seller-dashboard-card seller-dashboard-card-customers">
+                        <div class="seller-dashboard-card-icon">
+                            <i class="fas fa-box"></i>
+                        </div>
+                        <div class="seller-dashboard-card-content">
+                            <p class="seller-dashboard-card-title">Tổng Sản Phẩm</p>
+                            <p class="seller-dashboard-card-value" th:text="${dashboardData.overview.totalProducts}">0</p>
+                        </div>
+                    </div>
+
+                    <!-- Total Customers -->
+                    <div class="seller-dashboard-card seller-dashboard-card-conversion">
+                        <div class="seller-dashboard-card-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="seller-dashboard-card-content">
+                            <p class="seller-dashboard-card-title">Tổng Khách Hàng</p>
+                            <p class="seller-dashboard-card-value" th:text="${dashboardData.overview.totalCustomers}">0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts and Tables -->
+                <div class="seller-dashboard-charts">
+                    <!-- Monthly Revenue Chart -->
+                    <div class="seller-dashboard-chart-card">
+                        <div class="seller-dashboard-chart-header">
+                            <h3>Biểu Đồ Doanh Thu</h3>
+                            <p>Doanh thu theo tháng trong năm 2024</p>
+                        </div>
+                        <div class="seller-dashboard-chart-container">
+                            <canvas id="monthlyRevenueChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Category Distribution Chart -->
+                    <div class="seller-dashboard-chart-card">
+                        <div class="seller-dashboard-chart-header">
+                            <h3>Phân Bổ Danh Mục</h3>
+                            <p>Doanh thu theo danh mục sản phẩm</p>
+                        </div>
+                        <div class="seller-dashboard-chart-container">
+                            <canvas id="categoryChart" width="400" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details Section -->
+                <div class="seller-dashboard-details">
+                    <!-- Best Selling Products -->
+                    <div class="seller-dashboard-detail-card">
+                        <div class="seller-dashboard-detail-header">
+                            <h3>Sản Phẩm Bán Chạy</h3>
+                            <p>Top 5 sản phẩm có doanh thu cao nhất</p>
+                        </div>
+                        <div class="seller-dashboard-product-list">
+                            <div th:each="product, stat : ${dashboardData.bestSellingProducts}" class="seller-dashboard-product-item">
+                                <div class="seller-dashboard-product-rank" th:text="${stat.count}">1</div>
+                                <div class="seller-dashboard-product-image" >
+                                    <img th:if="${product.productImage != null and product.productImage != ''}" 
+                                         th:src="${product.productImage}" 
+                                         alt="Product Image" 
+                                         class="seller-dashboard-product-img">
+                                    <div th:if="${product.productImage == null or product.productImage == ''}" 
+                                         class="seller-dashboard-product-img-placeholder">
+                                        <i class="fas fa-image"></i>
+                                    </div>
+                                </div>
+                                <div class="seller-dashboard-product-info">
+                                    <p class="seller-dashboard-product-name" th:text="${product.productName}">Product Name</p>
+                                    <div class="seller-dashboard-product-stats">
+                                        <p class="seller-dashboard-product-quantity" th:text="${product.quantitySold} + ' đã bán'">0 đã bán</p>
+                                        <p class="seller-dashboard-product-revenue" th:text="${#numbers.formatDecimal(product.totalRevenue, 1, 'COMMA', 1, 'POINT')} + ' ₫'">0 ₫</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Orders -->
+                    <div class="seller-dashboard-detail-card">
+                        <div class="seller-dashboard-detail-header">
+                            <h3>Đơn Hàng Gần Đây</h3>
+                            <p>Các đơn hàng mới nhất</p>
+                        </div>
+                        <div class="seller-dashboard-order-list">
+                            <div th:each="order : ${dashboardData.recentOrders}" class="seller-dashboard-order-item">
+                                <div class="seller-dashboard-order-id" th:text="${order.orderId}">#12345</div>
+                                <div class="seller-dashboard-order-customer" th:text="${order.customerName}">Customer Name</div>
+                                <div class="seller-dashboard-order-amount" th:text="${#numbers.formatDecimal(order.amount, 1, 'COMMA', 1, 'POINT')} + ' ₫'">0 ₫</div>
+                                <div class="seller-dashboard-order-status" th:text="${order.status}">Status</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script th:inline="javascript">
+        // Monthly Revenue Chart
+        const monthlyRevenueData = /*[[${dashboardData.monthlyRevenue}]]*/ [];
+        const monthlyRevenueLabels = monthlyRevenueData.map(item => item.month);
+        const monthlyRevenueValues = monthlyRevenueData.map(item => item.revenue);
+        
+        const monthlyRevenueChart = new Chart(document.getElementById('monthlyRevenueChart'), {
+            type: 'line',
+            data: {
+                labels: monthlyRevenueLabels,
+                datasets: [{
+                    label: 'Doanh Thu',
+                    data: monthlyRevenueValues,
+                    borderColor: 'rgb(59, 130, 246)',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return new Intl.NumberFormat('vi-VN').format(value) + ' ₫';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Category Chart
+        const categoryData = /*[[${dashboardData.categoryRevenue}]]*/ [];
+        const categoryLabels = categoryData.map(item => item.categoryName);
+        const categoryValues = categoryData.map(item => item.revenue);
+        const categoryColors = categoryData.map(item => item.color);
+        
+        const categoryChart = new Chart(document.getElementById('categoryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: categoryLabels,
+                datasets: [{
+                    data: categoryValues,
+                    backgroundColor: categoryColors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html> 

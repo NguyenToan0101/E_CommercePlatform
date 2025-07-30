@@ -2,6 +2,7 @@ package org.example.ecommerce.repository;
 
 import org.example.ecommerce.common.dto.shopManagement.ShopDTO;
 import org.example.ecommerce.common.dto.shopManagement.ShopDetailDTO;
+import org.example.ecommerce.entity.Seller;
 import org.example.ecommerce.entity.Shop;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -80,4 +81,6 @@ WHERE s.id = :shopId
     Shop findShopsById(Integer shopid);
 
     Optional<Shop> findBySellerid_Id(Integer sellerId);
+
+    Shop findBySellerid(Seller sellerid);
 }

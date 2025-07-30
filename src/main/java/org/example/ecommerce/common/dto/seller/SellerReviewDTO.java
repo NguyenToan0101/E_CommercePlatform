@@ -20,4 +20,5 @@ public class SellerReviewDTO {
     private List<String> reviewImages;
     private Instant createdAt;
     private String customerName;
+    private String reply; // Phản hồi của seller
 } 

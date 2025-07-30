@@ -22,7 +22,7 @@ public class HomeSellerController {
             return "redirect:/sellerChannel";
         }
 
-        return "redirect:seller/products";
+        return "redirect:seller/dashboard";
     }
 
 

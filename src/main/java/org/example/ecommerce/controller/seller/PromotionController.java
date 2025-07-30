@@ -31,9 +31,7 @@ public class PromotionController {
 
     private final PromotionSellerService promotionSellerService;
 
-    /**
-     * Hiển thị trang danh sách khuyến mãi
-     */
+
     @GetMapping
     public String listPromotions(
             @RequestParam(value = "page", defaultValue = "0") int page,
@@ -85,6 +83,19 @@ public class PromotionController {
             model.addAttribute("currentPage", page);
             model.addAttribute("totalPages", promotionPage.getTotalPages());
             model.addAttribute("totalItems", promotionPage.getTotalElements());
+            model.addAttribute("activePage", "promotions"); // Thêm activePage cho sidebar
+            
+            // Tính toán stats cho từng trạng thái
+            List<Promotion> allPromotions = promotionPage.getContent();
+            long activeCount = allPromotions.stream().filter(p -> "ACTIVE".equals(p.getStatus())).count();
+            long scheduledCount = allPromotions.stream().filter(p -> "SCHEDULED".equals(p.getStatus())).count();
+            long pausedCount = allPromotions.stream().filter(p -> "PAUSED".equals(p.getStatus())).count();
+            long expiredCount = allPromotions.stream().filter(p -> "EXPIRED".equals(p.getStatus())).count();
+            
+            model.addAttribute("activeCount", activeCount);
+            model.addAttribute("scheduledCount", scheduledCount);
+            model.addAttribute("pausedCount", pausedCount);
+            model.addAttribute("expiredCount", expiredCount);
             
             // Tạo danh sách số trang để hiển thị
             int totalPages = promotionPage.getTotalPages();
@@ -103,16 +114,23 @@ public class PromotionController {
             
         } catch (Exception e) {
             model.addAttribute("error", "Có lỗi xảy ra khi tải danh sách khuyến mãi: " + e.getMessage());
+            model.addAttribute("activePage", "promotions"); // Thêm activePage cho sidebar
+            
+            // Thêm stats mặc định khi có lỗi
+            model.addAttribute("activeCount", 0);
+            model.addAttribute("scheduledCount", 0);
+            model.addAttribute("pausedCount", 0);
+            model.addAttribute("expiredCount", 0);
+            
             return "seller/promotions/list";
         }
     }
     
-    /**
-     * Hiển thị form tạo mới khuyến mãi
-     */
+
     @GetMapping("/create")
     public String showCreateForm(Model model) {
         model.addAttribute("promotion", new CreatePromotionRequest());
+        model.addAttribute("activePage", "promotions"); // Thêm activePage cho sidebar
         return "seller/promotions/create";
     }
 
@@ -122,35 +140,35 @@ public class PromotionController {
             BindingResult result,
             HttpSession session,
             Model model) {
-        
+
         // Check if user is logged in and get shop ID
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null || customer.getSeller() == null || customer.getSeller().getShop() == null) {
             return "redirect:/login";
         }
-        
+
         Shop shopId = customer.getSeller().getShop();
-        
+
         // Validate request
         if (result.hasErrors()) {
             return "seller/promotions/create";
         }
-        
+
         // Validate at least one of categoryIds or productIds is provided
-        if ((request.getCategoryIds() == null || request.getCategoryIds().isEmpty()) && 
+        if ((request.getCategoryIds() == null || request.getCategoryIds().isEmpty()) &&
             (request.getProductIds() == null || request.getProductIds().isEmpty())) {
             model.addAttribute("error", "Bạn phải chọn ít nhất một ngành hàng hoặc sản phẩm");
             return "seller/promotions/create";
         }
-        
+
         try {
             Promotion createdPromotion = promotionSellerService.createPromotion(request, shopId);
-            return "redirect:/seller/promotions/" + createdPromotion.getId() + "?success";
+            return "redirect:/seller/promotions";
         } catch (Exception e) {
             model.addAttribute("error", "Có lỗi xảy ra khi tạo khuyến mãi: " + e.getMessage());
             return "seller/promotions/create";
         }
     }
     
-    // Add more endpoints for listing, viewing, updating, and deleting promotions as needed
+
 }
