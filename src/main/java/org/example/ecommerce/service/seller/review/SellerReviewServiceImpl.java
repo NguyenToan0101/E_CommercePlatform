@@ -74,6 +74,7 @@ public class SellerReviewServiceImpl implements SellerReviewService {
                     ? r.getOrderitemid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";
             int safeRating = r.getRating() != null ? Math.min(r.getRating(), 5) : 0;
             System.out.println("DEBUG rating: " + safeRating);
+            String replyContent = reviewReplyRepository.findByReview(r).map(ReviewReply::getReply).orElse(null);
             return new SellerReviewDTO(
                     r.getId(),
                     p.getId(),
@@ -83,7 +84,8 @@ public class SellerReviewServiceImpl implements SellerReviewService {
                     r.getComment(),
                     reviewImages,
                     r.getCreatedat(),
-                    customerName
+                    customerName,
+                    replyContent
             );
         }).collect(Collectors.toList());
     }
@@ -105,6 +107,7 @@ public class SellerReviewServiceImpl implements SellerReviewService {
                 ? r.getOrderitemid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";
         int safeRating = r.getRating() != null ? Math.min(r.getRating(), 5) : 0;
         System.out.println("DEBUG rating (detail): " + safeRating);
+        String replyContent = reviewReplyRepository.findByReview(r).map(ReviewReply::getReply).orElse(null);
         return new SellerReviewDTO(
                 r.getId(),
                 p.getId(),
@@ -114,7 +117,8 @@ public class SellerReviewServiceImpl implements SellerReviewService {
                 r.getComment(),
                 reviewImages,
                 r.getCreatedat(),
-                customerName
+                customerName,
+                replyContent
         );
     }
 

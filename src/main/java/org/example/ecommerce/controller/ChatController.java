@@ -25,6 +25,15 @@ import java.util.Set;
 import java.util.Collections;
 import java.util.stream.Collectors;
 import org.example.ecommerce.entity.Shop;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import java.util.Map;
 
 @Controller
 public class ChatController {
@@ -38,6 +47,9 @@ public class ChatController {
     private ShopRepository shopRepository;
     @Autowired
     private UserRepository userRepository;
+    
+    @Autowired
+    private Cloudinary cloudinary;
 
     // Trang chat cho customer (hỗ trợ truyền conversationId để hiển thị hội thoại cụ thể)
     @GetMapping("/customer/chat")
@@ -65,6 +77,7 @@ public class ChatController {
                 }
                 model.addAttribute("conversation", conversation);
                 model.addAttribute("messageViews", messageViews);
+                model.addAttribute("customer", customer);
             }
         }
         return "customer/chat";
@@ -223,4 +236,97 @@ public class ChatController {
         List<Customer> customers = userRepository.findByEmailContainingIgnoreCase(email);
         return customers.stream().filter(c -> !customerIds.contains(c.getId())).collect(Collectors.toList());
     }
+
+    // Upload ảnh cho chat (seller)
+    @PostMapping("/seller/chat/upload-image")
+    @ResponseBody
+    public Map<String, String> uploadSellerChatImage(@RequestParam("image") MultipartFile image, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null || customer.getSeller() == null) {
+            return Map.of("error", "Unauthorized");
+        }
+        
+        try {
+            if (image.isEmpty()) {
+                return Map.of("error", "No image selected");
+            }
+            
+            // Kiểm tra loại file
+            String contentType = image.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return Map.of("error", "Invalid file type. Only images are allowed.");
+            }
+            
+            // Kiểm tra kích thước file (max 5MB)
+            if (image.getSize() > 5 * 1024 * 1024) {
+                return Map.of("error", "File too large. Maximum size is 5MB.");
+            }
+            
+            // Upload lên Cloudinary
+            try {
+                Map<String, Object> uploadResult = cloudinary.uploader().upload(
+                    image.getBytes(),
+                    ObjectUtils.asMap(
+                        "folder", "chat",
+                        "public_id", "chat_" + System.currentTimeMillis(),
+                        "resource_type", "image"
+                    )
+                );
+                
+                String imageUrl = (String) uploadResult.get("secure_url");
+                return Map.of("imageUrl", imageUrl);
+            } catch (Exception e) {
+                return Map.of("error", "Failed to upload to Cloudinary: " + e.getMessage());
+            }
+        } catch (Exception e) {
+            return Map.of("error", "Upload failed: " + e.getMessage());
+        }
+    }
+
+    // Upload ảnh cho chat (customer)
+    @PostMapping("/customer/chat/upload-image")
+    @ResponseBody
+    public Map<String, String> uploadCustomerChatImage(@RequestParam("image") MultipartFile image, HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return Map.of("error", "Unauthorized");
+        }
+        
+        try {
+            if (image.isEmpty()) {
+                return Map.of("error", "No image selected");
+            }
+            
+            // Kiểm tra loại file
+            String contentType = image.getContentType();
+            if (contentType == null || !contentType.startsWith("image/")) {
+                return Map.of("error", "Invalid file type. Only images are allowed.");
+            }
+            
+            // Kiểm tra kích thước file (max 5MB)
+            if (image.getSize() > 5 * 1024 * 1024) {
+                return Map.of("error", "File too large. Maximum size is 5MB.");
+            }
+            
+            // Upload lên Cloudinary
+            try {
+                Map<String, Object> uploadResult = cloudinary.uploader().upload(
+                    image.getBytes(),
+                    ObjectUtils.asMap(
+                        "folder", "chat",
+                        "public_id", "chat_" + System.currentTimeMillis(),
+                        "resource_type", "image"
+                    )
+                );
+                
+                String imageUrl = (String) uploadResult.get("secure_url");
+                return Map.of("imageUrl", imageUrl);
+            } catch (Exception e) {
+                return Map.of("error", "Failed to upload to Cloudinary: " + e.getMessage());
+            }
+        } catch (Exception e) {
+            return Map.of("error", "Upload failed: " + e.getMessage());
+        }
+    }
+
 } 

@@ -1,12 +1,12 @@
+
 package org.example.ecommerce.service.seller.order;
 
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.example.ecommerce.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.example.ecommerce.entity.Order;
 import org.example.ecommerce.entity.Orderitem;
-import org.example.ecommerce.entity.Shop;
-import org.example.ecommerce.entity.conplaint.Complaint;
 import org.example.ecommerce.repository.OrderItemsRepository;
 import org.example.ecommerce.repository.seller.ShopRepo;
 import org.example.ecommerce.repository.ComplaintRepository;
@@ -43,6 +43,8 @@ public class OrderSellerService {
     private static final String STATUS_CHO_XAC_NHAN = "Chờ xác nhận";
     private static final String STATUS_DA_XAC_NHAN = "Đã xác nhận";
     private static final String STATUS_CHO_LAY_HANG = "Chờ lấy hàng";
+    private static final String STATUS_DANG_GIAO = "Đang giao hàng";
+    private static final String STATUS_DA_GIAO = "Đã giao";
     private static final String STATUS_DA_HUY = "Đã hủy";
     private static final String STATUS_YEU_CAU_TRA_HANG = "Yêu cầu trả hàng/hoàn tiền";
 
@@ -63,10 +65,12 @@ public class OrderSellerService {
     // 3. Cập nhật trạng thái đơn hàng
     public boolean updateOrderStatus(Integer orderId, String status) {
         List<String> allowedStatuses = List.of(
-            STATUS_CHO_XAC_NHAN,
-            STATUS_DA_XAC_NHAN,
-            STATUS_CHO_LAY_HANG,
-            STATUS_DA_HUY
+                STATUS_CHO_XAC_NHAN,
+                STATUS_DA_XAC_NHAN,
+                STATUS_CHO_LAY_HANG,
+                STATUS_DANG_GIAO,
+                STATUS_DA_GIAO,
+                STATUS_DA_HUY
         );
         if (!allowedStatuses.contains(status)) {
             return false;
@@ -84,15 +88,27 @@ public class OrderSellerService {
 
     // 4. Tìm kiếm và lọc đơn hàng (theo trạng thái, ngày, tên khách, mã đơn)
     public List<Order> searchOrders(Integer shopId, String status, String keyword, LocalDateTime from, LocalDateTime to) {
-        String filterStatus = null;
+        List<Order> orders;
+
+        // Xử lý trường hợp có hoặc không có lọc trạng thái
         if (status != null && !status.isEmpty()) {
-            filterStatus = status;
+            orders = ordersRepository.findAllByShopIdAndStatus(shopId, status);
+        } else {
+            orders = ordersRepository.findAllByShopIdAndStatus(shopId, null);
         }
-        List<Order> orders = ordersRepository.findAllByShopIdAndStatus(shopId, filterStatus);
+
+        // Lọc theo từ khóa và khoảng thời gian
         return orders.stream()
-                .filter(o -> (keyword == null || keyword.isEmpty() || o.getFullname().toLowerCase().contains(keyword.toLowerCase()) || o.getId().toString().contains(keyword))
-                        && (from == null || !o.getOrderdate().isBefore(from))
-                        && (to == null || !o.getOrderdate().isAfter(to)))
+                .filter(o -> {
+                    boolean matchesKeyword = keyword == null || keyword.isEmpty() ||
+                            (o.getFullname() != null && o.getFullname().toLowerCase().contains(keyword.toLowerCase())) ||
+                            (o.getId() != null && o.getId().toString().contains(keyword));
+
+                    boolean matchesFromDate = from == null || (o.getOrderdate() != null && !o.getOrderdate().isBefore(from));
+                    boolean matchesToDate = to == null || (o.getOrderdate() != null && !o.getOrderdate().isAfter(to));
+
+                    return matchesKeyword && matchesFromDate && matchesToDate;
+                })
                 .toList();
     }
 
@@ -132,17 +148,26 @@ public class OrderSellerService {
     }
     public long countOrdersByStatus(Integer shopId, String status) {
         List<String> allowedStatuses = List.of(
-            STATUS_CHO_XAC_NHAN,
-            STATUS_DA_XAC_NHAN,
-            STATUS_CHO_LAY_HANG,
-            STATUS_DA_HUY,
-            STATUS_YEU_CAU_TRA_HANG
+                STATUS_CHO_XAC_NHAN,
+                STATUS_DA_XAC_NHAN,
+                STATUS_CHO_LAY_HANG,
+                STATUS_DANG_GIAO,
+                STATUS_DA_GIAO,
+                STATUS_DA_HUY,
+                STATUS_YEU_CAU_TRA_HANG
         );
         if (!allowedStatuses.contains(status)) return 0;
         return getAllOrdersByShop(shopId).stream().filter(o -> status.equals(o.getStatus())).count();
     }
     public BigDecimal sumRevenueByShop(Integer shopId) {
-        return BigDecimal.ZERO;
+        try {
+            // Sử dụng cùng logic với Dashboard để đảm bảo consistency
+            return ordersRepository.sumRevenueByShopId(shopId);
+        } catch (Exception e) {
+            // Log lỗi nếu có
+            System.err.println("Lỗi khi tính tổng doanh thu: " + e.getMessage());
+            return BigDecimal.ZERO;
+        }
     }
 
     public List<Object[]> countOrdersByStatusForShop(Integer shopId) {
@@ -153,10 +178,21 @@ public class OrderSellerService {
     public ShopPerformanceReport getShopPerformance(Integer shopId) {
         ShopPerformanceReport report = new ShopPerformanceReport();
         report.totalOrders = countOrdersByShop(shopId);
-        report.completedOrders = 0; // Không có trạng thái hoàn thành
+        report.completedOrders = countOrdersByStatus(shopId, STATUS_DA_GIAO);
         report.cancelledOrders = countOrdersByStatus(shopId, STATUS_DA_HUY);
         report.returnedOrders = countOrdersByStatus(shopId, STATUS_YEU_CAU_TRA_HANG);
-        report.revenue = BigDecimal.ZERO;
+        report.pendingOrders = countOrdersByStatus(shopId, STATUS_CHO_XAC_NHAN);
+        report.confirmedOrders = countOrdersByStatus(shopId, STATUS_DA_XAC_NHAN);
+        report.shippingOrders = countOrdersByStatus(shopId, STATUS_DANG_GIAO);
+        report.revenue = sumRevenueByShop(shopId);
+
+        // Tính tỷ lệ Đã giao
+        if (report.totalOrders > 0) {
+            report.completionRate = (double) report.completedOrders / report.totalOrders * 100;
+        } else {
+            report.completionRate = 0.0;
+        }
+
         return report;
     }
 
@@ -165,6 +201,10 @@ public class OrderSellerService {
         public long completedOrders;
         public long cancelledOrders;
         public long returnedOrders;
+        public long pendingOrders;
+        public long confirmedOrders;
+        public long shippingOrders;
         public BigDecimal revenue;
+        public double completionRate; // Tỷ lệ Đã giao (%)
     }
 }

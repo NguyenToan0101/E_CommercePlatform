@@ -345,8 +345,8 @@
     <form id="stockAlertForm" method="post" th:action="@{/seller/products/inventory/alert}">
       <input type="hidden" name="productId" id="stockAlertProductId" value="" />
       <input type="hidden" name="setAllAlertQuantity" id="setAllAlertQuantityHidden" value="" />
-      <div style="margin-bottom: 12px; text-align: right;">
-        <input type="number" id="setAllAlertInput" class="stock-alert-input stock-alert-input-all" placeholder="Nhập số lượng cho tất cả" style="width: 200px; margin-right: 8px;" min="1" oninput="window.setAllAlertQuantity()" />
+      <div class="stock-alert-bulk-input">
+        <input type="number" id="setAllAlertInput" class="stock-alert-input stock-alert-input-all" placeholder="Nhập số lượng cho tất cả" min="1" oninput="window.setAllAlertQuantity()" />
       </div>
       <table class="stock-alert-table">
         <thead>
@@ -359,7 +359,7 @@
           <!-- JS sẽ render các dòng inventory ở đây -->
         </tbody>
       </table>
-      <div style="text-align:right; margin-top:16px;">
+      <div class="stock-alert-form-controls">
         <button type="button" class="btn btn-secondary" onclick="closeStockAlertModal()">Hủy</button>
         <button type="submit" class="btn btn-primary">Lưu</button>
       </div>

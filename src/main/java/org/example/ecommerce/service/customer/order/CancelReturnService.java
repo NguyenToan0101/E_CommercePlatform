@@ -44,6 +44,12 @@ public class CancelReturnService {
     @Transactional
     public boolean cancelOrderByCustomer(Integer orderId, Customer customer) {
         Order order = ordersRepository.findOrderById(orderId);
+
+        // Chỉ cho phép hủy khi đơn hàng ở trạng thái "Chờ xác nhận"
+        if (!"Chờ xác nhận".equals(order.getStatus())) {
+            return false; // Trả về false nếu không đúng trạng thái
+        }
+
         BigDecimal totalAmount = order.getTotalamount();
 
         List<Orderitem> orderItems = new ArrayList<>(order.getOrderitems());
@@ -110,6 +116,12 @@ public class CancelReturnService {
                 return false;
             }
             Order oldOrder = orderItem.getOrderid();
+
+            // Chỉ cho phép yêu cầu trả hàng khi đơn hàng ở trạng thái "Đã giao"
+            if (!"Đã giao".equals(oldOrder.getStatus())) {
+                return false; // Trả về false nếu không đúng trạng thái
+            }
+
             boolean onlyOne = oldOrder.getOrderitems().size() == 1;
             Complaint complaint = new Complaint();
 

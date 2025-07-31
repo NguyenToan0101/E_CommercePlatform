@@ -8,59 +8,59 @@
     <div th:replace="seller/fragments/sidebar :: sidebar"></div>
     <main class="main-content">
         <div th:replace="seller/fragments/header :: header"></div>
-        <div class="shop-profile-container">
-            <div th:if="${errorMessage}" class="shop-profile-alert alert alert-danger" th:text="${errorMessage}"></div>
-            <div th:if="${successMessage}" class="shop-profile-alert alert alert-success" th:text="${successMessage}"></div>
-            <div class="shop-profile-header">
-                <div class="shop-profile-header-left">
-                    <i class="fas fa-store shop-profile-header-icon"></i>
+        <div class="store-profile-container">
+            <div th:if="${errorMessage}" class="store-profile-alert alert alert-danger" th:text="${errorMessage}"></div>
+            <div th:if="${successMessage}" class="store-profile-alert alert alert-success" th:text="${successMessage}"></div>
+            <div class="store-profile-header">
+                <div class="store-profile-header-left">
+                    <i class="fas fa-store store-profile-header-icon"></i>
                     <div>
-                        <div class="shop-profile-header-title">Hồ sơ Shop</div>
-                        <div class="shop-profile-header-desc">Quản lý thông tin cửa hàng và chủ shop của bạn</div>
+                        <div class="store-profile-header-title">Hồ sơ Shop</div>
+                        <div class="store-profile-header-desc">Quản lý thông tin cửa hàng và chủ shop của bạn</div>
                     </div>
                 </div>
-                <div class="shop-profile-header-right">
-                    <a th:href="@{/seller/shop/profile/edit}" class="btn btn-primary shop-profile-edit-btn">Chỉnh sửa thông tin</a>
+                <div class="store-profile-header-right">
+                    <a th:href="@{/seller/shop/profile/edit}" class="btn btn-primary store-profile-edit-btn">Chỉnh sửa thông tin</a>
                 </div>
             </div>
-            <div class="shop-profile-card">
+            <div class="store-profile-card">
                 <div style="text-align:center;">
-                    <img th:if="${shop.imageshop != null}" th:src="${shop.imageshop}" class="shop-profile-avatar" alt="Ảnh shop" />
+                    <img th:if="${shop.imageshop != null}" th:src="${shop.imageshop}" class="store-profile-avatar" alt="Ảnh shop" />
                 </div>
                 <form th:action="@{/seller/shop/profile}" method="post" th:object="${shop}">
-                    <div class="shop-profile-row">
-                        <div class="shop-profile-col-half shop-profile-section">
-                            <div class="shop-profile-block">
+                    <div class="store-profile-row">
+                        <div class="store-profile-col-half store-profile-section">
+                            <div class="store-profile-block">
                                 <h4>Thông tin Shop</h4>
-                                <label class="shop-profile-label">Tên shop</label>
-                                <input type="text" class="shop-profile-input" th:field="*{shopname}" readonly />
-                                <label class="shop-profile-label">Mô tả</label>
-                                <textarea class="shop-profile-textarea" th:field="*{description}" rows="3" readonly></textarea>
-                                <label class="shop-profile-label">Địa chỉ</label>
-                                <input type="text" class="shop-profile-input" th:field="*{fulladdress}" readonly />
-                                <label class="shop-profile-label">Số điện thoại</label>
-                                <input type="text" class="shop-profile-input" th:field="*{phone}" readonly />
-                                <label class="shop-profile-label">Email hóa đơn</label>
-                                <input type="email" class="shop-profile-input" th:field="*{invoiceEmail}" readonly />
-                                <label class="shop-profile-label">Loại hình kinh doanh</label>
-                                <input type="text" class="shop-profile-input" th:field="*{businessType}" readonly />
+                                <label class="store-profile-label">Tên shop</label>
+                                <input type="text" class="store-profile-input" th:field="*{shopname}" readonly />
+                                <label class="store-profile-label">Mô tả</label>
+                                <textarea class="store-profile-textarea" th:field="*{description}" rows="3" readonly></textarea>
+                                <label class="store-profile-label">Địa chỉ</label>
+                                <input type="text" class="store-profile-input" th:field="*{fulladdress}" readonly />
+                                <label class="store-profile-label">Số điện thoại</label>
+                                <input type="text" class="store-profile-input" th:field="*{phone}" readonly />
+                                <label class="store-profile-label">Email hóa đơn</label>
+                                <input type="email" class="store-profile-input" th:field="*{invoiceEmail}" readonly />
+                                <label class="store-profile-label">Loại hình kinh doanh</label>
+                                <input type="text" class="store-profile-input" th:field="*{businessType}" readonly />
                             </div>
                         </div>
-                        <div class="shop-profile-col-half shop-profile-section">
-                            <div class="shop-profile-block">
+                        <div class="store-profile-col-half store-profile-section">
+                            <div class="store-profile-block">
                                 <h4>Thông tin Chủ Shop</h4>
-                                <label class="shop-profile-label">Họ tên</label>
-                                <input type="text" class="shop-profile-input" th:value="${seller.customer.firstname + ' ' + seller.customer.lastname}" readonly />
-                                <label class="shop-profile-label">Email</label>
-                                <input type="text" class="shop-profile-input" th:value="${seller.customer.email}" readonly />
-                                <label class="shop-profile-label">Số điện thoại</label>
-                                <input type="text" class="shop-profile-input" th:value="${seller.customer.phone}" readonly />
-                                <label class="shop-profile-label">Giới tính</label>
-                                <input type="text" class="shop-profile-input" th:value="${seller.customer.gender == 'M' ? 'Nam' : (seller.customer.gender == 'F' ? 'Nữ' : seller.customer.gender)}" readonly />
-                                <label class="shop-profile-label">Ngày sinh</label>
-                                <input type="text" class="shop-profile-input" th:value="${seller.customer.dateofbirth}" readonly />
-                                <label class="shop-profile-label">Địa chỉ</label>
-                                <input type="text" class="shop-profile-input" th:value="${seller.customer.address}" readonly />
+                                <label class="store-profile-label">Họ tên</label>
+                                <input type="text" class="store-profile-input" th:value="${seller.customer.firstname + ' ' + seller.customer.lastname}" readonly />
+                                <label class="store-profile-label">Email</label>
+                                <input type="text" class="store-profile-input" th:value="${seller.customer.email}" readonly />
+                                <label class="store-profile-label">Số điện thoại</label>
+                                <input type="text" class="store-profile-input" th:value="${seller.customer.phone}" readonly />
+                                <label class="store-profile-label">Giới tính</label>
+                                <input type="text" class="store-profile-input" th:value="${seller.customer.gender == 'M' ? 'Nam' : (seller.customer.gender == 'F' ? 'Nữ' : seller.customer.gender)}" readonly />
+                                <label class="store-profile-label">Ngày sinh</label>
+                                <input type="text" class="store-profile-input" th:value="${seller.customer.dateofbirth}" readonly />
+                                <label class="store-profile-label">Địa chỉ</label>
+                                <input type="text" class="store-profile-input" th:value="${seller.customer.address}" readonly />
                             </div>
                         </div>
                     </div>

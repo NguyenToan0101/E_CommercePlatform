@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Tạo khuyến mãi mới</title>
+    <link rel="stylesheet" th:href="@{/assets/css/seller.css}">
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div th:replace="seller/fragments/sidebar :: sidebar"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div th:replace="seller/fragments/header :: header"></div>
+
+        <!-- Promotions Create Page -->
+        <div class="seller-promo-create-content">
+            <nav class="seller-promo-create-breadcrumb">
+                <a href="/seller/promotions">Khuyến mãi</a> &gt; <span>Tạo khuyến mãi mới</span>
+            </nav>
+            <h1 class="seller-promo-create-title">Tạo khuyến mãi mới</h1>
+            <form th:action="@{/seller/promotions}" method="post" th:object="${promotion}">
+                <div class="seller-promo-create-card">
+                    <div class="seller-promo-create-section-header">Thông tin chung</div>
+                    <div class="seller-promo-create-row">
+                        <div class="seller-promo-create-col">
+                            <label class="seller-promo-create-label">Mã khuyến mãi *</label>
+                            <input type="text" class="seller-promo-create-input" th:field="*{code}" required placeholder="VD: SALE2024">
+                        </div>
+                        <div class="seller-promo-create-col">
+                            <label class="seller-promo-create-label">Tên chương trình *</label>
+                            <input type="text" class="seller-promo-create-input" th:field="*{name}" required placeholder="VD: Flash Sale">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="seller-promo-create-label">Mô tả</label>
+                        <textarea class="seller-promo-create-input" th:field="*{description}" rows="3"></textarea>
+                    </div>
+                    <div class="seller-promo-create-row">
+                        <div class="seller-promo-create-col">
+                            <label class="seller-promo-create-label">Loại khuyến mãi *</label>
+                            <select class="seller-promo-create-input" th:field="*{type}" required>
+                                <option value="">Chọn loại khuyến mãi</option>
+                                <option value="PERCENTAGE">Giảm giá theo %</option>
+                                <option value="FIXED">Giảm giá cố định (VNĐ)</option>
+                            </select>
+                        </div>
+                        <div class="seller-promo-create-col">
+                            <label class="seller-promo-create-label">Giá trị *</label>
+                            <input type="number" class="seller-promo-create-input" th:field="*{value}" step="0.01" min="0" required placeholder="0">
+                        </div>
+                        <div class="seller-promo-create-col">
+                            <label class="seller-promo-create-label">Giá trị đơn hàng tối thiểu</label>
+                            <input type="number" class="seller-promo-create-input" th:field="*{minOrderValue}" min="0" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="seller-promo-create-row">
+                        <div class="seller-promo-create-col">
+                            <label class="seller-promo-create-label">Ngày bắt đầu *</label>
+                            <input type="datetime-local" class="seller-promo-create-input" th:field="*{startDate}" required>
+                        </div>
+                        <div class="seller-promo-create-col">
+                            <label class="seller-promo-create-label">Ngày kết thúc *</label>
+                            <input type="datetime-local" class="seller-promo-create-input" th:field="*{endDate}" required>
+                        </div>
+                    </div>
+                    <div class="seller-promo-create-row">
+                        <div class="seller-promo-create-col">
+                            <label class="seller-promo-create-label">Số lần sử dụng tối đa</label>
+                            <input type="number" class="seller-promo-create-input" th:field="*{usageLimit}" min="1" placeholder="Không giới hạn">
+                            <small class="seller-promo-create-note">Để trống nếu không giới hạn</small>
+                        </div>
+                        <div class="seller-promo-create-col">
+                            <input type="hidden" th:field="*{perUserLimit}" value="1">
+                            <div class="seller-promo-create-info">
+                                <strong>Lưu ý:</strong> Mỗi khách hàng chỉ được sử dụng 1 lần
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="seller-promo-create-card">
+                    <div class="seller-promo-create-section-header">Áp dụng cho</div>
+                    <div class="seller-promo-create-radio-group">
+                        <label><input type="radio" name="applyType" value="all" checked> Toàn shop</label>
+                        <label><input type="radio" name="applyType" value="categories"> Ngành hàng</label>
+                        <label><input type="radio" name="applyType" value="products"> Sản phẩm cụ thể</label>
+                    </div>
+                    <div id="promo-create-categories">
+                        <label class="seller-promo-create-label" style="color: #222 !important;">Chọn ngành hàng</label>
+                        <select class="seller-promo-create-input" multiple th:field="*{categoryIds}"></select>
+                    </div>
+                    <div id="promo-create-products" style="display:none;">
+                        <label class="seller-promo-create-label">Chọn sản phẩm</label>
+                        <select class="seller-promo-create-input" multiple th:field="*{productIds}"></select>
+                    </div>
+                </div>
+                <div class="seller-promo-create-actions">
+                    <a href="/seller/promotions" class="seller-promo-create-btn seller-promo-create-btn-secondary">Quay lại</a>
+                    <button type="submit" class="seller-promo-create-btn seller-promo-create-btn-primary">Tạo khuyến mãi</button>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+<script>
+    // JS thuần để chuyển đổi giữa category/product/shop
+    document.querySelectorAll('input[name="applyType"]').forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            document.getElementById('promo-create-categories').style.display = this.value === 'categories' ? 'block' : 'none';
+            document.getElementById('promo-create-products').style.display = this.value === 'products' ? 'block' : 'none';
+            if (this.value === 'all') {
+                document.getElementById('promo-create-categories').style.display = 'none';
+                document.getElementById('promo-create-products').style.display = 'none';
+            }
+        });
+    });
+
+    // Load categories
+    function loadCategories() {
+        fetch('/api/categories/all')
+            .then(res => res.json())
+            .then(data => {
+                const select = document.querySelector('select[name="categoryIds"]');
+                if (!select) return;
+                select.innerHTML = '';
+                data.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = cat.name;
+                    select.appendChild(option);
+                });
+            });
+    }
+    // Load products
+    function loadProducts() {
+        fetch('/api/seller/products')
+            .then(res => res.json())
+            .then(data => {
+                const select = document.querySelector('select[name="productIds"]');
+                if (!select) return;
+                select.innerHTML = '';
+                data.forEach(prod => {
+                    const option = document.createElement('option');
+                    option.value = prod.id;
+                    option.textContent = prod.name;
+                    select.appendChild(option);
+                });
+            });
+    }
+    // Tự động load khi vào trang
+    document.addEventListener('DOMContentLoaded', function() {
+        var checked = document.querySelector('input[name="applyType"]:checked');
+        if (checked && checked.value === 'all') {
+            document.getElementById('promo-create-categories').style.display = 'none';
+            document.getElementById('promo-create-products').style.display = 'none';
+        }
+        loadCategories();
+        loadProducts();
+    });
+</script>
+</body>
+</html>

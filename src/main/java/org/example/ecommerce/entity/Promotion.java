@@ -7,6 +7,7 @@ import org.hibernate.annotations.Nationalized;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -60,6 +61,14 @@ public class Promotion {
             inverseJoinColumns = @JoinColumn(name = "categoryid")
     )
     private List<Category> categories;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shopid")
+    private Shop shop;
+
+    @OneToMany(mappedBy = "promotionid", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PromotionTarget> promotionTargets = new ArrayList<>();
+
 
     public Promotion() {
     }

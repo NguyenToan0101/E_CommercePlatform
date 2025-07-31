@@ -52,7 +52,7 @@
                     <img th:each="img : ${review.reviewImages}" th:src="${img}" class="seller-review-detail-img-thumb" alt="Ảnh đánh giá">
                 </div>
                 <div class="seller-review-detail-meta">
-                    Người đánh giá: <span th:text="${review.customerName}"></span> | Ngày: <span th:text="${#dates.format(review.createdAt, 'dd/MM/yyyy')}"></span>
+                    Người đánh giá: <span th:text="${review.customerName}"></span> | Ngày: <span th:text="${#temporals.format(review.createdAt, 'dd/MM/yyyy')}"></span>
                 </div>
                 <div class="seller-review-reply-block">
                     <h4>Phản hồi của shop:</h4>

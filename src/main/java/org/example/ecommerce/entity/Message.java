@@ -40,4 +40,10 @@ public class Message {
     @Column(name = "isread")
     private Boolean isread;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "message_type")
+    private String messageType; // "TEXT" or "IMAGE"
+
 }

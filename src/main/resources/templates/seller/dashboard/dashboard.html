@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" th:href="@{/assets/css/Seller.css}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <i class="fas fa-store"></i>
+                    <span>Seller Portal</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-box"></i>
+                        <span>Sản phẩm</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Đơn hàng</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Khuyến mãi</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-wallet"></i>
+                        <span>Ví</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-comments"></i>
+                        <span>Chat</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-star"></i>
+                        <span>Đánh giá</span>
+                    </li>
+                    <li class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span>Cài đặt</span>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <h1>Dashboard</h1>
+                <div class="header-right">
+                    <button class="btn-icon">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="seller-dashboard-content">
+                <!-- Loading State -->
+                <div id="seller-dashboard-loading" class="seller-dashboard-loading">
+                    <div class="seller-dashboard-loading-spinner"></div>
+                    <p>Đang tải dữ liệu...</p>
+                </div>
+
+                <!-- Dashboard Data -->
+                <div id="seller-dashboard-data" class="seller-dashboard-data" style="display: none;">
+                    <!-- Overview Cards -->
+                    <div class="seller-dashboard-overview">
+                        <div class="seller-dashboard-card seller-dashboard-card-revenue">
+                            <div class="seller-dashboard-card-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="seller-dashboard-card-content">
+                                <h3 class="seller-dashboard-card-title">Tổng Doanh Thu</h3>
+                                <p class="seller-dashboard-card-value" th:text="${dashboardData != null and dashboardData.overview != null ? #numbers.formatDecimal(dashboardData.overview.totalRevenue, 0, 'COMMA', 0, 'POINT') + ' VNĐ' : '0 VNĐ'}">0 VNĐ</p>
+                                <span class="seller-dashboard-card-change seller-dashboard-card-change-positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span th:text="${dashboardData != null and dashboardData.overview != null ? #numbers.formatDecimal(dashboardData.overview.conversionRate, 1, 'POINT', 2, 'COMMA') + '%' : '0%'}">0%</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="seller-dashboard-card seller-dashboard-card-orders">
+                            <div class="seller-dashboard-card-icon">
+                                <i class="fas fa-shopping-bag"></i>
+                            </div>
+                            <div class="seller-dashboard-card-content">
+                                <h3 class="seller-dashboard-card-title">Tổng Đơn Hàng</h3>
+                                <p class="seller-dashboard-card-value" th:text="${dashboardData != null and dashboardData.overview != null ? #numbers.formatDecimal(dashboardData.overview.totalOrders, 0, 'COMMA', 0, 'POINT') : '0'}">0</p>
+                                <span class="seller-dashboard-card-change seller-dashboard-card-change-positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>12%</span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="seller-dashboard-card seller-dashboard-card-customers">
+                            <div class="seller-dashboard-card-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="seller-dashboard-card-content">
+                                <h3 class="seller-dashboard-card-title">Khách Hàng</h3>
+                                <p class="seller-dashboard-card-value" th:text="${dashboardData != null and dashboardData.overview != null ? #numbers.formatDecimal(dashboardData.overview.totalCustomers, 0, 'COMMA', 0, 'POINT') : '0'}">0</p>
+                                <span class="seller-dashboard-card-change seller-dashboard-card-change-positive">
+                                    <i class="fas fa-arrow-up"></i>
+                                    <span>8%</span>
+                                </span>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Charts Section -->
+                    <div class="seller-dashboard-charts">
+                        <!-- Revenue Chart -->
+                        <div class="seller-dashboard-chart-card">
+                            <div class="seller-dashboard-chart-header">
+                                <h3>Doanh Thu Theo Tháng</h3>
+                                <p>Biểu đồ doanh thu 12 tháng gần đây</p>
+                            </div>
+                            <div class="seller-dashboard-chart-container">
+                                <canvas id="seller-dashboard-revenue-chart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Category Chart -->
+                        <div class="seller-dashboard-chart-card">
+                            <div class="seller-dashboard-chart-header">
+                                <h3>Doanh Thu Theo Danh Mục</h3>
+                                <p>Phân bố doanh thu theo danh mục sản phẩm</p>
+                            </div>
+                            <div class="seller-dashboard-chart-container">
+                                <canvas id="seller-dashboard-category-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Products and Orders Section -->
+                    <div class="seller-dashboard-details">
+                        <!-- Best Selling Products -->
+                        <div class="seller-dashboard-detail-card">
+                            <div class="seller-dashboard-detail-header">
+                                <h3>Sản Phẩm Bán Chạy</h3>
+                                <p>Top 5 sản phẩm có doanh thu cao nhất</p>
+                            </div>
+                            <div class="seller-dashboard-product-list" th:if="${dashboardData != null and dashboardData.bestSellingProducts != null and !dashboardData.bestSellingProducts.isEmpty()}">
+                                <div th:each="product, stat : ${dashboardData.bestSellingProducts}" class="seller-dashboard-product-item">
+                                    <div class="seller-dashboard-product-rank" th:text="${stat.count}">1</div>
+                                    <div class="seller-dashboard-product-info">
+                                        <h4 class="seller-dashboard-product-name" th:text="${product.productName}">Tên sản phẩm</h4>
+                                        <p class="seller-dashboard-product-stats">
+                                            <span class="seller-dashboard-product-quantity" th:text="'Đã bán: ' + ${#numbers.formatDecimal(product.quantitySold, 0, 'COMMA', 0, 'POINT')} + ' cái'">Đã bán: 0 cái</span>
+                                            <span class="seller-dashboard-product-revenue" th:text="'Doanh thu: ' + ${#numbers.formatDecimal(product.totalRevenue, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">Doanh thu: 0 VNĐ</span>
+                                        </p>
+                                    </div>
+                                    <div class="seller-dashboard-product-change" th:class="${product.percentageChange != null and product.percentageChange >= 0 ? 'seller-dashboard-product-change-positive' : 'seller-dashboard-product-change-negative'}">
+                                        <i th:class="${product.percentageChange != null and product.percentageChange >= 0 ? 'fas fa-arrow-up' : 'fas fa-arrow-down'}"></i>
+                                        <span th:text="${product.percentageChange != null ? (product.percentageChange >= 0 ? #numbers.formatDecimal(product.percentageChange, 1, 'POINT', 1, 'COMMA') : #numbers.formatDecimal(-product.percentageChange, 1, 'POINT', 1, 'COMMA')) + '%' : '0%'}">0%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="seller-dashboard-empty" th:if="${dashboardData == null or dashboardData.bestSellingProducts == null or dashboardData.bestSellingProducts.isEmpty()}">
+                                <i class="fas fa-box-open"></i>
+                                <h3>Chưa có sản phẩm bán chạy</h3>
+                                <p>Bắt đầu bán hàng để xem thống kê sản phẩm bán chạy</p>
+                            </div>
+                        </div>
+
+                        <!-- Recent Orders -->
+                        <div class="seller-dashboard-detail-card">
+                            <div class="seller-dashboard-detail-header">
+                                <h3>Đơn Hàng Gần Đây</h3>
+                                <p>5 đơn hàng mới nhất</p>
+                            </div>
+                            <div class="seller-dashboard-order-list" th:if="${dashboardData != null and dashboardData.recentOrders != null and !dashboardData.recentOrders.isEmpty()}">
+                                <div th:each="order : ${dashboardData.recentOrders}" class="seller-dashboard-order-item">
+                                    <div class="seller-dashboard-order-id" th:text="${order.orderId}">#12345</div>
+                                    <div class="seller-dashboard-order-customer" th:text="${order.customerName}">Tên khách hàng</div>
+                                    <div class="seller-dashboard-order-amount" th:text="${#numbers.formatDecimal(order.amount, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</div>
+                                    <div class="seller-dashboard-order-status" th:text="${order.status}">Trạng thái</div>
+                                </div>
+                            </div>
+                            <div class="seller-dashboard-empty" th:if="${dashboardData == null or dashboardData.recentOrders == null or dashboardData.recentOrders.isEmpty()}">
+                                <i class="fas fa-shopping-cart"></i>
+                                <h3>Chưa có đơn hàng</h3>
+                                <p>Chưa có đơn hàng nào được tạo</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        // Parse Thymeleaf data
+        const dashboardData = /*[[${dashboardData}]]*/ {};
+        
+        // Chart.js configuration
+        let revenueChart, categoryChart;
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                if (dashboardData && Object.keys(dashboardData).length > 0) {
+                    initializeDashboard();
+                } else {
+                    // Fallback to API call if no data from server
+                    loadDashboardData();
+                }
+            } catch (error) {
+                console.error('Error initializing dashboard:', error);
+                // Show error state
+                const loadingElement = document.getElementById('seller-dashboard-loading');
+                if (loadingElement) {
+                    loadingElement.innerHTML = '<p>Không thể khởi tạo dashboard. Vui lòng thử lại sau.</p>';
+                }
+            }
+        });
+
+        function initializeDashboard() {
+            // Hide loading, show data
+            const loadingElement = document.getElementById('seller-dashboard-loading');
+            const dataElement = document.getElementById('seller-dashboard-data');
+            
+            if (loadingElement) {
+                loadingElement.style.display = 'none';
+            }
+            if (dataElement) {
+                dataElement.style.display = 'block';
+            }
+
+            // Initialize charts
+            try {
+                initializeRevenueChart();
+                initializeCategoryChart();
+            } catch (error) {
+                console.error('Error initializing charts:', error);
+            }
+        }
+
+        function loadDashboardData() {
+            fetch('/seller/api/dashboard-data')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data && Object.keys(data).length > 0) {
+                        // Update the dashboard with fetched data
+                        updateDashboardData(data);
+                        initializeDashboard();
+                    } else {
+                        throw new Error('No data received');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading dashboard data:', error);
+                    // Show error state
+                    const loadingElement = document.getElementById('seller-dashboard-loading');
+                    if (loadingElement) {
+                        loadingElement.innerHTML = '<p>Không thể tải dữ liệu. Vui lòng thử lại sau.</p>';
+                    }
+                });
+        }
+
+        function updateDashboardData(data) {
+            // Update overview values
+            if (data && data.overview) {
+                const revenueElement = document.querySelector('.seller-dashboard-card-revenue .seller-dashboard-card-value');
+                const ordersElement = document.querySelector('.seller-dashboard-card-orders .seller-dashboard-card-value');
+                const customersElement = document.querySelector('.seller-dashboard-card-customers .seller-dashboard-card-value');
+                
+                if (revenueElement) {
+                    revenueElement.textContent = formatCurrency(data.overview.totalRevenue || 0) + ' VNĐ';
+                }
+                if (ordersElement) {
+                    ordersElement.textContent = formatNumber(data.overview.totalOrders || 0);
+                }
+                if (customersElement) {
+                    customersElement.textContent = formatNumber(data.overview.totalCustomers || 0);
+                }
+            }
+        }
+
+        function initializeRevenueChart() {
+            const canvas = document.getElementById('seller-dashboard-revenue-chart');
+            if (!canvas) {
+                console.error('Revenue chart canvas not found');
+                return;
+            }
+            
+            const ctx = canvas.getContext('2d');
+            
+            const monthlyData = /*[[${dashboardData != null ? dashboardData.monthlyRevenue : []}]]*/ [];
+            const labels = monthlyData && monthlyData.length > 0 ? monthlyData.map(item => `Tháng ${item.month}`) : [];
+            const data = monthlyData && monthlyData.length > 0 ? monthlyData.map(item => item.revenue) : [];
+
+            revenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu (VNĐ)',
+                        data: data,
+                        borderColor: '#4ecdc4',
+                        backgroundColor: 'rgba(78, 205, 196, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#4ecdc4',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return formatCurrency(value) + ' VNĐ';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeCategoryChart() {
+            const canvas = document.getElementById('seller-dashboard-category-chart');
+            if (!canvas) {
+                console.error('Category chart canvas not found');
+                return;
+            }
+            
+            const ctx = canvas.getContext('2d');
+            
+            const categoryData = /*[[${dashboardData != null ? dashboardData.categoryRevenue : []}]]*/ [];
+            const labels = categoryData && categoryData.length > 0 ? categoryData.map(item => item.categoryName) : [];
+            const data = categoryData && categoryData.length > 0 ? categoryData.map(item => item.revenue) : [];
+            const colors = categoryData && categoryData.length > 0 ? categoryData.map(item => item.color) : [];
+
+            categoryChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: colors,
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                padding: 20,
+                                usePointStyle: true,
+                                pointStyle: 'circle'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function formatCurrency(amount) {
+            if (amount == null || amount === undefined) {
+                return '0';
+            }
+            return new Intl.NumberFormat('vi-VN').format(amount);
+        }
+
+        function formatNumber(number) {
+            if (number == null || number === undefined) {
+                return '0';
+            }
+            return new Intl.NumberFormat('vi-VN').format(number);
+        }
+    </script>
+</body>
+</html> 

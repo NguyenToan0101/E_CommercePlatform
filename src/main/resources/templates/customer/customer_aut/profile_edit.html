@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh sửa thông tin cá nhân</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Core Colors */
+            --primary-black: #1a2233;
+            --secondary-black: #222b45;
+            --white: #ffffff;
+            --text-gray: #6b7280;
+            --border-gray: #e5eaf2;
+            --accent-gray: #e0e7ef;
+            --light-gray: #f5f7fa;
+
+            /* Brand Colors */
+            --primary: #088395;
+            --primary-blue: #0a4d68;
+            --secondary-blue: #088395;
+            --accent-teal: #05bfdb;
+            --gradient-start: #0a4d68;
+            --gradient-mid: #088395;
+            --gradient-end: #05bfdb;
+            --gradient-light-end: #8de0a6;
+
+            /* Accent Colors */
+            --gold-accent: #f7c873;
+            --success-green: #10b981;
+            --error-red: #dc2626;
+            --orange-accent: #ff7a45;
+            --blue-accent: #3b82f6;
+            --shopee-orange: #ee4d2d;
+            --accent: #F7EEDD;
+
+            /* Gender Colors */
+            --male-color: #1e40af;
+            --female-color: #be185d;
+            --other-color: #7e22ce;
+
+            /* Shadows */
+            --shadow-light: rgba(16, 42, 67, 0.04);
+            --shadow-medium: rgba(16, 42, 67, 0.10);
+            --shadow-heavy: rgba(16, 42, 67, 0.18);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
+            min-height: 100vh;
+            color: #111;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Styles */
+        .main-header {
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+            box-shadow: 0 2px 16px var(--shadow-light);
+            padding: 0 16px;
+            height: 88px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            width: 100vw;
+            box-sizing: border-box;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .logo-img {
+            height: 80px !important;
+            width: auto !important;
+            display: block;
+            margin-right: 8px;
+            filter: drop-shadow(0 2px 8px #05bfdb33);
+        }
+
+        .search-bar {
+            flex: 1;
+            margin: 0 16px;
+            display: flex;
+            align-items: center;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 2px 12px var(--shadow-light);
+            padding: 0 16px;
+            max-width: 900px;
+            border: 2px solid #05bfdb22;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            font-size: 1.1rem;
+            flex: 1;
+            padding: 12px 0;
+            outline: none;
+            color: #111 !important;
+        }
+
+        .search-bar button {
+            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-left: 8px;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px var(--shadow-light);
+        }
+
+        .search-bar button:hover {
+            background: var(--gradient-start);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            overflow-x: auto;
+            white-space: nowrap;
+            max-width: 250px;
+        }
+
+        .account-link {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #111 !important;
+            background: none;
+            padding: 0 0 0 2px;
+            text-decoration: none;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .user-info-box {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .user-info-box:hover .account-menu-list,
+        .user-info-box:focus-within .account-menu-list {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .account-menu-list {
+            display: none;
+            position: fixed;
+            top: 72px;
+            right: 16px;
+            background: var(--white);
+            min-width: 200px;
+            border-radius: 16px;
+            box-shadow: 0 16px 48px rgba(16,42,67,0.13);
+            border: 1px solid var(--accent-gray);
+            overflow: visible;
+            z-index: 9999;
+            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s, visibility 0.2s;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .account-menu-list::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 20px;
+            width: 12px;
+            height: 12px;
+            background: var(--white);
+            border: 1px solid var(--accent-gray);
+            border-bottom: none;
+            border-right: none;
+            transform: rotate(45deg);
+        }
+
+        .account-menu-list a {
+            color: var(--primary-black);
+            padding: 12px 20px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background 0.15s, color 0.15s, transform 0.15s;
+            border-left: 3px solid transparent;
+            white-space: normal;
+            word-break: break-word;
+        }
+
+        .account-menu-list a:hover {
+            background: var(--accent-gray);
+            border-left-color: var(--gradient-mid);
+            color: var(--gradient-mid);
+            transform: translateX(4px);
+        }
+
+        .account-menu-list a:not(:last-child) {
+            border-bottom: 1px solid var(--accent-gray);
+        }
+
+        .user-avatar {
+            width: auto;
+            height: auto;
+            background: none;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 0;
+            overflow: visible;
+            padding: 0;
+        }
+
+        .user-avatar img {
+            width: 32px;
+            height: 32px;
+            object-fit: cover;
+            border-radius: 50%;
+            display: block;
+        }
+
+        .header-cart-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            margin-left: 18px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .header-cart-link img {
+            height: 40px;
+            width: 40px;
+            filter: drop-shadow(0 2px 8px #05bfdb33);
+        }
+
+        .header-cart-link:hover img {
+            transform: scale(1.08) rotate(-8deg);
+            filter: drop-shadow(0 4px 16px #08839566);
+        }
+
+        /* Header Top Bar */
+        .header-top-bar {
+            background: var(--white);
+            color: #111;
+            font-size: 1rem;
+            padding: 0 16px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border-gray);
+            width: 100vw;
+            box-sizing: border-box;
+        }
+
+        /* Animated background elements */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Layout */
+        .container {
+            max-width: 100vw;
+            width: 100%;
+            margin: 0;
+            padding: 40px 16px;
+            display: flex;
+            gap: 30px;
+            flex: 1;
+            box-sizing: border-box;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            width: 20%;
+            min-width: 200px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px var(--shadow-light);
+            padding: 24px 0;
+            height: fit-content;
+            position: sticky;
+            top: 140px;
+        }
+
+        .nav-section {
+            margin-bottom: 24px;
+        }
+
+        .nav-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .nav-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0 24px 12px 24px;
+            border-bottom: 1px solid var(--border-gray);
+            margin-bottom: 12px;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 12px 24px;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+            position: relative;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-gray);
+            color: var(--gradient-mid);
+            border-left-color: var(--gradient-end);
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: linear-gradient(90deg, var(--gradient-end) 0%, var(--gradient-mid) 100%);
+            color: var(--white);
+            border-left-color: var(--white);
+        }
+
+        .nav-item svg {
+            width: 18px;
+            height: 18px;
+            margin-right: 12px;
+            vertical-align: middle;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            width: 80%;
+            flex: 1;
+        }
+
+        /* Edit Container */
+        .edit-container {
+            width: 100%;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 16px 32px var(--shadow-light), 0 8px 16px var(--shadow-medium);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .edit-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--gradient-start) 0%, var(--gradient-end) 50%, var(--gradient-start) 100%);
+        }
+
+        .edit-body {
+            padding: 40px 32px;
+            position: relative;
+        }
+
+        /* Image Section */
+        .image-section {
+            background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
+            border-radius: 12px;
+            margin-bottom: 32px;
+            border: 2px dashed var(--border-gray);
+            text-align: center;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 24px;
+        }
+
+        .image-section:hover {
+            border-color: var(--accent-teal);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px var(--shadow-light);
+        }
+
+        .current-image {
+            margin-bottom: 16px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .current-image img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--white);
+            box-shadow: 0 10px 20px var(--shadow-medium);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .current-image img:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-teal);
+        }
+
+        .image-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--border-gray) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            color: var(--text-gray);
+            margin: 0 auto 16px;
+            border: 4px solid var(--white);
+            box-shadow: 0 10px 20px var(--shadow-medium);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .image-placeholder:hover {
+            transform: scale(1.05);
+            border-color: var(--accent-teal);
+        }
+
+        .preview-overlay {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 28px;
+            height: 28px;
+            background: var(--error-red);
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--white);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .preview-overlay:hover {
+            background: #b91c1c;
+            transform: scale(1.1);
+        }
+
+        .preview-overlay.show {
+            display: flex;
+        }
+
+        .preview-overlay .close-icon {
+            color: var(--white);
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .file-input-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: var(--white);
+            color: var(--primary-blue);
+            border: 2px solid var(--accent-teal);
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: none;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(8, 131, 149, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-input-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(5, 191, 219, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .file-input-label:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(8, 131, 149, 0.25);
+            background: var(--accent-teal);
+            color: var(--white);
+            border-color: var(--accent-teal);
+        }
+
+        .file-input-label:hover::before {
+            left: 100%;
+        }
+
+        .file-input-label svg {
+            transition: transform 0.3s ease;
+        }
+
+        .file-input-label:hover svg {
+            transform: scale(1.1);
+        }
+
+        /* Form Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .form-section {
+            background: linear-gradient(135deg, rgba(8, 131, 149, 0.03) 0%, rgba(5, 191, 219, 0.03) 100%);
+            border-radius: 12px;
+            padding: 24px;
+            border-left: 4px solid var(--gradient-mid);
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .form-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--shadow-light);
+            border-left-color: var(--gradient-end);
+        }
+
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 8px;
+            height: 8px;
+            background: var(--gradient-end);
+            border-radius: 50%;
+        }
+
+        .form-section h3 {
+            font-family: 'Inter', sans-serif;
+            color: var(--gradient-start);
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .form-section h3::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 32px;
+            height: 2px;
+            background: var(--gradient-end);
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin-bottom: 6px;
+            font-size: 14px;
+            text-transform: none;
+            letter-spacing: 0.3px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            background: var(--white);
+            color: var(--primary-blue);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-teal);
+            box-shadow: 0 0 0 3px rgba(5, 191, 219, 0.08);
+            transform: translateY(-1px);
+        }
+
+        .form-control::placeholder {
+            color: var(--text-gray);
+            opacity: 0.7;
+        }
+
+        .error-message {
+            display: none;
+            color: var(--error-red);
+            font-size: 12px;
+            margin-top: 6px;
+            font-weight: 500;
+        }
+
+        .validation-message {
+            text-align: center;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            display: none;
+            font-size: 15px;
+        }
+
+        .validation-message.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success-green);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .validation-message.error {
+            background: rgba(220, 38, 38, 0.1);
+            color: var(--error-red);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, var(--secondary-blue) 0%, var(--accent-teal) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 6px 20px rgba(8, 131, 149, 0.3);
+            margin-bottom: 24px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(8, 131, 149, 0.4);
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Back Link */
+        .back-link {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-gray);
+        }
+
+        .back-link a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary-blue);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            padding: 10px 16px;
+            border-radius: 8px;
+        }
+
+        .back-link a:hover {
+            background: var(--accent-gray);
+            color: var(--gradient-mid);
+            transform: translateX(-4px);
+        }
+
+        .back-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+
+            .main-header {
+                padding: 0 8px;
+                height: 70px;
+            }
+
+            .header-top-bar {
+                padding: 0 8px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+
+            .search-bar {
+                margin: 0 8px;
+                width: calc(100% - 16px);
+                padding: 0 10px;
+            }
+
+            .search-bar input {
+                font-size: 1rem;
+            }
+
+            .search-bar button {
+                width: 36px;
+                height: 36px;
+            }
+
+            .logo-img {
+                height: 60px !important;
+            }
+
+            .header-right {
+                max-width: 200px;
+            }
+
+            .container {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px 10px;
+            }
+
+            .sidebar-nav {
+                width: 100%;
+                min-width: unset;
+                position: static;
+                order: 2;
+            }
+
+            .main-content {
+                width: 100%;
+                order: 1;
+            }
+
+            .edit-body {
+                padding: 24px 16px;
+            }
+
+            .image-section {
+                padding: 16px;
+            }
+
+            .current-image img, .image-placeholder {
+                width: 100px;
+                height: 100px;
+                font-size: 40px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .form-section {
+                padding: 16px;
+            }
+
+            .form-control {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .submit-btn {
+                padding: 12px 16px;
+                font-size: 15px;
+            }
+
+            .back-link a {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-header {
+                padding: 0 4px;
+            }
+
+            .header-top-bar {
+                padding: 0 4px;
+            }
+
+            .container {
+                padding: 10px 5px;
+            }
+
+            .edit-body {
+                padding: 16px 12px;
+            }
+
+            .image-section {
+                padding: 12px;
+            }
+
+            .image-section h3 {
+                font-size: 15px;
+            }
+
+            .current-image img, .image-placeholder {
+                width: 80px;
+                height: 80px;
+                font-size: 35px;
+            }
+
+            .file-input-label {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+
+            .submit-btn {
+                padding: 10px 12px;
+                font-size: 14px;
+            }
+
+            .form-section {
+                padding: 12px;
+            }
+
+            .form-control {
+                padding: 8px 10px;
+                font-size: 13px;
+            }
+
+            .form-group label {
+                font-size: 13px;
+            }
+
+            .error-message {
+                font-size: 11px;
+            }
+        }
+
+        /* Focus states for accessibility */
+        .submit-btn:focus,
+        .file-input-label:focus {
+            outline: 2px solid var(--accent-teal);
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .submit-btn {
+                border-width: 2px;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Header Top Bar -->
+<div class="header-top-bar">
+    <div class="header-top-left" style="display: flex; align-items: center; gap: 18px;">
+        <a th:href="@{/seller}" style="color: #111; text-decoration: none; font-weight: 600;">Kênh Người Bán</a>
+        <span style="color: #bbb;">|</span>
+        <span style="font-weight: 600; color: #111;">Kết nối</span>
+        <a href="#" style="margin-left: 6px; display: inline-flex; align-items: center;" title="Facebook">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#1877F3"/><path d="M21.333 16.001h-3.2v8h-3.2v-8h-2.133v-2.667h2.133v-1.6c0-2.133 1.067-3.2 3.2-3.2h2.133v2.667h-1.6c-.267 0-.533.267-.533.533v1.6h2.133l-.267 2.667z" fill="#fff"/></svg>
+        </a>
+        <a href="#" style="margin-left: 2px; display: inline-flex; align-items: center;" title="Instagram">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><radialGradient id="ig1" cx="16" cy="16" r="16" gradientUnits="userSpaceOnUse"><stop stop-color="#FFD600"/><stop offset="0.5" stop-color="#FF0069"/><stop offset="1" stop-color="#2827FF"/></radialGradient><circle cx="16" cy="16" r="16" fill="url(#ig1)"/><rect x="9" y="9" width="14" height="14" rx="4" fill="#fff"/><circle cx="16" cy="16" r="3.5" fill="#FF0069"/><circle cx="21.5" cy="10.5" r="1.5" fill="#FFD600"/></svg>
+        </a>
+    </div>
+    <div class="header-top-right" style="display: flex; align-items: center; gap: 18px;">
+        <a href="#" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/>
+            </svg>
+            Thông Báo
+        </a>
+        <th:block th:if="${customer}">
+            <div class="user-info-box">
+                <div class="user-avatar" th:if="${customer.image != null && !#strings.isEmpty(customer.image)}" style="background: none;">
+                    <img th:src="@{${customer.image}}" alt="avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" />
+                </div>
+                <span class="user-avatar" th:if="${customer.image == null || #strings.isEmpty(customer.image)}" th:text="${customer.firstname.substring(0,1)}"></span>
+                <a class="account-link" th:text="${customer.firstname + ' ' + customer.lastname}" tabindex="0" style="color: #111 !important; font-weight: 700;"></a>
+                <div class="account-menu-list">
+                    <a th:href="@{/customers/profile}">Tài khoản của tôi</a>
+                    <a th:href="@{/wallet}">Ví của tôi</a>
+                    <a th:href="@{/wishlist}">Danh sách yêu thích</a>
+                    <a th:href="@{/orders}">Đơn mua</a>
+                    <a th:href="@{/logout}">Đăng xuất</a>
+                </div>
+            </div>
+        </th:block>
+        <a th:unless="${customer}" href="/login" class="account-link" style="color:#fff;">Đăng nhập</a>
+    </div>
+</div>
+<!-- Main Header -->
+<header class="main-header">
+    <div class="header-left">
+        <a th:href="@{/home}" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+            <img src="/logo/logo.png" alt="Logo" class="logo-img" />
+        </a>
+    </div>
+    <form class="search-bar" action="/search_name" method="GET">
+        <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
+        <button type="submit" aria-label="Tìm kiếm">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
+            </svg>
+        </button>
+    </form>
+    <a href="/cart" class="header-cart-link" title="Giỏ hàng">
+        <img src="/logo/cart.png" alt="Giỏ hàng" />
+    </a>
+</header>
+
+<div class="container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar-nav">
+        <div class="nav-section">
+            <div class="nav-title">Tài khoản</div>
+            <a th:href="@{/customers/profile}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12.5 19H5C5 19 5 16 5 15C5 14 6 13 7 13H17C18 13 19 14 19 15C19 16 19 19 19 19H16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Thông tin cá nhân
+            </a>
+            <a th:href="@{/customers/editprofile}" class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M18.5 2.50001C18.8978 2.10219 19.4374 1.87869 20 1.87869C20.5626 1.87869 21.1022 2.10219 21.5 2.50001C21.8978 2.89784 22.1213 3.4374 22.1213 4.00001C22.1213 4.56262 21.8978 5.10219 21.5 5.50001L12 15L8 16L9 12L18.5 2.50001Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Chỉnh sửa thông tin
+            </a>
+            <a th:href="@{/customers/change-password}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="11" width="18" height="11" rx="2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 15V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Đổi mật khẩu
+            </a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-title">Dịch vụ</div>
+            <a th:href="@{/wallet}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 7V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Ví của tôi
+            </a>
+            <a th:href="@{/wishlist}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20.84 4.61C20.3292 4.099 19.7228 3.69364 19.0554 3.41708C18.3879 3.14052 17.6725 2.99817 16.95 2.99817C16.2275 2.99817 15.5121 3.14052 14.8446 3.41708C14.1772 3.69364 13.5708 4.099 13.06 4.61L12 5.67L10.94 4.61C9.9083 3.5783 8.50903 2.9987 7.05 2.9987C5.59096 2.9987 4.19169 3.5783 3.16 4.61C2.1283 5.6417 1.5487 7.04097 1.5487 8.5C1.5487 9.95903 2.1283 11.3583 3.16 12.39L12 21.23L20.84 12.39C21.351 11.879 21.7564 11.2726 22.0329 10.6051C22.3095 9.93767 22.4518 9.22225 22.4518 8.5C22.4518 7.77775 22.3095 7.06233 22.0329 6.39489C21.7564 5.72745 21.351 5.121 20.84 4.61Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Danh sách yêu thích
+            </a>
+            <a th:href="@{/orders}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 12L11 14L15 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Đơn mua
+            </a>
+        </div>
+        <div class="nav-section">
+            <div class="nav-title">Khác</div>
+            <a th:href="@{/home}" class="nav-item">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Về trang chủ
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+        <div class="edit-container">
+            <div class="edit-body">
+                <form th:action="@{/customers/update}" th:object="${customer}" method="post" enctype="multipart/form-data" id="editForm">
+                    <div class="image-section">
+                        <div class="current-image">
+                            <img th:if="${customer.image != null and customer.image != ''}"
+                                 th:src="@{${customer.image}}"
+                                 alt="Ảnh đại diện hiện tại"
+                                 id="currentAvatar" />
+                            <div th:unless="${customer.image != null and customer.image != ''}" class="image-placeholder" id="avatarPlaceholder">
+                                <svg width="50" height="50" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M20 21C20 18.7909 20 17.6863 19.3259 16.9393C18.6519 16.1924 17.596 16.0399 15.484 15.7347C14.1106 15.5413 12.7213 15.4446 11.3309 15.4446C9.94035 15.4446 8.55102 15.5413 7.17766 15.7347C5.06566 16.0399 4.00967 16.1924 3.33564 16.9393C2.66162 17.6863 2.66162 18.7909 2.66162 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </div>
+                            <div class="preview-overlay" id="previewOverlay">
+                                <div class="close-icon">×</div>
+                            </div>
+                        </div>
+                        <div class="file-input-wrapper">
+                            <input type="file" name="imageFile" id="imageFile" class="file-input" accept="image/*" aria-label="Chọn ảnh đại diện mới">
+                            <label for="imageFile" class="file-input-label">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 5V19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                                Chọn ảnh mới
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-section">
+                            <h3>Thông tin cơ bản</h3>
+                            <div class="form-group">
+                                <label for="firstName">Họ <span style="color: var(--error-red);">*</span></label>
+                                <input type="text" th:field="*{firstname}" id="firstName" class="form-control" required placeholder="Nhập họ của bạn" autocomplete="given-name">
+                                <div class="error-message" id="firstNameError">Vui lòng nhập họ</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Tên <span style="color: var(--error-red);">*</span></label>
+                                <input type="text" th:field="*{lastname}" id="lastName" class="form-control" required placeholder="Nhập tên của bạn" autocomplete="family-name">
+                                <div class="error-message" id="lastNameError">Vui lòng nhập tên</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="dateOfBirth">Ngày sinh <span style="color: var(--error-red);">*</span></label>
+                                <input type="date" th:field="*{dateofbirth}" id="dateOfBirth" class="form-control" required autocomplete="bday">
+                                <div class="error-message" id="dobError">Bạn phải trên 16 tuổi</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="gender">Giới tính</label>
+                                <select th:field="*{gender}" id="gender" class="form-control" autocomplete="sex">
+                                    <option value="">Chọn giới tính</option>
+                                    <option value="M" th:selected="${customer.gender == 'M'}">Nam</option>
+                                    <option value="F" th:selected="${customer.gender == 'F'}">Nữ</option>
+                                    <option value="O" th:selected="${customer.gender == 'O'}">Khác</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Thông tin liên hệ</h3>
+                            <div class="form-group">
+                                <label for="phone">Số điện thoại <span style="color: var(--error-red);">*</span></label>
+                                <input type="tel" th:field="*{phone}" id="phone" class="form-control" required placeholder="Nhập số điện thoại" autocomplete="tel">
+                                <div class="error-message" id="phoneError">Vui lòng nhập số điện thoại hợp lệ</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="address">Địa chỉ</label>
+                                <input type="text" th:field="*{address}" id="address" class="form-control" placeholder="Nhập địa chỉ của bạn" autocomplete="street-address">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="validation-message" id="validationMessage"></div>
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 21H5C3.89543 21 3 20.1046 3 19V5C3 3.89543 3.89543 3 5 3H16L21 8V19C21 20.1046 20.1046 21 19 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 21V13H7V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M7 3V8H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Cập nhật thông tin
+                    </button>
+                </form>
+                <div class="back-link">
+                    <a th:href="@{/customers/profile}">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 12H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 19L5 12L12 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Quay lại trang cá nhân
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Enhanced image preview functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        const imageFile = document.getElementById('imageFile');
+        const currentImageContainer = document.querySelector('.current-image');
+        let currentAvatar = document.getElementById('currentAvatar');
+        const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+        const previewOverlay = document.getElementById('previewOverlay');
+        let originalImageSrc = '';
+
+        // Store original image source if it exists
+        if (currentAvatar) {
+            originalImageSrc = currentAvatar.src;
+        }
+
+        imageFile.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+
+            if (file) {
+                // Validate file type
+                const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Vui lòng chọn file hình ảnh hợp lệ (JPEG, PNG, GIF)');
+                    this.value = '';
+                    hidePreviewOverlay();
+                    return;
+                }
+
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Kích thước file quá lớn. Vui lòng chọn file nhỏ hơn 5MB');
+                    this.value = '';
+                    hidePreviewOverlay();
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newImageSrc = e.target.result;
+
+                    // Hide placeholder
+                    if (avatarPlaceholder) {
+                        avatarPlaceholder.style.display = 'none';
+                    }
+
+                    // If currentAvatar doesn't exist, create it
+                    if (!currentAvatar) {
+                        currentAvatar = document.createElement('img');
+                        currentAvatar.id = 'currentAvatar';
+                        currentAvatar.alt = 'Ảnh đại diện hiện tại';
+                        currentAvatar.style.width = '120px';
+                        currentAvatar.style.height = '120px';
+                        currentAvatar.style.borderRadius = '50%';
+                        currentAvatar.style.objectFit = 'cover';
+                        currentAvatar.style.border = '4px solid var(--white)';
+                        currentAvatar.style.boxShadow = '0 10px 20px var(--shadow-medium)';
+                        currentAvatar.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+                        // Insert the new image before the preview overlay
+                        currentImageContainer.insertBefore(currentAvatar, previewOverlay);
+                    }
+
+                    // Set the new image source
+                    currentAvatar.src = newImageSrc;
+                    currentAvatar.style.display = 'block';
+
+                    // Show preview overlay with close button
+                    showPreviewOverlay();
+                };
+                reader.readAsDataURL(file);
+            } else {
+                hidePreviewOverlay();
+            }
+        });
+
+        // Show preview overlay
+        function showPreviewOverlay() {
+            previewOverlay.classList.add('show');
+        }
+
+        // Hide preview overlay and restore original image
+        function hidePreviewOverlay() {
+            previewOverlay.classList.remove('show');
+
+            // Restore original state
+            if (originalImageSrc && currentAvatar) {
+                currentAvatar.src = originalImageSrc;
+                currentAvatar.style.display = 'block';
+                if (avatarPlaceholder) {
+                    avatarPlaceholder.style.display = 'none';
+                }
+            } else {
+                // If no original image, hide currentAvatar and show placeholder
+                if (currentAvatar) {
+                    currentAvatar.style.display = 'none';
+                }
+                if (avatarPlaceholder) {
+                    avatarPlaceholder.style.display = 'flex';
+                }
+            }
+
+            // Clear file input
+            imageFile.value = '';
+        }
+
+        // Close button click handler
+        previewOverlay.addEventListener('click', function() {
+            hidePreviewOverlay();
+        });
+
+        // Age validation function with improved calculation
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birth = new Date(birthDate);
+
+            // Check for invalid date
+            if (isNaN(birth.getTime())) return -1;
+
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+
+            return age;
+        }
+
+        // Enhanced phone validation function
+        function isValidPhone(phone) {
+            // Remove spaces, dashes, and parentheses
+            const cleanPhone = phone.replace(/[\s\-()]/g, '');
+            const phoneRegex = /^[0-9]{10,11}$/;
+            return phoneRegex.test(cleanPhone);
+        }
+
+        // Form validation with enhanced UX
+        const editForm = document.getElementById('editForm');
+        const validationMessage = document.getElementById('validationMessage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Set max date to 16 years ago
+        const today = new Date();
+        const maxDate = new Date(today.getFullYear() - 16, today.getMonth(), today.getDate());
+        document.getElementById('dateOfBirth').max = maxDate.toISOString().split('T')[0];
+
+        // Real-time validation for all fields
+        const formControls = document.querySelectorAll('.form-control');
+        formControls.forEach(control => {
+            control.addEventListener('input', function() {
+                validateField(this);
+            });
+
+            control.addEventListener('blur', function() {
+                validateField(this, true);
+            });
+        });
+
+        function validateField(field, showError = false) {
+            const id = field.id;
+            const value = field.value.trim();
+            let isValid = true;
+            let errorMsg = '';
+
+            // Reset field styling
+            field.classList.remove('valid');
+
+            switch(id) {
+                case 'firstName':
+                    if (!value) {
+                        isValid = false;
+                        errorMsg = 'Vui lòng nhập họ';
+                    } else if (value.length < 2) {
+                        isValid = false;
+                        errorMsg = 'Họ phải có ít nhất 2 ký tự';
+                    }
+                    break;
+
+                case 'lastName':
+                    if (!value) {
+                        isValid = false;
+                        errorMsg = 'Vui lòng nhập tên';
+                    } else if (value.length < 2) {
+                        isValid = false;
+                        errorMsg = 'Tên phải có ít nhất 2 ký tự';
+                    }
+                    break;
+
+                case 'phone':
+                    if (!value) {
+                        isValid = false;
+                        errorMsg = 'Vui lòng nhập số điện thoại';
+                    } else if (!isValidPhone(value)) {
+                        isValid = false;
+                        errorMsg = 'Số điện thoại phải có 10-11 chữ số';
+                    }
+                    break;
+
+                case 'dateOfBirth':
+                    if (!value) {
+                        isValid = false;
+                        errorMsg = 'Vui lòng nhập ngày sinh';
+                    } else {
+                        const age = calculateAge(value);
+                        if (age < 16) {
+                            isValid = false;
+                            errorMsg = `Bạn mới ${age} tuổi. Phải trên 16 tuổi.`;
+                        }
+                    }
+                    break;
+            }
+
+            const errorElement = document.getElementById(`${id}Error`);
+
+            if (!isValid && (showError || value)) {
+                field.style.borderColor = 'var(--error-red)';
+                if (errorElement) {
+                    errorElement.textContent = errorMsg;
+                    errorElement.style.display = 'block';
+                }
+            } else if (value) {
+                if (isValid) {
+                    field.style.borderColor = 'var(--success-green)';
+                    field.classList.add('valid');
+                }
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            } else {
+                field.style.borderColor = '';
+                if (errorElement) {
+                    errorElement.style.display = 'none';
+                }
+            }
+
+            return isValid;
+        }
+
+        // Form submission with enhanced validation
+        editForm.addEventListener('submit', function(e) {
+            let isValid = true;
+
+            // Reset validation message
+            validationMessage.style.display = 'none';
+
+            // Validate all required fields
+            const requiredFields = ['firstName', 'lastName', 'phone', 'dateOfBirth'];
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!validateField(field, true)) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
+
+                // Show validation message
+                validationMessage.textContent = 'Vui lòng kiểm tra và sửa các lỗi trên form.';
+                validationMessage.style.display = 'block';
+
+                // Scroll to first error with smooth behavior
+                const firstError = document.querySelector('.form-control[style*="border-color: var(--error-red)"]');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(() => firstError.focus(), 500);
+                }
+
+                // Shake validation message for attention
+                validationMessage.style.animation = 'none';
+                setTimeout(() => {
+                    validationMessage.style.animation = 'fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
+                }, 10);
+            } else {
+                // Add loading state to button
+                submitBtn.innerHTML = '<span class="loading-spinner"></span> Đang cập nhật...';
+                submitBtn.disabled = true;
+                submitBtn.style.cursor = 'not-allowed';
+            }
+        });
+
+        // Add keyboard navigation for better accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                // Clear focus from current element
+                document.activeElement.blur();
+            }
+        });
+
+        // Header menu functionality
+        const userInfoBox = document.querySelector('.user-info-box');
+        const menu = document.querySelector('.account-menu-list');
+        let hideTimeout;
+        if (userInfoBox && menu) {
+            userInfoBox.addEventListener('mouseenter', () => {
+                clearTimeout(hideTimeout);
+                menu.style.display = 'block';
+                menu.style.opacity = '1';
+                menu.style.visibility = 'visible';
+            });
+            userInfoBox.addEventListener('mouseleave', () => {
+                hideTimeout = setTimeout(() => {
+                    menu.style.display = '';
+                    menu.style.opacity = '';
+                    menu.style.visibility = '';
+                }, 400);
+            });
+            menu.addEventListener('mouseenter', () => {
+                clearTimeout(hideTimeout);
+                menu.style.display = 'block';
+                menu.style.opacity = '1';
+                menu.style.visibility = 'visible';
+            });
+            menu.addEventListener('mouseleave', () => {
+                hideTimeout = setTimeout(() => {
+                    menu.style.display = '';
+                    menu.style.opacity = '';
+                    menu.style.visibility = '';
+                }, 400);
+            });
+        }
+    });
+</script>
+</body>
+</html>

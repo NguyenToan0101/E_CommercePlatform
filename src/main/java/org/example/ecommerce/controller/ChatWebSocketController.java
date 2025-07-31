@@ -21,7 +21,7 @@ public class ChatWebSocketController {
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
 
-    // Nhận tin nhắn từ client gửi tới /app/chat.send/{conversationId}
+    // Nhận tin nhắn text từ client gửi tới /app/chat.send/{conversationId}
     @MessageMapping("/chat.send/{conversationId}")
     public void sendMessage(@DestinationVariable Integer conversationId, @Payload Map<String, Object> payload) {
         Integer senderId = (Integer) payload.get("senderid");
@@ -37,6 +37,29 @@ public class ChatWebSocketController {
         dto.setContent(message.getContent());
         dto.setSentat(message.getSentat());
         dto.setIsread(message.getIsread());
+        dto.setMessageType(message.getMessageType());
+        // Gửi message DTO tới tất cả client subscribe /topic/conversation/{conversationId}
+        messagingTemplate.convertAndSend("/topic/conversation/" + conversationId, dto);
+    }
+
+    // Nhận tin nhắn ảnh từ client gửi tới /app/chat.sendImage/{conversationId}
+    @MessageMapping("/chat.sendImage/{conversationId}")
+    public void sendImageMessage(@DestinationVariable Integer conversationId, @Payload Map<String, Object> payload) {
+        Integer senderId = (Integer) payload.get("senderid");
+        Integer receiverId = (Integer) payload.get("receiverid");
+        String imageUrl = (String) payload.get("imageUrl");
+        // Lưu message vào DB
+        Message message = chatService.sendImageMessage(conversationId, senderId, receiverId, imageUrl);
+        // Chuyển sang DTO
+        MessageDTO dto = new MessageDTO();
+        dto.setId(message.getId());
+        dto.setSenderid(message.getSenderid());
+        dto.setReceiverid(message.getReceiverid());
+        dto.setContent(message.getContent());
+        dto.setImageUrl(message.getImageUrl());
+        dto.setSentat(message.getSentat());
+        dto.setIsread(message.getIsread());
+        dto.setMessageType(message.getMessageType());
         // Gửi message DTO tới tất cả client subscribe /topic/conversation/{conversationId}
         messagingTemplate.convertAndSend("/topic/conversation/" + conversationId, dto);
     }

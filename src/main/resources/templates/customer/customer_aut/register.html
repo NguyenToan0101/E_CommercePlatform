@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng ký</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-black: #1a2233;
+            --secondary-black: #222b45;
+            --accent-gray: #e0e7ef;
+            --light-gray: #f5f7fa;
+            --border-gray: #e5eaf2;
+            --text-gray: #6b7280;
+            --white: #ffffff;
+            --gold-accent: #f7c873;
+            --success-green: #10b981;
+            --error-red: #dc2626;
+            --orange-accent: #ff7a45;
+            --blue-accent: #3b82f6;
+            --shopee-orange: #ee4d2d;
+            --shadow-light: rgba(16, 42, 67, 0.04);
+            --shadow-medium: rgba(16, 42, 67, 0.10);
+            --shadow-heavy: rgba(16, 42, 67, 0.18);
+            --gradient-start: #0a4d68;
+            --gradient-mid: #088395;
+            --gradient-end: #05bfdb;
+            --gradient-light-end: #8de0a6;
+            --primary: #088395;
+            --accent: #F7EEDD;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #fff;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .register-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+        }
+
+        .brand-section {
+            flex: 0 0 50%;
+            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            position: relative;
+        }
+
+        .brand-logo {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .brand-logo img {
+            width: 240px;
+            height: auto;
+            filter: brightness(0) invert(1);
+        }
+
+        .brand-slogan {
+            font-size: 1.1rem;
+            font-weight: 400;
+            text-align: center;
+            line-height: 1.6;
+            max-width: 280px;
+        }
+
+        .register-section {
+            flex: 0 0 50%;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .register-form-container {
+            background: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 8px 48px var(--shadow-medium);
+            padding: 40px;
+            width: 100%;
+            max-width: 480px;
+            border: 1px solid #e9ecef;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .form-title {
+            font-size: 1.7rem;
+            font-weight: 700;
+            color: var(--primary-black);
+            margin-bottom: 8px;
+        }
+
+        .form-subtitle {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(8, 131, 149, 0.05) 0%, rgba(5, 191, 219, 0.05) 100%);
+            border-radius: 12px;
+            border: 2px dashed var(--border-gray);
+        }
+
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--white);
+            background: var(--white);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 20px var(--shadow-light);
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            color: var(--text-gray);
+            font-size: 24px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        .file-input-label {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
+            color: var(--white);
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .file-input-label:hover {
+            background: var(--gradient-start);
+            transform: translateY(-1px);
+        }
+
+        .file-input-label svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary-black);
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: var(--error-red);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            background: var(--white);
+            color: var(--primary-black);
+            font-family: inherit;
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-gray);
+            opacity: 0.7;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--gradient-mid);
+            background: var(--white);
+            box-shadow: 0 0 0 3px rgba(8, 131, 149, 0.1);
+        }
+
+        .form-group.error input {
+            border-color: var(--error-red);
+            background: rgba(220, 38, 38, 0.05);
+        }
+
+        .form-group.success input {
+            border-color: var(--success-green);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .error-message {
+            color: var(--error-red);
+            font-size: 0.8rem;
+            margin-top: 6px;
+            display: none;
+            font-weight: 500;
+        }
+
+        .form-group.error .error-message {
+            display: block;
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 32px;
+        }
+
+        .submit-btn {
+            background: linear-gradient(90deg, var(--gradient-mid) 0%, var(--gradient-end) 100%);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            padding: 14px 32px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(8, 131, 149, 0.3);
+            font-family: inherit;
+            min-width: 200px;
+        }
+
+        .submit-btn:hover {
+            background: var(--gradient-start);
+            box-shadow: 0 6px 16px rgba(8, 131, 149, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 24px;
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+
+        .login-link a {
+            color: var(--gradient-end);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .login-link a:hover {
+            color: var(--gradient-mid);
+        }
+
+        @media (max-width: 900px) {
+            .register-container {
+                flex-direction: column;
+            }
+            .brand-section, .register-section {
+                flex: 0 0 50vh;
+            }
+            .brand-logo img {
+                width: 200px;
+            }
+            .brand-slogan {
+                font-size: 1rem;
+                max-width: 250px;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .register-section {
+                padding: 20px;
+            }
+            .register-form-container {
+                padding: 24px;
+            }
+            .brand-logo img {
+                width: 180px;
+            }
+            .avatar-preview {
+                width: 60px;
+                height: 60px;
+            }
+            .submit-btn {
+                width: 100%;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="register-container">
+        <div class="brand-section">
+            <div class="brand-logo">
+                <img src="/logo/logo.png" alt="Logo" />
+            </div>
+            <div class="brand-slogan">
+                Nền tảng thương mại điện tử<br>
+    </div>
+        </div>
+
+        <div class="register-section">
+            <div class="register-form-container">
+            <form th:action="@{/customers/register}" method="post" enctype="multipart/form-data" th:object="${customer}" id="registrationForm">
+                    <div class="form-header">
+                        <div class="form-title">Đăng ký tài khoản</div>
+                        <div class="form-subtitle">Tạo tài khoản mới để trải nghiệm dịch vụ của chúng tôi</div>
+                    </div>
+                    <div th:if="${errorMessage}" style="color: red; text-align: center; margin-bottom: 16px; font-weight: 600;">
+                        <span th:text="${errorMessage}"></span>
+                    </div>
+
+                <!-- Avatar Section -->
+                <div class="avatar-section">
+                    <div class="avatar-preview" id="avatarPreview">
+                        <div class="avatar-placeholder">
+                                <i class="fas fa-user"></i>
+                        </div>
+                    </div>
+                    <div class="file-input-wrapper">
+                        <input type="file" name="imageFile" id="imageFile" accept="image/*" aria-label="Chọn ảnh đại diện">
+                        <label for="imageFile" class="file-input-label">
+                                <i class="fas fa-camera"></i>
+                            Chọn ảnh
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Personal Information Section -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Họ <span class="required">*</span></label>
+                            <input type="text" th:field="*{firstname}" id="firstName" required placeholder="Nhập họ của bạn" autocomplete="given-name">
+                            <div class="error-message">Vui lòng nhập họ</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName">Tên <span class="required">*</span></label>
+                            <input type="text" th:field="*{lastname}" id="lastName" required placeholder="Nhập tên của bạn" autocomplete="family-name">
+                            <div class="error-message">Vui lòng nhập tên</div>
+                    </div>
+                </div>
+
+                <!-- Contact Information Section -->
+                    <div class="form-group full-width">
+                            <label for="email">Email <span class="required">*</span></label>
+                            <input type="email" th:field="*{email}" id="email" required placeholder="example@domain.com" autocomplete="email">
+                            <div class="error-message">Vui lòng nhập email hợp lệ</div>
+                </div>
+
+                <!-- Security Section -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password">Mật khẩu <span class="required">*</span></label>
+                            <input type="password" th:field="*{password}" id="password" required placeholder="Nhập mật khẩu" autocomplete="new-password">
+                            <div class="error-message">Vui lòng nhập mật khẩu</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="confirmPassword">Xác nhận mật khẩu <span class="required">*</span></label>
+                            <input type="password" id="confirmPassword" required placeholder="Nhập lại mật khẩu" autocomplete="new-password">
+                            <div class="error-message">Mật khẩu xác nhận không khớp</div>
+                    </div>
+                </div>
+
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                            <i class="fas fa-user-plus"></i>
+                        Đăng ký tài khoản
+                    </button>
+                </div>
+
+                    <div class="login-link">
+                        Đã có tài khoản? <a th:href="@{/login}">Đăng nhập</a>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Enhanced image preview functionality
+        const imageFile = document.getElementById('imageFile');
+        const preview = document.getElementById('avatarPreview');
+
+        imageFile.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+
+            if (file) {
+                // Validate file type
+                const validTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Vui lòng chọn file hình ảnh hợp lệ (JPEG, PNG, GIF)');
+                    this.value = '';
+                    return;
+                }
+
+                // Validate file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Kích thước file quá lớn. Vui lòng chọn file nhỏ hơn 5MB');
+                    this.value = '';
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Avatar Preview">`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.innerHTML = `
+                    <div class="avatar-placeholder">
+                            <i class="fas fa-user"></i>
+                    </div>
+                `;
+            }
+        });
+
+            // Simple password validation
+        document.getElementById('password').addEventListener('input', function(e) {
+            validatePasswords();
+        });
+
+        // Password confirmation validation
+        function validatePasswords() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const confirmGroup = document.getElementById('confirmPassword').closest('.form-group');
+
+            if (confirmPassword && password !== confirmPassword) {
+                confirmGroup.classList.add('error');
+                confirmGroup.classList.remove('success');
+                return false;
+            } else if (confirmPassword && password === confirmPassword) {
+                confirmGroup.classList.remove('error');
+                confirmGroup.classList.add('success');
+                return true;
+            } else {
+                confirmGroup.classList.remove('error');
+                confirmGroup.classList.remove('success');
+                return false;
+            }
+        }
+
+        document.getElementById('confirmPassword').addEventListener('input', validatePasswords);
+
+        // Enhanced form validation
+        const registrationForm = document.getElementById('registrationForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        registrationForm.addEventListener('submit', function(e) {
+            let isValid = true;
+
+            // Validate all required fields
+            const requiredFields = this.querySelectorAll('[required]');
+            requiredFields.forEach(field => {
+                const formGroup = field.closest('.form-group');
+                if (!field.value.trim()) {
+                    formGroup.classList.add('error');
+                    formGroup.classList.remove('success');
+                    isValid = false;
+                }
+            });
+
+            // Validate password confirmation
+            if (!validatePasswords()) {
+                isValid = false;
+            }
+
+            // Validate email format
+            const email = document.getElementById('email').value;
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('email').closest('.form-group').classList.add('error');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                e.preventDefault();
+
+                // Scroll to first error
+                const firstError = document.querySelector('.form-group.error');
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const input = firstError.querySelector('input, select');
+                    if (input) {
+                        setTimeout(() => input.focus(), 500);
+                    }
+                }
+            } else {
+                // Add loading state
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang đăng ký...';
+                submitBtn.disabled = true;
+            }
+        });
+
+        // Real-time validation for all inputs
+        document.querySelectorAll('input, select').forEach(input => {
+            input.addEventListener('blur', function() {
+                const formGroup = this.closest('.form-group');
+                if (!formGroup) return; // Thêm kiểm tra null để tránh lỗi
+                if (this.hasAttribute('required') && !this.value.trim()) {
+                    formGroup.classList.add('error');
+                    formGroup.classList.remove('success');
+                } else if (this.value.trim()) {
+                    // Additional validation for specific fields
+                    if (this.type === 'email') {
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (emailRegex.test(this.value)) {
+                            formGroup.classList.remove('error');
+                            formGroup.classList.add('success');
+                        } else {
+                            formGroup.classList.add('error');
+                            formGroup.classList.remove('success');
+                        }
+                    } else {
+                        formGroup.classList.remove('error');
+                        formGroup.classList.add('success');
+                    }
+                }
+            });
+        });
+
+        // Enhanced keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.activeElement.blur();
+            }
+        });
+    });
+</script>
+</body>
+</html>

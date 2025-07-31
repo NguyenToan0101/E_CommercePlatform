@@ -46,7 +46,7 @@
         <i class="fa-solid fa-dollar-sign icon"></i>
         <div>
             <div class="stat-label">Doanh thu</div>
-            <div class="stat-value"><span th:text="${revenue}">0</span> <span class="stat-unit">₫</span></div>
+            <div class="stat-value" th:text="${#numbers.formatDecimal(revenue, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></div>
         </div>
     </div>
 </div>
@@ -62,7 +62,7 @@
                                 <option value="Chờ xác nhận">Chờ xác nhận</option>
                                 <option value="Đã xác nhận">Đã xác nhận</option>
                                 <option value="Chờ lấy hàng">Chờ lấy hàng</option>
-                                <option value="Đang giao">Đang giao</option>
+                                <option value="Đang giao hàng">Đang giao hàng</option>
                                 <option value="Đã giao">Đã giao</option>
                                 <option value="Đã hủy">Đã hủy</option>
                                 <option value="Yêu cầu trả hàng/hoàn tiền">Yêu cầu trả hàng/hoàn tiền</option>
@@ -77,7 +77,7 @@
                         <button class="order-tab" data-status="Chờ xác nhận" onclick="filterByStatus('Chờ xác nhận')" th:text="'Chờ xác nhận (' + ${statusCounts['Chờ xác nhận']} + ')'">Chờ xác nhận</button>
                         <button class="order-tab" data-status="Đã xác nhận" onclick="filterByStatus('Đã xác nhận')" th:text="'Đã xác nhận (' + ${statusCounts['Đã xác nhận']} + ')'">Đã xác nhận</button>
                         <button class="order-tab" data-status="Chờ lấy hàng" onclick="filterByStatus('Chờ lấy hàng')" th:text="'Chờ lấy hàng (' + ${statusCounts['Chờ lấy hàng']} + ')'">Chờ lấy hàng</button>
-                        <button class="order-tab" data-status="Đang giao" onclick="filterByStatus('Đang giao')" th:text="'Đang giao (' + ${statusCounts['Đang giao']} + ')'">Đang giao</button>
+                        <button class="order-tab" data-status="Đang giao hàng" onclick="filterByStatus('Đang giao hàng')" th:text="'Đang giao hàng (' + ${statusCounts['Đang giao hàng']} + ')'">Đang giao hàng</button>
                         <button class="order-tab" data-status="Đã giao" onclick="filterByStatus('Đã giao')" th:text="'Đã giao (' + ${statusCounts['Đã giao']} + ')'">Đã giao</button>
                         <button class="order-tab" data-status="Đã hủy" onclick="filterByStatus('Đã hủy')" th:text="'Đã hủy (' + ${statusCounts['Đã hủy']} + ')'">Đã hủy</button>
                         <button class="order-tab" data-status="Yêu cầu trả hàng/hoàn tiền" onclick="filterByStatus('Yêu cầu trả hàng/hoàn tiền')" th:text="'Yêu cầu trả hàng/hoàn tiền (' + ${statusCounts['Yêu cầu trả hàng/hoàn tiền']} + ')'">Yêu cầu trả hàng/hoàn tiền</button>
@@ -110,7 +110,7 @@
             <td>
                 <div class="order-product-summary" th:text="${#lists.size(order.orderitems)} + ' sản phẩm'"></div>
             </td>
-            <td><i class="fa-regular fa-calendar"></i> <span th:text="${#dates.format(order.orderdate, 'dd/MM/yyyy')}"></span></td>
+            <td><i class="fa-regular fa-calendar"></i> <span th:text="${order.orderdate}"></span></td>
             <td><span class="order-amount" th:text="${#numbers.formatDecimal(order.totalamount, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span></td>
             <td>
                                 <span th:class="'seller-order-status-badge ' + ${order.statusClass}" th:text="${order.status}"></span>
@@ -152,13 +152,68 @@
         <option value="Chờ xác nhận">Chờ xác nhận</option>
         <option value="Đã xác nhận">Đã xác nhận</option>
         <option value="Chờ lấy hàng">Chờ lấy hàng</option>
+        <option value="Đang giao hàng">Đang giao hàng</option>
+        <option value="Đã giao">Đã giao</option>
         <option value="Đã hủy">Đã hủy</option>
       </select>
       <button type="submit" style="background:#4f8cff; color:#fff; border:none; border-radius:8px; padding:0.7rem 1.5rem; font-weight:600; cursor:pointer;">Cập nhật</button>
     </form>
   </div>
 </div>
+<style>
+/* Toast notification styles */
+.toast {
+    visibility: hidden;
+    min-width: 250px;
+    margin-left: -125px;
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    padding: 16px;
+    position: fixed;
+    z-index: 10000;
+    left: 50%;
+    top: 30px;
+    font-size: 17px;
+    opacity: 0;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+
+.toast.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.toast.success {
+    background-color: #4CAF50;
+}
+
+.toast.error {
+    background-color: #f44336;
+}
+
+.toast.info {
+    background-color: #2196F3;
+}
+</style>
+
+<!-- Toast container -->
+<div id="toast" class="toast"></div>
+
 <script>
+// Hiển thị toast thông báo
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast show ${type}`;
+    
+    // Ẩn toast sau 3 giây
+    setTimeout(() => {
+        toast.className = toast.className.replace('show', '');
+    }, 3000);
+}
+
 function filterByStatus(status) {
     const rows = document.querySelectorAll('.order-row');
     rows.forEach(row => {
@@ -190,13 +245,35 @@ document.getElementById('updateStatusForm').addEventListener('submit', function(
     e.preventDefault();
     const orderId = document.getElementById('updateStatusOrderId').value;
     const newStatus = document.getElementById('newStatus').value;
+    
+    // Xác nhận trước khi cập nhật
+    if (newStatus === 'Đã hủy' && !confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
+        return;
+    }
+    
     fetch(`/seller/orders/${orderId}/status`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `status=${newStatus}`
-    }).then(res => res.text()).then(msg => {
-        if(msg === 'success') location.reload();
-        else alert('Cập nhật trạng thái thất bại!');
+        headers: { 
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: `status=${encodeURIComponent(newStatus)}`
+    })
+    .then(res => {
+        if (!res.ok) throw new Error('Network response was not ok');
+        return res.text();
+    })
+    .then(msg => {
+        if (msg === 'success') {
+            showToast('Cập nhật trạng thái thành công!', 'success');
+            setTimeout(() => location.reload(), 1500);
+        } else {
+            throw new Error('Cập nhật thất bại');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Cập nhật trạng thái thất bại!', 'error');
     });
 });
 function cancelOrder(btn) {
@@ -212,4 +289,4 @@ function cancelOrder(btn) {
 }
 </script>
 </body>
-</html> 
+</html>

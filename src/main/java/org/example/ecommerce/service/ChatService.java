@@ -24,8 +24,11 @@ public interface ChatService {
     // Lấy tất cả message của conversation
     List<Message> getConversationMessages(Integer conversationId);
     
-    // Gửi tin nhắn
+    // Gửi tin nhắn text
     Message sendMessage(Integer conversationId, Integer senderId, Integer receiverId, String content);
+    
+    // Gửi tin nhắn ảnh
+    Message sendImageMessage(Integer conversationId, Integer senderId, Integer receiverId, String imageUrl);
     
     // Đánh dấu tin nhắn đã đọc
     void markMessagesAsRead(Integer conversationId, Integer receiverId);

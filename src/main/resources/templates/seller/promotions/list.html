@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <title>Quản lý khuyến mãi</title>
+    <link rel="stylesheet" th:href="@{/assets/css/seller.css}">
+</head>
+<body>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div th:replace="seller/fragments/sidebar :: sidebar"></div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header -->
+        <div th:replace="seller/fragments/header :: header"></div>
+
+        <!-- Promotions Page -->
+        <div class="seller-promo-list-content">
+            <nav class="seller-promo-list-breadcrumb">
+                <span>Quản lý khuyến mãi</span>
+            </nav>
+            <h1 class="seller-promo-list-title">Quản lý khuyến mãi</h1>
+            <p class="seller-promo-list-desc">Tạo và quản lý các chương trình khuyến mãi của shop</p>
+            <div class="seller-promo-list-stats">
+                <div class="seller-promo-list-stats-card">
+                    <div class="seller-promo-list-stats-icon active"></div>
+                    <div class="seller-promo-list-stats-value" th:text="${activeCount != null ? activeCount : 0}">0</div>
+                    <div class="seller-promo-list-stats-label">Đang hoạt động</div>
+                </div>
+                <div class="seller-promo-list-stats-card">
+                    <div class="seller-promo-list-stats-icon scheduled"></div>
+                    <div class="seller-promo-list-stats-value" th:text="${scheduledCount != null ? scheduledCount : 0}">0</div>
+                    <div class="seller-promo-list-stats-label">Đã lên lịch</div>
+                </div>
+                <div class="seller-promo-list-stats-card">
+                    <div class="seller-promo-list-stats-icon paused"></div>
+                    <div class="seller-promo-list-stats-value" th:text="${pausedCount != null ? pausedCount : 0}">0</div>
+                    <div class="seller-promo-list-stats-label">Tạm dừng</div>
+                </div>
+                <div class="seller-promo-list-stats-card">
+                    <div class="seller-promo-list-stats-icon expired"></div>
+                    <div class="seller-promo-list-stats-value" th:text="${expiredCount != null ? expiredCount : 0}">0</div>
+                    <div class="seller-promo-list-stats-label">Đã hết hạn</div>
+                </div>
+            </div>
+            <div class="seller-promo-list-header">
+                <h2>Danh sách khuyến mãi</h2>
+                <a th:href="@{/seller/promotions/create}" class="seller-promo-list-btn seller-promo-list-btn-primary">+ Tạo khuyến mãi mới</a>
+            </div>
+            <div th:if="${error}" class="seller-promo-list-alert seller-promo-list-alert-danger" th:text="${error}"></div>
+            <form th:action="@{/seller/promotions}" method="get" class="seller-promo-list-filters">
+                <input type="text" name="keyword" th:value="${param.keyword}" placeholder="Tìm kiếm theo tên hoặc mã khuyến mãi...">
+                <select name="status" onchange="this.form.submit()">
+                    <option value="">Tất cả trạng thái</option>
+                    <option th:value="'ACTIVE'" th:selected="${param.status == 'ACTIVE'}">Đang hoạt động</option>
+                    <option th:value="'SCHEDULED'" th:selected="${param.status == 'SCHEDULED'}">Đã lên lịch</option>
+                    <option th:value="'EXPIRED'" th:selected="${param.status == 'EXPIRED'}">Đã hết hạn</option>
+                    <option th:value="'PAUSED'" th:selected="${param.status == 'PAUSED'}">Tạm dừng</option>
+                </select>
+                <button type="submit" class="seller-promo-list-btn">Tìm kiếm</button>
+            </form>
+            <div class="seller-promo-list-list">
+                <div class="seller-promo-list-empty" th:if="${promotions != null && promotions.getContent().isEmpty()}">
+                    Không tìm thấy khuyến mãi nào.
+                </div>
+                <div class="seller-promo-list-cards">
+                    <div class="seller-promo-list-card" th:each="promotion : ${promotions.getContent()}">
+                        <div class="seller-promo-list-card-header">
+                            <div>
+                                <div class="seller-promo-list-card-title" th:text="${promotion.name}"></div>
+                                <div class="seller-promo-list-card-code" th:text="'Mã: ' + ${promotion.code}"></div>
+                            </div>
+                            <div class="seller-promo-list-card-status" th:text="${promotion.status}"></div>
+                        </div>
+                        <div class="seller-promo-list-card-desc" th:text="${promotion.description}"></div>
+                        <div class="seller-promo-list-card-info">
+                            <span th:if="${promotion.type == 'PERCENTAGE'}" th:text="'Giảm ' + ${promotion.value} + '%'"/>
+                            <span th:if="${promotion.type == 'FIXED'}" th:text="'Giảm ' + ${#numbers.formatDecimal(promotion.value, 0, 'COMMA', 0, 'POINT')} + '₫'"/>
+                            <span th:if="${promotion.minOrderValue > 0}" th:text="'Đơn tối thiểu ' + ${#numbers.formatDecimal(promotion.minOrderValue, 0, 'COMMA', 0, 'POINT')} + '₫'"/>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- Phân trang -->
+            <nav th:if="${promotions != null && !promotions.getContent().isEmpty() && totalPages > 1}" class="seller-promo-list-pagination">
+                <ul>
+                    <li th:each="i : ${pageNumbers}" th:classappend="${i == currentPage} ? 'active'">
+                        <a th:href="@{${'?page=' + i + '&size=' + size + '&status=' + (param.status != null ? param.status : '') + '&keyword=' + (param.keyword != null ? param.keyword : '')}}"
+                           th:text="${i + 1}"></a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </main>
+</div>
+<script>
+    // Xác nhận xóa (có thể dùng alert hoặc custom modal)
+    function confirmDelete(id, name) {
+        if (confirm('Bạn có chắc chắn muốn xóa khuyến mãi ' + name + '?')) {
+            window.location.href = '/seller/promotions/' + id + '/delete';
+        }
+    }
+    // Tự động đóng alert sau 5s
+    window.onload = function() {
+        var alert = document.querySelector('.promo-list-alert');
+        if (alert) setTimeout(() => alert.style.display = 'none', 5000);
+    };
+</script>
+</body>
+</html>
+

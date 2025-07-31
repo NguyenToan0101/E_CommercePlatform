@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xác nhận đơn hàng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root {
+            --primary: #0a4d68;
+            --secondary: #05bfdb;
+            --accent: #60a5fa;
+            --light-bg: #f9fafb;
+            --text-dark: #111827;
+            --text-gray: #6b7280;
+            --error: #dc2626;
+            --success: #16a34a;
+            --warning: #f59e0b;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
+            min-height: 100vh;
+            color: var(--text-dark);
+            padding: 16px;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
+            color: #fff;
+            padding: 24px;
+            text-align: center;
+        }
+        .section {
+            padding: 24px;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .input-group label {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        .input-group input, .input-group select {
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(10, 77, 104, 0.1);
+        }
+        .table-container {
+            overflow-x: auto;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        th {
+            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:hover {
+            background-color: #f9fafb;
+        }
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
+            color: #fff;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(10, 77, 104, 0.3);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .notification {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: #fff;
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1001;
+        }
+        .notification.show {
+            transform: translateX(0);
+        }
+        .notification.success {
+            border-left: 4px solid var(--success);
+        }
+        .notification.error {
+            border-left: 4px solid var(--error);
+        }
+        .notification.warning {
+            border-left: 4px solid var(--warning);
+        }
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .payment-method-container {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .voucher-item {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+        .voucher-item:hover:not(.disabled) {
+            border-color: var(--primary);
+            box-shadow: 0 2px 8px rgba(10, 77, 104, 0.1);
+        }
+        .voucher-item.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+            background-color: #f5f5f5;
+        }
+        .voucher-item.eligible {
+            border-color: #10b981;
+            background-color: #f0fdf4;
+        }
+        .voucher-status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        .voucher-status.eligible {
+            background-color: #10b981;
+            color: white;
+        }
+        .voucher-status.not-eligible {
+            background-color: #ef4444;
+            color: white;
+        }
+        @media (max-width: 768px) {
+            .container {
+                margin: 8px;
+                border-radius: 12px;
+            }
+            .section {
+                padding: 16px;
+            }
+            .header {
+                padding: 20px 16px;
+            }
+            .input-group input, .input-group select {
+                width: 100%;
+            }
+            .table-container {
+                overflow-x: auto;
+            }
+            .modal-content {
+                width: 95%;
+                margin: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Header -->
+    <div class="header">
+        <h1 class="text-2xl font-bold"><i class="fas fa-shopping-cart mr-2"></i> Xác nhận đơn hàng</h1>
+        <p class="text-sm opacity-90 mt-2">Vui lòng kiểm tra và xác nhận thanh toán</p>
+    </div>
+
+    <!-- Content -->
+    <div class="section">
+        <!-- Customer Info -->
+        <div class="mb-8">
+            <h2 class="section-title"><i class="fas fa-user mr-2"></i>Thông tin cá nhân</h2>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="input-group md:col-span-2">
+                    <label for="firstname">Họ *</label>
+                    <input type="text" id="firstname" name="firstname" th:value="${customer.firstname}" placeholder="Nhập họ" required>
+                </div>
+                <div class="input-group md:col-span-2">
+                    <label for="lastname">Tên *</label>
+                    <input type="text" id="lastname" name="lastname" th:value="${customer.lastname}" placeholder="Nhập tên" required>
+                </div>
+                <div class="input-group md:col-span-2">
+                    <label for="phone">Điện thoại *</label>
+                    <input type="tel" id="phone" name="phone" th:value="${customer.phone}" placeholder="Nhập số điện thoại" required>
+                </div>
+                <div class="input-group md:col-span-2">
+                    <label for="address">Địa chỉ *</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="address" name="address" th:value="${customer.address}" placeholder="Nhập địa chỉ" required>
+                        <button type="button" id="openMapBtn" class="btn btn-primary"><i class="fas fa-map-marker-alt"></i></button>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="province">Tỉnh/TP</label>
+                    <select id="province" disabled>
+                        <option value="">Chọn Tỉnh/TP</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="district">Quận/Huyện</label>
+                    <select id="district" disabled>
+                        <option value="">Chọn Q/H</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="ward">Phường/Xã</label>
+                    <select id="ward" disabled>
+                        <option value="">Chọn P/X</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="houseNumber">Số nhà</label>
+                    <input type="text" id="houseNumber" placeholder="Số nhà/đường">
+                </div>
+            </div>
+            <div id="warning" class="hidden bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg mt-4">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Vui lòng nhập đầy đủ thông tin hợp lệ.
+            </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="mb-8">
+            <h2 class="section-title"><i class="fas fa-credit-card mr-2"></i>Phương thức thanh toán</h2>
+            <div class="payment-method-container">
+                <div class="flex justify-between items-center">
+                    <span id="selected-method-label" class="font-semibold">Thanh toán khi nhận hàng</span>
+                    <button type="button" id="change-method-btn" class="text-blue-600 font-semibold hover:text-blue-800">THAY ĐỔI</button>
+                </div>
+            </div>
+            <div id="payment-method-tabs-container" class="hidden mt-4">
+                <div class="flex gap-2 mb-4">
+                    <button type="button" class="payment-tab btn btn-primary" data-method="MUSA">Ví MUSA</button>
+                    <button type="button" class="payment-tab btn" data-method="COD">Thanh toán khi nhận hàng</button>
+                </div>
+                <div id="payment-method-desc" class="bg-gray-100 p-4 rounded-lg">
+                    Thanh toán khi nhận hàng: Phí thu hộ 0 VNĐ.
+                </div>
+                <button type="button" id="confirm-method-btn" class="btn btn-primary mt-4">XÁC NHẬN</button>
+            </div>
+        </div>
+
+        <!-- Cart Items -->
+        <div id="cartItemsContainer" class="mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="section-title"><i class="fas fa-shopping-basket mr-2"></i> Giỏ hàng</h2>
+                <span id="cartTotal" class="font-bold text-lg">Tổng: 0 đ</span>
+            </div>
+            <div class="table-container">
+                <form th:action="@{/checkout}" method="post">
+                    <input type="hidden" id="cartFirstName" name="firstname">
+                    <input type="hidden" id="cartLastName" name="lastname">
+                    <input type="hidden" id="cartPhone" name="phone">
+                    <input type="hidden" id="cartAddress" name="address">
+                    <input type="hidden" id="walletIdInput" name="walletId" value="">
+                    <span id="musaWalletId" th:text="${wallet?.id}" class="hidden"></span>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Hình ảnh</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Màu</th>
+                            <th>Phân loại</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="item : ${items}" th:if="${item.id != null}">
+                            <td><img th:src="${item.imageUrl}" alt="Product" class="w-16 h-16 rounded object-cover"></td>
+                            <td th:text="${item.productName}" class="font-medium"></td>
+                            <td th:text="${item.color ?: '-'}"></td>
+                            <td th:text="${item.dimension ?: '-'}"></td>
+                            <td class="price font-semibold" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
+                            <td class="quantity text-center" th:text="${item.quantity}"></td>
+                            <td>
+                                <input type="hidden" name="cartItemIds" th:value="${item.id}">
+                                <span class="text-blue-600 font-semibold">Thanh toán chung</span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button id="cartSubmitBtn" type="submit" class="btn btn-primary mt-4">
+                        <i class="fas fa-check mr-2"></i>Xác nhận thanh toán
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Buy Now Items -->
+        <div id="buyNowItemsContainer">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="section-title"><i class="fas fa-bolt mr-2"></i> Mua ngay</h2>
+                <span id="buyNowTotal" class="font-bold text-lg">Tổng: 0 đ</span>
+            </div>
+            <button type="button" id="openModalBtn" class="btn btn-primary mb-4">
+                <i class="fas fa-ticket-alt mr-2"></i>Chọn voucher
+            </button>
+            <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                    <p>Phí ship: <span id="feeShip" class="font-semibold">0 đ</span></p>
+                    <p>Trừ phí ship: <span id="feeShipVoucher" class="font-semibold text-green-600">0 đ</span></p>
+                    <p>Khuyến mãi: <span id="discountVoucher" class="font-semibold text-green-600">0 đ</span></p>
+                    <p>Thời gian giao: <span id="timeDelivery" class="font-semibold">-</span></p>
+                </div>
+                <div class="mt-2 pt-2 border-t">
+                    <p class="text-lg font-bold">Tổng: <span id="totalPrice" class="text-red-600">0 đ</span></p>
+                </div>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Màu</th>
+                        <th>Phân loại</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Hành động</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item : ${items}" th:if="${item.id == null}">
+                        <td><img th:src="${item.imageUrl}" alt="Product" class="w-16 h-16 rounded object-cover"></td>
+                        <td th:text="${item.productName}" class="font-medium"></td>
+                        <td th:text="${item.color ?: '-'}"></td>
+                        <td th:text="${item.dimension ?: '-'}"></td>
+                        <td class="price font-semibold" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
+                        <td class="quantity text-center" th:text="${item.quantity}"></td>
+                        <td>
+                            <form th:action="@{/checkout/realtime}" method="post" onsubmit="setTotalPrice(this)">
+                                <input type="hidden" name="inventory" th:value="${item.inventoryId}">
+                                <input type="hidden" name="quantity" th:value="${item.quantity}">
+                                <input type="hidden" name="firstname" th:id="'buyNowFirstName_' + ${item.inventoryId}">
+                                <input type="hidden" name="lastname" th:id="'buyNowLastName_' + ${item.inventoryId}">
+                                <input type="hidden" name="phone" th:id="'buyNowPhone_' + ${item.inventoryId}">
+                                <input type="hidden" name="address" th:id="'buyNowAddress_' + ${item.inventoryId}">
+                                <input type="hidden" name="freeshipId" id="selectedFreeshipId">
+                                <input type="hidden" name="discountId" id="selectedDiscountId">
+                                <input type="hidden" name="totalPrice" id="inputTotalPrice">
+                                <button type="submit" class="btn btn-primary buyNowBtn">
+                                    <i class="fas fa-lightning mr-2"></i>Thanh toán ngay
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Voucher Modal -->
+<div id="voucherModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold"><i class="fas fa-ticket-alt mr-2"></i>Chọn Voucher</h3>
+            <button type="button" id="closeModalBtn" class="text-2xl hover:text-red-500">&times;</button>
+        </div>
+        <div class="mb-4 p-3 bg-blue-50 rounded-lg">
+            <p class="text-sm text-blue-800">
+                <i class="fas fa-info-circle mr-2"></i>
+                Tổng đơn hàng: <span id="modalOrderTotal" class="font-semibold">0 đ</span>
+            </p>
+        </div>
+        <div class="flex gap-2 mb-4">
+            <button type="button" data-tab="freeship" class="tab-btn btn btn-primary">
+                <i class="fas fa-shipping-fast mr-2"></i>Freeship
+            </button>
+            <button type="button" data-tab="discount" class="tab-btn btn">
+                <i class="fas fa-percent mr-2"></i>Discount
+            </button>
+        </div>
+        <div id="tab-freeship" class="tab-content">
+            <div th:each="promo : ${voucherFreeShip}" class="voucher-item" th:attr="data-min-order=${promo.getMinOrderValue()}, data-voucher-id=${promo.getId()}, data-max-discount=${promo.getMaxDiscount()}">
+                <div class="flex items-center">
+                    <img th:src="@{/images/freeship.png}" alt="Freeship" class="w-12 h-12 mr-4">
+                    <div class="flex-1">
+                        <div class="flex items-center">
+                            <p class="font-semibold" th:text="${promo.getName()}"></p>
+                            <span class="voucher-status ml-2"></span>
+                        </div>
+                        <p class="text-sm text-gray-600" th:text="'Giảm tối đa ' + ${promo.getMaxDiscount() / 1000} + 'k'"></p>
+                        <p class="text-sm text-gray-600" th:text="'Đơn tối thiểu ' + ${promo.getMinOrderValue() / 1000} + 'k'"></p>
+                        <p th:if="${promo.getUsageCount() != null and promo.getUsageLimit() != null and (promo.getUsageCount() * 100.0 / promo.getUsageLimit()) > 70}"
+                           class="text-xs text-orange-600" th:text="'Đã dùng ' + ${#numbers.formatDecimal(promo.getUsageCount() * 100.0 / promo.getUsageLimit(), 0, 1)} + '%'"></p>
+                        <p th:if="${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), promo.enddate).toHours() < 24}"
+                           class="text-xs text-red-600" th:text="'Hết hạn trong ' + ${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), promo.enddate).toHours()} + 'h'"></p>
+                        <p th:unless="${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), promo.enddate).toHours() < 24}"
+                           class="text-xs text-gray-500" th:text="'Hết hạn lúc ' + ${#temporals.format(promo.enddate, 'dd/MM/yyyy HH:mm')}"></p>
+                    </div>
+                    <input type="radio" name="freeship" th:value="${promo.getId()}" class="ml-4 voucher-radio">
+                </div>
+            </div>
+        </div>
+        <div id="tab-discount" class="tab-content hidden">
+            <div th:each="promo : ${voucherDiscount}" class="voucher-item" th:attr="data-min-order=${promo.getMinOrderValue()}, data-voucher-id=${promo.getId()}, data-max-discount=${promo.getMaxDiscount()}">
+                <div class="flex items-center">
+                    <img th:src="@{/images/discount.png}" alt="Discount" class="w-12 h-12 mr-4">
+                    <div class="flex-1">
+                        <div class="flex items-center">
+                            <p class="font-semibold" th:text="${promo.getName()}"></p>
+                            <span class="voucher-status ml-2"></span>
+                        </div>
+                        <p th:if="${promo.getType() == 'PERCENTAGE'}" class="text-sm text-gray-600" th:text="'Giảm ' + ${promo.getValue()} + '%'"></p>
+                        <p class="text-sm text-gray-600" th:text="'Giảm tối đa ' + ${promo.getMaxDiscount() / 1000} + 'k'"></p>
+                        <p class="text-sm text-gray-600" th:text="'Đơn tối thiểu ' + ${promo.getMinOrderValue() / 1000} + 'k'"></p>
+                        <p th:if="${promo.getUsageCount() != null and promo.getUsageLimit() != null and (promo.getUsageCount() * 100.0 / promo.getUsageLimit()) > 70}"
+                           class="text-xs text-orange-600" th:text="'Đã dùng ' + ${#numbers.formatDecimal(promo.getUsageCount() * 100.0 / promo.getUsageLimit(), 0, 1)} + '%'"></p>
+                        <p th:if="${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), promo.enddate).toHours() < 24}"
+                           class="text-xs text-red-600" th:text="'Hết hạn trong ' + ${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), promo.enddate).toHours()} + 'h'"></p>
+                        <p th:unless="${T(java.time.Duration).between(T(java.time.LocalDateTime).now(), promo.enddate).toHours() < 24}"
+                           class="text-xs text-gray-500" th:text="'Hết hạn lúc ' + ${#temporals.format(promo.enddate, 'dd/MM/yyyy HH:mm')}"></p>
+                    </div>
+                    <input type="radio" name="discount" th:value="${promo.getId()}" class="ml-4 voucher-radio">
+                </div>
+            </div>
+        </div>
+        <div class="flex justify-end gap-2 mt-4">
+            <button type="button" id="cancelBtn" class="btn bg-gray-200 text-gray-800 hover:bg-gray-300">Trở lại</button>
+            <button type="button" id="confirmBtn" class="btn btn-primary">OK</button>
+        </div>
+    </div>
+</div>
+
+<!-- Map Modal -->
+<div id="mapModal" class="modal hidden">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold"><i class="fas fa-map mr-2"></i>Chọn địa chỉ trên bản đồ</h3>
+            <button type="button" id="closeMapBtn" class="text-2xl hover:text-red-500">&times;</button>
+        </div>
+        <div id="map" class="w-full h-96 rounded-lg"></div>
+    </div>
+</div>
+
+<script>
+    // Store voucher data for calculations
+    let voucherData = {
+        freeship: new Map(),
+        discount: new Map()
+    };
+
+    function validateInfo() {
+        const firstName = document.getElementById("firstname").value.trim();
+        const lastName = document.getElementById("lastname").value.trim();
+        const phone = document.getElementById("phone").value.trim();
+        const address = document.getElementById("address").value.trim();
+        const phoneValid = /^[0-9]{9,11}$/.test(phone);
+        const addressValid = address.length > 10 && /\d+/.test(address);
+        const warning = document.getElementById("warning");
+        const cartBtn = document.getElementById("cartSubmitBtn");
+        const buyNowBtns = document.querySelectorAll(".buyNowBtn");
+
+        if (!firstName || !lastName || !phoneValid || !addressValid) {
+            warning.classList.remove("hidden");
+            cartBtn?.setAttribute("disabled", true);
+            buyNowBtns.forEach(btn => btn.setAttribute("disabled", true));
+        } else {
+            warning.classList.add("hidden");
+            cartBtn?.removeAttribute("disabled");
+            buyNowBtns.forEach(btn => btn.removeAttribute("disabled"));
+        }
+    }
+
+    function formatCurrency(amount) {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND',
+            minimumFractionDigits: 0
+        }).format(amount);
+    }
+
+    function calculateCartTotal() {
+        let total = 0;
+        document.querySelectorAll("#cartItemsContainer tbody tr").forEach(row => {
+            const priceText = row.querySelector(".price")?.textContent || "0";
+            const quantityText = row.querySelector(".quantity")?.textContent || "0";
+            const price = parseInt(priceText.replace(/[^\d]/g, ""));
+            const quantity = parseInt(quantityText);
+            total += price * quantity;
+        });
+        return total;
+    }
+
+    function calculateBuyNowTotal() {
+        let total = 0;
+        document.querySelectorAll("#buyNowItemsContainer tbody tr").forEach(row => {
+            const priceText = row.querySelector(".price")?.textContent || "0";
+            const quantityText = row.querySelector(".quantity")?.textContent || "0";
+            const price = parseInt(priceText.replace(/[^\d]/g, ""));
+            const quantity = parseInt(quantityText);
+            total += price * quantity;
+        });
+        return total;
+    }
+
+    function updateTotals() {
+        const cartTotal = calculateCartTotal();
+        const buyNowTotal = calculateBuyNowTotal();
+
+        const cartTotalElement = document.getElementById("cartTotal");
+        const buyNowTotalElement = document.getElementById("buyNowTotal");
+
+        if (cartTotal > 0 && cartTotalElement) {
+            cartTotalElement.textContent = `Tổng: ${formatCurrency(cartTotal)}`;
+        }
+        if (buyNowTotal > 0 && buyNowTotalElement) {
+            buyNowTotalElement.textContent = `Tổng: ${formatCurrency(buyNowTotal)}`;
+        }
+    }
+
+    function showNotification(message, type = "success") {
+        const notification = document.createElement("div");
+        notification.className = `notification ${type}`;
+        notification.innerHTML = `<i class="fas fa-${type === "error" ? "exclamation-circle" : type === "warning" ? "exclamation-triangle" : "check-circle"} mr-2"></i>${message}`;
+        document.body.appendChild(notification);
+
+        setTimeout(() => notification.classList.add("show"), 100);
+        setTimeout(() => {
+            notification.classList.remove("show");
+            setTimeout(() => notification.remove(), 300);
+        }, 4000);
+    }
+
+    function updateVoucherEligibility() {
+        const orderTotal = calculateBuyNowTotal();
+        const modalOrderTotal = document.getElementById("modalOrderTotal");
+
+        if (modalOrderTotal) {
+            modalOrderTotal.textContent = formatCurrency(orderTotal);
+        }
+
+        // Update freeship vouchers
+        document.querySelectorAll("#tab-freeship .voucher-item").forEach(item => {
+            const minOrder = parseInt(item.getAttribute("data-min-order"));
+            const maxDiscount = parseInt(item.getAttribute("data-max-discount"));
+            const voucherId = item.getAttribute("data-voucher-id");
+            const radio = item.querySelector("input[type='radio']");
+            const status = item.querySelector(".voucher-status");
+
+            // Store voucher data
+            voucherData.freeship.set(voucherId, { minOrder, maxDiscount });
+
+            if (orderTotal >= minOrder) {
+                item.classList.remove("disabled");
+                item.classList.add("eligible");
+                radio.disabled = false;
+                status.textContent = "Có thể dùng";
+                status.className = "voucher-status eligible";
+            } else {
+                item.classList.add("disabled");
+                item.classList.remove("eligible");
+                radio.disabled = true;
+                radio.checked = false;
+                status.textContent = "Không đủ điều kiện";
+                status.className = "voucher-status not-eligible";
+            }
+        });
+
+        // Update discount vouchers
+        document.querySelectorAll("#tab-discount .voucher-item").forEach(item => {
+            const minOrder = parseInt(item.getAttribute("data-min-order"));
+            const maxDiscount = parseInt(item.getAttribute("data-max-discount"));
+            const voucherId = item.getAttribute("data-voucher-id");
+            const radio = item.querySelector("input[type='radio']");
+            const status = item.querySelector(".voucher-status");
+
+            // Store voucher data
+            voucherData.discount.set(voucherId, { minOrder, maxDiscount });
+
+            if (orderTotal >= minOrder) {
+                item.classList.remove("disabled");
+                item.classList.add("eligible");
+                radio.disabled = false;
+                status.textContent = "Có thể dùng";
+                status.className = "voucher-status eligible";
+            } else {
+                item.classList.add("disabled");
+                item.classList.remove("eligible");
+                radio.disabled = true;
+                radio.checked = false;
+                status.textContent = "Không đủ điều kiện";
+                status.className = "voucher-status not-eligible";
+            }
+        });
+    }
+
+    async function fetchProvinces() {
+        try {
+            const response = await fetch("https://provinces.open-api.vn/api/p/", { cache: "force-cache" });
+            if (!response.ok) throw new Error("Lỗi tải tỉnh");
+
+            const provinces = await response.json();
+            const provinceSelect = document.getElementById("province");
+            provinceSelect.innerHTML = '<option value="">Chọn Tỉnh/Thành phố</option>';
+
+            provinces.forEach(province => {
+                const option = document.createElement("option");
+                option.value = province.code;
+                option.textContent = province.name;
+                provinceSelect.appendChild(option);
+            });
+
+            provinceSelect.disabled = false;
+        } catch (error) {
+            console.error("Error fetching provinces:", error);
+            showNotification("Không thể tải danh sách tỉnh", "error");
+        }
+    }
+
+    async function fetchDistricts(provinceCode) {
+        try {
+            const response = await fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`);
+            if (!response.ok) throw new Error("Lỗi tải quận");
+
+            const data = await response.json();
+            const districtSelect = document.getElementById("district");
+            districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+
+            data.districts.forEach(district => {
+                const option = document.createElement("option");
+                option.value = district.code;
+                option.textContent = district.name;
+                districtSelect.appendChild(option);
+            });
+
+            districtSelect.disabled = false;
+        } catch (error) {
+            console.error("Error fetching districts:", error);
+            showNotification("Không thể tải danh sách quận", "error");
+        }
+    }
+
+    async function fetchWards(districtCode) {
+        try {
+            const response = await fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`);
+            if (!response.ok) throw new Error("Lỗi tải phường");
+
+            const data = await response.json();
+            const wardSelect = document.getElementById("ward");
+            wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+
+            data.wards.forEach(ward => {
+                const option = document.createElement("option");
+                option.value = ward.name;
+                option.textContent = ward.name;
+                wardSelect.appendChild(option);
+            });
+
+            wardSelect.disabled = false;
+        } catch (error) {
+            console.error("Error fetching wards:", error);
+            showNotification("Không thể tải danh sách phường", "error");
+        }
+    }
+
+    async function fetchPreviewRealtime() {
+        const inventory = localStorage.getItem("inventory");
+        const quantity = localStorage.getItem("quantity");
+        const freeshipId = localStorage.getItem("freeshipId");
+        const discountId = localStorage.getItem("discountId");
+
+        if (!inventory || !quantity) return;
+
+        try {
+            const url = new URL("/checkout/preview_realtime_data", window.location.origin);
+            url.searchParams.append("inventory", inventory);
+            url.searchParams.append("quantity", quantity);
+            if (freeshipId && freeshipId !== "null") url.searchParams.append("freeshipId", freeshipId);
+            if (discountId && discountId !== "null") url.searchParams.append("discountId", discountId);
+
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Lỗi tải dữ liệu");
+
+            const data = await response.json();
+
+            // Update shipping fee from backend
+            document.getElementById("feeShip").textContent = `${data.feeShip} đ`;
+            document.getElementById("timeDelivery").textContent = data.timeDelivery;
+
+            // Calculate discounts using JavaScript with proper logic
+            calculateAndUpdateTotal();
+
+        } catch (error) {
+            console.error("Error fetching preview data:", error);
+            showNotification("Lỗi tải dữ liệu phí ship", "error");
+        }
+    }
+
+    function calculateAndUpdateTotal() {
+        // Get order total from buy now items
+        const orderTotal = calculateBuyNowTotal();
+
+        // Get shipping fee (remove 'đ' and convert to number)
+        const feeShipText = document.getElementById("feeShip").textContent.replace(/[^\d]/g, "");
+        const feeShip = parseInt(feeShipText) || 0;
+
+        // Calculate shipping discount
+        let feeShipVoucher = 0;
+        const selectedFreeshipId = localStorage.getItem("freeshipId");
+        if (selectedFreeshipId && selectedFreeshipId !== "null" && voucherData.freeship.has(selectedFreeshipId)) {
+            const freeshipVoucher = voucherData.freeship.get(selectedFreeshipId);
+            // Take minimum between voucher max discount and actual shipping fee
+            feeShipVoucher = Math.min(freeshipVoucher.maxDiscount, feeShip);
+        }
+
+        // Calculate promotion discount
+        let discountVoucher = 0;
+        const selectedDiscountId = localStorage.getItem("discountId");
+        if (selectedDiscountId && selectedDiscountId !== "null" && voucherData.discount.has(selectedDiscountId)) {
+            const discountVoucherData = voucherData.discount.get(selectedDiscountId);
+            // For discount vouchers, use the max discount amount
+            // (In real implementation, this might be calculated based on percentage and order total)
+            discountVoucher = discountVoucherData.maxDiscount;
+        }
+
+        // Update display values
+        document.getElementById("feeShipVoucher").textContent = `${feeShipVoucher} đ`;
+        document.getElementById("discountVoucher").textContent = `${discountVoucher} đ`;
+
+        // Calculate final total: Order Total + Shipping Fee - Shipping Discount - Promotion Discount
+        const finalTotal = orderTotal + feeShip - feeShipVoucher - discountVoucher;
+
+        // Update the total price display
+        document.getElementById("totalPrice").textContent = formatCurrency(finalTotal);
+
+        console.log("Calculation breakdown:", {
+            orderTotal,
+            feeShip,
+            feeShipVoucher: `${feeShipVoucher} (min of voucher max: ${voucherData.freeship.get(selectedFreeshipId)?.maxDiscount || 0} and shipping: ${feeShip})`,
+            discountVoucher,
+            finalTotal
+        });
+    }
+
+    async function sendAddressToBackend() {
+        const provinceSelect = document.getElementById("province");
+        const districtSelect = document.getElementById("district");
+        const provinceCode = provinceSelect.value;
+        const districtCode = districtSelect.value;
+        const provinceName = provinceSelect.options[provinceSelect.selectedIndex]?.text || "";
+        const districtName = districtSelect.options[districtSelect.selectedIndex]?.text || "";
+
+        try {
+            const response = await fetch("/checkout/address", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ provinceCode, provinceName, districtCode, districtName })
+            });
+
+            if (!response.ok) throw new Error("Lỗi gửi địa chỉ");
+            await fetchPreviewRealtime();
+        } catch (error) {
+            console.error("Error sending address:", error);
+            showNotification("Không thể gửi địa chỉ", "error");
+        }
+    }
+
+    function updateAddressFromDropdowns() {
+        const provinceSelect = document.getElementById("province");
+        const districtSelect = document.getElementById("district");
+        const wardSelect = document.getElementById("ward");
+
+        const province = provinceSelect.options[provinceSelect.selectedIndex]?.text || "";
+        const district = districtSelect.options[districtSelect.selectedIndex]?.text || "";
+        const ward = wardSelect.options[wardSelect.selectedIndex]?.text || "";
+        const houseNumber = document.getElementById("houseNumber").value.trim();
+        const addressInput = document.getElementById("address");
+
+        if (province && district && ward && houseNumber) {
+            addressInput.value = `${houseNumber}, ${ward}, ${district}, ${province}`;
+            sendAddressToBackend();
+        }
+        validateInfo();
+    }
+
+    function resetDropdowns() {
+        document.getElementById("province").value = "";
+        document.getElementById("district").value = "";
+        document.getElementById("district").disabled = true;
+        document.getElementById("ward").value = "";
+        document.getElementById("ward").disabled = true;
+        document.getElementById("houseNumber").value = "";
+    }
+
+    let map, marker;
+
+    function initMap() {
+        if (!window.L) {
+            const css = document.createElement("link");
+            css.rel = "stylesheet";
+            css.href = "https://unpkg.com/leaflet/dist/leaflet.css";
+            document.head.appendChild(css);
+
+            const script = document.createElement("script");
+            script.src = "https://unpkg.com/leaflet/dist/leaflet.js";
+            script.onload = createMap;
+            document.body.appendChild(script);
+        } else {
+            createMap();
+        }
+    }
+
+    function createMap() {
+        if (map) {
+            map.invalidateSize();
+            return;
+        }
+
+        map = L.map("map").setView([10.8231, 106.6297], 15);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(map);
+
+        map.on("click", async e => {
+            const { lat, lng } = e.latlng;
+
+            if (marker) {
+                marker.setLatLng(e.latlng);
+            } else {
+                marker = L.marker(e.latlng).addTo(map);
+            }
+
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json&addressdetails=1&accept-language=vi`);
+                if (!response.ok) throw new Error("Lỗi lấy địa chỉ");
+
+                const data = await response.json();
+                document.getElementById("address").value = data.display_name || `${lat}, ${lng}`;
+                document.getElementById("mapModal").classList.add("hidden");
+                resetDropdowns();
+                validateInfo();
+            } catch (error) {
+                console.error("Error getting address from map:", error);
+                showNotification("Không thể lấy địa chỉ từ bản đồ", "error");
+            }
+        });
+    }
+
+    function setTotalPrice(form) {
+        const spanPrice = document.getElementById("totalPrice");
+        const inputPrice = form.querySelector("input[name='totalPrice']");
+        if (spanPrice && inputPrice) {
+            inputPrice.value = spanPrice.textContent.replace(/[^\d]/g, "");
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Initialize
+        fetchProvinces();
+        updateTotals();
+
+        // Calculate initial total for buy now section
+        setTimeout(() => {
+            calculateAndUpdateTotal();
+            updateVoucherEligibility();
+            showNotification("Đã tải thông tin đơn hàng!", "success");
+        }, 500);
+
+        // Form validation
+        document.querySelectorAll("#firstname, #lastname, #phone, #address").forEach(input => {
+            input.addEventListener("input", validateInfo);
+        });
+
+        // Province/District/Ward handling
+        document.getElementById("province").addEventListener("change", function () {
+            const districtSelect = document.getElementById("district");
+            const wardSelect = document.getElementById("ward");
+
+            districtSelect.disabled = true;
+            wardSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+            wardSelect.disabled = true;
+            wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+
+            if (this.value) {
+                fetchDistricts(this.value);
+            } else {
+                districtSelect.innerHTML = '<option value="">Chọn Quận/Huyện</option>';
+            }
+            updateAddressFromDropdowns();
+        });
+
+        document.getElementById("district").addEventListener("change", function () {
+            const wardSelect = document.getElementById("ward");
+            wardSelect.disabled = true;
+
+            if (this.value) {
+                fetchWards(this.value);
+            } else {
+                wardSelect.innerHTML = '<option value="">Chọn Phường/Xã</option>';
+            }
+            updateAddressFromDropdowns();
+        });
+
+        document.getElementById("ward").addEventListener("change", updateAddressFromDropdowns);
+        document.getElementById("houseNumber").addEventListener("input", updateAddressFromDropdowns);
+
+        document.getElementById("address").addEventListener("input", () => {
+            resetDropdowns();
+            validateInfo();
+        });
+
+        // Map modal
+        document.getElementById("openMapBtn").addEventListener("click", () => {
+            document.getElementById("mapModal").classList.remove("hidden");
+            setTimeout(initMap, 100);
+        });
+
+        document.getElementById("closeMapBtn").addEventListener("click", () => {
+            document.getElementById("mapModal").classList.add("hidden");
+        });
+
+        // Voucher modal
+        const modal = document.getElementById("voucherModal");
+        document.getElementById("openModalBtn").addEventListener("click", () => {
+            updateVoucherEligibility();
+            modal.classList.remove("hidden");
+        });
+        document.getElementById("closeModalBtn").addEventListener("click", () => modal.classList.add("hidden"));
+        document.getElementById("cancelBtn").addEventListener("click", () => modal.classList.add("hidden"));
+
+        document.getElementById("confirmBtn").addEventListener("click", () => {
+            const freeship = document.querySelector("input[name='freeship']:checked")?.value || null;
+            const discount = document.querySelector("input[name='discount']:checked")?.value || null;
+
+            // Clear previous selections if no voucher is selected
+            if (!freeship) {
+                localStorage.removeItem("freeshipId");
+                document.getElementById("selectedFreeshipId").value = "";
+            } else {
+                localStorage.setItem("freeshipId", freeship);
+                document.getElementById("selectedFreeshipId").value = freeship;
+            }
+
+            if (!discount) {
+                localStorage.removeItem("discountId");
+                document.getElementById("selectedDiscountId").value = "";
+            } else {
+                localStorage.setItem("discountId", discount);
+                document.getElementById("selectedDiscountId").value = discount;
+            }
+
+            modal.classList.add("hidden");
+
+            // Recalculate total with new voucher selection
+            calculateAndUpdateTotal();
+
+            // Show notification about voucher selection
+            if (freeship || discount) {
+                showNotification("Đã áp dụng voucher!", "success");
+            } else {
+                showNotification("Đã bỏ chọn voucher", "warning");
+            }
+        });
+
+        // Tab switching
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("btn-primary"));
+                document.querySelectorAll(".tab-content").forEach(c => c.classList.add("hidden"));
+
+                btn.classList.add("btn-primary");
+                document.getElementById(`tab-${btn.dataset.tab}`).classList.remove("hidden");
+            });
+        });
+
+        // Payment method handling
+        document.getElementById("change-method-btn").addEventListener("click", () => {
+            document.getElementById("payment-method-tabs-container").classList.toggle("hidden");
+        });
+
+        document.getElementById("confirm-method-btn").addEventListener("click", () => {
+            const selectedMethod = document.querySelector(".payment-tab.btn-primary")?.dataset.method || "COD";
+            const methodLabel = selectedMethod === "MUSA" ? "Ví MUSA" : "Thanh toán khi nhận hàng";
+
+            document.getElementById("selected-method-label").textContent = methodLabel;
+            document.getElementById("payment-method-tabs-container").classList.add("hidden");
+        });
+
+        document.querySelectorAll(".payment-tab").forEach(tab => {
+            tab.addEventListener("click", () => {
+                document.querySelectorAll(".payment-tab").forEach(t => t.classList.remove("btn-primary"));
+                tab.classList.add("btn-primary");
+
+                const method = tab.dataset.method;
+                const desc = method === "MUSA" ? "Ví MUSA: Thanh toán nhanh chóng và bảo mật." : "Thanh toán khi nhận hàng: Phí thu hộ 0 VNĐ.";
+                document.getElementById("payment-method-desc").textContent = desc;
+            });
+        });
+
+        // Show/hide sections based on content
+        const cartContainer = document.getElementById("cartItemsContainer");
+        const buyNowContainer = document.getElementById("buyNowItemsContainer");
+
+        if (!document.querySelectorAll("#cartItemsContainer tbody tr").length) {
+            cartContainer.classList.add("hidden");
+        }
+
+        if (!document.querySelectorAll("#buyNowItemsContainer tbody tr").length) {
+            buyNowContainer.classList.add("hidden");
+        }
+
+        // Form submission handling
+        document.getElementById("cartSubmitBtn")?.addEventListener("click", () => {
+            const inputs = ["firstname", "lastname", "phone", "address"].map(id =>
+                document.getElementById(id).value.trim()
+            );
+
+            ["cartFirstName", "cartLastName", "cartPhone", "cartAddress"].forEach((id, i) => {
+                const element = document.getElementById(id);
+                if (element) element.value = inputs[i];
+            });
+        });
+
+        document.querySelectorAll(".buyNowBtn").forEach(btn => {
+            btn.addEventListener("click", e => {
+                const form = btn.closest("form");
+                const inventoryInput = form.querySelector("input[name='inventory']");
+
+                if (!inventoryInput) {
+                    e.preventDefault();
+                    showNotification("Lỗi hệ thống, vui lòng thử lại", "error");
+                    return;
+                }
+
+                const inventoryId = inventoryInput.value;
+                const inputs = ["firstname", "lastname", "phone", "address"].map(id =>
+                    document.getElementById(id).value.trim()
+                );
+
+                [`buyNowFirstName_${inventoryId}`, `buyNowLastName_${inventoryId}`, `buyNowPhone_${inventoryId}`, `buyNowAddress_${inventoryId}`].forEach((id, i) => {
+                    const field = document.getElementById(id);
+                    if (field) {
+                        field.value = inputs[i];
+                    } else {
+                        e.preventDefault();
+                        showNotification("Lỗi hệ thống, vui lòng thử lại", "error");
+                    }
+                });
+            });
+        });
+
+        // Voucher selection handling
+        document.querySelectorAll("input[name='freeship']").forEach(radio => {
+            radio.addEventListener("change", () => {
+                if (radio.checked) {
+                    document.getElementById("selectedFreeshipId").value = radio.value;
+                }
+            });
+        });
+
+        document.querySelectorAll("input[name='discount']").forEach(radio => {
+            radio.addEventListener("change", () => {
+                if (radio.checked) {
+                    document.getElementById("selectedDiscountId").value = radio.value;
+                }
+            });
+        });
+
+        // Initial validation
+        validateInfo();
+    });
+</script>
+</body>
+</html>
