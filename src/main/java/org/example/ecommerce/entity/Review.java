@@ -51,4 +51,7 @@ public class Review {
     @OneToMany(mappedBy = "reviewid")
     private Set<ReviewsImage> reviewsImages = new LinkedHashSet<>();
 
+    @OneToMany(mappedBy = "review")
+    private Set<ReviewReply> reviewReplies = new LinkedHashSet<>();
+
 }
