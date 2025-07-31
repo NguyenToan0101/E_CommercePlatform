@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Giỏ hàng</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-black: #1a2233;
+      --secondary-black: #222b45;
+      --accent-gray: #e0e7ef;
+      --light-gray: #f5f7fa;
+      --border-gray: #e5eaf2;
+      --text-gray: #6b7280;
+      --white: #ffffff;
+      --shopee-orange: #ee4d2d;
+      --shadow-light: rgba(16, 42, 67, 0.04);
+      --gradient-start: #e3eded;
+      --gradient-mid: #e3eded;
+      --gradient-end: #e3eded;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-end) 100%);
+      color: var(--primary-black);
+      margin: 0;
+      padding: 0;
+    }
+    .main-content {
+      padding: 40px 0 40px 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: none;
+    }
+    .cart-table-wrapper {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px var(--shadow-light);
+      padding: 0 24px 24px 24px;
+      position: relative;
+    }
+    .cart-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: #fff;
+      margin: 0 auto;
+    }
+    .cart-table th, .cart-table td {
+      padding: 16px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e5eaf2;
+    }
+    .cart-table th {
+      background: #f5f7fa;
+      font-weight: 700;
+      color: #088395;
+      font-size: 1.05rem;
+    }
+    .cart-table tr:last-child td {
+      border-bottom: none;
+    }
+    .cart-item-row {
+      background: #fff;
+    }
+    .shop-row td {
+      background: #f5f7fa;
+      font-weight: 700;
+      color: #088395;
+      font-size: 1.1rem;
+      border-top: 2px solid #e5eaf2;
+      border-bottom: 2px solid #e5eaf2;
+    }
+    .cart-product-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    .product-image {
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid #e5eaf2;
+      background: #f5f7fa;
+    }
+    .product-details {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .product-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #222b45;
+      margin-bottom: 2px;
+      max-width: 200px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .product-variant {
+      font-size: 0.95rem;
+      color: #6b7280;
+    }
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid #e5eaf2;
+      border-radius: 6px;
+      background: #f5f7fa;
+      width: fit-content;
+      padding: 2px 8px;
+    }
+    .quantity-btn {
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      color: #088395;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+    .quantity-btn:hover {
+      background: #e0f7fa;
+    }
+    .quantity-input {
+      width: 40px;
+      height: 28px;
+      border: none;
+      text-align: center;
+      font-size: 1rem;
+      background: transparent;
+      color: #222b45;
+      -moz-appearance: textfield;
+    }
+    .quantity-input::-webkit-outer-spin-button,
+    .quantity-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .item-price, .item-total {
+      font-weight: 600;
+      color: #ee4d2d;
+      font-size: 1.05rem;
+      text-align: center;
+    }
+    .btn-remove {
+      background: none;
+      border: none;
+      color: #dc2626;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: background 0.15s;
+    }
+    .btn-remove:hover {
+      background: #ffeaea;
+    }
+    @media (max-width: 1300px) {
+      .main-content, .cart-table-wrapper {
+        max-width: 100vw;
+        padding: 0 8px;
+      }
+    }
+    @media (max-width: 900px) {
+      .cart-table th, .cart-table td {
+        padding: 10px 4px;
+      }
+      .product-image {
+        width: 60px;
+        height: 60px;
+      }
+    }
+    .header-top-bar {
+      background: #fff;
+      color: #111;
+      font-size: 1rem;
+      padding: 0 32px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #e5eaf2;
+    }
+    .header-top-left, .header-top-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .main-header {
+      background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
+      box-shadow: 0 2px 16px var(--shadow-light);
+      border-radius: 0 0 18px 18px;
+      padding: 0 32px;
+      height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-left { display: flex; align-items: center; gap: 18px; }
+    .logo-img {
+      height: 80px !important;
+      width: auto !important;
+      display: block;
+      margin-right: 8px;
+      filter: drop-shadow(0 2px 8px #05bfdb33);
+    }
+    .search-bar {
+      flex: unset;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px var(--shadow-light);
+      padding: 0 16px;
+      width: 900px;
+      border: 2px solid #05bfdb22;
+    }
+    .search-bar input {
+      border: none;
+      background: transparent;
+      font-size: 1.1rem;
+      flex: 1;
+      padding: 12px 0;
+      outline: none;
+      color: #111 !important;
+    }
+    .search-bar button {
+      background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 8px;
+      transition: background 0.2s;
+      box-shadow: 0 2px 8px var(--shadow-light);
+    }
+    .search-bar button:hover { background: #0a4d68; }
+    .header-right { display: flex; align-items: center; gap: 18px; overflow-x: auto; white-space: nowrap; max-width: 250px; }
+    .account-link {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #111 !important;
+      background: none;
+      padding: 0 0 0 2px;
+      text-decoration: none;
+      position: relative;
+      cursor: pointer;
+    }
+    .user-info-box { position: relative; display: flex; align-items: center; gap: 4px; }
+    .user-info-box:hover .account-menu-list,
+    .user-info-box:focus-within .account-menu-list {
+      display: block;
+      opacity: 1;
+      visibility: visible;
+    }
+    .account-menu-list {
+      display: none;
+      position: fixed;
+      top: 72px;
+      right: 32px;
+      background: #fff;
+      min-width: 200px;
+      border-radius: 16px;
+      box-shadow: 0 16px 48px rgba(16,42,67,0.13);
+      border: 1px solid #e0e7ef;
+      overflow: visible;
+      z-index: 9999;
+      animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+    }
+    @keyframes slideDown {
+      from { opacity: 0; transform: translateY(-8px) scale(0.95); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .account-menu-list::before {
+      content: '';
+      position: absolute;
+      top: -6px;
+      right: 20px;
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border: 1px solid #e0e7ef;
+      border-bottom: none;
+      border-right: none;
+      transform: rotate(45deg);
+    }
+    .account-menu-list a {
+      color: var(--primary-black);
+      padding: 12px 20px;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background 0.15s, color 0.15s, transform 0.15s;
+      border-left: 3px solid transparent;
+      white-space: normal;
+      word-break: break-word;
+    }
+    .account-menu-list a:hover {
+      background: var(--accent-gray);
+      border-left-color: var(--gradient-mid);
+      color: var(--gradient-mid);
+      transform: translateX(4px);
+      }
+    .account-menu-list a:not(:last-child) {
+      border-bottom: 1px solid #e0e7ef;
+      }
+    .user-avatar {
+      width: auto;
+      height: auto;
+      background: none;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 0;
+      overflow: visible;
+      padding: 0;
+      }
+    .user-avatar img {
+      width: 32px;
+      height: 32px;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+      }
+    .header-cart-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      margin-left: 18px;
+      cursor: pointer;
+      text-decoration: none;
+      }
+    .header-cart-link img {
+      height: 40px;
+      width: 40px;
+      filter: drop-shadow(0 2px 8px #05bfdb33);
+      }
+    .header-cart-link:hover img {
+      transform: scale(1.08) rotate(-8deg);
+      filter: drop-shadow(0 4px 16px #08839566);
+      }
+    .product-name-link {
+      text-decoration: none;
+    }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+<!-- Header Top Bar -->
+<div class="header-top-bar" style="background: #fff; color: #111; font-size: 1rem; padding: 0 32px; height: 38px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5eaf2;">
+  <div class="header-top-left" style="display: flex; align-items: center; gap: 18px;">
+    <a th:href="@{/seller}" style="color: #111; text-decoration: none; font-weight: 600;">Kênh Người Bán</a>
+    <span style="color: #bbb;">|</span>
+    <span style="font-weight: 600; color: #111;">Kết nối</span>
+    <a href="#" style="margin-left: 6px; display: inline-flex; align-items: center;" title="Facebook">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#1877F3"/><path d="M21.333 16.001h-3.2v8h-3.2v-8h-2.133v-2.667h2.133v-1.6c0-2.133 1.067-3.2 3.2-3.2h2.133v2.667h-1.6c-.267 0-.533.267-.533.533v1.6h2.133l-.267 2.667z" fill="#fff"/></svg>
+    </a>
+    <a href="#" style="margin-left: 2px; display: inline-flex; align-items: center;" title="Instagram">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><radialGradient id="ig1" cx="16" cy="16" r="16" gradientUnits="userSpaceOnUse"><stop stop-color="#FFD600"/><stop offset="0.5" stop-color="#FF0069"/><stop offset="1" stop-color="#2827FF"/></radialGradient><circle cx="16" cy="16" r="16" fill="url(#ig1)"/><rect x="9" y="9" width="14" height="14" rx="4" fill="#fff"/><circle cx="16" cy="16" r="3.5" fill="#FF0069"/><circle cx="21.5" cy="10.5" r="1.5" fill="#FFD600"/></svg>
+      </a>
+    </div>
+  <div class="header-top-right" style="display: flex; align-items: center; gap: 18px;">
+    <a href="#" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/></svg> Thông Báo</a>
+    <th:block th:if="${customer}">
+      <div class="user-info-box">
+        <div class="user-avatar" th:if="${customer.image != null && !#strings.isEmpty(customer.image)}" style="background: none;">
+          <img th:src="@{${customer.image}}" alt="avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" />
+        </div>
+        <span class="user-avatar" th:if="${customer.image == null || #strings.isEmpty(customer.image)}" th:text="${customer.firstname.substring(0,1)}"></span>
+        <a class="account-link" th:text="${customer.firstname + ' ' + customer.lastname}" tabindex="0" style="color: #111 !important; font-weight: 700;"></a>
+        <div class="account-menu-list">
+          <a th:href="@{/customers/profile}">Tài khoản của tôi</a>
+          <a th:href="@{/wallet}">Ví của tôi</a>
+          <a th:href="@{/wishlist}">Danh sách yêu thích</a>
+          <a th:href="@{/orders}">Đơn mua</a>
+          <a th:href="@{/logout}">Đăng xuất</a>
+      </div>
+    </div>
+    </th:block>
+    <a th:unless="${customer}" href="/login" class="account-link" style="color:#fff;">Đăng nhập</a>
+    </div>
+  </div>
+<!-- Main Header -->
+<header class="main-header">
+  <div class="header-left" style="display: flex; align-items: center; gap: 18px;">
+    <a th:href="@{/home}" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+      <img src="/logo/logo.png" alt="Logo" class="logo-img" />
+    </a>
+        </div>
+  <form class="search-bar" action="/search_name" method="GET" style="max-width: 900px; margin: 0 auto;">
+    <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
+    <button type="submit" aria-label="Tìm kiếm">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+          </button>
+  </form>
+  <a href="/cart" class="header-cart-link" title="Giỏ hàng">
+    <img src="/logo/cart.png" alt="Giỏ hàng" />
+  </a>
+</header>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- Loading overlay -->
+<div id="loading-overlay" style="display:none;position:fixed;z-index:99999;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.5);align-items:center;justify-content:center;">
+  <div style="border:6px solid #05bfdb;border-top:6px solid #fff;border-radius:50%;width:48px;height:48px;animation:spin 1s linear infinite;"></div>
+</div>
+
+<main class="main-content">
+  <!-- Flash message display -->
+  <div th:if="${message}" class="flash-message alert-success" th:text="${message}"></div>
+  <div th:if="${error}" class="flash-message alert-error" th:text="${error}"></div>
+
+  <!-- Empty cart message -->
+  <div th:if="${#lists.isEmpty(cartItems)}" class="empty-cart">
+    <h3>Giỏ hàng của bạn đang trống</h3>
+    <p>Hãy thêm sản phẩm vào giỏ hàng để tiếp tục mua sắm</p>
+    <a href="javascript:history.back()" class="continue-shopping">Tiếp tục mua sắm</a>
+  </div>
+
+  <!-- Shopee-style Cart Table -->
+  <div th:if="${not #lists.isEmpty(cartItems)}" class="cart-table-wrapper">
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th style="width:40px;"><input type="checkbox" id="select-all" class="checkbox" onchange="toggleSelectAll()"></th>
+          <th>Sản Phẩm</th>
+          <th>Đơn Giá</th>
+          <th>Số Lượng</th>
+          <th>Số Tiền</th>
+          <th>Thao Tác</th>
+        </tr>
+      </thead>
+      <tbody>
+        <th:block th:each="item,iter : ${cartItems}">
+          <!-- Shop header row: show if first item or shop changes -->
+          <tr th:if="${iter.index == 0 or item.shopName != cartItems[iter.index-1].shopName}" class="shop-row">
+            <td colspan="6">
+              <span class="shop-badge">&#128722;</span>
+              <span class="shop-name" th:text="${item.shopName}"></span>
+            </td>
+          </tr>
+          <!-- Product row -->
+          <tr class="cart-item-row" th:data-cart-item-id="${item.cartItemId}">
+            <td><input type="checkbox" class="item-checkbox" th:data-item-id="${item.cartItemId}"
+                       th:data-price="${item.price}" th:data-quantity="${item.quantity}" onchange="updateSummary()"></td>
+            <td>
+              <div class="cart-product-info">
+                <a th:href="@{/detailproduct(id=${item.productId})}">
+                  <img th:src="${item.imageUrl != null ? item.imageUrl : '/images/default-product.jpg'}" alt="Product Image" class="product-image">
+            </a>
+            <div class="product-details">
+              <a th:href="@{/detailproduct(id=${item.productId})}" class="product-name-link">
+                    <div class="product-name" th:text="${item.productName}"></div>
+              </a>
+                  <div class="product-variant">
+                    <span th:if="${item.color}" th:text="'Màu: ' + ${item.color}"></span>
+                    <span th:if="${item.dimension}" th:text="'Size: ' + ${item.dimension}"></span>
+            </div>
+          </div>
+          </div>
+            </td>
+            <td class="item-price" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+            <td>
+          <div class="quantity-controls">
+            <input type="hidden" class="cart-item-id" th:value="${item.cartItemId}">
+            <input type="hidden" class="product-id" th:value="${item.productId}">
+            <input type="hidden" class="inventory-id" th:value="${item.inventoryId}">
+            <button type="button" class="quantity-btn" onclick="decreaseQuantity(this)">-</button>
+            <input type="number" th:value="${item.quantity}" min="1" class="quantity-input"
+                   onchange="updateQuantityDebounced(this)" th:data-original-quantity="${item.quantity}">
+            <button type="button" class="quantity-btn" onclick="increaseQuantity(this)">+</button>
+          </div>
+            </td>
+            <td class="item-total" th:text="${#numbers.formatDecimal(item.price * item.quantity, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+            <td>
+            <button type="button" class="btn-remove" th:data-cart-item-id="${item.cartItemId}"
+                    th:data-product-name="${item.productName}" onclick="removeCartItem(this)">
+                Xóa
+            </button>
+            </td>
+          </tr>
+        </th:block>
+      </tbody>
+    </table>
+    <div id="cart-summary-spacer" style="height:0;"></div>
+    <div id="cart-summary-bar" style="display:none;position:fixed;bottom:0;left:0;width:100vw;z-index:10000;background:#fff;box-shadow:0 -2px 12px #0001;display:flex;align-items:center;justify-content:center;padding:16px 0;">
+      <div style="display:flex;align-items:center;gap:32px;max-width:700px;width:100%;justify-content:center;">
+        <input type="checkbox" id="summary-select-all" style="width:18px;height:18px;">
+        <span id="summary-select-label">Chọn Tất Cả (0)</span>
+        <span id="summary-total-label">Tổng cộng (0 Sản phẩm):</span>
+        <span id="summary-total-price" style="color:#ee4d2d;font-weight:700;font-size:1.1rem;">₫0</span>
+        <button id="summary-buy-btn" style="background:#ee4d2d;color:#fff;font-weight:600;border:none;border-radius:4px;padding:10px 32px;font-size:1rem;cursor:pointer;">Mua Hàng</button>
+          </div>
+        </div>
+  </div>
+</main>
+
+<script>
+  function showLoading() {
+    document.getElementById('loading-overlay').style.display = 'flex';
+  }
+  function hideLoading() {
+    document.getElementById('loading-overlay').style.display = 'none';
+  }
+  function increaseQuantity(button) {
+    const input = button.parentElement.querySelector('.quantity-input');
+    input.value = parseInt(input.value) + 1;
+    showLoading();
+      updateCartQuantity(input);
+  }
+  function decreaseQuantity(button) {
+    const input = button.parentElement.querySelector('.quantity-input');
+    if (parseInt(input.value) > 1) {
+      input.value = parseInt(input.value) - 1;
+      showLoading();
+      updateCartQuantity(input);
+    }
+  }
+  document.querySelectorAll('.quantity-input').forEach(function(input) {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        showLoading();
+        updateCartQuantity(input);
+      }
+    });
+  });
+  async function updateCartQuantity(input) {
+    const cartItemRow = input.closest('.cart-item-row');
+    const cartItemId = cartItemRow.querySelector('.cart-item-id').value;
+    const productId = cartItemRow.querySelector('.product-id').value;
+    const inventoryId = cartItemRow.querySelector('.inventory-id').value;
+    const quantity = parseInt(input.value);
+    if (quantity < 1) {
+      input.value = 1;
+      hideLoading();
+      return;
+    }
+    try {
+      input.disabled = true;
+      const formData = new FormData();
+      formData.append('cartItemId', cartItemId);
+      formData.append('productId', productId);
+      formData.append('inventoryId', inventoryId);
+      formData.append('quantity', quantity);
+      const response = await fetch('/cart/update', {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        location.reload(true);
+      } else {
+        hideLoading();
+      }
+    } catch (error) {
+      hideLoading();
+    } finally {
+      input.disabled = false;
+    }
+  }
+  async function removeCartItem(button) {
+    showLoading();
+    const cartItemId = button.dataset.cartItemId;
+    const cartItemRow = button.closest('.cart-item-row');
+    try {
+      button.disabled = true;
+      const formData = new FormData();
+      formData.append('cartItemId', cartItemId);
+      const response = await fetch('/cart/remove', {
+        method: 'POST',
+        body: formData
+      });
+      if (response.ok) {
+        cartItemRow.remove();
+            location.reload(true);
+      } else {
+        button.disabled = false;
+        hideLoading();
+      }
+    } catch (error) {
+      button.disabled = false;
+      hideLoading();
+    }
+  }
+  // Header user menu logic
+  const userInfoBox = document.querySelector('.user-info-box');
+  const menu = document.querySelector('.account-menu-list');
+    let hideTimeout;
+  if (userInfoBox && menu) {
+    userInfoBox.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      menu.style.display = 'block';
+      menu.style.opacity = '1';
+      menu.style.visibility = 'visible';
+    });
+    userInfoBox.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => {
+        menu.style.display = '';
+        menu.style.opacity = '';
+        menu.style.visibility = '';
+      }, 400);
+    });
+    menu.addEventListener('mouseenter', () => {
+      clearTimeout(hideTimeout);
+      menu.style.display = 'block';
+      menu.style.opacity = '1';
+      menu.style.visibility = 'visible';
+    });
+    menu.addEventListener('mouseleave', () => {
+      hideTimeout = setTimeout(() => {
+        menu.style.display = '';
+        menu.style.opacity = '';
+        menu.style.visibility = '';
+      }, 400);
+  });
+  }
+  // Floating summary bar logic
+  function formatCurrency(num) {
+    return num.toLocaleString('vi-VN') + ' ₫';
+  }
+  function updateSummary() {
+    const checkboxes = document.querySelectorAll('.item-checkbox');
+    let checked = 0, total = 0, totalQty = 0;
+    checkboxes.forEach(cb => {
+      if (cb.checked) {
+        checked++;
+        total += parseFloat(cb.dataset.price) * parseInt(cb.dataset.quantity);
+        totalQty += parseInt(cb.dataset.quantity);
+      }
+    });
+    // Update summary bar
+    document.getElementById('summary-select-label').textContent = `Chọn Tất Cả (${checked})`;
+    document.getElementById('summary-total-label').textContent = `Tổng cộng (${totalQty} Sản phẩm):`;
+    document.getElementById('summary-total-price').textContent = formatCurrency(total);
+    // Show/hide bar
+    document.getElementById('cart-summary-bar').style.display = checked > 0 ? 'flex' : 'none';
+    // Update select all
+    const allChecked = checked === checkboxes.length && checked > 0;
+    document.getElementById('summary-select-all').checked = allChecked;
+  }
+  // Select all in summary bar
+  document.getElementById('summary-select-all').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.item-checkbox');
+    checkboxes.forEach(cb => cb.checked = this.checked);
+    updateSummary();
+  });
+  // Sync select all in table
+  document.getElementById('select-all').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.item-checkbox');
+    checkboxes.forEach(cb => cb.checked = this.checked);
+    updateSummary();
+  });
+  // Update summary on checkbox change
+  document.querySelectorAll('.item-checkbox').forEach(cb => {
+    cb.addEventListener('change', updateSummary);
+  });
+  // Initial update
+    updateSummary();
+  // Mua hàng: gửi cartItemIds lên /checkout/preview
+  document.getElementById('summary-buy-btn').addEventListener('click', function() {
+    const checked = Array.from(document.querySelectorAll('.item-checkbox:checked'));
+    if (checked.length === 0) return;
+    const ids = checked.map(cb => cb.getAttribute('data-item-id'));
+    showLoading();
+    // Chuyển hướng sang trang preview
+    window.location.href = '/checkout/preview?cartItemIds=' + ids.join('&cartItemIds=');
+  });
+  // Sticky summary bar logic
+  function handleSummaryBarSticky() {
+    const bar = document.getElementById('cart-summary-bar');
+    const wrapper = document.querySelector('.cart-table-wrapper');
+    const spacer = document.getElementById('cart-summary-spacer');
+    if (!bar || !wrapper || !spacer) return;
+    const barHeight = bar.offsetHeight;
+    const wrapperRect = wrapper.getBoundingClientRect();
+    const barBottom = window.scrollY + window.innerHeight;
+    const wrapperBottom = wrapperRect.top + window.scrollY + wrapperRect.height;
+    if (bar.style.display === 'none') {
+      spacer.style.height = '0';
+      return;
+    }
+    if (barBottom > wrapperBottom) {
+      // Chạm cuối, absolute sát đáy wrapper
+      bar.style.position = 'absolute';
+      bar.style.left = '0';
+      bar.style.bottom = '0';
+      bar.style.top = 'auto';
+      bar.style.width = '100%';
+      spacer.style.height = barHeight + 'px'; // LUÔN giữ khoảng trống
+    } else {
+      // Fixed, spacer đúng chiều cao bar
+      bar.style.position = 'fixed';
+      bar.style.bottom = '0';
+      bar.style.top = 'auto';
+      bar.style.left = '0';
+      bar.style.width = '100vw';
+      spacer.style.height = barHeight + 'px';
+    }
+  }
+  window.addEventListener('scroll', handleSummaryBarSticky);
+  window.addEventListener('resize', handleSummaryBarSticky);
+  document.addEventListener('DOMContentLoaded', handleSummaryBarSticky);
+</script>
+
+</body>
+</html>
