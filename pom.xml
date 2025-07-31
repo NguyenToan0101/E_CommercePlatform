@@ -175,9 +175,7 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>**/*.html</include>
-					<include>**/*.properties</include>
-					<include>**/*.yml</include>
+					<include>**/*.*</include>
 				</includes>
 			</resource>
 		</resources>

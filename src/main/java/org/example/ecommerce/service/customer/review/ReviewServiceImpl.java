@@ -26,7 +26,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Transactional
     public boolean submitReview(Review review, MultipartFile[] mediaFiles) {
-        if (reviewRepository.existsByProductidAndOrderitemsid(review.getProductid(), review.getOrderitemsid())) {
+        if (reviewRepository.existsByProductidAndOrderitemid(review.getProductid(), review.getOrderitemid())) {
             return false;
         }
         review.setCreatedat(LocalDateTime.now());

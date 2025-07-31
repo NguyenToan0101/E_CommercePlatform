@@ -49,7 +49,7 @@ public class HomeController {
         Customer customer = (Customer) session.getAttribute("customer");
         List<Category> categories = productService.getCategories();
 
-        int categoriesPerPage = 20;
+        int categoriesPerPage = 28;
         int totalCategories = categories.size();
         int totalCategoryPages = (int) Math.ceil((double) totalCategories / categoriesPerPage);
         if (categoryPage < 1) categoryPage = 1;

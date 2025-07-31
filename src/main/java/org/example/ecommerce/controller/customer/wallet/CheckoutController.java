@@ -226,7 +226,8 @@ public Map<String, Object> getPreviewData(
 
 
     BigDecimal feeShip = BigDecimal.valueOf(shippingService.calculateShippingFee(shippingRequest));
-    BigDecimal totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity())) .add(feeShip);
+//    BigDecimal totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity())) .add(feeShip);
+        BigDecimal totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity()));
     BigDecimal feeShipVoucher = totalPrice;
     BigDecimal discountVoucher = BigDecimal.ZERO;
     BigDecimal feeShipDefault = feeShip;
@@ -278,6 +279,9 @@ public Map<String, Object> getPreviewData(
     }
     return response;
 }
+
+
+
 
 
 
