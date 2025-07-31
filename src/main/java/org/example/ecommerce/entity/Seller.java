@@ -31,7 +31,7 @@ public class Seller {
     @Column(name = "backidimage")
     private String backidimage;
 
-    @Column(name = "version")
+    @Version
     private Long version;
 
     @OneToMany(mappedBy = "sellerid")
