@@ -9,6 +9,8 @@ public class MessageDTO {
     private String content;
     private Instant sentat;
     private Boolean isread;
+    private String imageUrl;
+    private String messageType;
 
     // Getters and setters
     public Integer getId() { return id; }
@@ -23,4 +25,8 @@ public class MessageDTO {
     public void setSentat(Instant sentat) { this.sentat = sentat; }
     public Boolean getIsread() { return isread; }
     public void setIsread(Boolean isread) { this.isread = isread; }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getMessageType() { return messageType; }
+    public void setMessageType(String messageType) { this.messageType = messageType; }
 } 

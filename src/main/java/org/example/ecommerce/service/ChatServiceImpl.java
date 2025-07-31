@@ -87,6 +87,29 @@ public class ChatServiceImpl implements ChatService {
         message.setContent(content);
         message.setSentat(Instant.now());
         message.setIsread(false);
+        message.setMessageType("TEXT");
+        
+        // Cập nhật thời gian tin nhắn cuối
+        conversation.setLastmessageat(Instant.now());
+        conversationRepository.save(conversation);
+        
+        return messageRepository.save(message);
+    }
+
+    @Override
+    public Message sendImageMessage(Integer conversationId, Integer senderId, Integer receiverId, String imageUrl) {
+        Conversation conversation = conversationRepository.findById(conversationId)
+                .orElseThrow(() -> new RuntimeException("Conversation not found"));
+        
+        Message message = new Message();
+        message.setConversationid(conversation);
+        message.setSenderid(senderId);
+        message.setReceiverid(receiverId);
+        message.setContent(""); // Không có text cho ảnh
+        message.setImageUrl(imageUrl);
+        message.setSentat(Instant.now());
+        message.setIsread(false);
+        message.setMessageType("IMAGE");
         
         // Cập nhật thời gian tin nhắn cuối
         conversation.setLastmessageat(Instant.now());
