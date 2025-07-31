@@ -27,7 +27,7 @@
                         <h3>Thông tin đơn hàng</h3>
                         <div class="seller-order-detail-info-fields">
                             <div><b>Khách hàng:</b> <span th:text="${order.fullname != null && !#strings.isEmpty(order.fullname) ? order.fullname : (order.customerid != null ? order.customerid.firstname + ' ' + order.customerid.lastname : '')}"></span></div>
-                            <div><b>Ngày đặt:</b> <span th:text="${#dates.format(order.orderdate, 'dd/MM/yyyy HH:mm')}"></span></div>
+                            <div><b>Ngày đặt:</b> <span th:text="${order.orderdate}"></span></div>
                             <div><b>Trạng thái:</b> <span th:class="'seller-order-status-badge ' + ${order.statusClass}" th:text="${order.status}"></span></div>
                             <div><b>Tổng tiền:</b> <span th:text="${#numbers.formatDecimal(order.totalamount, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span></div>
                             <div><b>Địa chỉ giao:</b> <span th:text="${order.address != null && !#strings.isEmpty(order.address) ? order.address : (order.customerid != null ? order.customerid.address : '')}"></span></div>
@@ -52,8 +52,8 @@
                             <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Chờ lấy hàng' ? 'active'">
                                 <span class="seller-order-timeline-radio"></span> Chờ lấy hàng
                             </li>
-                            <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Đang giao' ? 'active'">
-                                <span class="seller-order-timeline-radio"></span> Đang giao
+                            <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Đang giao hàng' ? 'active'">
+                                <span class="seller-order-timeline-radio"></span> Đang giao hàng
                             </li>
                             <li class="seller-order-timeline-step" th:classappend="${order.status} == 'Đã giao' ? 'active'">
                                 <span class="seller-order-timeline-radio"></span> Đã giao

@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-
 import java.math.BigDecimal;
 
 public interface OrdersRepository extends JpaRepository<Order, Integer> {
@@ -16,6 +15,7 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
 
     @Query("SELECT DISTINCT o FROM Order o JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId AND (:status IS NULL OR o.status = :status) ORDER BY o.orderdate DESC")
     List<Order> findAllByShopIdAndStatus(@Param("shopId") Integer shopId, @Param("status") String status);
+
 
     @Query("SELECT o.status, COUNT(o) FROM Order o JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId GROUP BY o.status")
     List<Object[]> countOrdersByStatusForShop(@Param("shopId") Integer shopId);
@@ -52,20 +52,45 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o WHERE o.customerid = :customer")
     BigDecimal sumTotalAmountByCustomerid(Customer customer);
 
-    Order findOrderById(Integer id);}
+    Order findOrderById(Integer id);
 
+    // Dashboard methods
+    @Query("SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o " +
+            "WHERE o.id IN (SELECT DISTINCT o2.id FROM Order o2 " +
+            "JOIN o2.orderitems oi JOIN oi.productid p " +
+            "WHERE p.shopid.id = :shopId) AND o.status = 'Đã giao'")
+    BigDecimal sumRevenueByShopId(@Param("shopId") Integer shopId);
 
-//    @Query("SELECT DISTINCT o FROM Order o " +
-//           "JOIN o.orderitems oi " +
-//           "JOIN oi.productid p " +
-//           "WHERE p.shopid.id = :shopId " +
-//           "AND (:status IS NULL OR o.status = :status)")
-//    List<Order> findAllByShopIdAndStatus(@Param("shopId") Integer shopId, @Param("status") String status);
-//
-//    @Query("SELECT o.status, COUNT(DISTINCT o) FROM Order o " +
-//           "JOIN o.orderitems oi " +
-//           "JOIN oi.productid p " +
-//           "WHERE p.shopid.id = :shopId " +
-//           "GROUP BY o.status")
-//    List<Object[]> countOrdersByStatusForShop(@Param("shopId") Integer shopId);
-//}
+    @Query("SELECT COALESCE(COUNT(o.id), 0) FROM Order o " +
+            "JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId")
+    Long countOrdersByShopId(@Param("shopId") Integer shopId);
+
+    @Query("SELECT COALESCE(COUNT(DISTINCT o.customerid.id), 0) FROM Order o " +
+            "JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId")
+    Long countDistinctCustomersByShopId(@Param("shopId") Integer shopId);
+
+    @Query("SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o " +
+            "WHERE o.id IN (SELECT DISTINCT o2.id FROM Order o2 " +
+            "JOIN o2.orderitems oi JOIN oi.productid p " +
+            "WHERE p.shopid.id = :shopId) " +
+            "AND EXTRACT(YEAR FROM o.orderdate) = :year AND EXTRACT(MONTH FROM o.orderdate) = :month " +
+            "AND o.status = 'Đã giao'")
+    BigDecimal sumRevenueByShopIdAndMonth(@Param("shopId") Integer shopId, @Param("year") int year, @Param("month") int month);
+
+    @Query("SELECT c.categoryname, COALESCE(SUM(o.totalamount), 0) FROM Order o " +
+            "JOIN o.orderitems oi JOIN oi.productid p JOIN p.categoryid c " +
+            "WHERE p.shopid.id = :shopId AND o.status = 'Đã giao' " +
+            "AND o.id IN (SELECT DISTINCT o2.id FROM Order o2 " +
+            "JOIN o2.orderitems oi2 JOIN oi2.productid p2 " +
+            "WHERE p2.shopid.id = :shopId) " +
+            "GROUP BY c.categoryname ORDER BY SUM(o.totalamount) DESC")
+    List<Object[]> sumRevenueByCategoryAndShopId(@Param("shopId") Integer shopId);
+
+    @Query(value = "SELECT o.* FROM orders o " +
+            "JOIN orderitems oi ON o.orderid = oi.orderid " +
+            "JOIN products p ON oi.productid = p.productid " +
+            "WHERE p.shopid = :shopId " +
+            "ORDER BY o.orderdate DESC " +
+            "LIMIT :limit", nativeQuery = true)
+    List<Order> findRecentOrdersByShopId(@Param("shopId") Integer shopId, @Param("limit") int limit);
+}

@@ -353,6 +353,10 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public List<Product> getAllProductsForShop(Integer shopId) {
+        return productRepository.findByShopidId(shopId);
+    }
+
     public void deleteProductHard(Integer id) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sản phẩm!"));

@@ -728,6 +728,12 @@
     <div class="header-top-right">
         <a th:href="@{/policies}" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"></svg> Chính sách sử dụng</a>
         <a href="#" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/></svg> Thông Báo</a>
+        <a href="/customer/chat" class="header-chat-link" title="Tin nhắn" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;">
+            <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+                <path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" fill="#1877F3"/>
+            </svg>
+            Tin nhắn
+        </a>
         <th:block th:if="${customer}">
             <div class="user-info-box">
                 <div class="user-avatar" th:if="${customer.image != null && !#strings.isEmpty(customer.image)}" style="background: none;">
@@ -749,24 +755,24 @@
 </div>
 
 <!-- Main Header -->
-    <header class="main-header">
-        <div class="header-left">
-            <a th:href="@{/home}" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-                <img th:src="@{logo/logo.png}" alt="Logo" class="logo-img" />
-            </a>
-        </div>
-        <form class="search-bar" action="/search_name" method="GET">
-            <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
-            <button type="submit" aria-label="Tìm kiếm">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
-            </button>
-        </form>
-        <div class="header-right">
-            <a href="/cart" class="header-cart-link" title="Giỏ hàng">
-                <img th:src="@{logo/cart.png}" alt="Giỏ hàng" />
-            </a>
-        </div>
-    </header>
+<header class="main-header">
+    <div class="header-left">
+        <a th:href="@{/home}" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
+            <img src="/logo/logo.png" alt="Logo" class="logo-img" />
+        </a>
+    </div>
+    <form class="search-bar" action="/search_name" method="GET">
+        <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
+        <button type="submit" aria-label="Tìm kiếm">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+    </form>
+    <div class="header-right">
+        <a href="/cart" class="header-cart-link" title="Giỏ hàng">
+            <img src="/logo/cart.png" alt="Giỏ hàng" />
+        </a>
+    </div>
+</header>
 
 <!-- Categories Section -->
 <div class="category-outer">

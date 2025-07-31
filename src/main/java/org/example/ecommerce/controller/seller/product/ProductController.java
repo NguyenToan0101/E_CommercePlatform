@@ -17,11 +17,8 @@ import jakarta.validation.Valid;
 
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.Objects;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -257,3 +254,4 @@ public class ProductController {
     return "redirect:/seller/products";
 }
 }
+

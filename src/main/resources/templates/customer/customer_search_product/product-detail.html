@@ -391,6 +391,89 @@
             padding: 0 2rem;
         }
 
+        .btn-chat-seller {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 52px;
+            min-width: 180px;
+            background: linear-gradient(90deg, #25d366 0%, #128c7e 100%);
+            color: #fff;
+            border-radius: 28px;
+            font-weight: 700;
+            font-size: clamp(1rem, 2.5vw, 1.15rem);
+            text-decoration: none;
+            border: none;
+            box-shadow: 0 2px 12px #25d36633;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            padding: 0 2rem;
+            gap: 8px;
+            margin-top: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-chat-seller:hover {
+            background: linear-gradient(90deg, #128c7e 0%, #25d366 100%);
+            box-shadow: 0 4px 20px #25d36655;
+            transform: translateY(-2px);
+        }
+
+        .btn-chat-seller:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 8px #25d36644;
+        }
+
+        .btn-chat-seller i {
+            font-size: 1.1rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .btn-chat-seller::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn-chat-seller:hover::before {
+            left: 100%;
+        }
+
+        /* Responsive cho nút chat */
+        @media (max-width: 768px) {
+            .btn-chat-seller {
+                min-width: 140px;
+                font-size: 0.9rem;
+                padding: 0 1rem;
+                height: 48px;
+            }
+
+            .btn-chat-seller i {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn-chat-seller {
+                min-width: 120px;
+                font-size: 0.85rem;
+                padding: 0 0.8rem;
+                height: 44px;
+            }
+        }
+
         /* Product Info Section */
         .product-info-section {
             margin-top: 2%;
@@ -986,8 +1069,15 @@
             </div>
             <div class="shop-action">
                 <a th:href="@{/shop_detail(shopid=${detail.shop.id})}" class="btn-shop">Xem shop</a>
+                <form id="chatWithSellerForm" th:action="@{/customer/chat/start}" method="post" style="display:none;">
+                    <input type="hidden" name="shopId" th:value="${detail.shop.id}" />
+                </form>
+                <a href="#" class="btn-chat-seller" onclick="document.getElementById('chatWithSellerForm').submit(); return false;">
+                    <i class="fas fa-comments"></i> Chat với người bán
+                </a>
             </div>
         </div>
+
 
         <div class="product-info-section w-full">
             <div class="product-info-tabs">

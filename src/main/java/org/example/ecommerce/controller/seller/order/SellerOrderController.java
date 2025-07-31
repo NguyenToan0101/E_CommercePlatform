@@ -41,26 +41,31 @@ public class    SellerOrderController {
         List<Order> orders = orderSellerService.getAllOrdersByShop(shopId);
         model.addAttribute("orders", orders);
         // Thêm các biến thống kê cho dashboard
-        long totalOrders = orderSellerService.countOrdersByShop(shopId);
-        long completedOrders = orderSellerService.countOrdersByStatus(shopId, "Đã giao");
-        long cancelledOrders = orderSellerService.countOrdersByStatus(shopId, "Đã hủy");
-        model.addAttribute("totalOrders", totalOrders);
-        model.addAttribute("completedOrders", completedOrders);
-        model.addAttribute("cancelledOrders", cancelledOrders);
+        OrderSellerService.ShopPerformanceReport report = orderSellerService.getShopPerformance(shopId);
+        model.addAttribute("totalOrders", report.totalOrders);
+        model.addAttribute("completedOrders", report.completedOrders);
+        model.addAttribute("cancelledOrders", report.cancelledOrders);
+        model.addAttribute("shippingOrders", report.shippingOrders);
+        model.addAttribute("revenue", report.revenue);
 
         // Đảm bảo truyền đủ key cho tất cả trạng thái
         List<String> allStatuses = List.of(
-            "Chờ xác nhận", "Đã xác nhận", "Chờ lấy hàng", "Đang giao", "Đã giao", "Đã hủy", "Yêu cầu trả hàng/hoàn tiền"
+            "Chờ xác nhận", "Đã xác nhận", "Chờ lấy hàng", 
+            "Đang giao hàng", "Đã giao", "Đã hủy", "Yêu cầu trả hàng/hoàn tiền"
         );
         Map<String, Integer> statusCounts = new LinkedHashMap<>();
         for (String status : allStatuses) {
             statusCounts.put(status, 0);
         }
-        for (Object[] row : orderSellerService.countOrdersByStatusForShop(shopId)) {
-            String status = (String) row[0];
-            Long count = (Long) row[1];
-            statusCounts.put(status, count.intValue());
-        }
+        
+        // Lấy số lượng đơn theo từng trạng thái
+        statusCounts.put("Chờ xác nhận", (int) report.pendingOrders);
+        statusCounts.put("Đã xác nhận", (int) report.confirmedOrders);
+        statusCounts.put("Chờ lấy hàng", (int) orderSellerService.countOrdersByStatus(shopId, "Chờ lấy hàng"));
+        statusCounts.put("Đang giao hàng", (int) orderSellerService.countOrdersByStatus(shopId, "Đang giao hàng"));
+        statusCounts.put("Đã giao", (int) report.completedOrders);
+        statusCounts.put("Đã hủy", (int) report.cancelledOrders);
+        statusCounts.put("Yêu cầu trả hàng/hoàn tiền", (int) report.returnedOrders);
         int total = statusCounts.values().stream().mapToInt(Integer::intValue).sum();
         statusCounts.put("Tất cả", total);
         model.addAttribute("statusCounts", statusCounts);
@@ -106,8 +111,22 @@ public class    SellerOrderController {
         // Thêm các biến thống kê cho dashboard
         long totalOrders = orderSellerService.countOrdersByShop(shopId);
         long completedOrders = orderSellerService.countOrdersByStatus(shopId, "Đã giao");
-        long shippingOrders = orderSellerService.countOrdersByStatus(shopId, "Đang giao");
+        long shippingOrders = orderSellerService.countOrdersByStatus(shopId, "Đang giao hàng");
         java.math.BigDecimal revenue = orderSellerService.sumRevenueByShop(shopId);
+        
+        // Bổ sung statusCounts cho dashboard và tab trạng thái
+        Map<String, Integer> statusCounts = new LinkedHashMap<>();
+        statusCounts.put("Chờ xác nhận", (int) orderSellerService.countOrdersByStatus(shopId, "Chờ xác nhận"));
+        statusCounts.put("Đã xác nhận", (int) orderSellerService.countOrdersByStatus(shopId, "Đã xác nhận"));
+        statusCounts.put("Chờ lấy hàng", (int) orderSellerService.countOrdersByStatus(shopId, "Chờ lấy hàng"));
+        statusCounts.put("Đang giao hàng", (int) orderSellerService.countOrdersByStatus(shopId, "Đang giao hàng"));
+        statusCounts.put("Đã giao", (int) orderSellerService.countOrdersByStatus(shopId, "Đã giao"));
+        statusCounts.put("Đã hủy", (int) orderSellerService.countOrdersByStatus(shopId, "Đã hủy"));
+        statusCounts.put("Yêu cầu trả hàng/hoàn tiền", (int) orderSellerService.countOrdersByStatus(shopId, "Yêu cầu trả hàng/hoàn tiền"));
+        int total = statusCounts.values().stream().mapToInt(Integer::intValue).sum();
+        statusCounts.put("Tất cả", total);
+        model.addAttribute("statusCounts", statusCounts);
+        
         model.addAttribute("totalOrders", totalOrders);
         model.addAttribute("completedOrders", completedOrders);
         model.addAttribute("shippingOrders", shippingOrders);
