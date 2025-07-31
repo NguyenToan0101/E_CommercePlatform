@@ -57,7 +57,9 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
 
     // Dashboard methods
     @Query("SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o " +
-            "JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId AND o.status = 'Đã giao'")
+            "WHERE o.id IN (SELECT DISTINCT o2.id FROM Order o2 " +
+            "JOIN o2.orderitems oi JOIN oi.productid p " +
+            "WHERE p.shopid.id = :shopId) AND o.status = 'Đã giao'")
     BigDecimal sumRevenueByShopId(@Param("shopId") Integer shopId);
 
     @Query("SELECT COALESCE(COUNT(o.id), 0) FROM Order o " +
@@ -69,7 +71,9 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
     Long countDistinctCustomersByShopId(@Param("shopId") Integer shopId);
 
     @Query("SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o " +
-            "JOIN o.orderitems oi JOIN oi.productid p WHERE p.shopid.id = :shopId " +
+            "WHERE o.id IN (SELECT DISTINCT o2.id FROM Order o2 " +
+            "JOIN o2.orderitems oi JOIN oi.productid p " +
+            "WHERE p.shopid.id = :shopId) " +
             "AND EXTRACT(YEAR FROM o.orderdate) = :year AND EXTRACT(MONTH FROM o.orderdate) = :month " +
             "AND o.status = 'Đã giao'")
     BigDecimal sumRevenueByShopIdAndMonth(@Param("shopId") Integer shopId, @Param("year") int year, @Param("month") int month);
@@ -77,6 +81,9 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
     @Query("SELECT c.categoryname, COALESCE(SUM(o.totalamount), 0) FROM Order o " +
             "JOIN o.orderitems oi JOIN oi.productid p JOIN p.categoryid c " +
             "WHERE p.shopid.id = :shopId AND o.status = 'Đã giao' " +
+            "AND o.id IN (SELECT DISTINCT o2.id FROM Order o2 " +
+            "JOIN o2.orderitems oi2 JOIN oi2.productid p2 " +
+            "WHERE p2.shopid.id = :shopId) " +
             "GROUP BY c.categoryname ORDER BY SUM(o.totalamount) DESC")
     List<Object[]> sumRevenueByCategoryAndShopId(@Param("shopId") Integer shopId);
 
