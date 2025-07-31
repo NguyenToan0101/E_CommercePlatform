@@ -160,20 +160,8 @@ public class OrderSellerService {
     }
     public BigDecimal sumRevenueByShop(Integer shopId) {
         try {
-            // Lấy tất cả đơn hàng của shop có trạng thái đã giao
-            List<Order> deliveredOrders = getAllOrdersByShop(shopId).stream()
-                    .filter(order -> STATUS_DA_GIAO.equals(order.getStatus()))
-                    .toList();
-            
-            // Tính tổng doanh thu
-            BigDecimal totalRevenue = BigDecimal.ZERO;
-            for (Order order : deliveredOrders) {
-                if (order.getTotalamount() != null) {
-                    totalRevenue = totalRevenue.add(order.getTotalamount());
-                }
-            }
-            
-            return totalRevenue;
+            // Sử dụng cùng logic với Dashboard để đảm bảo consistency
+            return ordersRepository.sumRevenueByShopId(shopId);
         } catch (Exception e) {
             // Log lỗi nếu có
             System.err.println("Lỗi khi tính tổng doanh thu: " + e.getMessage());
