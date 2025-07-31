@@ -2,6 +2,7 @@ package org.example.ecommerce.entity.conplaint;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.ecommerce.entity.Customer;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class Complaint {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
-    private org.example.ecommerce.entity.Customer customer;
+    private Customer customer;
 
     @Column(name = "order_id", nullable = true)
     private Integer orderId;

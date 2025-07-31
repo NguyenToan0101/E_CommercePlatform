@@ -41,9 +41,7 @@ public class Orderitem {
     @Column(name = "promotionid")
     private Integer promotionid;
 
-    @OneToMany(mappedBy = "orderitemsid")
+    @OneToMany(mappedBy = "orderitemid")
     private Set<Review> reviews = new LinkedHashSet<>();
-
-
 
 }

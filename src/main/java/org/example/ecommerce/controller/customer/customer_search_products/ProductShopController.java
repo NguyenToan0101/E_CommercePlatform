@@ -23,6 +23,6 @@ public class ProductShopController {
         model.addAttribute("customer", customer);
         model.addAttribute("shop", productService.getShops(shopid));
         model.addAttribute("products", productService.getProductViewsByShopId(shopid));
-        return "/customer/customer_search_product/search_shop";
+        return "customer/customer_search_product/search_shop";
     }
 }

@@ -97,4 +97,14 @@ public class Product {
     @OneToMany(mappedBy = "productid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
+
+    public enum Status{
+        LOCK,
+        AVAILABLE,
+        PENDING_APPROVAL,
+        REJECTED,
+        HIDDEN
+    }
+
+
 }

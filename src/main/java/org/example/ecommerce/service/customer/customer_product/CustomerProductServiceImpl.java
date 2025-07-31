@@ -71,14 +71,9 @@ public class CustomerProductServiceImpl implements CustomerProductService {
 
 
     public List<Category> getCategories() {
-        List<Category> categoryList = new ArrayList<>();
-        for (Category c : categoryRepository.findRootCategories()) {
-            if (c.getId()==313){
-                continue;
-            }
-            categoryList.add(c);
-        }
-        return categoryList;
+
+
+        return categoryRepository.findRootCategories().stream().filter(category -> category.getId() != 313).toList();
     }
 
     public Shop getShops(Integer shopid) {

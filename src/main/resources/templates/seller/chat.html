@@ -20,52 +20,57 @@
         </div>
         <div class="seller-chat-outer">
             <div class="seller-chat-container">
-    <!-- Sidebar -->
-    <div class="seller-chat-sidebar">
-        <div class="seller-chat-sidebar-header">
-            <h3>Khách đã chat</h3>
-        </div>
-        <div class="seller-chat-search-box">
-            <input type="text" id="customer-search-input" placeholder="Tìm khách hàng hoặc bắt đầu chat mới...">
-        </div>
-        <ul class="seller-chat-conversations-list">
-            <li th:each="conv : ${conversations}"
-                th:classappend="${conversation != null and conv.id == conversation.id} ? 'seller-chat-conversation-item active' : 'seller-chat-conversation-item'">
-                <a th:href="@{'/seller/chat?conversationId=' + ${conv.id}}" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;">
-                    <div class="seller-chat-conversation-avatar" th:text="${conv.customerid.firstname.substring(0,1)}"></div>
-                    <span th:text="${conv.customerid.firstname + ' ' + conv.customerid.lastname}"></span>
-                </a>
-            </li>
-        </ul>
-    </div>
-    <!-- Main chat area -->
-    <div class="seller-chat-main-area">
-        <div th:if="${conversation == null}" class="seller-chat-header seller-chat-empty-chat" style="justify-content:center;">
-            <span>Chọn một khách hàng để bắt đầu chat!</span>
-        </div>
-        <div th:if="${conversation != null}">
-            <div class="seller-chat-header">
-                <i class="fas fa-user"></i>
-                <span th:text="${conversation.customerid.firstname + ' ' + conversation.customerid.lastname}"></span>
-            </div>
-            <div class="seller-chat-messages" id="messages">
-                <div th:each="vw : ${messageViews}" th:classappend="${vw.message.senderid == conversation.sellerid.id} ? 'seller-chat-msg-me' : 'seller-chat-msg-customer'">
-                    <span class="seller-chat-msg-content" th:text="${vw.message.content}"></span>
+                <!-- Sidebar -->
+                <div class="seller-chat-sidebar">
+                    <div class="seller-chat-sidebar-header">
+                        <h3>Khách đã chat</h3>
+                    </div>
+                    <!-- Ô tìm shop để tạo cuộc trò chuyện mới -->
+                    <div class="seller-chat-search-box" style="margin-bottom: 10px;">
+                        <input type="text" id="shop-search-input" placeholder="Tìm shop để bắt đầu chat mới..." autocomplete="off">
+                        <div id="shop-search-results" class="search-results" style="display:block;"></div>
+                    </div>
+                    <div class="seller-chat-search-box">
+                        <input type="text" id="customer-search-input" placeholder="Tìm khách hàng hoặc bắt đầu chat mới...">
+                    </div>
+                    <ul class="seller-chat-conversations-list">
+                        <li th:each="conv : ${conversations}"
+                            th:classappend="${conversation != null and conv.id == conversation.id} ? 'seller-chat-conversation-item active' : 'seller-chat-conversation-item'">
+                            <a th:href="@{'/seller/chat?conversationId=' + ${conv.id}}" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;">
+                                <div class="seller-chat-conversation-avatar" th:text="${conv.customerid.firstname.substring(0,1)}"></div>
+                                <span th:text="${conv.customerid.firstname + ' ' + conv.customerid.lastname}"></span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
-            </div>
-            <div class="seller-chat-input">
-                <input type="text" id="msgInput" placeholder="Nhập tin nhắn..." autocomplete="off" />
-                <button id="sendBtn"><i class="fas fa-paper-plane"></i> Gửi</button>
-            </div>
-        </div>
-    </div>
+                <!-- Main chat area -->
+                <div class="seller-chat-main-area">
+                    <div th:if="${conversation == null}" class="seller-chat-header seller-chat-empty-chat" style="justify-content:center;">
+                        <span>Chọn một khách hàng để bắt đầu chat!</span>
+                    </div>
+                    <div th:if="${conversation != null}">
+                        <div class="seller-chat-header">
+                            <i class="fas fa-user"></i>
+                            <span th:text="${conversation.customerid.firstname + ' ' + conversation.customerid.lastname}"></span>
+                        </div>
+                        <div class="seller-chat-messages" id="messages">
+                            <div th:each="vw : ${messageViews}" th:classappend="${vw.message.senderid == conversation.sellerid.id} ? 'seller-chat-msg-me' : 'seller-chat-msg-customer'">
+                                <span class="seller-chat-msg-content" th:text="${vw.message.content}"></span>
+                            </div>
+                        </div>
+                        <div class="seller-chat-input">
+                            <input type="text" id="msgInput" placeholder="Nhập tin nhắn..." autocomplete="off" />
+                            <button id="sendBtn"><i class="fas fa-paper-plane"></i> Gửi</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 </div>
 <div class="start-chat-section" style="position:relative; margin-bottom:1rem;">
-  <input type="text" id="customer-search-input" placeholder="Nhập email khách hàng..." autocomplete="off" style="width:100%;padding:8px;" />
-  <div id="customer-search-results" class="search-results" style="display:block;"></div>
+    <input type="text" id="customer-search-input" placeholder="Nhập email khách hàng..." autocomplete="off" style="width:100%;padding:8px;" />
+    <div id="customer-search-results" class="search-results" style="display:block;"></div>
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
@@ -112,69 +117,114 @@
     }
 </script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  const input = document.getElementById('customer-search-input');
-  const results = document.getElementById('customer-search-results');
-  let timeout = null;
-  input.addEventListener('input', function() {
-    clearTimeout(timeout);
-    const query = input.value.trim();
-    if (query.length < 2) {
-      results.innerHTML = '';
-      return;
-    }
-    timeout = setTimeout(() => {
-      fetch(`/seller/chat/find-customer?email=${encodeURIComponent(query)}`)
-        .then(res => res.json())
-        .then(data => {
-          results.innerHTML = '';
-          if (data.length === 0) {
-            results.innerHTML = '<div>Không tìm thấy khách hàng phù hợp</div>';
-            return;
-          }
-          data.forEach(customer => {
-            const div = document.createElement('div');
-            div.textContent = (customer.firstname ? customer.firstname + ' ' : '') + (customer.lastname ? customer.lastname : '') + ' (' + customer.email + ')';
-            div.style.cursor = 'pointer';
-            div.onclick = () => {
-              fetch('/seller/chat/start', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `customerId=${customer.id}`
-              }).then(() => {
-                window.location.reload();
-              });
-            };
-            results.appendChild(div);
-          });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Tìm khách hàng (giữ nguyên)
+        const input = document.getElementById('customer-search-input');
+        const results = document.getElementById('customer-search-results');
+        let timeout = null;
+        input.addEventListener('input', function() {
+            clearTimeout(timeout);
+            const query = input.value.trim();
+            if (query.length < 2) {
+                results.innerHTML = '';
+                return;
+            }
+            timeout = setTimeout(() => {
+                fetch(`/seller/chat/find-customer?email=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        results.innerHTML = '';
+                        if (data.length === 0) {
+                            results.innerHTML = '<div>Không tìm thấy khách hàng phù hợp</div>';
+                            return;
+                        }
+                        data.forEach(customer => {
+                            const div = document.createElement('div');
+                            div.textContent = (customer.firstname ? customer.firstname + ' ' : '') + (customer.lastname ? customer.lastname : '') + ' (' + customer.email + ')';
+                            div.style.cursor = 'pointer';
+                            div.onclick = () => {
+                                fetch('/seller/chat/start', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: `customerId=${customer.id}`
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            };
+                            results.appendChild(div);
+                        });
+                    });
+            }, 300);
         });
-    }, 300);
-  });
-  document.addEventListener('click', function(e) {
-    if (!input.contains(e.target) && !results.contains(e.target)) {
-      results.innerHTML = '';
-    }
-  });
-});
+        document.addEventListener('click', function(e) {
+            if (!input.contains(e.target) && !results.contains(e.target)) {
+                results.innerHTML = '';
+            }
+        });
+
+        // Tìm shop để tạo cuộc trò chuyện mới
+        const shopInput = document.getElementById('shop-search-input');
+        const shopResults = document.getElementById('shop-search-results');
+        let shopTimeout = null;
+        shopInput.addEventListener('input', function() {
+            clearTimeout(shopTimeout);
+            const query = shopInput.value.trim();
+            if (query.length < 2) {
+                shopResults.innerHTML = '';
+                return;
+            }
+            shopTimeout = setTimeout(() => {
+                fetch(`/seller/chat/find-shop?shopName=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        shopResults.innerHTML = '';
+                        if (data.length === 0) {
+                            shopResults.innerHTML = '<div>Không tìm thấy shop phù hợp</div>';
+                            return;
+                        }
+                        data.forEach(shop => {
+                            const div = document.createElement('div');
+                            div.textContent = shop.shopname + (shop.status === 'ACTIVE' ? '' : ' (không hoạt động)');
+                            div.style.cursor = 'pointer';
+                            div.onclick = () => {
+                                fetch('/seller/chat/start-shop', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                    body: `shopId=${shop.id}`
+                                }).then(() => {
+                                    window.location.reload();
+                                });
+                            };
+                            shopResults.appendChild(div);
+                        });
+                    });
+            }, 300);
+        });
+        document.addEventListener('click', function(e) {
+            if (!shopInput.contains(e.target) && !shopResults.contains(e.target)) {
+                shopResults.innerHTML = '';
+            }
+        });
+    });
 </script>
 
 <style>
-.start-chat-section { margin-bottom: 1rem; }
-.search-results {
-  background: #fff;
-  border: 1px solid #ddd;
-  max-height: 200px;
-  overflow-y: auto;
-  position: absolute;
-  z-index: 10;
-  width: 100%;
-}
-.search-results div {
-  padding: 8px 12px;
-  cursor: pointer;
-}
-.search-results div:hover {
-  background: #f0f0f0;
-}
+    .start-chat-section { margin-bottom: 1rem; }
+    .search-results {
+        background: #fff;
+        border: 1px solid #ddd;
+        max-height: 200px;
+        overflow-y: auto;
+        position: absolute;
+        z-index: 10;
+        width: 100%;
+    }
+    .search-results div {
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+    .search-results div:hover {
+        background: #f0f0f0;
+    }
 </style>
-</html> 
+</html>

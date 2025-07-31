@@ -78,7 +78,7 @@ public class CancelReturnController {
         model.addAttribute("orderId", orderItemsId);
         model.addAttribute("reasons", reasons);
         model.addAttribute("categories", categories);
-        return "/customer/order/return_request";
+        return "customer/order/return_request";
     }
 
 }

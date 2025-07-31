@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: springboot-app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres?prepareThreshold=0&user=postgres.skwpdekgaovwlxqiknpx&password=congtoan123@
+      SPRING_DATASOURCE_USERNAME: postgres.skwpdekgaovwlxqiknpx
+      SPRING_DATASOURCE_PASSWORD: congtoan123@
+    restart: always

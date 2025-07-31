@@ -9,3 +9,13 @@ GET http://localhost:8080/admin/dashboard
 
 ###
 GET http://localhost:8080/registration/api/get-address
+
+### Delete
+GET http://localhost:8080/search/deleteAll
+
+### Convert
+GET http://localhost:8080/search/convert
+
+### Delete search
+DELETE http://localhost:9200/products
+

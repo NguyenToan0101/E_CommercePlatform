@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
-public class CategoryManagementDTO {
+public class    CategoryManagementDTO {
     private Integer id;
     private String categoryname;
     private String image;

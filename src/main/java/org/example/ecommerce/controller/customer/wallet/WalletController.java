@@ -45,7 +45,7 @@ public class WalletController {
         model.addAttribute("wallet", wallet);
         model.addAttribute("balance", wallet.getBalance());
         model.addAttribute("historyList", walletHistoryRepository.findAllByWalletidOrderByCreatedAtDesc(wallet));
-        return "/customer/wallet/wallet";
+        return "customer/wallet/wallet";
     }
 
     @GetMapping("/wallet/deposit")
@@ -55,7 +55,7 @@ public class WalletController {
             return "redirect:/login";
         } else {
             model.addAttribute("customer", customer);
-            return "/customer/wallet/deposit";
+            return "customer/wallet/deposit";
         }
     }
 
