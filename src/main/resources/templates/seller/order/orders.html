@@ -110,7 +110,7 @@
             <td>
                 <div class="order-product-summary" th:text="${#lists.size(order.orderitems)} + ' sản phẩm'"></div>
             </td>
-            <td><i class="fa-regular fa-calendar"></i> <span th:text="${#dates.format(order.orderdate, 'dd/MM/yyyy')}"></span></td>
+            <td><i class="fa-regular fa-calendar"></i> <span th:text="${order.orderdate}"></span></td>
             <td><span class="order-amount" th:text="${#numbers.formatDecimal(order.totalamount, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span></td>
             <td>
                                 <span th:class="'seller-order-status-badge ' + ${order.statusClass}" th:text="${order.status}"></span>

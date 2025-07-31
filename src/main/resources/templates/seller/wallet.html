@@ -79,7 +79,7 @@
                         </thead>
                         <tbody>
                         <tr th:each="tx : ${historyPage.content}">
-                            <td th:text="${#dates.format(tx.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024 12:00</td>
+                            <td th:text="${tx.createdAt}">01/01/2024 12:00</td>
                             <td>
                                 <span th:if="${tx.status} == 'Increase'" class="seller-wallet-history-type-income">Nạp tiền</span>
                                 <span th:if="${tx.status} == 'Decrease'" class="seller-wallet-history-type-expense">Rút/Chi tiêu</span>

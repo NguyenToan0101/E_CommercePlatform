@@ -1,12 +1,12 @@
+
 package org.example.ecommerce.service.seller.order;
 
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.example.ecommerce.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.example.ecommerce.entity.Order;
 import org.example.ecommerce.entity.Orderitem;
-import org.example.ecommerce.entity.Shop;
-import org.example.ecommerce.entity.conplaint.Complaint;
 import org.example.ecommerce.repository.OrderItemsRepository;
 import org.example.ecommerce.repository.seller.ShopRepo;
 import org.example.ecommerce.repository.ComplaintRepository;
@@ -65,12 +65,12 @@ public class OrderSellerService {
     // 3. Cập nhật trạng thái đơn hàng
     public boolean updateOrderStatus(Integer orderId, String status) {
         List<String> allowedStatuses = List.of(
-            STATUS_CHO_XAC_NHAN,
-            STATUS_DA_XAC_NHAN,
-            STATUS_CHO_LAY_HANG,
-            STATUS_DANG_GIAO,
-            STATUS_DA_GIAO,
-            STATUS_DA_HUY
+                STATUS_CHO_XAC_NHAN,
+                STATUS_DA_XAC_NHAN,
+                STATUS_CHO_LAY_HANG,
+                STATUS_DANG_GIAO,
+                STATUS_DA_GIAO,
+                STATUS_DA_HUY
         );
         if (!allowedStatuses.contains(status)) {
             return false;
@@ -88,7 +88,9 @@ public class OrderSellerService {
 
     // 4. Tìm kiếm và lọc đơn hàng (theo trạng thái, ngày, tên khách, mã đơn)
     public List<Order> searchOrders(Integer shopId, String status, String keyword, LocalDateTime from, LocalDateTime to) {
-        String filterStatus = null;
+        List<Order> orders;
+
+        // Xử lý trường hợp có hoặc không có lọc trạng thái
         if (status != null && !status.isEmpty()) {
             orders = ordersRepository.findAllByShopIdAndStatus(shopId, status);
         } else {
@@ -146,13 +148,13 @@ public class OrderSellerService {
     }
     public long countOrdersByStatus(Integer shopId, String status) {
         List<String> allowedStatuses = List.of(
-            STATUS_CHO_XAC_NHAN,
-            STATUS_DA_XAC_NHAN,
-            STATUS_CHO_LAY_HANG,
-            STATUS_DANG_GIAO,
-            STATUS_DA_GIAO,
-            STATUS_DA_HUY,
-            STATUS_YEU_CAU_TRA_HANG
+                STATUS_CHO_XAC_NHAN,
+                STATUS_DA_XAC_NHAN,
+                STATUS_CHO_LAY_HANG,
+                STATUS_DANG_GIAO,
+                STATUS_DA_GIAO,
+                STATUS_DA_HUY,
+                STATUS_YEU_CAU_TRA_HANG
         );
         if (!allowedStatuses.contains(status)) return 0;
         return getAllOrdersByShop(shopId).stream().filter(o -> status.equals(o.getStatus())).count();
