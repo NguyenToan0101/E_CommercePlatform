@@ -31,60 +31,110 @@
             --primary: #088395;
             --accent: #F7EEDD;
         }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
             color: #111;
             margin: 0;
             padding: 0;
+            width: 100%;
+            min-height: 100vh;
         }
+
         h1, h2, h3, h4, h5, h6, p, a, span, div, label, input, button, .products-title, .category-header, .category-label, .account-link, .user-avatar, .account-menu-list a {
             color: #111 !important;
         }
-        /* Header from home.html */
+
+        /* Header Styles - Fully Responsive */
+        .header-top-bar {
+            background: #fff;
+            color: #111;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            padding: 0 2%;
+            height: auto;
+            min-height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #e5eaf2;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-top-left, .header-top-right {
+            display: flex;
+            align-items: center;
+            gap: clamp(8px, 2vw, 18px);
+            flex-wrap: wrap;
+        }
+
+        .header-top-left a, .header-top-right a {
+            color: #111;
+            text-decoration: none;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
         .main-header {
             background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
             box-shadow: 0 2px 16px var(--shadow-light);
             border-radius: 0 0 18px 18px;
-            padding: 0 32px;
-            height: 88px;
+            padding: 1rem 2%;
+            min-height: 70px;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: space-around;
             position: sticky;
             top: 0;
             z-index: 100;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
-        .header-left { display: flex; align-items: center; gap: 18px; }
-        .logo { font-size: 2.6rem; font-weight: 700; color: #111 !important; letter-spacing: 1px; }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-shrink: 0;
+        }
+
         .logo-img {
-            height: 80px !important;
+            height: clamp(50px, 8vw, 80px) !important;
             width: auto !important;
             display: block;
-            margin-right: 8px;
             filter: drop-shadow(0 2px 8px #05bfdb33);
         }
+
         .search-bar {
-            flex: unset;
-            margin: 0 auto;
+            flex: 1;
+            max-width: 900px;
+            min-width: 200px;
             display: flex;
             align-items: center;
             background: #fff;
             border-radius: 12px;
             box-shadow: 0 2px 12px var(--shadow-light);
             padding: 0 16px;
-            width: 900px;
             border: 2px solid #05bfdb22;
+            margin: 0 1rem;
         }
+
         .search-bar input {
             border: none;
             background: transparent;
-            font-size: 1.1rem;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
             flex: 1;
             padding: 12px 0;
             outline: none;
             color: #111 !important;
+            min-width: 0;
         }
+
         .search-bar button {
             background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
             color: #fff;
@@ -99,31 +149,28 @@
             margin-left: 8px;
             transition: background 0.2s;
             box-shadow: 0 2px 8px var(--shadow-light);
+            flex-shrink: 0;
         }
-        .search-bar button:hover { background: #0a4d68; }
-        .header-right { display: flex; align-items: center; gap: 18px; overflow-x: auto; white-space: nowrap; max-width: 250px; }
-        .account-link {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #111 !important;
-            background: none;
-            padding: 0 0 0 2px;
-            text-decoration: none;
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-shrink: 0;
+        }
+
+        .user-info-box {
             position: relative;
-            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
-        .user-info-box { position: relative; display: flex; align-items: center; gap: 4px; }
-        .user-info-box:hover .account-menu-list,
-        .user-info-box:focus-within .account-menu-list {
-            display: block;
-            opacity: 1;
-            visibility: visible;
-        }
+
         .account-menu-list {
             display: none;
             position: fixed;
             top: 72px;
-            right: 32px;
+            right: 2%;
             background: #fff;
             min-width: 200px;
             border-radius: 16px;
@@ -136,168 +183,482 @@
             visibility: hidden;
             transition: opacity 0.2s, visibility 0.2s;
         }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-8px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .account-menu-list::before {
-            content: '';
-            position: absolute;
-            top: -6px;
-            right: 20px;
-            width: 12px;
-            height: 12px;
-            background: #fff;
-            border: 1px solid #e0e7ef;
-            border-bottom: none;
-            border-right: none;
-            transform: rotate(45deg);
-        }
-        .account-menu-list a {
-            color: var(--primary-black);
-            padding: 12px 20px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background 0.15s, color 0.15s, transform 0.15s;
-            border-left: 3px solid transparent;
-            white-space: normal;
-            word-break: break-word;
-        }
-        .account-menu-list a:hover {
-            background: var(--accent-gray);
-            border-left-color: var(--gradient-mid);
-            color: var(--gradient-mid);
-            transform: translateX(4px);
-        }
-        .account-menu-list a:not(:last-child) {
-            border-bottom: 1px solid #e0e7ef;
-        }
-        .user-avatar {
-            width: auto;
-            height: auto;
-            background: none;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 0;
-            overflow: visible;
-            padding: 0;
-        }
+
         .user-avatar img {
-            width: 32px;
-            height: 32px;
+            width: clamp(28px, 4vw, 32px);
+            height: clamp(28px, 4vw, 32px);
             object-fit: cover;
             border-radius: 50%;
             display: block;
         }
-        .header-cart-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 48px;
-            margin-left: 18px;
-            cursor: pointer;
-            text-decoration: none;
-        }
+
         .header-cart-link img {
-            height: 40px;
-            width: 40px;
+            height: clamp(32px, 5vw, 40px);
+            width: clamp(32px, 5vw, 40px);
             filter: drop-shadow(0 2px 8px #05bfdb33);
         }
-        .header-cart-link:hover img {
-            transform: scale(1.08) rotate(-8deg);
-            filter: drop-shadow(0 4px 16px #08839566);
-        }
-        .header-top-bar {
-            background: #fff;
-            color: #111;
-            font-size: 1rem;
-            padding: 0 32px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #e5eaf2;
-        }
-        .header-top-left, .header-top-right {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-        }
-        .header-top-left a, .header-top-right a {
-            color: #111;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .header-top-right a {
-            color: #1877F3;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
+
+        /* Main Content - Fully Responsive */
         .main-content {
-            padding: 20px 32px;
+            padding: 2% 2%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            max-width: 100%;
         }
+
         .product-detail-container {
             display: flex;
-            max-width: 1200px;
+            max-width: 100%;
             width: 100%;
-            gap: 0px;
+            gap: 2%;
+            flex-wrap: wrap;
         }
+
         .product-detail-left {
-            width: 50%;
-            flex: 0 0 50%;
-        }
-        .product-detail-left .main-image {
             width: 100%;
-            overflow: hidden;
+            flex: 1;
+            min-width: 300px;
         }
-        .product-detail-left .main-image img {
+
+        .product-detail-right {
+            width: 100%;
+            flex: 1;
+            min-width: 300px;
+            padding-left: 0;
+            align-self: flex-start;
+        }
+
+        /* Desktop Layout */
+        @media (min-width: 768px) {
+            .product-detail-left {
+                width: 48%;
+                flex: 0 0 48%;
+            }
+
+            .product-detail-right {
+                width: 48%;
+                flex: 0 0 48%;
+                padding-left: 2%;
+            }
+        }
+
+        .main-image img {
             width: 100%;
             height: auto;
             object-fit: contain;
             border-radius: 8px;
-            max-height: 500px;
+            max-height: 70vh;
         }
-        .product-detail-left .thumbnails {
+
+        .thumbnails {
             display: flex;
-            gap: 10px;
+            gap: 1%;
             margin-top: 10px;
+            flex-wrap: wrap;
         }
-        .product-detail-left .thumbnails .thumbnail {
-            width: 80px;
-            height: 80px;
+
+        .thumbnail {
+            width: clamp(60px, 15%, 80px);
+            height: clamp(60px, 15%, 80px);
             object-fit: cover;
             border-radius: 4px;
             cursor: pointer;
+            flex-shrink: 0;
         }
-        .product-detail-left .product-share-like {
-            display: flex;
-            justify-content: space-evenly;
-            margin-top: 10px;
-        }
-        .product-detail-right {
-            width: 50%;
-            flex: 0 0 50%;
-            padding-left: 0px;
-            align-self: flex-start;
-        }
+
         .product-title {
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
             font-weight: bold;
             margin-bottom: 10px;
             color: var(--primary-black);
+            line-height: 1.3;
         }
+
+        .product-price {
+            margin-bottom: 10px;
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
+            color: var(--shopee-orange);
+            font-weight: bold;
+        }
+
+        .product-attributes .attribute-values {
+            display: flex;
+            gap: 1%;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+
+        .product-attributes .attribute-values span {
+            padding: 8px 12px;
+            border: 1px solid var(--border-gray);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+        }
+
+        .product-quantity {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .product-actions button {
+            padding: 14px 24px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 12px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            transition: all 0.2s;
+        }
+
+        /* Shop Section - Fully Responsive */
+        .shop-section {
+            width: 100%;
+            max-width: 100%;
+            margin-top: 2%;
+        }
+
+        .shop-info-pro {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2%;
+            background: #fafdff;
+            border-radius: 18px;
+            box-shadow: 0 4px 24px rgba(16,42,67,0.08);
+            padding: 2%;
+            margin-bottom: 2%;
+            flex-wrap: wrap;
+        }
+
+        .shop-img {
+            width: clamp(80px, 15vw, 110px);
+            height: clamp(80px, 15vw, 110px);
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #05bfdb;
+            box-shadow: 0 2px 12px #05bfdb22;
+            background: #fff;
+            flex-shrink: 0;
+        }
+
+        .shop-details {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .shop-name {
+            font-size: clamp(1.4rem, 4vw, 2.1rem);
+            font-weight: 800;
+            color: #088395;
+            margin-bottom: 2px;
+        }
+
+        .shop-address {
+            color: #6b7280;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            margin-bottom: 2px;
+        }
+
+        .btn-shop {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 52px;
+            min-width: 180px;
+            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            color: #fff;
+            border-radius: 28px;
+            font-weight: 700;
+            font-size: clamp(1rem, 2.5vw, 1.15rem);
+            text-decoration: none;
+            border: none;
+            box-shadow: 0 2px 12px #05bfdb33;
+            transition: all 0.2s;
+            cursor: pointer;
+            padding: 0 2rem;
+        }
+
+        /* Product Info Section */
+        .product-info-section {
+            margin-top: 2%;
+            background: var(--white);
+            border: 1px solid var(--border-gray);
+            border-radius: 8px;
+            padding: 2%;
+            box-shadow: 0 2px 12px var(--shadow-light);
+            width: 100%;
+        }
+
+        .product-info-tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-gray);
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .product-info-tabs .tab {
+            padding: 10px 20px;
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            font-weight: bold;
+            cursor: pointer;
+            color: var(--text-gray);
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        /* Review Section */
+        .review-list {
+            text-align: left;
+            padding: 0;
+            width: 100%;
+        }
+
+        .review-card {
+            border-bottom: 1px solid #eee;
+            padding: 16px 0;
+            width: 100%;
+        }
+
+        .review-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .review-avatar {
+            width: clamp(32px, 6vw, 40px);
+            height: clamp(32px, 6vw, 40px);
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1.5px solid #eee;
+            flex-shrink: 0;
+        }
+
+        .review-meta {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            font-size: clamp(0.8rem, 2vw, 0.95rem);
+            min-width: 0;
+        }
+
+        .review-content {
+            margin: 8px 0;
+            font-size: clamp(0.9rem, 2.5vw, 1rem);
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .review-media {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .review-media img,
+        .review-media video {
+            width: clamp(60px, 12vw, 80px);
+            height: clamp(60px, 12vw, 80px);
+            border-radius: 4px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        /* Seller Reply */
+        .seller-reply {
+            margin-top: 16px;
+            padding: 20px;
+            background: #fafdff;
+            border: 1px solid #e0e7ef;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(16, 42, 67, 0.06);
+            position: relative;
+            margin-left: clamp(10px, 3vw, 20px);
+            width: calc(100% - clamp(10px, 3vw, 20px));
+        }
+
+        /* Modals */
+        .media-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            padding: 2%;
+        }
+
+        .media-modal-content {
+            position: relative;
+            max-width: 95%;
+            max-height: 95%;
+        }
+
+        .media-modal img,
+        .media-modal video {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 8px;
+        }
+
+        /* Mobile Specific Styles */
+        @media (max-width: 767px) {
+            .main-header {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem 2%;
+            }
+
+            .search-bar {
+                order: 3;
+                width: 100%;
+                margin: 0;
+            }
+
+            .header-left {
+                order: 1;
+            }
+
+            .header-right {
+                order: 2;
+            }
+
+            .product-detail-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .product-detail-left,
+            .product-detail-right {
+                width: 100%;
+                padding-left: 0;
+            }
+
+            .shop-info-pro {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: center;
+            }
+
+            .shop-action {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+            }
+
+            .btn-shop {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .thumbnails {
+                justify-content: center;
+            }
+
+            .product-actions button {
+                font-size: 1rem;
+                padding: 12px 20px;
+            }
+
+            .review-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .seller-reply {
+                margin-left: 5px;
+                width: calc(100% - 5px);
+                padding: 16px;
+            }
+        }
+
+        /* Tablet Styles */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .main-content {
+                padding: 2% 3%;
+            }
+
+            .search-bar {
+                max-width: 500px;
+            }
+        }
+
+        /* Large Screen Styles */
+        @media (min-width: 1200px) {
+            .main-content {
+                padding: 2% 5%;
+            }
+
+            .product-detail-container {
+                max-width: 1400px;
+            }
+        }
+
+        /* Utility Classes for Full Width */
+        .w-full {
+            width: 100% !important;
+        }
+
+        .max-w-full {
+            max-width: 100% !important;
+        }
+
+        .container-fluid {
+            width: 100%;
+            max-width: 100%;
+            padding-left: 2%;
+            padding-right: 2%;
+        }
+
+        /* Additional responsive utilities */
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .flex-nowrap {
+            flex-wrap: nowrap;
+        }
+
+        @media (max-width: 480px) {
+            .main-content {
+                padding: 1% 1%;
+            }
+
+            .header-top-bar {
+                padding: 0 1%;
+            }
+
+            .main-header {
+                padding: 1rem 1%;
+            }
+
+            .product-info-section {
+                padding: 1rem;
+            }
+        }
+
+        /* Rest of the existing styles remain the same */
         .product-rating {
             display: flex;
             align-items: center;
@@ -305,29 +666,16 @@
             background: var(--light-gray);
             padding: 8px;
             border-radius: 4px;
+            flex-wrap: wrap;
         }
-        .product-rating span {
-            margin: 0 10px;
-            color: var(--text-gray);
-        }
+
         .product-shipping, .product-insurance {
             margin-bottom: 10px;
             background: var(--accent-gray);
             padding: 8px;
             border-radius: 4px;
         }
-        .product-shipping span, .product-insurance span {
-            color: var(--success-green);
-        }
-        .product-price {
-            margin-bottom: 10px;
-            font-size: 1.8rem;
-            color: var(--shopee-orange);
-            font-weight: bold;
-        }
-        .product-price-value {
-            color: #ff0000 !important;
-        }
+
         .flash-sale {
             background-color: var(--orange-accent);
             color: white;
@@ -337,32 +685,18 @@
             margin-bottom: 10px;
             font-weight: bold;
         }
-        .product-attributes .attribute-values {
-            display: flex;
-            gap: 10px;
-        }
-        .product-attributes .attribute-values span {
-            padding: 8px 12px;
-            border: 1px solid var(--border-gray);
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+
         .product-attributes .attribute-values span:hover {
             border-color: var(--shopee-orange);
             background: var(--light-gray);
         }
+
         .product-attributes .attribute-values span.selected {
             border-color: var(--shopee-orange);
             background: var(--shopee-orange);
             color: white;
         }
-        .product-quantity {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+
         .product-quantity button {
             width: 40px;
             height: 40px;
@@ -373,9 +707,7 @@
             font-size: 1.2rem;
             transition: all 0.2s;
         }
-        .product-quantity button:hover {
-            background: var(--light-gray);
-        }
+
         .product-quantity input {
             width: 60px;
             height: 40px;
@@ -384,137 +716,23 @@
             border-radius: 4px;
             font-size: 1.1rem;
         }
-        .product-actions button {
-            padding: 14px 24px;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 12px;
-            font-size: 1.2rem;
-            transition: all 0.2s;
-        }
+
         .product-actions .buy-now-btn {
             background: var(--shopee-orange);
             color: white;
         }
-        .product-actions .buy-now-btn:hover {
-            background: #d94322;
-        }
+
         .product-actions .add-to-cart-btn {
             background: var(--success-green);
             color: white;
         }
-        .product-actions .add-to-cart-btn:hover {
-            background: #0e9f6e;
-        }
-        .shop-section {
-            width: 100%;
-            max-width: 1200px;
-            margin-top: 20px;
-        }
-        .shop-info {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-            background: #f5fafd;
-            border-radius: 28px;
-            padding: 24px;
-            margin-bottom: 32px;
-            box-shadow: 0 2px 8px rgba(16,42,67,0.06);
-            flex-wrap: wrap;
-        }
-        .shop-info img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 1px solid #eee;
-        }
-        .shop-info .shop-details {
-            flex: 1;
-            min-width: 200px;
-        }
-        .shop-info .shop-details .shop-name {
-            font-size: 2rem;
-            font-weight: 700;
-            color: #088395;
-        }
-        .shop-info .shop-details .shop-address {
-            color: #555;
-            margin: 8px 0;
-        }
-        .shop-info .shop-details .shop-desc {
-            color: #333;
-        }
-        .product-info-section {
-            margin-top: 20px;
-            background: var(--white);
-            border: 1px solid var(--border-gray);
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 12px var(--shadow-light);
-        }
-        .product-info-tabs {
-            display: flex;
-            border-bottom: 2px solid var(--border-gray);
-            margin-bottom: 20px;
-        }
-        .product-info-tabs .tab {
-            padding: 10px 20px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            color: var(--text-gray);
-            transition: all 0.2s;
-        }
-        .product-info-tabs .tab.active {
-            color: var(--shopee-orange);
-            border-bottom: 2px solid var(--shopee-orange);
-        }
-        .product-info-tabs .tab:hover {
-            color: var(--shopee-orange);
-        }
-        .product-info-content {
-            display: none;
-        }
-        .product-info-content.active {
-            display: block;
-        }
+
         .product-description {
             font-size: 1rem;
             line-height: 1.6;
             color: var(--primary-black);
         }
-        .review-list {
-            text-align: left;
-            padding: 0;
-        }
-        .review-card {
-            border-bottom: 1px solid #eee;
-            padding: 16px 0;
-        }
-        .review-header {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-        .review-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 1.5px solid #eee;
-        }
-        .review-meta {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-            font-size: 0.95rem;
-        }
+
         .review-rating {
             color: #ffb400;
             font-size: 1rem;
@@ -523,204 +741,91 @@
             gap: 2px;
             margin: 4px 0;
         }
-        .review-rating i {
-            font-size: 1rem;
-        }
-        .rating-number {
-            font-weight: 500;
-        }
-        .review-content {
-            margin: 8px 0;
-            font-size: 1rem;
-        }
-        .review-media {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-        .review-media img,
-        .review-media video {
-            width: 80px;
-            height: 80px;
-            border-radius: 4px;
-            object-fit: cover;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .review-media img:hover,
-        .review-media video:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        /* Modal overlay cho phóng to */
-        .media-modal {
+
+        #add-cart-success {
             display: none;
             position: fixed;
+            top: 80px;
+            right: 2%;
+            z-index: 9999;
+            background: #10b981;
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px #08839533;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        #fullpage-loading {
+            display: none;
+            position: fixed;
+            z-index: 99999;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 10000;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255,255,255,0.7);
+            align-items: center;
             justify-content: center;
+        }
+
+        /* Report Modal Styles */
+        #report-modal, #report-review-modal {
+            display: none;
+            position: fixed;
+            z-index: 99999;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.3);
             align-items: center;
+            justify-content: center;
+            padding: 2%;
         }
-        .media-modal-content {
-            position: relative;
-            max-width: 90%;
-            max-height: 90%;
-        }
-        .media-modal img,
-        .media-modal video {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 8px;
-        }
-        .media-modal-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 8px;
-        }
-        .media-modal-close:hover {
-            color: #ddd;
-        }
-        .shop-info-pro {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 32px;
-            background: #fafdff;
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(16,42,67,0.08);
-            padding: 32px 40px;
-            margin-bottom: 36px;
-            flex-wrap: wrap;
-        }
-        .shop-info-pro .shop-img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid #05bfdb;
-            box-shadow: 0 2px 12px #05bfdb22;
+
+        #report-modal > div, #report-review-modal > div {
             background: #fff;
+            border-radius: 12px;
+            max-width: 400px;
+            width: 100%;
+            padding: 28px 24px;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
         }
-        .shop-info-pro .shop-details {
-            flex: 1;
-            min-width: 180px;
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-8px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .user-info-box:hover .account-menu-list,
+        .user-info-box:focus-within .account-menu-list {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .account-menu-list a {
+            color: var(--primary-black);
+            padding: 12px 20px;
+            text-decoration: none;
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .shop-info-pro .shop-name {
-            font-size: 2.1rem;
-            font-weight: 800;
-            color: #088395;
-            margin-bottom: 2px;
-        }
-        .shop-info-pro .shop-address {
-            color: #6b7280;
-            font-size: 1.1rem;
-            margin-bottom: 2px;
-        }
-        .shop-info-pro .shop-desc {
-            color: #333;
+            align-items: center;
+            gap: 12px;
             font-size: 1rem;
-            opacity: 0.85;
+            font-weight: 500;
+            transition: all 0.15s;
+            border-left: 3px solid transparent;
         }
-        .shop-info-pro .shop-action {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 200px;
-        }
-        .shop-info-pro .btn-shop {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 52px;
-            min-width: 180px;
-            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
-            color: #fff;
-            border-radius: 28px;
-            font-weight: 700;
-            font-size: 1.15rem;
-            text-decoration: none;
-            border: none;
-            box-shadow: 0 2px 12px #05bfdb33;
-            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
-            margin: 0;
-            padding: 0 36px;
-            cursor: pointer;
-        }
-        .shop-info-pro .btn-shop:hover {
-            background: linear-gradient(90deg, #05bfdb 0%, #088395 100%);
-            box-shadow: 0 6px 24px #05bfdb55;
-            transform: translateY(-2px) scale(1.04);
-        }
-        
-        .shop-info-pro .btn-chat-seller {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 52px;
-            min-width: 180px;
-            background: linear-gradient(90deg, #1976d2 0%, #1565c0 100%);
-            color: #fff;
-            border-radius: 28px;
-            font-weight: 700;
-            font-size: 1.15rem;
-            text-decoration: none;
-            border: none;
-            box-shadow: 0 2px 12px #1976d233;
-            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
-            margin-left: 16px;
-            padding: 0 36px;
-            cursor: pointer;
-            gap: 8px;
-        }
-        .shop-info-pro .btn-chat-seller:hover {
-            background: linear-gradient(90deg, #1565c0 0%, #1976d2 100%);
-            box-shadow: 0 6px 24px #1976d255;
-            transform: translateY(-2px) scale(1.04);
-        }
-        @media (max-width: 700px) {
-            .shop-info-pro {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 18px 10px;
-                gap: 18px;
-            }
-            .shop-info-pro .shop-action {
-                width: 100%;
-                min-width: unset;
-                justify-content: flex-start;
-            }
-            .shop-info-pro .btn-shop {
-                width: 100%;
-                min-width: unset;
-                font-size: 1rem;
-                padding: 0 18px;
-            }
-            .shop-info-pro .btn-chat-seller {
-                width: 100%;
-                min-width: unset;
-                font-size: 1rem;
-                padding: 0 18px;
-                margin-left: 0;
-                margin-top: 12px;
-            }
-        }
-        #report-btn:hover {
-            background: #fbbf24;
-            color: #fff;
-            border-color: #b45309;
+
+        .account-menu-list a:hover {
+            background: var(--accent-gray);
+            border-left-color: var(--gradient-mid);
+            color: var(--gradient-mid);
+            transform: translateX(4px);
         }
     </style>
 </head>
@@ -755,6 +860,7 @@
         <a th:unless="${customer}" href="/login" class="account-link">Đăng nhập</a>
     </div>
 </div>
+
 <!-- Main Header -->
 <header class="main-header">
     <div class="header-left">
@@ -765,16 +871,21 @@
     <form class="search-bar" action="/search_name" method="GET">
         <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
         <button type="submit" aria-label="Tìm kiếm">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
+            </svg>
         </button>
     </form>
-    <a href="/cart" class="header-cart-link" title="Giỏ hàng">
-        <img src="/logo/cart.png" alt="Giỏ hàng" />
-    </a>
+    <div class="header-right">
+        <a href="/cart" class="header-cart-link" title="Giỏ hàng">
+            <img src="/logo/cart.png" alt="Giỏ hàng" />
+        </a>
+    </div>
 </header>
 
 <!-- Main Content -->
-<main class="main-content">
+<main class="main-content container-fluid">
     <div class="product-detail-container">
         <div class="product-detail-left">
             <div class="main-image">
@@ -785,7 +896,7 @@
                      class="thumbnail" th:classappend="${iter.index == 0} ? 'active'"
                      onclick="changeMainImage(this)">
             </div>
-            <div class="product-share-like">
+            <div class="product-share-like" style="display: flex; justify-content: space-between; margin-top: 10px; flex-wrap: wrap; gap: 1rem;">
                 <div class="share-block">
                     <span style="font-weight: bold;">Chia sẻ:</span>
                     <a href="#" style="margin-left: 10px; color: #007bff;"><i class="fab fa-facebook"></i></a>
@@ -802,10 +913,12 @@
                 </div>
             </div>
         </div>
+
         <div class="product-detail-right">
             <div class="product-title" th:text="${detail.product.name}">
                 Bộ đồ quần áo sơ mi phối đồ cotton đầy cá tính, Áo dài tay lót
             </div>
+
             <div class="product-rating">
                 <span th:text="${detail.rate}" style="color: #ffcc00; font-size: 1.2rem;">4.9</span>
                 <span style="color: #ffcc00;">★</span>
@@ -817,31 +930,37 @@
                     <i class="fas fa-exclamation-triangle" style="font-size: 1rem;"></i> Báo cáo
                 </button>
             </div>
+
             <div class="product-shipping">
                 <span style="font-weight: bold;">Vận Chuyển</span>
                 <span>Miễn Phí Vận Chuyển</span>
             </div>
+
             <div class="product-insurance">
                 <span style="font-weight: bold;">An Tâm Mua Sắm Cùng MUSA</span>
             </div>
+
             <div class="product-price" id="price-range">
                 <!-- Giá sẽ được render bởi JS -->
             </div>
+
             <div class="flash-sale">
                 FLASH SALE
             </div>
+
             <div class="product-attributes">
-                <div class="attribute-label">Màu</div>
+                <div class="attribute-label" style="margin-bottom: 8px; font-weight: 600;">Màu</div>
                 <div class="attribute-values" id="color-options">
                     <span th:each="inv : ${detail.inventories}" class="color-option"
                           th:text="${inv.color}" th:data-color="${inv.color}" onclick="selectColor(this)"></span>
                 </div>
-                <div class="attribute-label">Size</div>
+                <div class="attribute-label" style="margin-bottom: 8px; font-weight: 600;">Kích cỡ</div>
                 <div class="attribute-values" id="size-options">
                     <span th:each="inv : ${detail.inventories}" class="size-option"
                           th:text="${inv.dimension}" th:data-size="${inv.dimension}" onclick="selectSize(this)"></span>
                 </div>
             </div>
+
             <div class="product-quantity">
                 <span>Số Lượng</span>
                 <button type="button" onclick="changeQty(-1)" id="btn-minus">-</button>
@@ -849,13 +968,15 @@
                 <button type="button" onclick="changeQty(1)" id="btn-plus">+</button>
                 <span id="stock-info"></span>
             </div>
+
             <div class="product-actions">
                 <button class="add-to-cart-btn" id="btn-add-cart">Thêm Vào Giỏ Hàng</button>
                 <button class="buy-now-btn" id="btn-buy-now">Mua Ngay</button>
             </div>
         </div>
     </div>
-    <div class="shop-section">
+
+    <div class="shop-section w-full">
         <div class="shop-info-pro">
             <img th:src="${detail.shop.imageshop}" alt="Shop Image" class="shop-img" />
             <div class="shop-details">
@@ -865,15 +986,10 @@
             </div>
             <div class="shop-action">
                 <a th:href="@{/shop_detail(shopid=${detail.shop.id})}" class="btn-shop">Xem shop</a>
-                <form id="chatWithSellerForm" th:action="@{/customer/chat/start}" method="post" style="display:none;">
-                    <input type="hidden" name="shopId" th:value="${detail.shop.id}" />
-                </form>
-                <a href="#" class="btn-chat-seller" onclick="document.getElementById('chatWithSellerForm').submit(); return false;">
-                    <i class="fas fa-comments"></i> Chat với người bán
-                </a>
             </div>
         </div>
-        <div class="product-info-section">
+
+        <div class="product-info-section w-full">
             <div class="product-info-tabs">
                 <div class="tab active">Mô tả sản phẩm</div>
             </div>
@@ -893,8 +1009,8 @@
     </div>
 
     <!-- Phần đánh giá sản phẩm -->
-    <div class="shop-section">
-        <div class="product-info-section">
+    <div class="shop-section w-full">
+        <div class="product-info-section w-full">
             <div class="product-info-tabs">
                 <div class="tab active">Đánh giá sản phẩm</div>
             </div>
@@ -911,7 +1027,7 @@
                                     <i th:each="i : ${#numbers.sequence(1, review.rating)}" class="fas fa-star" style="color: #ffb400;"></i>
                                     <span class="rating-number" th:text="${review.rating} + '/5'" style="margin-left: 8px; font-size: 0.9rem; color: #666;"></span>
                                 </div>
-                                <span class="review-date" th:text="${#dates.format(review.createdat, 'yyyy-MM-dd HH:mm')}"></span>
+                                <span class="review-date" th:text="${review.createdat}"></span>
                                 <span class="review-variant" th:each="item : ${review.orderitemsid.orderid.orderitems}">
                                     <th:block th:if="${item.productid.id == review.productid.id}">
                                         <span th:if="${item.inventoryid.color != null}" th:text="' | Màu: ' + ${item.inventoryid.color}"></span>
@@ -928,12 +1044,26 @@
                         <div class="review-media">
                             <div th:each="img : ${review.reviewsImages}">
                                 <th:block th:if="${#strings.contains(img.imageUrl, '.mp4') or #strings.contains(img.imageUrl, '.webm') or #strings.contains(img.imageUrl, '.mov') or #strings.contains(img.imageUrl, '/video/')}">
-                                    <video th:src="${img.imageUrl}" controls style="width:80px;height:80px;border-radius:4px;" onclick="openMediaModal(this.src, 'video')"></video>
+                                    <video th:src="${img.imageUrl}" controls onclick="openMediaModal(this.src, 'video')"></video>
                                 </th:block>
                                 <th:block th:unless="${#strings.contains(img.imageUrl, '.mp4') or #strings.contains(img.imageUrl, '.webm') or #strings.contains(img.imageUrl, '.mov') or #strings.contains(img.imageUrl, '/video/')}">
-                                    <img th:src="${img.imageUrl}" alt="Ảnh review" style="width:80px;height:80px;border-radius:4px;object-fit:cover;" onclick="openMediaModal(this.src, 'image')"/>
+                                    <img th:src="${img.imageUrl}" alt="Ảnh review" onclick="openMediaModal(this.src, 'image')"/>
                                 </th:block>
                             </div>
+                        </div>
+                        <!-- Hiển thị reply của seller -->
+                        <div class="seller-reply" th:if="${!review.reviewReplies.isEmpty()}">
+                            <div class="reply-badge" style="display: inline-flex; align-items: center; gap: 6px; background: linear-gradient(90deg, #088395 0%, #05bfdb 100%); color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 600; margin-bottom: 12px;">
+                                <i class="fas fa-store"></i>
+                                <span>Phản hồi từ shop</span>
+                            </div>
+                            <div class="reply-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+                                <img th:src="${review.reviewReplies.iterator().next().seller.shop.imageshop != null ? review.reviewReplies.iterator().next().seller.shop.imageshop : '/default-avatar.png'}"
+                                     alt="Shop avatar" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #05bfdb; box-shadow: 0 2px 8px rgba(5, 191, 219, 0.2);" />
+                                <span class="reply-seller-name" th:text="${review.reviewReplies.iterator().next().seller.shop.shopname}" style="font-weight: 600; color: #088395; font-size: 1rem;">Shop Name</span>
+                                <span class="reply-date" th:text="${review.reviewReplies.iterator().next().createdAt}" style="color: #6b7280; font-size: 0.9rem; margin-left: auto;">Reply Date</span>
+                            </div>
+                            <div class="reply-content" th:text="${review.reviewReplies.iterator().next().reply}" style="color: #1a2233; font-size: 1rem; line-height: 1.6;">Shop reply content</div>
                         </div>
                     </div>
                 </div>
@@ -943,24 +1073,26 @@
 </main>
 
 <!-- Form ẩn để thêm vào giỏ hàng bằng POST -->
-<div id="add-cart-success" style="display:none;position:fixed;top:80px;right:40px;z-index:9999;background:#10b981;color:#fff;padding:16px 32px;border-radius:8px;box-shadow:0 4px 16px #08839533;font-size:1.1rem;font-weight:600;">
+<div id="add-cart-success">
     Đã thêm vào giỏ hàng!
 </div>
 
 <!-- Modal phóng to review -->
 <div id="mediaModal" class="media-modal">
     <div class="media-modal-content">
-        <button class="media-modal-close" onclick="closeMediaModal()">&times;</button>
+        <button class="media-modal-close" onclick="closeMediaModal()" style="position: absolute; top: -40px; right: 0; color: white; font-size: 24px; cursor: pointer; background: none; border: none; padding: 8px;">&times;</button>
         <div id="modalMedia"></div>
     </div>
 </div>
 
 <!-- Thêm hiệu ứng loading toàn màn hình -->
-<div id="fullpage-loading" style="display:none;position:fixed;z-index:99999;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.7);align-items:center;justify-content:center;"><div style="font-size:2rem;color:#088395;"><i class="fas fa-spinner fa-spin"></i> Đang xử lý...</div></div>
+<div id="fullpage-loading">
+    <div style="font-size:2rem;color:#088395;"><i class="fas fa-spinner fa-spin"></i> Đang xử lý...</div>
+</div>
 
 <!-- Modal báo cáo sản phẩm -->
-<div id="report-modal" style="display:none; position:fixed; z-index:99999; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
-    <div style="background:#fff; border-radius:12px; max-width:400px; width:100%; padding:28px 24px; position:relative;">
+<div id="report-modal">
+    <div>
         <button onclick="closeReportModal()" style="position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.5rem; color:#888; cursor:pointer;">&times;</button>
         <h3 style="margin-bottom:18px; color:#b45309;"><i class="fas fa-exclamation-triangle"></i> Báo cáo sản phẩm</h3>
         <div id="report-alert" style="display:none; margin-bottom:10px; padding:8px 12px; border-radius:6px; font-weight:600;"></div>
@@ -968,20 +1100,20 @@
             <input type="hidden" name="id" th:value="${detail.product.id}" />
             <div style="margin-bottom:12px;">
                 <label>Danh mục</label>
-                <select name="category" required>
+                <select name="category" required style="width:100%; padding:8px; border-radius:6px; border:1px solid #eee;">
                     <option th:value="${complaintCategoryProduct.categoryId}" th:text="${complaintCategoryProduct.name}"></option>
                 </select>
             </div>
             <div style="margin-bottom:12px;">
                 <label>Lý do</label>
-                <select name="reasonId" required>
+                <select name="reasonId" required style="width:100%; padding:8px; border-radius:6px; border:1px solid #eee;">
                     <option value="">-- Chọn lý do --</option>
                     <option th:each="reason : ${complaintReasonProduct}" th:value="${reason.reasonId}" th:text="${reason.description}"></option>
                 </select>
             </div>
             <div style="margin-bottom:12px;">
                 <label>Mô tả chi tiết</label>
-                <textarea name="description" rows="3" style="width:100%; border-radius:6px; border:1px solid #eee;"></textarea>
+                <textarea name="description" rows="3" style="width:100%; border-radius:6px; border:1px solid #eee; padding:8px; resize:vertical;"></textarea>
             </div>
             <button type="submit" style="background:#fbbf24; color:#fff; border:none; border-radius:6px; padding:8px 24px; font-weight:600; cursor:pointer;">Gửi báo cáo</button>
         </form>
@@ -989,8 +1121,8 @@
 </div>
 
 <!-- Modal báo cáo review -->
-<div id="report-review-modal" style="display:none; position:fixed; z-index:99999; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.3); align-items:center; justify-content:center;">
-    <div style="background:#fff; border-radius:12px; max-width:400px; width:100%; padding:28px 24px; position:relative;">
+<div id="report-review-modal">
+    <div>
         <button onclick="closeReportReviewModal()" style="position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.5rem; color:#888; cursor:pointer;">&times;</button>
         <h3 style="margin-bottom:18px; color:#b45309;"><i class="fas fa-exclamation-triangle"></i> Báo cáo đánh giá</h3>
         <div id="report-review-alert" style="display:none; margin-bottom:10px; padding:8px 12px; border-radius:6px; font-weight:600;"></div>
@@ -998,20 +1130,20 @@
             <input type="hidden" name="id" id="report-review-id" value="" />
             <div style="margin-bottom:12px;">
                 <label>Danh mục</label>
-                <select name="category" required>
+                <select name="category" required style="width:100%; padding:8px; border-radius:6px; border:1px solid #eee;">
                     <option th:value="${complaintCategoryFeedback.categoryId}" th:text="${complaintCategoryFeedback.name}"></option>
                 </select>
             </div>
             <div style="margin-bottom:12px;">
                 <label>Lý do</label>
-                <select name="reasonId" required>
+                <select name="reasonId" required style="width:100%; padding:8px; border-radius:6px; border:1px solid #eee;">
                     <option value="">-- Chọn lý do --</option>
                     <option th:each="reason : ${complaintReason}" th:value="${reason.reasonId}" th:text="${reason.description}"></option>
                 </select>
             </div>
             <div style="margin-bottom:12px;">
                 <label>Mô tả chi tiết</label>
-                <textarea name="description" rows="3" style="width:100%; border-radius:6px; border:1px solid #eee;"></textarea>
+                <textarea name="description" rows="3" style="width:100%; border-radius:6px; border:1px solid #eee; padding:8px; resize:vertical;"></textarea>
             </div>
             <button type="submit" style="background:#fbbf24; color:#fff; border:none; border-radius:6px; padding:8px 24px; font-weight:600; cursor:pointer;">Gửi báo cáo</button>
         </form>
@@ -1031,6 +1163,7 @@
         document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
         imgElem.classList.add('active');
     }
+
     let selectedColor = null;
     let selectedSize = null;
     let selectedInventory = null;
@@ -1055,6 +1188,7 @@
         let stock = 0;
         let inventoryImage = null;
         let selectedInvObj = null;
+
         inventories.forEach(inv => {
             if (
                 inv.getAttribute('data-color') === selectedColor &&
@@ -1068,16 +1202,14 @@
                 };
             }
         });
-        // Debug inventory được chọn
-        console.log('Chọn:', selectedColor, selectedSize, '=>', selectedInventory, 'stock:', stock);
-        // Cập nhật hình ảnh chính nếu có inventory được chọn và có hình ảnh
+
+        // Update main image if inventory is selected and has image
         if (selectedInventory && inventoryImage) {
             const mainImage = document.getElementById('mainProductImage');
             if (mainImage) {
                 mainImage.src = inventoryImage;
-                // Cập nhật thumbnail active
+                // Update active thumbnail
                 document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
-                // Tìm thumbnail tương ứng với hình ảnh inventory và active nó
                 const thumbnails = document.querySelectorAll('.thumbnail');
                 thumbnails.forEach((thumb, index) => {
                     if (thumb.src === inventoryImage) {
@@ -1086,14 +1218,17 @@
                 });
             }
         }
+
         renderPriceRange(selectedInvObj);
-        // Cập nhật trạng thái nút và stockInfo tại đây
+
+        // Update button states and stock info
         const qtyInput = document.getElementById('quantity');
         const btnBuy = document.getElementById('btn-buy-now');
         const btnCart = document.getElementById('btn-add-cart');
         const btnMinus = document.getElementById('btn-minus');
         const btnPlus = document.getElementById('btn-plus');
         const stockInfo = document.getElementById('stock-info');
+
         if (selectedInventory && stock > 0) {
             qtyInput.disabled = false;
             btnBuy.disabled = false;
@@ -1104,7 +1239,7 @@
             stockInfo.textContent = `Kho: ${stock}`;
             if (parseInt(qtyInput.value) > stock) qtyInput.value = stock;
         } else if (!selectedInventory) {
-            // Nếu chưa chọn biến thể, hiển thị tổng số lượng tất cả inventory
+            // If no variant selected, show total stock
             let totalStock = 0;
             inventories.forEach(inv => {
                 totalStock += parseInt(inv.getAttribute('data-quantity')) || 0;
@@ -1123,30 +1258,6 @@
             btnPlus.disabled = true;
             stockInfo.textContent = 'Hết hàng';
         }
-    }
-
-    const qtyInput = document.getElementById('quantity');
-    const btnBuy = document.getElementById('btn-buy-now');
-    const btnCart = document.getElementById('btn-add-cart');
-    const btnMinus = document.getElementById('btn-minus');
-    const btnPlus = document.getElementById('btn-plus');
-    const stockInfo = document.getElementById('stock-info');
-    if (selectedInventory && stock > 0) {
-        qtyInput.disabled = false;
-        btnBuy.disabled = false;
-        btnCart.disabled = false;
-        btnMinus.disabled = false;
-        btnPlus.disabled = false;
-        qtyInput.max = stock;
-        stockInfo.textContent = `Kho: ${stock}`;
-        if (parseInt(qtyInput.value) > stock) qtyInput.value = stock;
-    } else {
-        qtyInput.disabled = true;
-        btnBuy.disabled = true;
-        btnCart.disabled = true;
-        btnMinus.disabled = true;
-        btnPlus.disabled = true;
-        stockInfo.textContent = 'Hết hàng';
     }
 
     function changeQty(delta) {
@@ -1184,10 +1295,12 @@
         }
         const inventoryId = selectedInventory.getAttribute('data-id');
         const quantity = document.getElementById('quantity').value;
+
         if (!productId) {
             alert('Không xác định được sản phẩm!');
             return;
         }
+
         showFullPageLoading(true);
         fetch('/cart/add', {
             method: 'POST',
@@ -1219,7 +1332,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Ẩn các màu trùng lặp, chỉ giữ lại màu đầu tiên
+        // Hide duplicate colors, keep only first occurrence
         const seenColors = {};
         document.querySelectorAll('#color-options .color-option').forEach(el => {
             const color = el.getAttribute('data-color');
@@ -1227,22 +1340,23 @@
             else seenColors[color] = true;
         });
 
-        // Ẩn các size trùng lặp, chỉ giữ lại size đầu tiên
+        // Hide duplicate sizes, keep only first occurrence
         const seenSizes = {};
         document.querySelectorAll('#size-options .size-option').forEach(el => {
             const size = el.getAttribute('data-size');
             if (seenSizes[size]) el.style.display = 'none';
             else seenSizes[size] = true;
         });
+
         renderPriceRange();
-        // Gọi updateInventorySelection để hiển thị tổng kho khi mới vào trang
         updateInventorySelection();
     });
 
-    // User menu JS from home.html
+    // User menu functionality
     const userInfoBox = document.querySelector('.user-info-box');
     const menu = document.querySelector('.account-menu-list');
     let hideTimeout;
+
     if (userInfoBox && menu) {
         userInfoBox.addEventListener('mouseenter', () => {
             clearTimeout(hideTimeout);
@@ -1250,6 +1364,7 @@
             menu.style.opacity = '1';
             menu.style.visibility = 'visible';
         });
+
         userInfoBox.addEventListener('mouseleave', () => {
             hideTimeout = setTimeout(() => {
                 menu.style.display = '';
@@ -1257,12 +1372,14 @@
                 menu.style.visibility = '';
             }, 400);
         });
+
         menu.addEventListener('mouseenter', () => {
             clearTimeout(hideTimeout);
             menu.style.display = 'block';
             menu.style.opacity = '1';
             menu.style.visibility = 'visible';
         });
+
         menu.addEventListener('mouseleave', () => {
             hideTimeout = setTimeout(() => {
                 menu.style.display = '';
@@ -1272,65 +1389,67 @@
         });
     }
 
-    function getSelectedProductInfo() {
-        // Lấy inventory đã chọn
-        const inventories = document.querySelectorAll('#inventory-data .inventory-item');
-        let selectedInventory = null;
-        let selectedColor = document.querySelector('.color-option.selected')?.getAttribute('data-color');
-        let selectedSize = document.querySelector('.size-option.selected')?.getAttribute('data-size');
-        inventories.forEach(inv => {
-            if (
-                inv.getAttribute('data-color') === selectedColor &&
-                inv.getAttribute('data-size') === selectedSize
-            ) {
-                selectedInventory = inv;
-            }
+    // Get inventories from DOM
+    function getInventories() {
+        const inventories = [];
+        document.querySelectorAll('#inventory-data .inventory-item').forEach(inv => {
+            inventories.push({
+                id: inv.getAttribute('data-id'),
+                color: inv.getAttribute('data-color'),
+                size: inv.getAttribute('data-size'),
+                quantity: parseInt(inv.getAttribute('data-quantity')),
+                sold: parseInt(inv.getAttribute('data-sold')),
+                price: parseFloat(inv.getAttribute('data-price')),
+                image: inv.getAttribute('data-image')
+            });
         });
-        if (!selectedInventory) {
-            return null; // hoặc trả về thông báo lỗi
-        }
-        const inventoryId = selectedInventory.getAttribute('data-id');
-        const quantity = document.getElementById('quantity').value;
-        return {
-            inventoryId,
-            productId,
-            quantity
-        };
+        return inventories;
     }
 
-    // Gọi hàm khi chọn color hoặc size
-    document.querySelectorAll('.color-option, .size-option').forEach(el => {
-        el.addEventListener('click', function() {
-            const info = getSelectedProductInfo();
-            if (info) {
-                console.log('Selected:', info);
-                // Có thể xử lý info ở đây (gửi AJAX, cập nhật UI, ...)
-            }
-        });
-    });
+    // Render price range
+    function renderPriceRange(selectedInv) {
+        const priceDiv = document.getElementById('price-range');
+        const inventories = getInventories();
+        let html = '';
 
-    // Hàm mở modal phóng to media
+        if (selectedInv) {
+            html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${selectedInv.price.toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
+        } else {
+            const prices = inventories.map(i => i.price).sort((a,b)=>a-b);
+            const allEqual = prices.every(p => p === prices[0]);
+            if (allEqual) {
+                html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${prices[0].toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
+            } else {
+                html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${prices[0].toLocaleString('vi-VN', {style:'currency',currency:'VND'})} - ${prices[prices.length-1].toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
+            }
+        }
+        priceDiv.innerHTML = html;
+    }
+
+    function showFullPageLoading(show) {
+        const loading = document.getElementById('fullpage-loading');
+        if (show) loading.style.display = 'flex';
+        else loading.style.display = 'none';
+    }
+
+    // Media modal functions
     function openMediaModal(src, type) {
         const modal = document.getElementById('mediaModal');
         const modalMedia = document.getElementById('modalMedia');
-
         if (type === 'video') {
             modalMedia.innerHTML = `<video src="${src}" controls autoplay style="max-width:100%;max-height:100%;border-radius:8px;"></video>`;
         } else {
             modalMedia.innerHTML = `<img src="${src}" alt="Ảnh phóng to" style="max-width:100%;max-height:100%;border-radius:8px;object-fit:contain;">`;
         }
-
         modal.style.display = 'flex';
     }
 
-    // Hàm đóng modal
     function closeMediaModal() {
         const modal = document.getElementById('mediaModal');
         modal.style.display = 'none';
         document.getElementById('modalMedia').innerHTML = '';
     }
 
-    // Đóng modal khi click bên ngoài
     document.getElementById('mediaModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeMediaModal();
@@ -1343,11 +1462,9 @@
             window.location.href = '/login';
             return;
         }
-
         const heartIcon = document.getElementById('wishlist-heart');
         const wishlistCount = document.getElementById('wishlist-count');
 
-        // Disable the button temporarily to prevent double clicks
         heartIcon.style.pointerEvents = 'none';
 
         fetch('/wishlist/toggle', {
@@ -1373,26 +1490,21 @@
                     heartIcon.className = 'fas fa-heart';
                     heartIcon.style.color = '#ff0000';
                     heartIcon.style.transform = 'scale(1.2)';
-
                     // Update count
                     const currentCount = parseInt(wishlistCount.textContent) || 0;
                     wishlistCount.textContent = currentCount + 1;
-
                     // Show success animation
                     setTimeout(() => {
                         heartIcon.style.transform = 'scale(1)';
                     }, 200);
-
                 } else if (result === 'REMOVED') {
                     // Product was removed from wishlist
                     heartIcon.className = 'far fa-heart';
                     heartIcon.style.color = '#ccc';
                     heartIcon.style.transform = 'scale(0.8)';
-
                     // Update count
                     const currentCount = parseInt(wishlistCount.textContent) || 0;
                     wishlistCount.textContent = Math.max(0, currentCount - 1);
-
                     // Show removal animation
                     setTimeout(() => {
                         heartIcon.style.transform = 'scale(1)';
@@ -1409,56 +1521,16 @@
             });
     }
 
-    // Lấy danh sách inventory từ DOM
-    function getInventories() {
-        const inventories = [];
-        document.querySelectorAll('#inventory-data .inventory-item').forEach(inv => {
-            inventories.push({
-                id: inv.getAttribute('data-id'),
-                color: inv.getAttribute('data-color'),
-                size: inv.getAttribute('data-size'),
-                quantity: parseInt(inv.getAttribute('data-quantity')),
-                sold: parseInt(inv.getAttribute('data-sold')),
-                price: parseFloat(inv.getAttribute('data-price')),
-                image: inv.getAttribute('data-image')
-            });
-        });
-        return inventories;
-    }
-
-    // Hiển thị giá từ thấp đến cao hoặc 1 giá nếu chỉ có 1
-    function renderPriceRange(selectedInv) {
-        const priceDiv = document.getElementById('price-range');
-        const inventories = getInventories();
-        let html = '';
-        if (selectedInv) {
-            html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${selectedInv.price.toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
-        } else {
-            const prices = inventories.map(i => i.price).sort((a,b)=>a-b);
-            const allEqual = prices.every(p => p === prices[0]);
-            if (allEqual) {
-                html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${prices[0].toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
-            } else {
-                html = `<span class='product-price-value' style='font-size:2rem;font-weight:700;'>${prices[0].toLocaleString('vi-VN', {style:'currency',currency:'VND'})} - ${prices[prices.length-1].toLocaleString('vi-VN', {style:'currency',currency:'VND'})}</span>`;
-            }
-        }
-        priceDiv.innerHTML = html;
-    }
-
-    // Hiệu ứng loading toàn màn hình khi thêm vào giỏ hàng
-    function showFullPageLoading(show) {
-        const loading = document.getElementById('fullpage-loading');
-        if (show) loading.style.display = 'flex';
-        else loading.style.display = 'none';
-    }
-
+    // Report functionality
     document.getElementById('report-btn').onclick = function() {
         document.getElementById('report-modal').style.display = 'flex';
     };
+
     function closeReportModal() {
         document.getElementById('report-modal').style.display = 'none';
     }
-    // Xử lý gửi báo cáo bằng AJAX, hiển thị thông báo, không reload trang
+
+    // Handle report form submission with AJAX
     document.getElementById('report-form').onsubmit = function(e) {
         e.preventDefault();
         const form = this;
@@ -1467,6 +1539,7 @@
         alertBox.textContent = '';
         alertBox.style.background = '';
         alertBox.style.color = '';
+
         const formData = new FormData(form);
         fetch(form.getAttribute('action'), {
             method: 'POST',
@@ -1496,7 +1569,7 @@
             });
     };
 
-    // Xử lý nút báo cáo review
+    // Handle review report buttons
     let currentReviewId = null;
     document.querySelectorAll('.review-list').forEach(list => {
         list.addEventListener('click', function(e) {
@@ -1508,10 +1581,12 @@
             }
         });
     });
+
     function closeReportReviewModal() {
         document.getElementById('report-review-modal').style.display = 'none';
     }
-    // Xử lý gửi báo cáo review bằng AJAX
+
+    // Handle review report form submission with AJAX
     const reviewForm = document.getElementById('report-review-form');
     if (reviewForm) {
         reviewForm.onsubmit = function(e) {
@@ -1522,6 +1597,7 @@
             alertBox.textContent = '';
             alertBox.style.background = '';
             alertBox.style.color = '';
+
             const formData = new FormData(form);
             fetch(form.getAttribute('action'), {
                 method: 'POST',
@@ -1552,5 +1628,6 @@
         };
     }
 </script>
+
 </body>
 </html>
