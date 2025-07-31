@@ -5,7 +5,9 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+
+import lombok.Getter;
+import lombok.Setter;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -19,7 +21,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "products")
 public class Product {
@@ -55,16 +58,16 @@ public class Product {
     private Instant createdat;
 
     @Column(name = "weight")
-    private Double weight;
+    private Integer weight;
 
     @Column(name = "length")
-    private Double length;
+    private Integer length;
 
     @Column(name = "width")
-    private Double width;
+    private Integer width;
 
     @Column(name = "height")
-    private Double height;
+    private Integer height;
 
     @Column(name = "use_variant_shipping")
     private Boolean useVariantShipping = false;
@@ -96,6 +99,7 @@ public class Product {
 
     @OneToMany(mappedBy = "productid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
+
 
 
     public enum Status{
