@@ -1,11 +1,12 @@
 package org.example.ecommerce.service.seller.order;
 
-import org.example.ecommerce.entity.conplaint.Complaint;
 import org.example.ecommerce.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.example.ecommerce.entity.Order;
 import org.example.ecommerce.entity.Orderitem;
+import org.example.ecommerce.entity.Shop;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.example.ecommerce.repository.OrderItemsRepository;
 import org.example.ecommerce.repository.seller.ShopRepo;
 import org.example.ecommerce.repository.ComplaintRepository;
@@ -78,7 +79,7 @@ public class OrderSellerService {
         if (orderOpt.isPresent()) {
             Order order = orderOpt.get();
             order.setStatus(status);
-            order.setUpdatedAt(Instant.now());
+            order.setUpdatedAt(LocalDateTime.now());
             ordersRepository.save(order);
             return true;
         }
@@ -86,26 +87,24 @@ public class OrderSellerService {
     }
 
     // 4. Tìm kiếm và lọc đơn hàng (theo trạng thái, ngày, tên khách, mã đơn)
-    public List<Order> searchOrders(Integer shopId, String status, String keyword, Instant from, Instant to) {
-        List<Order> orders;
-        
-        // Xử lý trường hợp có hoặc không có lọc trạng thái
+    public List<Order> searchOrders(Integer shopId, String status, String keyword, LocalDateTime from, LocalDateTime to) {
+        String filterStatus = null;
         if (status != null && !status.isEmpty()) {
             orders = ordersRepository.findAllByShopIdAndStatus(shopId, status);
         } else {
             orders = ordersRepository.findAllByShopIdAndStatus(shopId, null);
         }
-        
+
         // Lọc theo từ khóa và khoảng thời gian
         return orders.stream()
                 .filter(o -> {
-                    boolean matchesKeyword = keyword == null || keyword.isEmpty() || 
-                            (o.getFullname() != null && o.getFullname().toLowerCase().contains(keyword.toLowerCase())) || 
+                    boolean matchesKeyword = keyword == null || keyword.isEmpty() ||
+                            (o.getFullname() != null && o.getFullname().toLowerCase().contains(keyword.toLowerCase())) ||
                             (o.getId() != null && o.getId().toString().contains(keyword));
-                            
+
                     boolean matchesFromDate = from == null || (o.getOrderdate() != null && !o.getOrderdate().isBefore(from));
                     boolean matchesToDate = to == null || (o.getOrderdate() != null && !o.getOrderdate().isAfter(to));
-                    
+
                     return matchesKeyword && matchesFromDate && matchesToDate;
                 })
                 .toList();
@@ -184,14 +183,14 @@ public class OrderSellerService {
         report.confirmedOrders = countOrdersByStatus(shopId, STATUS_DA_XAC_NHAN);
         report.shippingOrders = countOrdersByStatus(shopId, STATUS_DANG_GIAO);
         report.revenue = sumRevenueByShop(shopId);
-        
+
         // Tính tỷ lệ Đã giao
         if (report.totalOrders > 0) {
             report.completionRate = (double) report.completedOrders / report.totalOrders * 100;
         } else {
             report.completionRate = 0.0;
         }
-        
+
         return report;
     }
 

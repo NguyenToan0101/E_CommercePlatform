@@ -33,7 +33,7 @@ public class DashboardController {
 
         // Quarterly Revenue
         ArrayList<QuarterlyRevenueDTO> dtos = orderLogService.quarterlyRevenueDTOArrayList();
-            dto.setQuarterlyRevenueDTOList(dtos);
+        dto.setQuarterlyRevenueDTOList(dtos);
 //        quarterlyRevenueList.add(new QuarterlyRevenueDTO("Q1 2024", 450000000, 12.0, 15420, 29200));
 //        quarterlyRevenueList.add(new QuarterlyRevenueDTO("Q2 2024", 520_000_000L, 15.5, 17800, 29200));
 //        quarterlyRevenueList.add(new QuarterlyRevenueDTO("Q3 2024", 580_000_000L, 11.5, 19200, 30200));
@@ -114,4 +114,3 @@ public class DashboardController {
         return dto;
     }
 }
-

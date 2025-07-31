@@ -13,7 +13,4 @@ public record OverviewStatisticsDTO(
         ArrayList<ServiceQualityDTO> serviceQualityDTOS,
         ArrayList<UserDeviceDTO> userDeviceDTOS,
         ArrayList<UserRegionDTO> userRegionDTOS,
-        ArrayList<YearlyRevenueDTO> yearlyRevenueDTOS
-
-) {
-}
+        ArrayList<YearlyRevenueDTO> yearlyRevenueDTOS) {}

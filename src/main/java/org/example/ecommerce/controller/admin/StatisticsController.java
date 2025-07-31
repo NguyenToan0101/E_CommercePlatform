@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,19 +49,19 @@ public class StatisticsController {
         // Trạng thái đơn hàng
         ArrayList<OrderStatusDTO> orderStatusDTOS =
                 new ArrayList<>(List.of(
-                new OrderStatusDTO("Hoàn thành", (double) orderFactLogRepo.countOrderStatus("Đã giao") /orderFactLogRepo.countAllOrderStatus() *100, "#81C784"),
-                new OrderStatusDTO("Chờ lấy hàng", (double) orderFactLogRepo.countOrderStatus("Chờ lấy hàng") /orderFactLogRepo.countAllOrderStatus() *100, "#4DD0E1"),
-                new OrderStatusDTO("Đang giao hàng", (double) orderFactLogRepo.countOrderStatus("Đang giao hàng") /orderFactLogRepo.countAllOrderStatus() *100, "#FFB74D"),
-                new OrderStatusDTO("Đã hủy", (double) orderFactLogRepo.countOrderStatus("Đã hủy") /orderFactLogRepo.countAllOrderStatus() *100, "#E57373"),
+                        new OrderStatusDTO("Hoàn thành", (double) orderFactLogRepo.countOrderStatus("Đã giao") /orderFactLogRepo.countAllOrderStatus() *100, "#81C784"),
+                        new OrderStatusDTO("Chờ lấy hàng", (double) orderFactLogRepo.countOrderStatus("Chờ lấy hàng") /orderFactLogRepo.countAllOrderStatus() *100, "#4DD0E1"),
+                        new OrderStatusDTO("Đang giao hàng", (double) orderFactLogRepo.countOrderStatus("Đang giao hàng") /orderFactLogRepo.countAllOrderStatus() *100, "#FFB74D"),
+                        new OrderStatusDTO("Đã hủy", (double) orderFactLogRepo.countOrderStatus("Đã hủy") /orderFactLogRepo.countAllOrderStatus() *100, "#E57373"),
                         new OrderStatusDTO("Đã xác nhận",(double) orderFactLogRepo.countOrderStatus("Đã xác nhận") /orderFactLogRepo.countAllOrderStatus() *100, "#001F54")
-        ));
+                ));
 
         // Phương thức thanh toán
         ArrayList<PaymentMethodDTO> paymentMethodDTOS = new ArrayList<>(List.of(
-                new PaymentMethodDTO("Thẻ tín dụng", 45, "#001F54"),
-                new PaymentMethodDTO("Ví điện tử", 30, "#4DD0E1"),
-                new PaymentMethodDTO("COD", 20, "#81C784"),
-                new PaymentMethodDTO("Chuyển khoản", 5, "#FFB74D")
+                new PaymentMethodDTO("Thẻ tín dụng", 0, "#001F54"),
+                new PaymentMethodDTO("Ví điện tử", 0, "#4DD0E1"),
+                new PaymentMethodDTO("COD", 13, "#81C784"),
+                new PaymentMethodDTO("Chuyển khoản", 87, "#FFB74D")
         ));
 
         // Phân tích đơn hàng theo thời gian
@@ -108,19 +108,19 @@ public class StatisticsController {
         // Thiết bị người dùng
         ArrayList<UserDeviceDTO> userDeviceDTOS =
                 new ArrayList<>(List.of(
-                new UserDeviceDTO("Mobile", ((double) orderFactLogRepo.countDeviceByName("mobile") /orderFactLogRepo.countAllDevice() *100), "#4DD0E1"),
-                new UserDeviceDTO("Desktop",  ((double) orderFactLogRepo.countDeviceByName("desktop") /orderFactLogRepo.countAllDevice() *100), "#001F54"),
-                new UserDeviceDTO("Tablet",  ((double) orderFactLogRepo.countDeviceByName("tablet") /orderFactLogRepo.countAllDevice() *100), "#81C784")
-        ));
+                        new UserDeviceDTO("Mobile", ((double) orderFactLogRepo.countDeviceByName("mobile") /orderFactLogRepo.countAllDevice() *100), "#4DD0E1"),
+                        new UserDeviceDTO("Desktop",  ((double) orderFactLogRepo.countDeviceByName("desktop") /orderFactLogRepo.countAllDevice() *100), "#001F54"),
+                        new UserDeviceDTO("Tablet",  ((double) orderFactLogRepo.countDeviceByName("tablet") /orderFactLogRepo.countAllDevice() *100), "#81C784")
+                ));
 
         // Khu vực người dùng
         ArrayList<UserRegionDTO> userRegionDTOS =
 
                 new ArrayList<>(List.of(
-                new UserRegionDTO("Miền Bắc", orderLogService.countUserrByRegion("Bắc"), (double) orderLogService.countUserrByRegion("Bắc") / orderFactLogRepo.countAllUserByRegion()*100),
-                new UserRegionDTO("Miền Trung", orderLogService.countUserrByRegion("Trung"), (double) orderLogService.countUserrByRegion("Trung") / orderFactLogRepo.countAllUserByRegion()*100),
-                new UserRegionDTO("Miền Nam", orderLogService.countUserrByRegion("Nam"), (double) orderLogService.countUserrByRegion("Nam") / orderFactLogRepo.countAllUserByRegion()*100)
-        ));
+                        new UserRegionDTO("Miền Bắc", orderLogService.countUserrByRegion("Bắc"), (double) orderLogService.countUserrByRegion("Bắc") / orderFactLogRepo.countAllUserByRegion()*100),
+                        new UserRegionDTO("Miền Trung", orderLogService.countUserrByRegion("Trung"), (double) orderLogService.countUserrByRegion("Trung") / orderFactLogRepo.countAllUserByRegion()*100),
+                        new UserRegionDTO("Miền Nam", orderLogService.countUserrByRegion("Nam"), (double) orderLogService.countUserrByRegion("Nam") / orderFactLogRepo.countAllUserByRegion()*100)
+                ));
 
         // Tổng hợp
         return new OverviewStatisticsDTO(
@@ -137,4 +137,5 @@ public class StatisticsController {
         );
     }
 }
+
 

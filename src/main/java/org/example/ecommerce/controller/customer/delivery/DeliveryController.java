@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -79,7 +80,7 @@ public class DeliveryController {
                         orderLog.setPromotionId(orderitem.getPromotionid());
                         orderLog.setProvince(orderService.getProvince(orderId));
                         orderLog.setRegion(orderService.getRegion(orderId));
-                        orderLog.setOrderDate(order.getOrderdate());
+                        orderLog.setOrderDate(order.getOrderdate().atZone(ZoneId.systemDefault()).toInstant());
                         orderLog.setQuantity(orderitem.getQuantity());
                         orderLog.setUnitPrice(orderitem.getUnitprice());
                         orderLog.setProfit(orderService.getProfit(orderId));

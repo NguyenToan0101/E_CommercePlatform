@@ -49,7 +49,7 @@ public class HomeController {
         Customer customer = (Customer) session.getAttribute("customer");
         List<Category> categories = productService.getCategories();
 
-        int categoriesPerPage = 20;
+        int categoriesPerPage = 28;
         int totalCategories = categories.size();
         int totalCategoryPages = (int) Math.ceil((double) totalCategories / categoriesPerPage);
         if (categoryPage < 1) categoryPage = 1;
@@ -85,20 +85,21 @@ public class HomeController {
                 return "redirect:/registrationSeller";
             }
 
-            return switch (shop.getStatus()) {
-                case "PENDING_APPROVAL" -> {
+            switch (shop.getStatus()) {
+                case "PENDING_APPROVAL":
                     System.out.println("PENDING APPROVAL");
-                    model.addAttribute("error","Tài khoản người bán đang yêu cầu phê duyệt. Xin vui lòng đợi! Hãy thường xuyên kiểm tra thông báo");
-                    yield "redirect:/home";
-                }
-                case "ACTIVE" -> "seller/index";
-                case "LOCK" -> {
+                    model.addAttribute("error", "Tài khoản người bán đang yêu cầu phê duyệt. Xin vui lòng đợi! Hãy thường xuyên kiểm tra thông báo");
+                    return "redirect:/home";
+                case "ACTIVE":
+                    return "seller/index";
+                case "LOCK":
                     System.out.println("LOCK");
-                    model.addAttribute("error","Tài khoản người bán đang bị khóa. Hãy liên hệ hỗ trợ hoặc gửi đến email admin@gmail.com");
-                    yield "redirect:/home";
-                }
-                default -> "redirect:/registrationSeller";
-            };
+                    model.addAttribute("error", "Tài khoản người bán đang bị khóa. Hãy liên hệ hỗ trợ hoặc gửi đến email admin@gmail.com");
+                    return "redirect:/home";
+                default:
+                    return "redirect:/registrationSeller";
+            }
+
 
         }catch (Exception e){
             return "redirect:/home";
@@ -141,7 +142,6 @@ public class HomeController {
 
     @GetMapping("/registrationSeller")
     public ResponseEntity<Void> registrationSeller() {
-
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(frontendSellerUrl));
         return new ResponseEntity<>(headers, HttpStatus.FOUND);

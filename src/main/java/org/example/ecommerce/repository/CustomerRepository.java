@@ -27,41 +27,37 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     List<Customer> findByIsLockedTrueAndLockedUntilBefore(LocalDateTime now);
 
 
-    @Query("""
-SELECT new org.example.ecommerce.common.dto.admin.userManagement.UserDTO(
-    c.id,
-    CONCAT(c.firstname, ' ', c.lastname),
-    c.email,
-    c.phone,
-    c.role,
-    c.status,
-    c.createdat,
-    (SELECT COUNT(o) FROM Order o WHERE o.customerid.id = c.id),
-    (SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o WHERE o.customerid.id = c.id),
-    c.gender,
-    c.dateofbirth,
-    c.address,
-    s.idnumber,
-    sh.shopname,
-    sh.fulladdress,
-    sh.businessType,
-    sh.taxCode,
-    sh.phone,
-    sh.invoiceEmail,
-    sh.manageName,
-    sh.status,
-    sh.express,
-    sh.fast,
-    sh.economy,
-    sh.lockerDelivery,
-    sh.bulkyItems
-)
-FROM Customer c
-LEFT JOIN c.seller s
-LEFT JOIN s.shop sh
-""")
+    @Query("SELECT new org.example.ecommerce.common.dto.admin.userManagement.UserDTO(" +
+            "c.id, " +
+            "CONCAT(c.firstname, ' ', c.lastname), " +
+            "c.email, " +
+            "c.phone, " +
+            "c.role, " +
+            "c.status, " +
+            "c.createdat, " +
+            "(SELECT COUNT(o) FROM Order o WHERE o.customerid.id = c.id), " +
+            "(SELECT COALESCE(SUM(o.totalamount), 0) FROM Order o WHERE o.customerid.id = c.id), " +
+            "c.gender, " +
+            "c.dateofbirth, " +
+            "c.address, " +
+            "s.idnumber, " +
+            "sh.shopname, " +
+            "sh.fulladdress, " +
+            "sh.businessType, " +
+            "sh.taxCode, " +
+            "sh.phone, " +
+            "sh.invoiceEmail, " +
+            "sh.manageName, " +
+            "sh.status, " +
+            "sh.express, " +
+            "sh.fast, " +
+            "sh.economy, " +
+            "sh.lockerDelivery, " +
+            "sh.bulkyItems) " +
+            "FROM Customer c " +
+            "LEFT JOIN c.seller s " +
+            "LEFT JOIN s.shop sh")
     List<UserDTO> getAllUserDTOs();
-
 
     @Query("SELECT count(c.id) FROM Customer c")
     Integer countCustomer();

@@ -57,11 +57,11 @@
                 <div th:each="vw : ${messageViews}" th:classappend="${vw.message.senderid == conversation.sellerid.id} ? 'seller-chat-msg-me' : 'seller-chat-msg-customer'">
                     <div class="seller-chat-msg-bubble">
                         <!-- Text message -->
-                        <span th:if="${vw.message.content != null and !vw.message.content.isEmpty()}" 
+                        <span th:if="${vw.message.content != null and !vw.message.content.isEmpty()}"
                               class="seller-chat-msg-content" th:text="${vw.message.content}"></span>
                         <!-- Image message -->
-                        <img th:if="${vw.message.imageUrl != null and !vw.message.imageUrl.isEmpty()}" 
-                             class="seller-chat-msg-image" th:src="${vw.message.imageUrl}" 
+                        <img th:if="${vw.message.imageUrl != null and !vw.message.imageUrl.isEmpty()}"
+                             class="seller-chat-msg-image" th:src="${vw.message.imageUrl}"
                              alt="Chat image" onclick="openImageModal(this.src)">
                         <div class="seller-chat-msg-time" th:text="${#dates.format(vw.message.sentat, 'HH:mm dd/MM')}"></div>
                     </div>
@@ -111,10 +111,10 @@
             const messages = document.getElementById('messages');
             const row = document.createElement('div');
             row.className = (msg.senderid === sellerId) ? 'seller-chat-msg-me' : 'seller-chat-msg-customer';
-            
+
             const bubble = document.createElement('div');
             bubble.className = 'seller-chat-msg-bubble';
-            
+
             // Text content
             if (msg.content && msg.content.trim() !== '') {
                 const content = document.createElement('span');
@@ -122,7 +122,7 @@
                 content.textContent = msg.content;
                 bubble.appendChild(content);
             }
-            
+
             // Image content
             if (msg.imageUrl && msg.imageUrl.trim() !== '') {
                 const image = document.createElement('img');
@@ -132,13 +132,13 @@
                 image.onclick = function() { openImageModal(this.src); };
                 bubble.appendChild(image);
             }
-            
+
             const time = document.createElement('div');
             time.className = 'seller-chat-msg-time';
             time.textContent = new Date(msg.sentat).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' +
                 new Date(msg.sentat).toLocaleDateString();
             bubble.appendChild(time);
-            
+
             row.appendChild(bubble);
             messages.appendChild(row);
             messages.scrollTop = messages.scrollHeight;
@@ -147,7 +147,7 @@
         document.getElementById('msgInput').onkeydown = function(e) { if (e.key === 'Enter') sendMessage(); };
         document.getElementById('imageBtn').onclick = function() { document.getElementById('imageInput').click(); };
         document.getElementById('imageInput').onchange = function() { uploadImage(); };
-        
+
         function sendMessage() {
             const input = document.getElementById('msgInput');
             const content = input.value.trim();
@@ -156,29 +156,29 @@
             stompClient.send('/app/chat.send/' + conversationId, {}, JSON.stringify(msg));
             input.value = '';
         }
-        
+
         function uploadImage() {
             const fileInput = document.getElementById('imageInput');
             const file = fileInput.files[0];
             if (!file) return;
-            
+
             // Kiểm tra loại file
             if (!file.type.startsWith('image/')) {
                 alert('Chỉ được chọn file ảnh!');
                 fileInput.value = '';
                 return;
             }
-            
+
             // Kiểm tra kích thước file (5MB)
             if (file.size > 5 * 1024 * 1024) {
                 alert('File quá lớn! Tối đa 5MB.');
                 fileInput.value = '';
                 return;
             }
-            
+
             const formData = new FormData();
             formData.append('image', file);
-            
+
             fetch('/seller/chat/upload-image', {
                 method: 'POST',
                 body: formData
@@ -198,11 +198,11 @@
                 fileInput.value = '';
             });
         }
-        
+
 
         connectWS();
     }
-    
+
     // Image modal functions
     function openImageModal(imageSrc) {
         const modal = document.getElementById('imageModal');
@@ -210,12 +210,12 @@
         modal.style.display = 'block';
         modalImg.src = imageSrc;
     }
-    
+
     // Close modal when clicking on X
     document.querySelector('.seller-chat-image-modal-close').onclick = function() {
         document.getElementById('imageModal').style.display = 'none';
     }
-    
+
     // Close modal when clicking outside
     document.getElementById('imageModal').onclick = function(e) {
         if (e.target === this) {

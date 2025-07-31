@@ -3,21 +3,25 @@ package org.example.ecommerce.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.example.ecommerce.entity.admin.Activity;
 import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "customer")
+@Data
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,13 +67,13 @@ public class Customer {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "version")
+    @Version
     private Integer version;
 
     @OneToMany(mappedBy = "customerid")
     private Set<Cart> carts = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "complaintId")
     private Set<Complaint> complaints = new LinkedHashSet<>();
 
     @OneToMany(mappedBy = "customerid")
@@ -84,7 +88,7 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")
     private Set<Ordernotification> ordernotifications = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "customerid")  // mappedBy trùng với tên biến Customer trong Order
+    @OneToMany(mappedBy = "customerid")
     private Set<Order> orders = new LinkedHashSet<>();
 
 
@@ -98,4 +102,6 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
-   }
+
+
+}

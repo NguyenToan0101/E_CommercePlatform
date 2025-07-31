@@ -60,7 +60,7 @@ public class ReportService {
         complaint.setReason(complaintReasonRepository.findComplaintReasonByReasonId(reasonId));
         complaint.setCreatedAt(LocalDateTime.now());
         complaintRepository.save(complaint);
-        ComplaintFeedback complaintFeedback = new ComplaintFeedback();
+        ComplaintReview complaintFeedback = new ComplaintReview();
         complaintFeedback.setComplaint(complaint);
         complaintFeedback.setReviewId(id);
         complaintFeedbackRepository.save(complaintFeedback);

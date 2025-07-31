@@ -19,7 +19,7 @@
 
 
     @RestController
-    @RequestMapping("/admin") // ← để khớp với frontend gọi /admin/users
+    @RequestMapping("/admin")
     public class AdminUserController {
 
         @Autowired
@@ -71,7 +71,6 @@
                 String untilStr = until.format(formatter);
                 emailService.sendAccountLockedEmail(customer.getEmail(), untilStr);
             } catch (MessagingException e) {
-                // Có thể log lỗi gửi email nếu cần
             }
             return ResponseEntity.ok().build();
         }
@@ -93,7 +92,6 @@
             try {
                 emailService.sendAccountUnlockedEmail(customer.getEmail());
             } catch (jakarta.mail.MessagingException e) {
-                // Có thể log lỗi gửi email nếu cần
             }
             return ResponseEntity.ok().build();
         }

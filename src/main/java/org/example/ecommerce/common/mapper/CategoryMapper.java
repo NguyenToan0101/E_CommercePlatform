@@ -35,7 +35,7 @@ public interface CategoryMapper {
         dto.setProductsCount(getCategoryRepository().countByCategoryId(category.getId()));
     }
 
-    // 👇 Hàm helper để lấy CategoryRepository (vì không inject trực tiếp vào interface được)
+
     default CategoryRepository getCategoryRepository() {
         return SpringContext.getBean(CategoryRepository.class);
     }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -18,7 +19,7 @@ public class SellerReviewDTO {
     private Integer rating;
     private String comment;
     private List<String> reviewImages;
-    private Instant createdAt;
+    private LocalDateTime createdAt;
     private String customerName;
     private String reply; // Phản hồi của seller
 } 

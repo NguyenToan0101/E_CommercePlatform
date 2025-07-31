@@ -11,6 +11,9 @@ import org.example.ecommerce.repository.ShopRepository;
 import org.example.ecommerce.repository.InventoryRepository;
 import org.example.ecommerce.service.UploadImageFile;
 import org.example.ecommerce.service.CategoryService;
+
+//import org.example.ecommerce.service.customer.customer_search_products.SearchProductServiceImpl;
+//import org.example.ecommerce.service.customer.search.ProductDocumentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -39,6 +42,12 @@ public class ProductService {
     @Autowired private OrderItemsRepository orderItemsRepository;
     @Autowired private InventoryRepository inventoryRepository;
     @Autowired private CategoryService categoryService;
+
+//    private final ProductDocumentService productDocumentService;
+//    public ProductService( ProductDocumentService productDocumentService) {
+//        this.productDocumentService = productDocumentService;
+//
+//    }
 
 
     public Product getById(Integer id) {
@@ -266,7 +275,7 @@ public class ProductService {
 
         BigDecimal totalRevenue = orderItems.stream()
                 .map(item -> item.getUnitprice().multiply(new BigDecimal(item.getQuantity())))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);  
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         int totalSoldQuantity = orderItems.stream()
                 .mapToInt(Orderitem::getQuantity)
                 .sum();

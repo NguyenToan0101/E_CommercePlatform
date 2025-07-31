@@ -53,22 +53,43 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductDetail getProductDetail(Integer productId) {
-        Product product = productRepo.findById(productId).orElse(null);
+        // Try optimized query first to get solditems
+        List<Object[]> detailResults = productRepo.findProductDetailOptimized(productId);
+        if (detailResults.isEmpty()) {
+            return null;
+        }
+        
+        Object[] detailRow = detailResults.get(0);
+        Long solditems = (Long) detailRow[12]; // solditems is at index 12
+        
+        // Get full product with relations for other data
+        Product product = productRepo.findWithAllRelationsById(productId).orElse(null);
+        if (product == null) {
+            return null;
+        }
+        
         Shop shop = product.getShopid();
-        List<Inventory> inventories = product.getInventories();
+        // Create defensive copies to avoid ConcurrentModificationException
+        List<Inventory> inventories = new ArrayList<>();
+        for (Inventory inv : product.getInventories()) {
+            if (!inventories.contains(inv)) {
+                inventories.add(inv);
+            }
+        }
         List<Productimage> images = new ArrayList<>(product.getProductimages());
         List<Review> reviews = new ArrayList<>(product.getReviews());
         List<Wishlist> wishlists = new ArrayList<>(product.getWishlists());
 
-        float rate = (float) product.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
+        float rate = (float) reviews.stream().mapToDouble(Review::getRating).average().orElse(0);
 
-        int solditems = product.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
+        // Use solditems from optimized query
+        int solditemsInt = solditems != null ? solditems.intValue() : 0;
 
-        int sumReviewRating = product.getReviews().stream().mapToInt(Review::getRating).sum();
+        int sumReviewRating = reviews.stream().mapToInt(Review::getRating).sum();
 
-        BigDecimal price = product.getInventoriesView().stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+        BigDecimal price = inventories.stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
 
-        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, price, rate, solditems, sumReviewRating);
+        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, price, rate, solditemsInt, sumReviewRating);
     }
 
     //Admin Product Management

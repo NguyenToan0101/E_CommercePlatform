@@ -10,9 +10,11 @@ import org.example.ecommerce.common.dto.ShopRegistrationDTO;
 import org.example.ecommerce.entity.Customer;
 import org.example.ecommerce.entity.Seller;
 import org.example.ecommerce.entity.Shop;
+import org.example.ecommerce.entity.admin.Activity;
 import org.example.ecommerce.repository.CustomerRepository;
 import org.example.ecommerce.repository.seller.SellerRepo;
 import org.example.ecommerce.repository.seller.ShopRepo;
+import org.example.ecommerce.service.admin.ActivityService;
 import org.example.ecommerce.service.seller.RegistrationService;
 import org.example.ecommerce.service.seller.SellerService;
 import org.example.ecommerce.service.seller.ShopService;
@@ -37,9 +39,9 @@ public class RegistrationController {
     protected  SellerRepo sellerRepo;
     protected ShopRepo shopRepo;
     private Logger logger = LoggerFactory.getLogger(RegistrationController.class);
-    private EntityManager em;
+    private final ActivityService activityService;
 
-    public RegistrationController(RegistrationService registrationService, SellerService sellerService, CustomerRepository customerRepository, ShopService shopService, SellerRepo sellerRepo, ShopRepo shopRepo) {
+    public RegistrationController(RegistrationService registrationService, SellerService sellerService, CustomerRepository customerRepository, ShopService shopService, SellerRepo sellerRepo, ShopRepo shopRepo, ActivityService activityService) {
         this.registrationService = registrationService;
         this.sellerService = sellerService;
 
@@ -47,6 +49,7 @@ public class RegistrationController {
         this.shopService = shopService;
         this.sellerRepo = sellerRepo;
         this.shopRepo = shopRepo;
+        this.activityService = activityService;
     }
 
 
@@ -137,7 +140,17 @@ public class RegistrationController {
 
             // Update session với managed entity
             session.setAttribute("customer", managedCustomer);
+            Activity activity;
+            if(managedCustomer.getLastname() != null){
+                 activity = new Activity(managedCustomer.getFirstname() + " " +managedCustomer.getLastname(),"đăng ký bán hàng",
+                        Activity.Type.seller_register.toString(),Activity.Status.INFO.toString());
+            }else {
+                 activity = new Activity(managedCustomer.getFirstname() ,"đăng ký bán hàng",
+                        Activity.Type.seller_register.toString(),Activity.Status.INFO.toString());
+            }
 
+
+            activityService.save(activity);
             return ResponseEntity.ok("Registration successful");
 
         } catch (OptimisticLockException | StaleObjectStateException e) {

@@ -14,6 +14,7 @@ import org.example.ecommerce.service.customer.order.ShippingService;
 import org.example.ecommerce.service.customer.wallet.CartPreviewDTO;
 import org.example.ecommerce.service.customer.wallet.PaymentService;
 import jakarta.servlet.http.HttpSession;
+import org.example.ecommerce.service.customer.wallet.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -33,8 +34,9 @@ public class CheckoutController {
     private final OderLogService oderLogService;
     private final OderItemService oderItemService;
     private final AddressDTO addressDTOs;
+    private final WalletService walletService;
 
-    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs) {
+    public CheckoutController(PaymentService paymentService, PromotionService promotionService, ShippingService shippingService, OrderService orderService, OderLogService oderLogService, OderItemService oderItemService, AddressDTO addressDTOs, WalletService walletService) {
         this.paymentService = paymentService;
         this.promotionService = promotionService;
         this.shippingService = shippingService;
@@ -42,25 +44,27 @@ public class CheckoutController {
         this.oderLogService = oderLogService;
         this.oderItemService = oderItemService;
         this.addressDTOs = addressDTOs;
+        this.walletService = walletService;
     }
 
     @PostMapping
     public String processCheckout(@RequestParam(value = "cartItemIds", required = false) List<Integer> cartItemIds,
                                   @ModelAttribute Customer customer,
+                                  @RequestParam(value = "walletId", required = false) Integer walletId,
                                   HttpSession session, Model model) {
         Customer customer1 = (Customer) session.getAttribute("customer");
         if (customer1 == null) {
             return "redirect:/login";
         }
-        String result = paymentService.checkout(customer1, cartItemIds, customer.getFirstname() + " " + customer.getLastname(), customer.getPhone(), customer.getAddress());
+        String result = paymentService.checkout(customer1, cartItemIds, customer.getFirstname() + " " + customer.getLastname(), customer.getPhone(), customer.getAddress(), walletId);
         if ("Thanh toán thành công".equals(result)) {
             model.addAttribute("message", result);
             model.addAttribute("customer", customer1);
-            return "/customer/wallet/checkout-success";
+            return "customer/wallet/checkout-success";
         } else {
             model.addAttribute("error", result);
             model.addAttribute("customer", customer1);
-            return "/customer/wallet/checkout-fail";
+            return "customer/wallet/checkout-fail";
         }
     }
 
@@ -79,10 +83,10 @@ public class CheckoutController {
         String result = paymentService.checkoutRealtime(freeshipId,discountId,totalPrice,customer1, inventory, quantity, customer.getFirstname() + " " + customer.getLastname(), customer.getPhone(), customer.getAddress());
         if ("Thanh toán thành công".equals(result)) {
             model.addAttribute("message", result);
-            return "/customer/wallet/checkout-success";
+            return "customer/wallet/checkout-success";
         } else {
             model.addAttribute("error", result);
-            return "/customer/wallet/checkout-fail";
+            return "customer/wallet/checkout-fail";
         }
     }
 
@@ -115,7 +119,7 @@ public class CheckoutController {
             System.out.println(promotionDTO.getName()+"Usage limit" +  promotionDTO.getUsageLimit() + "Usage Count" + promotionDTO.getUsageCount());
             if (promotionDTO.getStatus().equalsIgnoreCase("ACTIVE")
                     && promotionDTO.getPerUserLimit() >= oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId())
-                    && promotionDTO.getUsageLimit() >= promotionDTO.getUsageCount()
+//                    && promotionDTO.getUsageLimit() >= promotionDTO.getUsageCount()
             ) {
                 System.out.println(" --------------Active promotion");
                 System.out.println( promotionDTO.getName()+ "Per Usage limi"+  promotionDTO.getPerUserLimit()+ "----------Count promotion used------------" + oderLogService.countPromtionUsedByCustomerid(customer.getId(),promotionDTO.getId()));
@@ -128,15 +132,15 @@ public class CheckoutController {
                         voucherFreeShip.add(promotionDTO);
                     } else if (!promotionDTO.getType().equalsIgnoreCase("SHIPPING")
                             && (category.getValue().equals(ID_OF_ALL_CATEGORY) || (category.getValue().equals(product.getCategoryid().getId())))) {
-                        List<Orderitem> list = oderItemService.getAllOrderItems();
-                        if(promotionDTO.getId() == 17){
-                            boolean checkNewUser = isCheckNewUser(list, customer);
-                            if(!checkNewUser){
-                                voucherDiscount.add(promotionDTO);
-                            }
-                        }else {
-                            voucherDiscount.add(promotionDTO);
-                        }
+                       List<Orderitem> list = oderItemService.getAllOrderItems();
+                       if(promotionDTO.getId() == 17){
+                           boolean checkNewUser = isCheckNewUser(list, customer);
+                           if(!checkNewUser){
+                               voucherDiscount.add(promotionDTO);
+                           }
+                       }else {
+                           voucherDiscount.add(promotionDTO);
+                       }
 
 
 
@@ -151,14 +155,19 @@ public class CheckoutController {
         System.out.println("dis" + voucherDiscount);
         System.out.println("free" + voucherFreeShip);
 
+        // Get wallet for customer
+        Wallet wallet = walletService.getOrCreateWallet(customer);
+
         model.addAttribute("voucherDiscount", voucherDiscount);
         model.addAttribute("voucherFreeShip", voucherFreeShip);
-        model.addAttribute("price", preview.getPrice().intValueExact() * preview.getQuantity());
+        model.addAttribute("price", preview.getPrice().intValueExact());
 
         model.addAttribute("items", preview);
         model.addAttribute("customer", customer);
+        model.addAttribute("wallet", wallet);
         return "customer/wallet/checkout-preview";
     }
+
     private static boolean isCheckNewUser(List<Orderitem> list, Customer customer) {
         boolean checkNewUser = false;
         for (Orderitem orderitem : list) {
@@ -174,45 +183,9 @@ public class CheckoutController {
         }
         return checkNewUser;
     }
-//    @GetMapping("/preview_realtime_data")
-//    @ResponseBody
-//    public Map<String, Object> getPreviewData(
-//            @RequestParam Integer inventory,
-//            @RequestParam Integer quantity,
-//            HttpSession session) {
-//
-//        Customer customer = (Customer) session.getAttribute("customer");
-//        CartPreviewDTO preview = paymentService.getCheckoutPreviewRealtime(customer, inventory, quantity);
-//
-//        Product product = paymentService.getProductById(inventory);
-//        Inventory inventoryPayment = paymentService.getInventoryById(inventory);
-//
-//        ShippingRequest shippingRequest = new ShippingRequest();
-//        shippingRequest.setProvinceFrom(paymentService.getProvinceShopAddressById(product));
-//        shippingRequest.setProvinceTo(addressDTOs.getProvinceName());
-//        shippingRequest.setDistrictTo(addressDTOs.getDistrictName());
-//        shippingRequest.setWeight(inventoryPayment.getWeight());
-//        shippingRequest.setHeight(inventoryPayment.getHeight());
-//        shippingRequest.setLength(inventoryPayment.getLength());
-//        shippingRequest.setWidth(inventoryPayment.getWidth());
-//        shippingRequest.setCategoryName(product.getCategoryid().getCategoryname());
-//
-//
-//        System.out.println("From " + paymentService.getProvinceShopAddressById(product));
-//        System.out.println("To " + addressDTOs.getProvinceName());
-//        System.out.println("To district " + addressDTOs.getDistrictName());
-//        System.out.println("-------"+ shippingRequest);
-//        System.out.println("fee shipping" + shippingService.calculateShippingFee(shippingRequest));
-//
-//        BigDecimal feeShip = BigDecimal.valueOf(shippingService.calculateShippingFee(shippingRequest));
-//        BigDecimal totalPrice = inventoryPayment.getPrice().add(feeShip).multiply(BigDecimal.valueOf(preview.getQuantity()));
-//        Map<String, Object> response = new HashMap<>();
-//        response.put("feeShip", feeShip);
-//        response.put("priceTotal", totalPrice);
-//        response.put("timeDelivery" , shippingService.timeDelivery(shippingRequest).toString());
-//        return response;
-//    }
-@GetMapping("/preview_realtime_data")
+
+
+    @GetMapping("/preview_realtime_data")
 @ResponseBody
 public Map<String, Object> getPreviewData(
         @RequestParam Integer inventory,
@@ -253,7 +226,8 @@ public Map<String, Object> getPreviewData(
 
 
     BigDecimal feeShip = BigDecimal.valueOf(shippingService.calculateShippingFee(shippingRequest));
-    BigDecimal totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity())) .add(feeShip);
+//    BigDecimal totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity())) .add(feeShip);
+        BigDecimal totalPrice = inventoryPayment.getPrice().multiply(BigDecimal.valueOf(preview.getQuantity()));
     BigDecimal feeShipVoucher = totalPrice;
     BigDecimal discountVoucher = BigDecimal.ZERO;
     BigDecimal feeShipDefault = feeShip;
@@ -305,6 +279,9 @@ public Map<String, Object> getPreviewData(
     }
     return response;
 }
+
+
+
 
 
 

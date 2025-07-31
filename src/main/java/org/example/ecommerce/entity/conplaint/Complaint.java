@@ -2,14 +2,18 @@ package org.example.ecommerce.entity.conplaint;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.ecommerce.entity.Customer;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
-@Table(name = "complaint")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "complaint")
 public class Complaint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,10 +22,10 @@ public class Complaint {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
-    private org.example.ecommerce.entity.Customer customer;
+    private Customer customer;
 
     @Column(name = "order_id", nullable = true)
-    private Integer orderId;         // tham chiếu đến orders.orderid
+    private Integer orderId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "category_id", nullable = false)
@@ -32,7 +36,7 @@ public class Complaint {
     private ComplaintReason reason;
 
     @Column(name = "description", columnDefinition = "TEXT")
-    private String description;      // mô tả chi tiết (có thể null)
+    private String description;
 
     @Column(name = "status", nullable = false, length = 20)
     private String status = "pending";
@@ -51,5 +55,15 @@ public class Complaint {
 
     // Mỗi complaint có thể có 1 feedback
     @OneToOne(mappedBy = "complaint", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private ComplaintFeedback feedback;
+    private ComplaintReview review;
+
+    @OneToOne(mappedBy = "complaint", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ComplaintPayment payment;
+
+    @OneToOne(mappedBy = "complaint", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ComplaintShipping shipping;
+
+    @OneToMany(mappedBy = "complaint", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ComplaintImg> images = new ArrayList<>();
+
 }

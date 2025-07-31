@@ -48,7 +48,7 @@ public class ProductDetailController {
         model.addAttribute("complaintReason", complaintReasonFeedback);
 
 
-        return "/customer/customer_search_product/product-detail";
+        return "customer/customer_search_product/product-detail";
     }
 
     @PostMapping("/report_product")

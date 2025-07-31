@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.chrono.ChronoLocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.example.ecommerce.common.dto.seller.SellerReviewStatsDTO;
@@ -58,19 +59,19 @@ public class SellerReviewServiceImpl implements SellerReviewService {
         // Filter theo ngày
         if (fromDate != null && !fromDate.isEmpty()) {
             Instant from = LocalDate.parse(fromDate).atStartOfDay(ZoneId.systemDefault()).toInstant();
-            reviews = reviews.stream().filter(r -> r.getCreatedat() != null && r.getCreatedat().isAfter(from)).collect(Collectors.toList());
+            reviews = reviews.stream().filter(r -> r.getCreatedat() != null && r.getCreatedat().isAfter(ChronoLocalDateTime.from(from))).collect(Collectors.toList());
         }
         if (toDate != null && !toDate.isEmpty()) {
             Instant to = LocalDate.parse(toDate).plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant();
-            reviews = reviews.stream().filter(r -> r.getCreatedat() != null && r.getCreatedat().isBefore(to)).collect(Collectors.toList());
+            reviews = reviews.stream().filter(r -> r.getCreatedat() != null && r.getCreatedat().isBefore(ChronoLocalDateTime.from(to))).collect(Collectors.toList());
         }
         // Map sang DTO
         return reviews.stream().map(r -> {
             Product p = r.getProductid();
             String productImage = (p.getProductimages() != null && !p.getProductimages().isEmpty()) ? p.getProductimages().iterator().next().getImageurl() : null;
             List<String> reviewImages = r.getReviewsImages() != null ? r.getReviewsImages().stream().map(ReviewsImage::getImageUrl).collect(Collectors.toList()) : Collections.emptyList();
-            String customerName = (r.getOrderitemsid() != null && r.getOrderitemsid().getOrderid() != null && r.getOrderitemsid().getOrderid().getCustomerid() != null)
-                    ? r.getOrderitemsid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";
+            String customerName = (r.getOrderitemid() != null && r.getOrderitemid().getOrderid() != null && r.getOrderitemid().getOrderid().getCustomerid() != null)
+                    ? r.getOrderitemid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";
             int safeRating = r.getRating() != null ? Math.min(r.getRating(), 5) : 0;
             System.out.println("DEBUG rating: " + safeRating);
             String replyContent = reviewReplyRepository.findByReview(r).map(ReviewReply::getReply).orElse(null);
@@ -102,8 +103,8 @@ public class SellerReviewServiceImpl implements SellerReviewService {
         Product p = r.getProductid();
         String productImage = (p.getProductimages() != null && !p.getProductimages().isEmpty()) ? p.getProductimages().iterator().next().getImageurl() : null;
         List<String> reviewImages = r.getReviewsImages() != null ? r.getReviewsImages().stream().map(ReviewsImage::getImageUrl).toList() : List.of();
-        String customerName = (r.getOrderitemsid() != null && r.getOrderitemsid().getOrderid() != null && r.getOrderitemsid().getOrderid().getCustomerid() != null)
-                ? r.getOrderitemsid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";
+        String customerName = (r.getOrderitemid() != null && r.getOrderitemid().getOrderid() != null && r.getOrderitemid().getOrderid().getCustomerid() != null)
+                ? r.getOrderitemid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";
         int safeRating = r.getRating() != null ? Math.min(r.getRating(), 5) : 0;
         System.out.println("DEBUG rating (detail): " + safeRating);
         String replyContent = reviewReplyRepository.findByReview(r).map(ReviewReply::getReply).orElse(null);
@@ -162,7 +163,7 @@ public class SellerReviewServiceImpl implements SellerReviewService {
         reply.setReview(review);
         reply.setSeller(seller);
         reply.setReply(replyContent);
-        reply.setCreatedAt(java.time.Instant.now());
+        reply.setCreatedAt(LocalDate.now());
         reviewReplyRepository.save(reply);
     }
 

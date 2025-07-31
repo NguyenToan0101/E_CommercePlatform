@@ -3,7 +3,8 @@ package org.example.ecommerce.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "payments")
@@ -26,7 +27,16 @@ public class Payment {
     private String paymentstatus;
 
     @Column(name = "paidat")
-    private Instant paidat;
+    private LocalDateTime paidat;
+
+    @Column(name = "amount")
+    private BigDecimal amount;
+
+    @Column(name = "transaction_id")
+    private String transactionId;
+
+    @Column(name = "gateway")
+    private String gateway;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orderid")
@@ -72,12 +82,30 @@ public class Payment {
         this.paymentstatus = paymentstatus;
     }
 
-    public Instant getPaidat() {
+    public LocalDateTime getPaidat() {
         return paidat;
     }
 
-    public void setPaidat(Instant paidat) {
+    public void setPaidat(LocalDateTime paidat) {
         this.paidat = paidat;
     }
 
+    public BigDecimal getAmount() {
+        return amount;
+    }
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+    public String getTransactionId() {
+        return transactionId;
+    }
+    public void setTransactionId(String transactionId) {
+        this.transactionId = transactionId;
+    }
+    public String getGateway() {
+        return gateway;
+    }
+    public void setGateway(String gateway) {
+        this.gateway = gateway;
+    }
 }

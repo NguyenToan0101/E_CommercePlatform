@@ -5,9 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -21,8 +19,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "products")
 public class Product {
@@ -99,5 +96,15 @@ public class Product {
 
     @OneToMany(mappedBy = "productid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
+
+
+    public enum Status{
+        LOCK,
+        AVAILABLE,
+        PENDING_APPROVAL,
+        REJECTED,
+        HIDDEN
+    }
+
 
 }

@@ -75,13 +75,13 @@ public class ProductController {
     }
 
     private String mapStatus(String frontendStatus) {
-        return switch (frontendStatus) {
-            case "active" -> "available";
-            case "draft" -> "hidding";
-            case "violation" -> "locked";
-            case "pending" -> "pending_approval";
-            default -> null;
-        };
+         switch (frontendStatus) {
+             case "active" : return "available";
+            case "draft" : return "hidding";
+            case "violation" : return "locked";
+            case "pending" : return "pending_approval";
+            default : return null;
+        }
     }
     
     private List<ProductSalesDTO> filterProducts(List<ProductSalesDTO> products, String keyword, Integer categoryId) {

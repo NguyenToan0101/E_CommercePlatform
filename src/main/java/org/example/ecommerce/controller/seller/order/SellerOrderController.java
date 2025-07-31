@@ -2,6 +2,7 @@ package org.example.ecommerce.controller.seller.order;
 
 import org.example.ecommerce.entity.Customer;
 import org.example.ecommerce.entity.Shop;
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.example.ecommerce.entity.Order;
 import org.example.ecommerce.entity.Orderitem;
 import org.example.ecommerce.service.seller.order.OrderSellerService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.ResponseBody;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Map;
@@ -102,8 +104,8 @@ public class    SellerOrderController {
         if (customer == null || customer.getSeller() == null || customer.getSeller().getShop() == null)
             return "redirect:/login";
         Integer shopId = customer.getSeller().getShop().getId();
-        Instant fromDate = (from != null && !from.isEmpty()) ? Instant.parse(from) : null;
-        Instant toDate = (to != null && !to.isEmpty()) ? Instant.parse(to) : null;
+        LocalDateTime fromDate = (from != null && !from.isEmpty()) ? LocalDateTime.parse(from) : null;
+        LocalDateTime toDate = (to != null && !to.isEmpty()) ? LocalDateTime.parse(to) : null;
         List<Order> orders = orderSellerService.searchOrders(shopId, status, keyword, fromDate, toDate);
         model.addAttribute("orders", orders);
         // Thêm các biến thống kê cho dashboard
