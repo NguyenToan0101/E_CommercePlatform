@@ -295,6 +295,166 @@
             filter: drop-shadow(0 4px 16px #08839566);
         }
 
+        /* Promotional Features Bar */
+        .promo-features-bar {
+            background: linear-gradient(135deg, #0d6b8a 0%, #08d4f0 100%);
+            margin: 20px 2% 0;
+            border-radius: 18px;
+            padding: 24px 2%;
+            box-shadow: 0 4px 24px var(--shadow-light);
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #08d4f022;
+        }
+
+        .promo-features-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.08"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.08"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.08"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.08"/><circle cx="90" cy="40" r="0.5" fill="white" opacity="0.08"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .promo-features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .promo-feature-item {
+            background: transparent;
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .promo-feature-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(8, 212, 240, 0.15), transparent);
+            transition: left 0.5s;
+        }
+
+        .promo-feature-item:hover::before {
+            left: 100%;
+        }
+
+        .promo-feature-item:hover {
+            transform: translateY(-3px) scale(1.02);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .promo-feature-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 8px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        .promo-feature-icon.coupon {
+            background: linear-gradient(135deg, #ee4d2d, #ff6b6b);
+        }
+
+        .promo-feature-icon.checkin {
+            background: linear-gradient(135deg, #088395, #05bfdb);
+        }
+
+        .promo-feature-icon.sale {
+            background: linear-gradient(135deg, #ff7a45, #ffa726);
+        }
+
+        .promo-feature-icon.coin {
+            background: linear-gradient(135deg, #f7c873, #ffd54f);
+        }
+
+        .promo-feature-icon.vip {
+            background: linear-gradient(135deg, #8e24aa, #ab47bc);
+        }
+
+        .promo-feature-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 4px;
+            line-height: 1.2;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .promo-feature-desc {
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.3;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .promo-feature-badge {
+            display: none;
+        }
+
+
+
+        /* Responsive Design for Promo Features */
+        @media (max-width: 768px) {
+            .promo-features-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+            
+            .promo-feature-item {
+                padding: 10px;
+            }
+            
+            .promo-feature-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 16px;
+            }
+            
+            .promo-feature-title {
+                font-size: 11px;
+            }
+            
+            .promo-feature-desc {
+                font-size: 9px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .promo-features-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .promo-features-bar {
+                margin: 15px 1% 0;
+                padding: 16px 1%;
+            }
+        }
+
         /* Category Section */
         .category-outer {
             background: #fff;
@@ -773,6 +933,56 @@
         </a>
     </div>
 </header>
+
+<!-- Promotional Features Bar -->
+<div class="promo-features-bar">
+    <div class="promo-features-container">
+        <!-- Mã giảm giá -->
+        <div class="promo-feature-item" onclick="window.location.href='/coupons'">
+            <div class="promo-feature-icon coupon">
+                🎫
+            </div>
+            <div class="promo-feature-title">Mã giảm giá</div>
+            <div class="promo-feature-desc">Nhận mã giảm giá độc quyền</div>
+        </div>
+
+        <!-- Điểm danh nhận xu -->
+        <div class="promo-feature-item" onclick="window.location.href='/checkin/coin'">
+            <div class="promo-feature-icon checkin">
+                📅
+            </div>
+            <div class="promo-feature-title">Điểm danh nhận xu</div>
+            <div class="promo-feature-desc">Điểm danh hàng ngày nhận 100 xu</div>
+        </div>
+
+        <!-- Săn sale -->
+        <div class="promo-feature-item" onclick="window.location.href='/flash-sale'">
+            <div class="promo-feature-icon sale">
+                ⚡
+            </div>
+            <div class="promo-feature-title">Săn sale</div>
+            <div class="promo-feature-desc">Flash sale giảm giá cực sốc</div>
+        </div>
+
+        <!-- Săn xu ngay -->
+        <div class="promo-feature-item" onclick="window.location.href='/game/game_now'">
+            <div class="promo-feature-icon coin">
+                🎮
+            </div>
+            <div class="promo-feature-title">Săn xu ngay</div>
+            <div class="promo-feature-desc">Chơi game nhận xu miễn phí</div>
+        </div>
+
+        <!-- Khách hàng thân thiết -->
+        <div class="promo-feature-item" onclick="window.location.href='/vip-program'">
+            <div class="promo-feature-icon vip">
+                👑
+            </div>
+            <div class="promo-feature-title">Khách hàng thân thiết</div>
+            <div class="promo-feature-desc">Ưu đãi đặc biệt cho VIP</div>
+        </div>
+    </div>
+</div>
 
 <!-- Categories Section -->
 <div class="category-outer">
