@@ -28,4 +28,13 @@ public class GameService {
 
         coinRepository.save(coin);
     }
+
+    public void updateCoinAfterBauCua(Customer customer, int netResult) {
+        Coin coin = coinRepository.findByCustomer(customer);
+        
+        // Cập nhật xu dựa trên kết quả thắng/thua tổng cộng
+        coin.setTotalXu(coin.getTotalXu() + netResult);
+        
+        coinRepository.save(coin);
+    }
 }
