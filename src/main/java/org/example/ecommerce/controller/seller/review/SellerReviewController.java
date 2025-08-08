@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import java.util.List;
-import java.util.Arrays;
 
 @Controller
 @RequestMapping("/seller/reviews")
@@ -52,6 +51,7 @@ public class SellerReviewController {
         model.addAttribute("products", products);
         model.addAttribute("stats", stats);
         model.addAttribute("starList", java.util.Arrays.asList(5,4,3,2,1));
+        model.addAttribute("activePage", "reviews");
         return "seller/review/list";
     }
 
@@ -71,6 +71,7 @@ public class SellerReviewController {
         String replyContent = sellerReviewService.getReplyContentByReviewId(reviewId);
         model.addAttribute("review", review);
         model.addAttribute("replyContent", replyContent);
+        model.addAttribute("activePage", "reviews");
         return "seller/review/detail";
     }
 
@@ -82,6 +83,7 @@ public class SellerReviewController {
         }
         Seller seller = customer.getSeller();
         sellerReviewService.replyToReview(seller.getId(), reviewId, replyContent);
-        return "redirect:/seller/reviews/" + reviewId;
+        // Sau khi phản hồi, chuyển về trang danh sách
+        return "redirect:/seller/reviews?replied=1";
     }
 } 

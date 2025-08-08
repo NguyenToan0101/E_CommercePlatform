@@ -20,14 +20,15 @@ public class SellerReviewServiceImpl implements SellerReviewService {
     private ProductRepository productRepository;
     @Autowired
     private ReviewRepository reviewRepository;
-    @Autowired
-    private ReviewsImageRepository reviewsImageRepository;
 
     @Autowired
     private org.example.ecommerce.repository.seller.ShopRepo shopRepo;
 
     @Autowired
     private org.example.ecommerce.repository.ReviewReplyRepository reviewReplyRepository;
+
+    @Autowired
+    private ProductimageRepository productimageRepository;
 
     @Override
     public List<SellerReviewDTO> getReviewsForSeller(Integer sellerId, Integer productId, Integer rating, Boolean hasImage, String fromDate, String toDate) {
@@ -68,7 +69,14 @@ public class SellerReviewServiceImpl implements SellerReviewService {
         // Map sang DTO
         return reviews.stream().map(r -> {
             Product p = r.getProductid();
-            String productImage = (p.getProductimages() != null && !p.getProductimages().isEmpty()) ? p.getProductimages().iterator().next().getImageurl() : null;
+            String productImage;
+            try {
+                productImage = (p != null && p.getId() != null)
+                        ? productimageRepository.findFirstImageUrlByProductId(p.getId())
+                        : null;
+            } catch (Exception ex) {
+                productImage = null;
+            }
             List<String> reviewImages = r.getReviewsImages() != null ? r.getReviewsImages().stream().map(ReviewsImage::getImageUrl).collect(Collectors.toList()) : Collections.emptyList();
             String customerName = (r.getOrderitemid() != null && r.getOrderitemid().getOrderid() != null && r.getOrderitemid().getOrderid().getCustomerid() != null)
                     ? r.getOrderitemid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";
@@ -101,7 +109,14 @@ public class SellerReviewServiceImpl implements SellerReviewService {
         Review r = reviewOpt.get();
         if (r.getProductid() == null || !productIds.contains(r.getProductid().getId())) return null;
         Product p = r.getProductid();
-        String productImage = (p.getProductimages() != null && !p.getProductimages().isEmpty()) ? p.getProductimages().iterator().next().getImageurl() : null;
+        String productImage;
+        try {
+            productImage = (p != null && p.getId() != null)
+                    ? productimageRepository.findFirstImageUrlByProductId(p.getId())
+                    : null;
+        } catch (Exception ex) {
+            productImage = null;
+        }
         List<String> reviewImages = r.getReviewsImages() != null ? r.getReviewsImages().stream().map(ReviewsImage::getImageUrl).toList() : List.of();
         String customerName = (r.getOrderitemid() != null && r.getOrderitemid().getOrderid() != null && r.getOrderitemid().getOrderid().getCustomerid() != null)
                 ? r.getOrderitemid().getOrderid().getCustomerid().getFirstname() : "Ẩn danh";

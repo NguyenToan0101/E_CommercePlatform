@@ -2,612 +2,600 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat với Shop</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary-black: #1a2233;
-            --secondary-black: #222b45;
-            --accent-gray: #e0e7ef;
-            --light-gray: #f5f7fa;
-            --border-gray: #e5eaf2;
-            --text-gray: #6b7280;
-            --white: #ffffff;
-            --gold-accent: #f7c873;
-            --success-green: #10b981;
-            --error-red: #dc2626;
-            --orange-accent: #ff7a45;
-            --blue-accent: #3b82f6;
-            --shopee-orange: #ee4d2d;
-            --shadow-light: rgba(16, 42, 67, 0.04);
-            --shadow-medium: rgba(16, 42, 67, 0.10);
-            --shadow-heavy: rgba(16, 42, 67, 0.18);
-            --gradient-start: #0a4d68;
-            --gradient-mid: #088395;
-            --gradient-end: #05bfdb;
-            --gradient-light-end: #8de0a6;
-            --primary: #088395;
-            --accent: #F7EEDD;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #e0f7fa 0%, #f5fafd 100%);
-            color: #111 !important;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(90deg, #e8e7e7 0%, #d8ebed 100%);
+            height: 100vh;
+            overflow: hidden;
         }
-        h1, h2, h3, h4, h5, h6, p, a, span, div, label, input, button {
-            color: #111 !important;
-        }
-
-        /* Header Styles */
-        .main-header {
-            background: linear-gradient(90deg, #0a4d68 0%, #05bfdb 100%);
-            box-shadow: 0 2px 16px var(--shadow-light);
-            border-radius: 0 0 18px 18px;
-            padding: 0 32px;
-            height: 88px;
+        .chat-container {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .header-left { display: flex; align-items: center; gap: 18px; }
-        .logo { font-size: 2.6rem; font-weight: 700; color: #111 !important; letter-spacing: 1px; }
-        .logo-img {
-            height: 80px !important;
-            width: auto !important;
-            display: block;
-            margin-right: 8px;
-            filter: drop-shadow(0 2px 8px #05bfdb33);
-        }
-        .search-bar {
-            flex: unset;
+            height: 100vh;
+            max-width: 1400px;
             margin: 0 auto;
-            display: flex;
-            align-items: center;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px var(--shadow-light);
-            padding: 0 16px;
-            width: 900px;
-            border: 2px solid #05bfdb22;
-        }
-        .search-bar input {
-            border: none;
-            background: transparent;
-            font-size: 1.1rem;
-            flex: 1;
-            padding: 12px 0;
-            outline: none;
-            color: #111 !important;
-        }
-        .search-bar button {
-            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            margin-left: 8px;
-            transition: background 0.2s;
-            box-shadow: 0 2px 8px var(--shadow-light);
-        }
-        .search-bar button:hover { background: #0a4d68; }
-        .header-right { display: flex; align-items: center; gap: 18px; overflow-x: auto; white-space: nowrap; max-width: 250px; }
-        .account-link {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #111 !important;
-            background: none;
-            padding: 0 0 0 2px;
-            text-decoration: none;
-            position: relative;
-            cursor: pointer;
-        }
-        .user-info-box { position: relative; display: flex; align-items: center; gap: 4px; }
-        .user-info-box:hover .account-menu-list,
-        .user-info-box:focus-within .account-menu-list {
-            display: block;
-            opacity: 1;
-            visibility: visible;
-        }
-        .account-menu-list {
-            display: none;
-            position: fixed;
-            top: 72px;
-            right: 32px;
-            background: #fff;
-            min-width: 200px;
-            border-radius: 16px;
-            box-shadow: 0 16px 48px rgba(16,42,67,0.13);
-            border: 1px solid #e0e7ef;
-            overflow: visible;
-            z-index: 9999;
-            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.2s, visibility 0.2s;
-        }
-        @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-8px) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .account-menu-list::before {
-            content: '';
-            position: absolute;
-            top: -6px;
-            right: 20px;
-            width: 12px;
-            height: 12px;
-            background: #fff;
-            border: 1px solid #e0e7ef;
-            border-bottom: none;
-            border-right: none;
-            transform: rotate(45deg);
-        }
-        .account-menu-list a {
-            color: var(--primary-black);
-            padding: 12px 20px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1rem;
-            font-weight: 500;
-            transition: background 0.15s, color 0.15s, transform 0.15s;
-            border-left: 3px solid transparent;
-            white-space: normal;
-            word-break: break-word;
-        }
-        .account-menu-list a:hover {
-            background: var(--accent-gray);
-            border-left-color: var(--gradient-mid);
-            color: var(--gradient-mid);
-            transform: translateX(4px);
-        }
-        .account-menu-list a:not(:last-child) {
-            border-bottom: 1px solid #e0e7ef;
-        }
-        .user-avatar {
-            width: auto;
-            height: auto;
-            background: none;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            font-weight: 600;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: 0;
-            overflow: visible;
-            padding: 0;
-        }
-        .user-avatar img {
-            width: 32px;
-            height: 32px;
-            object-fit: cover;
-            border-radius: 50%;
-            display: block;
-        }
-        .header-cart-link {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 48px;
-            margin-left: 18px;
-            cursor: pointer;
-            text-decoration: none;
-        }
-        .header-cart-link img {
-            height: 40px;
-            width: 40px;
-            filter: drop-shadow(0 2px 8px #05bfdb33);
-        }
-        .header-cart-link:hover img {
-            transform: scale(1.08) rotate(-8deg);
-            filter: drop-shadow(0 4px 16px #08839566);
-        }
-
-        /* Responsive Header */
-        @media (max-width: 900px) {
-            .main-header { padding: 0 8px; }
-            .search-bar { width: 100%; max-width: 600px; }
-        }
-        @media (max-width: 600px) {
-            .main-header { flex-direction: column; height: auto; gap: 8px; }
-            .search-bar { margin: 8px 0; }
-            .footer-content { flex-direction: column; gap: 6px; align-items: center; }
-        }
-
-        /* Footer Styles */
-        .main-footer {
-            background: #e0f7fa;
-            border-top: 1px solid #e5eaf2;
-            padding: 18px 0;
-            margin-top: 0;
-            position: relative;
-            z-index: 10;
-        }
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            color: #088395;
-            font-size: 14px;
-        }
-
-        /* Chat Styles */
-        .chat-wrapper {
-            display: flex;
-            height: calc(100vh - 200px);
-            margin-top: 126px;
-            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
         .sidebar {
-            width: 320px; background: #fff; border-right: 1px solid #e0e7ef;
-            display: flex; flex-direction: column; box-shadow: 2px 0 8px #e0e7ef33;
-        }
-        .sidebar-header { padding: 24px 20px 12px 20px; border-bottom: 1px solid #e0e7ef; }
-        .sidebar-header h2 { margin: 0; font-size: 1.3rem; color: #1976d2; }
-        .search-box { padding: 12px 20px; }
-        .search-box input { width: 100%; padding: 8px 14px; border-radius: 20px; border: 1px solid #e0e7ef; }
-        .conversations-list { flex: 1; overflow-y: auto; list-style: none; margin: 0; padding: 0; }
-        .conversation-item {
-            display: flex; align-items: center; gap: 12px; padding: 14px 20px; cursor: pointer;
-            border-left: 3px solid transparent; transition: background 0.2s;
-        }
-        .conversation-item.active, .conversation-item:hover {
-            background: #e3f2fd; border-left: 3px solid #1976d2;
-        }
-        .conversation-avatar {
-            width: 38px; height: 38px; border-radius: 50%; background: #1976d2; color: #fff;
-            display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 1.1rem;
-        }
-                .main-chat {
-            flex: 1; 
-            display: flex; 
-            flex-direction: column; 
-            background: #f8fafc; 
-            position: relative;
-            height: calc(100vh - 312px);
-            min-height: 500px;
-        }
-        .chat-header {
-            padding: 20px 32px; background: #fff; border-bottom: 1px solid #e0e7ef;
-            font-size: 1.2rem; font-weight: 600; color: #1976d2; display: flex; align-items: center; gap: 12px;
-        }
-                .messages { 
-            flex: 1; 
-            overflow-y: auto; 
-            padding: 24px; 
-            padding-bottom: 24px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 16px; 
-            height: calc(100vh - 400px);
-            scrollbar-width: thin;
-            scrollbar-color: #cbd5e0 #f1f5f9;
-            position: relative;
-        }
-
-        .messages::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .messages::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 3px;
-        }
-
-        .messages::-webkit-scrollbar-thumb {
-            background: #cbd5e0;
-            border-radius: 3px;
-        }
-
-        .messages::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-        .msg-row { display: flex; }
-        .msg-me { justify-content: flex-end; }
-        .msg-shop { justify-content: flex-start; }
-        .msg-bubble {
-            max-width: 60%;
-            padding: 12px 18px;
-            border-radius: 18px;
-            font-size: 1rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            word-break: break-word;
-            position: relative;
-        }
-        .msg-me .msg-bubble {
-            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
-            color: #fff;
-            border-bottom-right-radius: 4px;
-        }
-        .msg-shop .msg-bubble {
-            background: #fff;
-            color: #1e293b;
-            border-bottom-left-radius: 4px;
-            border: 1px solid #e0e7ef;
-        }
-        .msg-time { font-size: 0.85rem; color: #888; margin-top: 2px; }
-        .chat-input-bar {
+            width: 350px;
+            background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            border-right: 1px solid #e2e8f0;
             display: flex;
-            gap: 12px;
-            padding: 20px 24px;
-            background: #fff;
-            border-top: 1px solid #e0e7ef;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 1000;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-            min-height: 80px;
-            align-items: center;
+            flex-direction: column;
+            position: relative;
         }
-        .chat-input-bar input {
-            flex: 1; padding: 12px 18px; border-radius: 24px; border: 1.5px solid #d1d5db; font-size: 0.95rem;
-            transition: border-color 0.2s; background: #fff; color: #1e293b; min-height: 48px;
+        .sidebar-header {
+            padding: 25px 20px;
+            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
-        .chat-input-bar input:focus {
-            outline: none; border-color: #1976d2; box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.1);
+        .sidebar-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: shimmer 3s ease-in-out infinite;
         }
-        .chat-input-bar button {
-            background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%); color: #fff; border: none; border-radius: 24px;
-            padding: 12px 24px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: all 0.2s;
-            display: flex; align-items: center; gap: 8px; min-width: 80px; justify-content: center; min-height: 48px;
+        @keyframes shimmer {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
         }
-        .chat-input-bar button:hover {
-            transform: translateY(-1px); box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
+        .sidebar-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 0;
+            position: relative;
+            z-index: 1;
         }
-        @media (max-width: 900px) {
-            .chat-wrapper { flex-direction: column; }
-            .sidebar { width: 100vw; height: 180px; flex-direction: row; overflow-x: auto; }
-            .main-chat { flex: 1; }
+        .sidebar-header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            margin-top: 5px;
+            position: relative;
+            z-index: 1;
         }
-
-        @media (max-width: 768px) {
-            .chat-wrapper { flex-direction: column; }
-            .sidebar { width: 100vw; height: 150px; flex-direction: row; overflow-x: auto; }
-                        .main-chat { 
-                flex: 1; 
-                position: relative;
-                height: calc(100vh - 150px);
-            }
-                        .messages { 
-                padding: 16px; 
-                padding-bottom: 16px; 
-                height: calc(100vh - 250px);
-            }
-            .chat-input-bar {
-                padding: 16px;
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                z-index: 1000;
-                background: #fff;
-                border-top: 1px solid #e0e7ef;
-                box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-                min-height: 80px;
-                align-items: center;
-            }
+        .search-section {
+            padding: 20px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .search-container {
+            position: relative;
+        }
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            font-size: 1.1rem;
         }
         .search-results {
-            background: #fff;
-            border: 1px solid #ddd;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             max-height: 200px;
             overflow-y: auto;
-            position: absolute;
-            z-index: 10;
-            width: 100%;
+            z-index: 1000;
+            margin-top: 5px;
         }
-        .search-results div {
-            padding: 8px 12px;
+        .search-result-item {
+            padding: 12px 15px;
             cursor: pointer;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid #f1f5f9;
         }
-        .search-results div:hover {
-            background: #f0f0f0;
+        .search-result-item:hover {
+            background: #f8fafc;
         }
-        .start-chat-section { margin-bottom: 1rem; }
-
-        /* Chat Image Styles */
-        .chat-image-btn {
-            background: #f1f5f9 !important;
-            color: #64748b !important;
-            border: none;
+        .search-result-item:last-child {
+            border-bottom: none;
+        }
+        .conversations-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 0;
+        }
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+        }
+        .conversation-item:hover {
+            background: rgba(79, 70, 229, 0.05);
+            border-left-color: #4f46e5;
+        }
+        .conversation-item.active {
+            background: linear-gradient(90deg, rgba(79, 70, 229, 0.1) 0%, rgba(124, 58, 237, 0.05) 100%);
+            border-left-color: #4f46e5;
+        }
+        .conversation-avatar {
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            padding: 12px 16px;
-            margin-right: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-height: 48px;
+            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-right: 15px;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .conversation-info {
+            flex: 1;
+        }
+        .conversation-name {
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+        .conversation-status {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            position: relative;
+            height: 100vh;
+        }
+        .chat-header {
+            padding: 20px 30px;
+            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
+        }
+        .chat-header-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        .chat-header-info h3 {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+        .chat-header-info .status {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        .messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 100px;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            height: calc(100vh - 160px);
+        }
+        .messages-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .messages-container::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .messages-container::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 4px;
+        }
+        .messages-container::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .message-row {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        .message-row.sent {
+            align-items: flex-end;
+        }
+        .message-row.received {
+            align-items: flex-start;
+        }
+        /* General message bubble styling */
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 20px; /* Default for text bubbles */
+            position: relative;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Default shadow for text bubbles */
+            animation: messageSlide 0.3s ease-out;
         }
 
-        .chat-image-btn:hover {
-            background: #e2e8f0 !important;
-            color: #475569 !important;
-            transform: none !important;
-            box-shadow: none !important;
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Styling for sent text bubbles */
+        .message-row.sent .message-bubble {
+            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            color: white;
+            border-bottom-right-radius: 5px;
         }
 
-        .msg-image {
-            max-width: 200px;
-            max-height: 200px;
-            border-radius: 12px;
+        /* Styling for received text bubbles */
+        .message-row.received .message-bubble {
+            background: white;
+            color: #1e293b;
+            border: 1px solid #e2e8f0;
+            border-bottom-left-radius: 5px;
+        }
+
+        /* Styling for images within bubbles */
+        .message-image {
+            width: 100%; /* Make image fill its container */
+            height: auto; /* Maintain aspect ratio */
+            max-width: 200px; /* Max width for images in chat */
+            max-height: 200px; /* Max height for images in chat */
+            border-radius: 8px; /* Apply rounded corners to the image itself */
+            display: block; /* Remove extra space below image */
+        }
+
+        /* Specific styling for message bubbles that contain ONLY an image */
+        .message-bubble:has(img:only-child) {
+            padding: 0; /* Remove padding */
+            border-radius: 8px; /* Apply rounded corners to the bubble itself */
+            overflow: hidden; /* Clip image corners */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Apply subtle shadow */
+        }
+
+        /* Specific styling for SENT message bubbles that contain ONLY an image */
+        .message-row.sent .message-bubble:has(img:only-child) {
+            background: transparent; /* No background gradient for image-only sent bubbles */
+            border: none; /* No border for image-only sent bubbles */
+            border-bottom-right-radius: 8px; /* Ensure consistent border-radius */
+        }
+
+        /* Specific styling for RECEIVED message bubbles that contain ONLY an image */
+        .message-row.received .message-bubble:has(img:only-child) {
+            background: white; /* White background for image-only received bubbles */
+            border: 1px solid #e2e8f0; /* Light border for image-only received bubbles */
+            border-bottom-left-radius: 8px; /* Ensure consistent border-radius */
+        }
+
+        .message-content {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+        .message-image:hover {
+            transform: scale(1.02);
+        }
+        .message-time {
+            font-size: 0.8rem;
+            margin-top: 2px;
+            color: #64748b;
+            align-self: flex-end;
+            padding: 0 5px;
+        }
+        .message-row.received .message-time {
+            align-self: flex-start;
+        }
+        .chat-input-container {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            left: 350px;
+            padding: 20px 30px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            background: #f8fafc;
+        }
+        .chat-input:focus {
+            outline: none;
+            border-color: #4f46e5;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        .chat-button {
+            width: 45px;
+            height: 45px;
+            border: none;
+            border-radius: 50%;
             cursor: pointer;
-            transition: transform 0.2s;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
         }
-
-        .msg-image:hover {
+        .image-button {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+        .image-button:hover {
+            background: #e2e8f0;
+            color: #475569;
             transform: scale(1.05);
         }
-
-        /* Image Modal Styles */
+        .send-button {
+            background: linear-gradient(90deg, #088395 0%, #05bfdb 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+        }
+        .empty-state {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 40px;
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+        }
+        .empty-state-icon {
+            font-size: 4rem;
+            color: #cbd5e0;
+            margin-bottom: 20px;
+        }
+        .empty-state h3 {
+            font-size: 1.5rem;
+            color: #475569;
+            margin-bottom: 10px;
+        }
+        .empty-state p {
+            color: #64748b;
+            font-size: 1rem;
+        }
         .image-modal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.9);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
         }
-
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
         .image-modal-content {
-            max-width: 90%;
-            max-height: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            width: 90%;
+            height: auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-
         .image-modal-content img {
-            width: 100%;
-            height: 100%;
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             border-radius: 8px;
         }
-
         .image-modal-close {
             position: absolute;
-            top: -40px;
-            right: 0;
-            color: #fff;
-            font-size: 2rem;
+            top: 10px;
+            right: 10px;
+            color: #333;
+            font-size: 1.8rem;
             cursor: pointer;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.8);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 35px;
+            height: 35px;
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: background 0.3s ease, color 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-
         .image-modal-close:hover {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(255, 255, 255, 1);
+            color: #000;
+        }
+        @media (max-width: 768px) {
+            .chat-container {
+                flex-direction: column;
+                border-radius: 0;
+            }
+            .sidebar {
+                width: 100%;
+                height: 200px;
+                flex-direction: row;
+                overflow-x: auto;
+            }
+            .conversations-list {
+                display: flex;
+                flex-direction: row;
+                padding: 10px;
+                gap: 10px;
+            }
+            .conversation-item {
+                min-width: 200px;
+                flex-shrink: 0;
+            }
+            .main-chat {
+                height: calc(100vh - 200px);
+            }
+            .messages-container {
+                height: calc(100vh - 360px);
+                padding-bottom: 20px;
+            }
+            .chat-input-container {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 15px 20px;
+            }
+            .message-bubble {
+                max-width: 85%;
+            }
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-<!-- Header Top Bar -->
-<div class="header-top-bar" style="background: #fff; color: #111; font-size: 1rem; padding: 0 32px; height: 38px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #e5eaf2;">
-    <div class="header-top-left" style="display: flex; align-items: center; gap: 18px;">
-        <a th:href="@{/seller}" style="color: #111; text-decoration: none; font-weight: 600;">Kênh Người Bán</a>
-        <span style="color: #bbb;">|</span>
-        <span style="font-weight: 600; color: #111;">Kết nối</span>
-        <a href="#" style="margin-left: 6px; display: inline-flex; align-items: center;" title="Facebook">
-            <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#1877F3"/><path d="M21.333 16.001h-3.2v8h-3.2v-8h-2.133v-2.667h2.133v-1.6c0-2.133 1.067-3.2 3.2-3.2h2.133v2.667h-1.6c-.267 0-.533.267-.533.533v1.6h2.133l-.267 2.667z" fill="#fff"/></svg>
-        </a>
-        <a href="#" style="margin-left: 2px; display: inline-flex; align-items: center;" title="Instagram">
-            <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><radialGradient id="ig1" cx="16" cy="16" r="16" gradientUnits="userSpaceOnUse"><stop stop-color="#FFD600"/><stop offset="0.5" stop-color="#FF0069"/><stop offset="1" stop-color="#2827FF"/></radialGradient><circle cx="16" cy="16" r="16" fill="url(#ig1)"/><rect x="9" y="9" width="14" height="14" rx="4" fill="#fff"/><circle cx="16" cy="16" r="3.5" fill="#FF0069"/><circle cx="21.5" cy="10.5" r="1.5" fill="#FFD600"/></svg>
-        </a>
-    </div>
-    <div class="header-top-right" style="display: flex; align-items: center; gap: 18px;">
-        <a th:href="@{/policies}" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"></svg> Chính sách sử dụng</a>
-        <a href="#" style="color: #1877F3; display: flex; align-items: center; gap: 4px; text-decoration: none; font-weight: 600;"><svg width="18" height="18" fill="none" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6V11c0-3.07-1.63-5.64-5-6.32V4a1 1 0 1 0-2 0v.68C7.63 5.36 6 7.92 6 11v5l-1.29 1.29A.996.996 0 0 0 5 19h14a.996.996 0 0 0 .71-1.71L18 16z" fill="#1877F3"/></svg> Thông Báo</a>
-   
-        <th:block th:if="${customer}">
-            <div class="user-info-box">
-                <div class="user-avatar" th:if="${customer.image != null && !#strings.isEmpty(customer.image)}" style="background: none;">
-                    <img th:src="@{${customer.image}}" alt="avatar" style="width:32px;height:32px;border-radius:50%;object-fit:cover;" />
-                </div>
-                <span class="user-avatar" th:if="${customer.image == null || #strings.isEmpty(customer.image)}" th:text="${customer.firstname.substring(0,1)}"></span>
-                <a class="account-link" th:text="${customer.firstname + ' ' + customer.lastname}" tabindex="0" style="color: #111 !important; font-weight: 700;"></a>
-                <div class="account-menu-list">
-                    <a th:href="@{/customers/profile}">Tài khoản của tôi</a>
-                    <a th:href="@{/wallet}">Ví của tôi</a>
-                    <a th:href="@{/wishlist}">Danh sách yêu thích</a>
-                    <a th:href="@{/orders}">Đơn mua</a>
-                    <a th:href="@{/logout}">Đăng xuất</a>
-                </div>
-            </div>
-        </th:block>
-
-    </div>
-</div>
-<!-- Main Header -->
-<header class="main-header">
-    <div class="header-left" style="display: flex; align-items: center; gap: 18px;">
-        <a th:href="@{/home}" style="display: flex; align-items: center; gap: 8px; text-decoration: none;">
-            <img src="/logo/logo.png" alt="Logo" class="logo-img" />
-        </a>
-    </div>
-    <form class="search-bar" action="/search_name" method="GET" style="max-width: 900px; margin: 0 auto;">
-        <input type="text" name="keyword" placeholder="Tìm kiếm sản phẩm, thương hiệu, danh mục..." />
-        <button type="submit" aria-label="Tìm kiếm">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/></svg>
-        </button>
-    </form>
-    <a href="/cart" class="header-cart-link" title="Giỏ hàng">
-        <img src="/logo/cart.png" alt="Giỏ hàng" />
-    </a>
-</header>
-<div class="chat-wrapper">
-    <!-- Sidebar -->
+<div class="chat-container">
     <div class="sidebar">
         <div class="sidebar-header">
-            <h2>Shop đã chat</h2>
+            <h2><i class="fas fa-comments"></i> Tin nhắn</h2>
+            <div class="subtitle">Kết nối với các shop</div>
         </div>
-        <!-- Ô tìm shop/tạo hội thoại mới -->
-        <div class="start-chat-section" style="position:relative; margin-bottom:1rem; padding: 0 20px;">
-          <input type="text" id="shop-search-input" placeholder="Nhập tên shop để bắt đầu chat mới..." autocomplete="off" style="width:100%;padding:8px;" />
-          <div id="shop-search-results" class="search-results" style="display:block;"></div>
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" id="shop-search-input" class="search-input"
+                       placeholder="Tìm kiếm shop để chat..." autocomplete="off">
+                <i class="fas fa-search search-icon"></i>
+                <div id="shop-search-results" class="search-results" style="display: none;"></div>
+            </div>
         </div>
-        <!-- Danh sách hội thoại -->
-        <ul class="conversations-list" id="conversationsList">
-            <li th:each="conv : ${conversations}"
-                th:classappend="${conversation != null and conv.id == conversation.id} ? 'conversation-item active' : 'conversation-item'">
-                <a th:href="@{'/customer/chat?conversationId=' + ${conv.id}}" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit;">
+        <div class="conversations-list">
+            <div th:each="conv : ${conversations}"
+                 th:classappend="${conversation != null and conv.id == conversation.id} ? 'conversation-item active' : 'conversation-item'">
+                <a th:href="@{'/customer/chat?conversationId=' + ${conv.id}}"
+                   style="display: flex; align-items: center; text-decoration: none; color: inherit; width: 100%;">
                     <div class="conversation-avatar" th:text="${conv.sellerid.shop.shopname.substring(0,1)}"></div>
-                    <span th:text="${conv.sellerid.shop.shopname}"></span>
+                    <div class="conversation-info">
+                        <div class="conversation-name" th:text="${conv.sellerid.shop.shopname}"></div>
+                        <div class="conversation-status">Đang hoạt động</div>
+                    </div>
                 </a>
-            </li>
-        </ul>
+            </div>
+        </div>
     </div>
-    <!-- Main chat area -->
     <div class="main-chat">
-        <div th:if="${conversation == null}" class="chat-header" style="justify-content:center;">
-            <span>Chọn một shop để bắt đầu chat!</span>
+        <div th:if="${conversation == null}" class="empty-state">
+            <div class="empty-state-icon">
+                <i class="fas fa-comment-dots"></i>
+            </div>
+            <h3>Chào mừng đến với Chat</h3>
+            <p>Chọn một cuộc trò chuyện hoặc tìm kiếm shop để bắt đầu nhắn tin</p>
         </div>
         <div th:if="${conversation != null}">
             <div class="chat-header">
-                <i class="fas fa-store"></i>
-                <span th:text="${conversation.sellerid.shop.shopname}"></span>
-            </div>
-            <div class="messages" id="messages">
-                <div th:each="vw : ${messageViews}" th:classappend="${vw.message.senderid == conversation.customerid.id} ? 'msg-row msg-me' : 'msg-row msg-shop'">
-                    <div class="msg-bubble">
-                        <!-- Text message -->
-                        <div th:if="${vw.message.content != null and !vw.message.content.isEmpty()}"
-                             class="msg-content" th:text="${vw.message.content}"></div>
-                        <!-- Image message -->
-                        <img th:if="${vw.message.imageUrl != null and !vw.message.imageUrl.isEmpty()}"
-                             class="msg-image" th:src="${vw.message.imageUrl}"
-                             alt="Chat image" onclick="openImageModal(this.src)">
-                    <div class="msg-time" th:text="${#dates.format(vw.message.sentat, 'HH:mm dd/MM')}"></div>
-                    </div>
+                <div class="chat-header-avatar" th:text="${conversation.sellerid.shop.shopname.substring(0,1)}"></div>
+                <div class="chat-header-info">
+                    <h3 th:text="${conversation.sellerid.shop.shopname}"></h3>
+                    <div class="status">Đang hoạt động</div>
                 </div>
             </div>
-            <div class="chat-input-bar">
-                <input type="text" id="msgInput" placeholder="Nhập tin nhắn..." autocomplete="off" />
-                <input type="file" id="imageInput" accept="image/*" style="display: none;" />
-                <button id="imageBtn" class="chat-image-btn"><i class="fas fa-image"></i></button>
-                <button id="sendBtn"><i class="fas fa-paper-plane"></i> Gửi</button>
+            <div class="messages-container" id="messages">
+                <div th:each="vw : ${messageViews}"
+                     th:classappend="${vw.message.senderid == conversation.customerid.id} ? 'message-row sent' : 'message-row received'">
+                    <div class="message-bubble">
+                        <div th:if="${vw.message.content != null and !vw.message.content.isEmpty()}"
+                             class="message-content" th:text="${vw.message.content}"></div>
+                        <img th:if="${vw.message.imageUrl != null and !vw.message.imageUrl.isEmpty()}"
+                             class="message-image" th:src="${vw.message.imageUrl}"
+                             alt="Chat image" onclick="openImageModal(this.src)">
+                    </div>
+                    <div class="message-time" th:text="${#dates.format(vw.message.sentat, 'HH:mm dd/MM')}"></div>
+                </div>
+            </div>
+            <div class="chat-input-container">
+                <input type="text" id="msgInput" class="chat-input"
+                       placeholder="Nhập tin nhắn..." autocomplete="off">
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                <button id="imageBtn" class="chat-button image-button" title="Gửi ảnh">
+                    <i class="fas fa-image"></i>
+                </button>
+                <button id="sendBtn" class="chat-button send-button" title="Gửi tin nhắn">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -615,12 +603,10 @@
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 <script th:inline="javascript">
-    // Realtime chỉ khởi tạo nếu có hội thoại đang chọn
     const conversationId = /*[[${conversation != null} ? ${conversation.id} : 0]]*/ 0;
     const customerId = /*[[${conversation != null} ? ${conversation.customerid.id} : 0]]*/ 0;
     const sellerId = /*[[${conversation != null} ? ${conversation.sellerid.id} : 0]]*/ 0;
     let stompClient = null;
-
     if (conversationId > 0) {
         function connectWS() {
             const socket = new SockJS('/ws');
@@ -635,44 +621,40 @@
         function addMessage(msg) {
             const messages = document.getElementById('messages');
             const row = document.createElement('div');
-            row.className = (msg.senderid === customerId) ? 'msg-row msg-me' : 'msg-row msg-shop';
-
+            row.className = (msg.senderid === customerId) ? 'message-row sent' : 'message-row received';
             const bubble = document.createElement('div');
-            bubble.className = 'msg-bubble';
-
-            // Text content
+            bubble.className = 'message-bubble';
             if (msg.content && msg.content.trim() !== '') {
                 const content = document.createElement('div');
-                content.className = 'msg-content';
+                content.className = 'message-content';
                 content.textContent = msg.content;
                 bubble.appendChild(content);
             }
-
-            // Image content
             if (msg.imageUrl && msg.imageUrl.trim() !== '') {
                 const image = document.createElement('img');
-                image.className = 'msg-image';
+                image.className = 'message-image';
                 image.src = msg.imageUrl;
                 image.alt = 'Chat image';
                 image.onclick = function() { openImageModal(this.src); };
                 bubble.appendChild(image);
             }
-
+            row.appendChild(bubble);
             const time = document.createElement('div');
-            time.className = 'msg-time';
+            time.className = 'message-time';
             time.textContent = new Date(msg.sentat).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) + ' ' +
                 new Date(msg.sentat).toLocaleDateString();
-            bubble.appendChild(time);
-
-            row.appendChild(bubble);
+            row.appendChild(time);
             messages.appendChild(row);
             messages.scrollTop = messages.scrollHeight;
         }
         document.getElementById('sendBtn').onclick = function() { sendMessage(); };
-        document.getElementById('msgInput').onkeydown = function(e) { if (e.key === 'Enter') sendMessage(); };
-        document.getElementById('imageBtn').onclick = function() { document.getElementById('imageInput').click(); };
+        document.getElementById('msgInput').onkeydown = function(e) {
+            if (e.key === 'Enter') sendMessage();
+        };
+        document.getElementById('imageBtn').onclick = function() {
+            document.getElementById('imageInput').click();
+        };
         document.getElementById('imageInput').onchange = function() { uploadImage(); };
-
         function sendMessage() {
             const input = document.getElementById('msgInput');
             const content = input.value.trim();
@@ -681,29 +663,22 @@
             stompClient.send('/app/chat.send/' + conversationId, {}, JSON.stringify(msg));
             input.value = '';
         }
-
         function uploadImage() {
             const fileInput = document.getElementById('imageInput');
             const file = fileInput.files[0];
             if (!file) return;
-
-            // Kiểm tra loại file
             if (!file.type.startsWith('image/')) {
                 alert('Chỉ được chọn file ảnh!');
                 fileInput.value = '';
                 return;
             }
-
-            // Kiểm tra kích thước file (5MB)
             if (file.size > 5 * 1024 * 1024) {
                 alert('File quá lớn! Tối đa 5MB.');
                 fileInput.value = '';
                 return;
             }
-
             const formData = new FormData();
             formData.append('image', file);
-
             fetch('/customer/chat/upload-image', {
                 method: 'POST',
                 body: formData
@@ -724,21 +699,73 @@
                 });
         }
         connectWS();
+        setTimeout(() => {
+            const messages = document.getElementById('messages');
+            if (messages) {
+                messages.scrollTop = messages.scrollHeight;
+            }
+        }, 100);
     }
-
-    // Image modal functions
+    document.addEventListener('DOMContentLoaded', function() {
+        const input = document.getElementById('shop-search-input');
+        const results = document.getElementById('shop-search-results');
+        let timeout = null;
+        input.addEventListener('input', function() {
+            clearTimeout(timeout);
+            const query = input.value.trim();
+            if (query.length < 2) {
+                results.style.display = 'none';
+                return;
+            }
+            timeout = setTimeout(() => {
+                fetch(`/customer/chat/find-shop?shopName=${encodeURIComponent(query)}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        results.innerHTML = '';
+                        if (data.length === 0) {
+                            results.innerHTML = '<div class="search-result-item">Không tìm thấy shop phù hợp</div>';
+                        } else {
+                            data.forEach(shop => {
+                                const div = document.createElement('div');
+                                div.className = 'search-result-item';
+                                div.innerHTML = `
+                                        <strong>${shop.shopname}</strong>
+                                        <small style="display: block; color: #64748b; margin-top: 2px;">
+                                            ${shop.status === 'ACTIVE' ? 'Đang hoạt động' : 'Không hoạt động'}
+                                        </small>
+                                    `;
+                                div.onclick = () => {
+                                    fetch('/customer/chat/start', {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                                        body: `shopId=${shop.sellerid.id}`
+                                    }).then(() => {
+                                        window.location.reload();
+                                    });
+                                };
+                                results.appendChild(div);
+                            });
+                        }
+                        results.style.display = 'block';
+                    });
+            }, 300);
+        });
+        document.addEventListener('click', function(e) {
+            if (!input.contains(e.target) && !results.contains(e.target)) {
+                results.style.display = 'none';
+            }
+        });
+    });
     function openImageModal(imageSrc) {
         const modal = document.createElement('div');
         modal.className = 'image-modal';
         modal.innerHTML = `
-            <span class="image-modal-close">&times;</span>
-            <div class="image-modal-content">
-                <img src="${imageSrc}" alt="Full size image">
-            </div>
-        `;
+                <div class="image-modal-content">
+                    <span class="image-modal-close">&times;</span>
+                    <img src="${imageSrc}" alt="Full size image">
+                </div>
+            `;
         document.body.appendChild(modal);
-
-        // Close modal
         modal.querySelector('.image-modal-close').onclick = function() {
             document.body.removeChild(modal);
         };
@@ -749,92 +776,6 @@
         };
     }
 </script>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const input = document.getElementById('shop-search-input');
-  const results = document.getElementById('shop-search-results');
-  let timeout = null;
-  input.addEventListener('input', function() {
-    clearTimeout(timeout);
-    const query = input.value.trim();
-    if (query.length < 2) {
-      results.innerHTML = '';
-      return;
-    }
-    timeout = setTimeout(() => {
-      fetch(`/customer/chat/find-shop?shopName=${encodeURIComponent(query)}`)
-        .then(res => res.json())
-        .then(data => {
-          results.innerHTML = '';
-          if (data.length === 0) {
-            results.innerHTML = '<div>Không tìm thấy shop phù hợp</div>';
-            return;
-          }
-          data.forEach(shop => {
-            const div = document.createElement('div');
-            div.textContent = shop.shopname + (shop.status === 'ACTIVE' ? '' : ' (không hoạt động)');
-            div.style.cursor = 'pointer';
-            div.onclick = () => {
-              fetch('/customer/chat/start', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `shopId=${shop.id}`
-              }).then(() => {
-                window.location.reload();
-              });
-            };
-            results.appendChild(div);
-          });
-        });
-    }, 300);
-  });
-  document.addEventListener('click', function(e) {
-    if (!input.contains(e.target) && !results.contains(e.target)) {
-      results.innerHTML = '';
-    }
-  });
-});
 
-    // Header menu functionality
-    const userInfoBox = document.querySelector('.user-info-box');
-    const menu = document.querySelector('.account-menu-list');
-    let hideTimeout;
-    if (userInfoBox && menu) {
-        userInfoBox.addEventListener('mouseenter', () => {
-            clearTimeout(hideTimeout);
-            menu.style.display = 'block';
-            menu.style.opacity = '1';
-            menu.style.visibility = 'visible';
-        });
-        userInfoBox.addEventListener('mouseleave', () => {
-            hideTimeout = setTimeout(() => {
-                menu.style.display = '';
-                menu.style.opacity = '';
-                menu.style.visibility = '';
-            }, 400);
-        });
-        menu.addEventListener('mouseenter', () => {
-            clearTimeout(hideTimeout);
-            menu.style.display = 'block';
-            menu.style.opacity = '1';
-            menu.style.visibility = 'visible';
-        });
-        menu.addEventListener('mouseleave', () => {
-            hideTimeout = setTimeout(() => {
-                menu.style.display = '';
-                menu.style.opacity = '';
-                menu.style.visibility = '';
-            }, 400);
-        });
-    }
-</script>
-
-<!-- Footer -->
-<footer class="main-footer">
-    <div class="footer-content">
-        <div>© 2024 E-Commerce Platform</div>
-        <div>Liên hệ: support@example.com</div>
-    </div>
-</footer>
 </body>
-</html> 
+</html>

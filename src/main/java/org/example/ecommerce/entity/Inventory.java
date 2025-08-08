@@ -6,18 +6,21 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.LinkedHashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "inventory")
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"productid", "cartitems", "orderitems"})
 public class Inventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,9 +57,6 @@ public class Inventory {
     @Column(name = "price")
     private BigDecimal price;
 
-
-
-
     @Column(name = "image")
     // @NotEmpty(message = "Ảnh không được để trống") // Đã bỏ validate này để tránh lỗi khi upload file
     private String image;
@@ -82,4 +82,16 @@ public class Inventory {
     @OneToMany(mappedBy = "inventoryid")
     private Set<Orderitem> orderitems = new LinkedHashSet<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Inventory inventory = (Inventory) o;
+        return Objects.equals(id, inventory.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

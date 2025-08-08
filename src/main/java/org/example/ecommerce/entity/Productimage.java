@@ -4,10 +4,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+import java.util.Objects;
 
 @Entity
 @Table(name = "productimages")
+@Getter
+@Setter
+@ToString(exclude = "productid")
 public class Productimage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,35 +27,23 @@ public class Productimage {
     @Column(name = "imageurl", nullable = false, length = Integer.MAX_VALUE)
     private String imageurl;
 
-    @Column(name = "embedding", columnDefinition = "TEXT")
-    private String embedding;
-
-
-    public Integer getId() {
-        return id;
+    @Column(
+            name = "embedding",
+            columnDefinition = "vector(512)"
+    )
+    @org.hibernate.annotations.JdbcTypeCode(java.sql.Types.ARRAY)
+    private Float[] embedding;
+    
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Productimage that = (Productimage) o;
+        return Objects.equals(id, that.id);
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
-
-    public Product getProductid() {
-        return productid;
-    }
-
-    public void setProductid(Product productid) {
-        this.productid = productid;
-    }
-
-    public String getImageurl() {
-        return imageurl;
-    }
-
-    public void setImageurl(String imageurl) {
-        this.imageurl = imageurl;
-    }
-
-    public String getEmbedding() {return embedding;}
-
-    public void setEmbedding(String embedding) {this.embedding = embedding;}
 }

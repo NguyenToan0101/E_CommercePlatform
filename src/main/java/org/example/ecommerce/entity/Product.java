@@ -5,10 +5,11 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -20,9 +21,11 @@ import java.util.LinkedHashSet;
 
 import java.util.List;
 import java.util.Set;
+import java.util.Objects;
 
 @Getter
 @Setter
+@ToString(exclude = {"cartitems", "inventories", "inventoriesView", "orderitems", "productimages", "promotionTargets", "reviews", "wishlists"})
 @Entity
 @Table(name = "products")
 public class Product {
@@ -58,16 +61,16 @@ public class Product {
     private Instant createdat;
 
     @Column(name = "weight")
-    private Integer weight;
+    private Double weight;
 
     @Column(name = "length")
-    private Integer length;
+    private Double length;
 
     @Column(name = "width")
-    private Integer width;
+    private Double width;
 
     @Column(name = "height")
-    private Integer height;
+    private Double height;
 
     @Column(name = "use_variant_shipping")
     private Boolean useVariantShipping = false;
@@ -96,11 +99,11 @@ public class Product {
 
     @OneToMany(mappedBy = "productid")
     private Set<Review> reviews = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "productid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
-
+    @OneToMany(mappedBy = "product_id")
+    private List<RecommenderSystem> recommenderSystems = new ArrayList<>();
 
     public enum Status{
         LOCK,
@@ -109,6 +112,4 @@ public class Product {
         REJECTED,
         HIDDEN
     }
-
-
 }

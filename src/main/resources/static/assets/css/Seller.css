@@ -77,10 +77,25 @@ body {
 }
 
 .nav-item.active {
-    background-color: rgba(78, 205, 196, 0.2);
-    color: white;
+    background: rgba(78, 205, 196, 0.16);
+    color: #fff;
+    position: relative;
     border-left-color: #4ecdc4;
 }
+
+.nav-item.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 3px;
+    background: #4ecdc4;
+    border-radius: 0 2px 2px 0;
+}
+
+.nav-item.active i { color: #4ecdc4; }
+.nav-item.active span { color: #fff; }
 
 .nav-item i {
     width: 20px;
@@ -5576,6 +5591,91 @@ body { background: #f7fafd; font-family: 'Inter', Arial, sans-serif; margin: 0; 
     }
 }
 
+/* Order Status Badges */
+.seller-order-status-badge {
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    display: inline-block;
+    min-width: 120px;
+}
+
+.seller-status-cho_xac_nhan {
+    background-color: #fef3c7;
+    color: #d97706;
+    border: 1px solid #fbbf24;
+}
+
+.seller-status-da_xac_nhan {
+    background-color: #dbeafe;
+    color: #2563eb;
+    border: 1px solid #60a5fa;
+}
+
+.seller-status-cho_lay_hang {
+    background-color: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #7dd3fc;
+}
+
+.seller-status-dang_giao {
+    background-color: #fef7cd;
+    color: #ca8a04;
+    border: 1px solid #facc15;
+}
+
+.seller-status-da_giao {
+    background-color: #dcfce7;
+    color: #16a34a;
+    border: 1px solid #4ade80;
+}
+
+.seller-status-da_huy {
+    background-color: #fee2e2;
+    color: #dc2626;
+    border: 1px solid #f87171;
+}
+
+.seller-status-yeu_cau_tra_hang_hoan_tien {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #ef4444;
+}
+
+/* New: Refunded status */
+.seller-status-da_hoan_tien {
+    background-color: #dbeafe;
+    color: #1e3a8a;
+    border: 1px solid #60a5fa;
+}
+
+/* Payment status badges */
+.payment-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1;
+  border: 1px solid transparent;
+}
+.payment-badge.paid {
+  color: #065f46;
+  background: #d1fae5;
+  border-color: #10b981;
+}
+.payment-badge.unpaid {
+  color: #7c2d12;
+  background: #ffedd5;
+  border-color: #fb923c;
+}
+.payment-badge.refunded {
+  color: #1e3a8a;
+  background: #dbeafe;
+  border-color: #60a5fa;
+}
 
 
 

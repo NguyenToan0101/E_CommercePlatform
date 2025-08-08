@@ -27,6 +27,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.example.ecommerce.common.dto.seller.InventorySimpleDTO;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.example.ecommerce.repository.ProductimageRepository;
+import org.example.ecommerce.repository.ProductImageLite;
 
 @Controller
 @RequestMapping("/seller/products")
@@ -34,6 +36,7 @@ public class ProductController {
 
     @Autowired private ProductService productService;
     @Autowired private CategoryService categoryService;
+    @Autowired private ProductimageRepository productimageRepository;
 
 
     @GetMapping
@@ -71,6 +74,7 @@ public class ProductController {
         model.addAttribute("perPage", size);
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("totalElements", productPage.getTotalElements());
+        model.addAttribute("activePage", "products-all");
         return "seller/product/products";
     }
 
@@ -115,6 +119,7 @@ public class ProductController {
 
         List<CategoryDTO> rootCategoryDTOs = categoryService.convertToDTOList(categoryService.getRootCategories());
         model.addAttribute("rootCategories", rootCategoryDTOs);
+        model.addAttribute("activePage", "products-add");
 
         return "seller/product/create";
     }
@@ -135,12 +140,18 @@ public class ProductController {
             bindingResult.getAllErrors().forEach(error -> System.out.println(error.toString()));
             List<CategoryDTO> rootCategoryDTOs = categoryService.convertToDTOList(categoryService.getRootCategories());
             model.addAttribute("rootCategories", rootCategoryDTOs);
+            model.addAttribute("errorMessage", "Vui lòng kiểm tra lại các trường thông tin sản phẩm.");
+            model.addAttribute("activePage", "products-add");
             return "seller/product/create";
         }
 
         Integer shopId = customer.getSeller().getShop().getId();
-        productService.save(product, images, colorNames, colorImages, shopId);
-        redirectAttributes.addFlashAttribute("successMessage", "Tạo sản phẩm thành công!");
+        try {
+            productService.save(product, images, colorNames, colorImages, shopId);
+            redirectAttributes.addFlashAttribute("successMessage", "Tạo sản phẩm thành công!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage() != null ? e.getMessage() : "Tạo sản phẩm thất bại!");
+        }
         return "redirect:/seller/products";
     }
 
@@ -153,6 +164,10 @@ public class ProductController {
         model.addAttribute("product", product);
         List<CategoryDTO> rootCategoryDTOs = categoryService.convertToDTOList(categoryService.getRootCategories());
         model.addAttribute("rootCategories", rootCategoryDTOs);
+
+        // Load lite images (id, imageurl) only
+        List<ProductImageLite> images = productimageRepository.findLiteByProductId(id);
+        model.addAttribute("images", images);
 
         // Map inventories sang DTO đơn giản
         List<InventorySimpleDTO> inventoryDTOs = product.getInventories().stream().map(inv -> {
@@ -170,6 +185,7 @@ public class ProductController {
         }).collect(Collectors.toList());
 
         model.addAttribute("inventoriesJson", new ObjectMapper().writeValueAsString(inventoryDTOs));
+        model.addAttribute("activePage", "products-all");
         return "seller/product/create";
     }
 

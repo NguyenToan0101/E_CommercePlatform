@@ -32,6 +32,7 @@ public class SellerDashboardController {
         Integer shopId = customer.getSeller().getShop().getId();
         SellerDashboardDTO dashboardData = sellerDashboardService.getDashboardDataByShopId(shopId);
         model.addAttribute("dashboardData", dashboardData);
+        model.addAttribute("activePage", "dashboard");
         
         return "seller/dashboard";
     }

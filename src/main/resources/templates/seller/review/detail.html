@@ -38,11 +38,8 @@
                     <div>
                         <div class="seller-review-detail-product-name" th:text="${review.productName}"></div>
                         <div class="seller-review-detail-rating">
-                            <span th:each="i : ${#numbers.sequence(1, review.rating)}">
-                                <i class="fa-solid fa-star" style="color:#FFD600;"></i>
-                            </span>
-                            <span th:each="i : ${#numbers.sequence(review.rating+1, 5)}">
-                                <i class="fa-regular fa-star" style="color:#FFD600;"></i>
+                            <span th:each="i : ${#numbers.sequence(1,5)}">
+                                <i th:class="${i <= review.rating} ? 'fa-solid fa-star' : 'fa-regular fa-star'" style="color:#FFD600;"></i>
                             </span>
                         </div>
                     </div>
