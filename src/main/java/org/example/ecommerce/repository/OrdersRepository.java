@@ -93,4 +93,6 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
             "ORDER BY o.orderdate DESC " +
             "LIMIT :limit", nativeQuery = true)
     List<Order> findRecentOrdersByShopId(@Param("shopId") Integer shopId, @Param("limit") int limit);
+
+    List<Order> findByCustomeridId(Integer customerId);
 }

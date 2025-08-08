@@ -1,114 +1,3 @@
-//package org.example.ecommerce.entity;
-//
-//import jakarta.persistence.*;
-//
-//import jakarta.validation.Valid;
-//import jakarta.validation.constraints.NotEmpty;
-//import jakarta.validation.constraints.NotNull;
-//import lombok.Data;
-//
-//import org.hibernate.annotations.ColumnDefault;
-//
-//import java.math.BigDecimal;
-//import java.time.Instant;
-//
-//
-//import java.util.ArrayList;
-//import java.util.LinkedHashSet;
-//
-//import java.util.List;
-//import java.util.Set;
-//
-//@Data
-//@Entity
-//@Table(name = "products")
-//public class Product {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Column(name = "productid", nullable = false)
-//    private Integer id;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "shopid")
-//    private Shop shopid;
-//
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "categoryid")
-//    @NotNull(message = "Vui lòng chọn ngành hàng")
-//    private Category categoryid;
-//
-//    @NotNull
-//    @NotEmpty(message = "Tên sản phẩm không được để trống")
-//    @Column(name = "name", nullable = false, length = Integer.MAX_VALUE)
-//    private String name;
-//
-//    @NotEmpty(message = "Mô tả không được để trống")
-//    @Column(name = "description", length = Integer.MAX_VALUE)
-//    private String description;
-//    @Column(name = "price", precision = 18, scale = 2)
-//    private BigDecimal price;
-//    @Column(name = "status", length = Integer.MAX_VALUE)
-//    private String status;
-//
-//    @ColumnDefault("CURRENT_TIMESTAMP")
-//    @Column(name = "createdat")
-//    private Instant createdat;
-//
-//    @Column(name = "weight")
-//    private Double weight;
-//
-//    @Column(name = "length")
-//    private Double length;
-//
-//    @Column(name = "width")
-//    private Double width;
-//
-//    @Column(name = "height")
-//    private Double height;
-//
-//    @Column(name = "use_variant_shipping")
-//    private Boolean useVariantShipping = false;
-//
-//    @Column(name = "locked_until")
-//    private Instant lockedUntil;
-//
-//    @OneToMany(mappedBy = "productid")
-//    private Set<Cartitem> cartitems = new LinkedHashSet<>();
-//
-//    @Valid
-//    @OneToMany(mappedBy = "productid", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private List<Inventory> inventories = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "productid")
-//    private Set<Inventory> inventoriesView = new LinkedHashSet<>();
-//
-//    @OneToMany(mappedBy = "productid")
-//    private Set<Orderitem> orderitems = new LinkedHashSet<>();
-//
-//    @OneToMany(mappedBy = "productid")
-//    private Set<Productimage> productimages = new LinkedHashSet<>();
-//
-//    @OneToMany(mappedBy = "productid")
-//    private Set<PromotionTarget> promotionTargets = new LinkedHashSet<>();
-//
-//    @OneToMany(mappedBy = "productid")
-//    private Set<Review> reviews = new LinkedHashSet<>();
-//
-//    @OneToMany(mappedBy = "productid")
-//    private Set<Wishlist> wishlists = new LinkedHashSet<>();
-//
-//
-//    public enum Status{
-//        LOCK,
-//        AVAILABLE,
-//        PENDING_APPROVAL,
-//        REJECTED,
-//        HIDDEN
-//    }
-//
-//
-//}
-
 package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
@@ -116,9 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import org.hibernate.annotations.ColumnDefault;
 
@@ -126,10 +13,13 @@ import java.math.BigDecimal;
 import java.time.Instant;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 
-@Getter
-@Setter
+import java.util.List;
+import java.util.Set;
+
+@Data
 @Entity
 @Table(name = "products")
 public class Product {
@@ -165,16 +55,16 @@ public class Product {
     private Instant createdat;
 
     @Column(name = "weight")
-    private Integer weight;
+    private Double weight;
 
     @Column(name = "length")
-    private Integer length;
+    private Double length;
 
     @Column(name = "width")
-    private Integer width;
+    private Double width;
 
     @Column(name = "height")
-    private Integer height;
+    private Double height;
 
     @Column(name = "use_variant_shipping")
     private Boolean useVariantShipping = false;

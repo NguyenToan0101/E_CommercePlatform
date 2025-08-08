@@ -15,4 +15,7 @@ public interface CartitemRepository extends JpaRepository<Cartitem, Integer> {
     Cartitem findCartitemByProductidAndInventoryidAndCartid(Product productid, Inventory inventory, Cart cartid);
 
     List<Cartitem> findByCartidAndIdIn(Cart cartid, Collection<Integer> ids);
+    
+    // Method mới cho API tối ưu
+    Cartitem findByCartidAndProductidAndInventoryid(Cart cartid, Product productid, Inventory inventoryid);
 }

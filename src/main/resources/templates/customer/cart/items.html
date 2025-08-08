@@ -433,10 +433,7 @@
 <!-- Toast Container -->
 <div class="toast-container" id="toast-container"></div>
 
-<!-- Loading overlay -->
-<div id="loading-overlay" style="display:none;position:fixed;z-index:99999;top:0;left:0;width:100vw;height:100vh;background:rgba(255,255,255,0.5);align-items:center;justify-content:center;">
-  <div style="border:6px solid #05bfdb;border-top:6px solid #fff;border-radius:50%;width:48px;height:48px;animation:spin 1s linear infinite;"></div>
-</div>
+
 
 <main class="main-content">
   <!-- Flash message display -->
@@ -529,23 +526,16 @@
 </main>
 
 <script>
-  function showLoading() {
-    document.getElementById('loading-overlay').style.display = 'flex';
-  }
-  function hideLoading() {
-    document.getElementById('loading-overlay').style.display = 'none';
-  }
+
   function increaseQuantity(button) {
     const input = button.parentElement.querySelector('.quantity-input');
     input.value = parseInt(input.value) + 1;
-    showLoading();
-      updateCartQuantity(input);
+    updateCartQuantity(input);
   }
   function decreaseQuantity(button) {
     const input = button.parentElement.querySelector('.quantity-input');
     if (parseInt(input.value) > 1) {
       input.value = parseInt(input.value) - 1;
-      showLoading();
       updateCartQuantity(input);
     }
   }
@@ -553,7 +543,6 @@
     input.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
-        showLoading();
         updateCartQuantity(input);
       }
     });
@@ -561,59 +550,132 @@
   async function updateCartQuantity(input) {
     const cartItemRow = input.closest('.cart-item-row');
     const cartItemId = cartItemRow.querySelector('.cart-item-id').value;
-    const productId = cartItemRow.querySelector('.product-id').value;
-    const inventoryId = cartItemRow.querySelector('.inventory-id').value;
     const quantity = parseInt(input.value);
+    
     if (quantity < 1) {
       input.value = 1;
-      hideLoading();
       return;
     }
+
     try {
       input.disabled = true;
-      const formData = new FormData();
-      formData.append('cartItemId', cartItemId);
-      formData.append('productId', productId);
-      formData.append('inventoryId', inventoryId);
-      formData.append('quantity', quantity);
-      const response = await fetch('/cart/update', {
+      
+      const response = await fetch('/cart/api/update', {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `cartItemId=${cartItemId}&quantity=${quantity}`
       });
+
       if (response.ok) {
-        location.reload(true);
+        const data = await response.json();
+        if (data.status === 'UPDATED') {
+          // Cập nhật UI ngay lập tức
+          updateItemTotal(cartItemRow, quantity);
+          updateSummary();
+          
+          // Cập nhật original quantity để theo dõi thay đổi
+          input.dataset.originalQuantity = quantity;
+        } else if (data.status === 'REMOVED') {
+          // Nếu số lượng = 0, xóa item
+          cartItemRow.remove();
+          updateSummary();
+        }
+      } else if (response.status === 401) {
+        window.location.href = '/login';
       } else {
-        hideLoading();
+        alert('Có lỗi xảy ra khi cập nhật số lượng!');
       }
     } catch (error) {
-      hideLoading();
+      console.error('Error:', error);
+      alert('Có lỗi xảy ra khi cập nhật số lượng!');
     } finally {
       input.disabled = false;
     }
   }
+
+  function updateItemTotal(cartItemRow, quantity) {
+    const priceElement = cartItemRow.querySelector('.item-price');
+    const totalElement = cartItemRow.querySelector('.item-total');
+    const checkbox = cartItemRow.querySelector('.item-checkbox');
+    
+    if (priceElement && totalElement) {
+      const priceText = priceElement.textContent.replace(/[^\d]/g, '');
+      const price = parseInt(priceText);
+      const total = price * quantity;
+      totalElement.textContent = formatCurrency(total);
+      
+      // Cập nhật data attributes cho checkbox để summary tính đúng
+      if (checkbox) {
+        checkbox.dataset.quantity = quantity;
+      }
+    }
+  }
   async function removeCartItem(button) {
-    showLoading();
     const cartItemId = button.dataset.cartItemId;
     const cartItemRow = button.closest('.cart-item-row');
+    
+    if (!confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')) {
+      return;
+    }
+
     try {
       button.disabled = true;
-      const formData = new FormData();
-      formData.append('cartItemId', cartItemId);
-      const response = await fetch('/cart/remove', {
+      button.textContent = 'Đang xóa...';
+      
+      const response = await fetch('/cart/api/remove', {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: `cartItemId=${cartItemId}`
       });
+
       if (response.ok) {
-        cartItemRow.remove();
-            location.reload(true);
+        const data = await response.json();
+        if (data.status === 'REMOVED') {
+          // Xóa item khỏi UI ngay lập tức
+          cartItemRow.remove();
+          updateSummary();
+          
+          // Hiển thị thông báo thành công
+          showSuccessMessage('Đã xóa sản phẩm khỏi giỏ hàng!');
+        }
+      } else if (response.status === 401) {
+        window.location.href = '/login';
       } else {
-        button.disabled = false;
-        hideLoading();
+        alert('Có lỗi xảy ra khi xóa sản phẩm!');
       }
     } catch (error) {
+      console.error('Error:', error);
+      alert('Có lỗi xảy ra khi xóa sản phẩm!');
+    } finally {
       button.disabled = false;
-      hideLoading();
+      button.textContent = 'Xóa';
     }
+  }
+
+  function showSuccessMessage(message) {
+    // Tạo thông báo tạm thời
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #4CAF50;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 4px;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    `;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.remove();
+    }, 3000);
   }
   // Header user menu logic
   const userInfoBox = document.querySelector('.user-info-box');
@@ -694,9 +756,52 @@
     const checked = Array.from(document.querySelectorAll('.item-checkbox:checked'));
     if (checked.length === 0) return;
     const ids = checked.map(cb => cb.getAttribute('data-item-id'));
-    showLoading();
-    // Chuyển hướng sang trang preview
-    window.location.href = '/checkout/preview?cartItemIds=' + ids.join('&cartItemIds=');
+    
+    // Disable button để tránh spam
+    const buyBtn = document.getElementById('summary-buy-btn');
+    buyBtn.disabled = true;
+    buyBtn.textContent = 'Đang xử lý...';
+    
+    // Đảm bảo tất cả thay đổi đã được lưu trước khi thanh toán
+    const pendingUpdates = [];
+    checked.forEach(checkbox => {
+      const cartItemRow = checkbox.closest('.cart-item-row');
+      const quantityInput = cartItemRow.querySelector('.quantity-input');
+      const cartItemId = cartItemRow.querySelector('.cart-item-id').value;
+      const currentQuantity = parseInt(quantityInput.value);
+      const originalQuantity = parseInt(quantityInput.dataset.originalQuantity || currentQuantity);
+      
+      if (currentQuantity !== originalQuantity) {
+        pendingUpdates.push({
+          cartItemId: cartItemId,
+          quantity: currentQuantity
+        });
+      }
+    });
+    
+    // Nếu có thay đổi chưa lưu, lưu trước khi chuyển trang
+    if (pendingUpdates.length > 0) {
+      Promise.all(pendingUpdates.map(update => 
+        fetch('/cart/api/update', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          body: `cartItemId=${update.cartItemId}&quantity=${update.quantity}`
+        })
+      )).then(() => {
+        // Sau khi lưu xong, chuyển trang
+        window.location.href = '/checkout/preview?cartItemIds=' + ids.join('&cartItemIds=');
+      }).catch(error => {
+        console.error('Error saving updates:', error);
+        alert('Có lỗi xảy ra khi lưu thay đổi!');
+        buyBtn.disabled = false;
+        buyBtn.textContent = 'Mua Hàng';
+      });
+    } else {
+      // Không có thay đổi, chuyển trang ngay
+      window.location.href = '/checkout/preview?cartItemIds=' + ids.join('&cartItemIds=');
+    }
   });
   // Sticky summary bar logic
   function handleSummaryBarSticky() {
