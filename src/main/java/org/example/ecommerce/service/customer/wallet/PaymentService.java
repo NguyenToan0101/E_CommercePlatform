@@ -247,7 +247,7 @@ public class PaymentService {
             promotion.setRevenue(
                     Optional.ofNullable(promotion.getRevenue()).orElse(BigDecimal.ZERO).add(price)
             );
-            
+
             promotion.setOrders(promotion.getOrders()+1);
             promotion.setUsageCount(promotion.getUsageCount()+1);
             promotionRepository.save(promotion);
@@ -348,8 +348,8 @@ public class PaymentService {
         return inventoryRepository.findById(inventoryId).orElse(null);
     }
     public String getProvinceShopAddressById(Product product) {
-       String[] partAddress =  product.getShopid().getFulladdress().split("-");
-       return partAddress[partAddress.length - 1];
+        String[] partAddress =  product.getShopid().getFulladdress().split("-");
+        return partAddress[partAddress.length - 1];
     }
 
     public Optional<Promotion> getPromotionById(Integer promotionId) {

@@ -20,18 +20,26 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @EntityGraph(attributePaths = {
             "shopid",
             "categoryid",
-            "inventories",
-            "productimages"
+            "inventories"
     })
     List<Product> findAll();  //join-fetch shop, category, inventory & images
+
+    // Query tối ưu để tránh lỗi embedding array
+    @Query("""
+        SELECT p FROM Product p
+        LEFT JOIN FETCH p.shopid
+        LEFT JOIN FETCH p.categoryid
+        LEFT JOIN FETCH p.inventories
+        """)
+    List<Product> findAllWithoutEmbeddingIssues();
 
     List<Product> findByNameContainingIgnoreCase(String keyword);
     Product findById(int id);
 
-    @EntityGraph(attributePaths = {"categoryid", "productimages", "inventories"})
+    @EntityGraph(attributePaths = {"categoryid", "inventories"})
     List<Product> findByShopidId(Integer shopId);
 
-    @EntityGraph(attributePaths = {"categoryid", "productimages", "inventories"})
+    @EntityGraph(attributePaths = {"categoryid", "inventories"})
     List<Product> findByShopidIdAndNameContainingIgnoreCase(Integer shopId, String keyword);
 
     List<Product> findByShopidIdAndStatus(Integer shopId, String status);
@@ -43,7 +51,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     //tim theo danh muc chinh
     @EntityGraph(attributePaths = {
-            "shopid","categoryid","inventories","productimages"
+            "shopid","categoryid","inventories"
     })
     @Query("""
       SELECT DISTINCT p
@@ -58,13 +66,11 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     @EntityGraph(attributePaths = {
             "shopid",
             "categoryid",
-            "inventories",
-            "productimages"
+            "inventories"
     })
     @Query("""
       SELECT p FROM Product p
       LEFT JOIN FETCH p.inventories
-      LEFT JOIN FETCH p.productimages
       LEFT JOIN FETCH p.shopid
       LEFT JOIN FETCH p.categoryid
       WHERE p.id = :id
@@ -75,14 +81,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "shopid",
             "categoryid",
             "inventories",
-            "productimages",
             "reviews",
             "wishlists"
     })
     @Query("""
       SELECT DISTINCT p FROM Product p
       LEFT JOIN FETCH p.inventories
-      LEFT JOIN FETCH p.productimages
       LEFT JOIN FETCH p.shopid
       LEFT JOIN FETCH p.categoryid
       LEFT JOIN FETCH p.reviews
@@ -92,10 +96,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Optional<Product> findWithAllRelationsById(@Param("id") Integer id);
 
     List<Product> findByStatusAndLockedUntilBefore(String status, Instant time);
-
-
-    List<Product> findByShopidAndCategoryidIn(Shop shopid, Collection<Category> categoryids);
-
     List<Product> findAllByShopid_Id(Integer shopidId);
 
     @Query("""
@@ -157,4 +157,5 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
         ORDER BY p.createdat DESC
     """)
     List<Object[]> findAvailableProductsByNameOptimized(@Param("keyword") String keyword);
+    List<Product> findByShopidAndCategoryidIn(Shop shopid, Collection<Category> categoryids);
 }
