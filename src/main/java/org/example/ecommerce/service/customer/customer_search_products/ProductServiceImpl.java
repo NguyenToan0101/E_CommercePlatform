@@ -43,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
     private EmailService emailService;
 
 
+
     public ProductServiceImpl(ProductRepository productRepo, InventoryRepository inventoryRepo, ProductimageRepository imageRepo, ReviewRepository reviewRepo, ShopRepository shopRepo, WishlistRepository wishlistRepo) {
         this.productRepo = productRepo;
         this.inventoryRepo = inventoryRepo;
@@ -53,31 +54,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductDetail getProductDetail(Integer productId) {
-        // Try optimized query first to get solditems
-        List<Object[]> detailResults = productRepo.findProductDetailOptimized(productId);
-        if (detailResults.isEmpty()) {
-            return null;
-        }
-
-        Object[] detailRow = detailResults.get(0);
-        Long solditems = (Long) detailRow[12]; // solditems is at index 12
-
-        // Get full product with relations for other data
-        Product product = productRepo.findWithAllRelationsById(productId).orElse(null);
-        if (product == null) {
-            return null;
-        }
-
+        Product product = productRepo.findById(productId).orElse(null);
         Shop shop = product.getShopid();
-        // Create defensive copies to avoid ConcurrentModificationException
-        List<Inventory> inventories = new ArrayList<>();
-        for (Inventory inv : product.getInventories()) {
-            if (!inventories.contains(inv)) {
-                inventories.add(inv);
-            }
-        }
+        List<Inventory> inventories = product.getInventories();
 
-        // Load product images separately to avoid embedding field issues
         List<Object[]> imageData = imageRepo.findImageDataByProductId(productId);
         List<Productimage> images = new ArrayList<>();
         for (Object[] data : imageData) {
@@ -87,20 +67,21 @@ public class ProductServiceImpl implements ProductService {
             img.setProductid(product);
             images.add(img);
         }
+
         List<Review> reviews = new ArrayList<>(product.getReviews());
         List<Wishlist> wishlists = new ArrayList<>(product.getWishlists());
 
-        float rate = (float) reviews.stream().mapToDouble(Review::getRating).average().orElse(0);
+        float rate = (float) product.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
 
-        // Use solditems from optimized query
-        int solditemsInt = solditems != null ? solditems.intValue() : 0;
+        int solditems = product.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
 
-        int sumReviewRating = reviews.stream().mapToInt(Review::getRating).sum();
+        int sumReviewRating = product.getReviews().stream().mapToInt(Review::getRating).sum();
 
-        BigDecimal price = inventories.stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+        BigDecimal price = product.getInventoriesView().stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
 
-        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, price, rate, solditemsInt, sumReviewRating);
+        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, price, rate, solditems, sumReviewRating);
     }
+
 
     //Admin Product Management
     @Override
