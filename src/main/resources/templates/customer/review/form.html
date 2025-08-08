@@ -698,7 +698,7 @@
         <!-- Review Form -->
         <form th:action="@{/review}" th:object="${review}" method="post" class="review-form" enctype="multipart/form-data">
             <input type="hidden" th:field="*{productid}" />
-            <input type="hidden" th:field="*{orderitemsid}" />
+            <input type="hidden" th:field="*{orderitemid}" />
 
             <div class="form-group">
                 <label for="rating" class="form-label">Số sao:</label>

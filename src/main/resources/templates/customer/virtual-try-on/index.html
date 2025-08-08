@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thử sản phẩm Virtual 3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin-bottom: 20px;
+        }
+
+        #webar {
+            width: 100%;
+            height: 100%;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+        }
+
+        .btn-success {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .effects-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .effects-panel h3 {
+            color: white;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .effect-category {
+            margin-bottom: 20px;
+        }
+
+        .effect-category h4 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .effect-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .effect-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .effect-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .effect-btn.active {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-color: #667eea;
+        }
+
+        .status {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .hand-tracking-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            color: white;
+        }
+
+        .hand-tracking-info h4 {
+            margin-bottom: 10px;
+            color: #4ecdc4;
+        }
+
+        .hand-gestures {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .gesture-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .gesture-item img {
+            width: 20px;
+            height: 20px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: white;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid white;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: rgba(255, 107, 107, 0.2);
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .effect-buttons {
+                justify-content: center;
+            }
+            
+            .camera-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Thử sản phẩm Virtual 3D</h1>
+        <p>Trải nghiệm thử kính, mũ và nhẫn với công nghệ AR</p>
+    </div>
+
+    <div class="main-container">
+        <div class="status" id="status">Đang khởi tạo...</div>
+        
+        <div class="camera-container">
+            <div id="webar"></div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="startBtn">
+                <i class="fas fa-play"></i> Bắt đầu
+            </button>
+            <button class="btn btn-danger" id="stopBtn" style="display: none;">
+                <i class="fas fa-stop"></i> Dừng
+            </button>
+            <button class="btn btn-success" id="captureBtn" style="display: none;">
+                <i class="fas fa-camera"></i> Chụp ảnh
+            </button>
+            <a href="/customer/search_product/product-detail" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+        </div>
+
+        <div class="effects-panel">
+            <h3>Chọn hiệu ứng</h3>
+            
+            <div class="effect-category">
+                <h4>🕶️ Thử kính</h4>
+                <div class="effect-buttons">
+                    <button class="effect-btn" data-effect="glasses_RayBan4165_Dark.zip">Kính RayBan</button>
+                    <button class="effect-btn" data-effect="Eye_lenses_Blue.zip">Kính xanh</button>
+                    <button class="effect-btn" data-effect="Eye_lenses_Green.zip">Kính xanh lá</button>
+                </div>
+            </div>
+
+            <div class="effect-category">
+                <h4>👒 Thử mũ</h4>
+                <div class="effect-buttons">
+                    <button class="effect-btn" data-effect="VTO_Headdresse_01.zip">Mũ thời trang</button>
+                </div>
+            </div>
+
+            <div class="effect-category">
+                <h4>💍 Thử nhẫn (Hand Tracking)</h4>
+                <div class="effect-buttons">
+                    <button class="effect-btn" data-effect="Ring_01.zip">Nhẫn đính đá</button>
+                </div>
+                <div class="hand-tracking-info">
+                    <h4>Hướng dẫn sử dụng Hand Tracking:</h4>
+                    <div class="hand-gestures">
+                        <div class="gesture-item">
+                            <img src="/static/quickstart-web/assets/icons/hand_gestures/Palm.svg" alt="Palm">
+                            <span>Đưa tay ra trước camera</span>
+                        </div>
+                        <div class="gesture-item">
+                            <img src="/static/quickstart-web/assets/icons/hand_gestures/Victory.svg" alt="Victory">
+                            <span>Giơ 2 ngón tay</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Đang tải hiệu ứng...</p>
+        </div>
+
+        <div class="error" id="error"></div>
+    </div>
+
+    <!-- Thymeleaf script to get productId -->
+    <script th:inline="javascript">
+        const productId = [[${productId}]];
+    </script>
+
+    <!-- Banuba SDK -->
+    <script src="/static/quickstart-web/BanubaClientToken.js"></script>
+    <script src="/static/quickstart-web/BanubaPlayer.js"></script>
+
+    <script>
+        let player = null;
+        let isActive = false;
+        let currentEffect = null;
+
+        // DOM elements
+        const status = document.getElementById('status');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const captureBtn = document.getElementById('captureBtn');
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+        const effectButtons = document.querySelectorAll('.effect-btn');
+
+        // Initialize camera
+        async function initCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { 
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    } 
+                });
+                return stream;
+            } catch (err) {
+                showError('Không thể truy cập camera: ' + err.message);
+                return null;
+            }
+        }
+
+        // Initialize Banuba Player
+        async function initBanubaPlayer() {
+            try {
+                if (typeof BanubaPlayer === 'undefined') {
+                    throw new Error('BanubaPlayer không được tải');
+                }
+
+                player = new BanubaPlayer({
+                    clientToken: BanubaClientToken,
+                    container: document.getElementById('webar'),
+                    width: 800,
+                    height: 500
+                });
+
+                status.textContent = `Sẵn sàng thử sản phẩm cho sản phẩm #${productId}`;
+                return true;
+            } catch (err) {
+                showError('Không thể khởi tạo Banuba Player: ' + err.message);
+                return false;
+            }
+        }
+
+        // Load effect
+        async function loadEffect(effectName) {
+            if (!player) return;
+
+            try {
+                showLoading(true);
+                status.textContent = `Đang tải hiệu ứng: ${effectName}`;
+
+                await player.loadEffect(effectName);
+                currentEffect = effectName;
+                
+                status.textContent = `Đã tải hiệu ứng: ${effectName}`;
+                showLoading(false);
+            } catch (err) {
+                showError('Không thể tải hiệu ứng: ' + err.message);
+                showLoading(false);
+            }
+        }
+
+        // Start AR session
+        async function startARSession() {
+            if (!player) {
+                const initialized = await initBanubaPlayer();
+                if (!initialized) return;
+            }
+
+            try {
+                const stream = await initCamera();
+                if (!stream) return;
+
+                await player.startCamera(stream);
+                isActive = true;
+                
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'inline-flex';
+                captureBtn.style.display = 'inline-flex';
+                
+                status.textContent = 'AR session đã bắt đầu - Hãy thử các hiệu ứng!';
+            } catch (err) {
+                showError('Không thể bắt đầu AR session: ' + err.message);
+            }
+        }
+
+        // Stop AR session
+        function stopARSession() {
+            if (player) {
+                player.stopCamera();
+                isActive = false;
+                
+                startBtn.style.display = 'inline-flex';
+                stopBtn.style.display = 'none';
+                captureBtn.style.display = 'none';
+                
+                status.textContent = 'AR session đã dừng';
+            }
+        }
+
+        // Capture photo
+        async function capturePhoto() {
+            if (!player || !isActive) return;
+
+            try {
+                const photo = await player.capturePhoto();
+                if (photo) {
+                    // Create download link
+                    const link = document.createElement('a');
+                    link.download = `virtual-try-on-${Date.now()}.png`;
+                    link.href = photo;
+                    link.click();
+                    
+                    status.textContent = 'Đã chụp ảnh thành công!';
+                }
+            } catch (err) {
+                showError('Không thể chụp ảnh: ' + err.message);
+            }
+        }
+
+        // Utility functions
+        function showLoading(show) {
+            loading.style.display = show ? 'block' : 'none';
+        }
+
+        function showError(message) {
+            error.textContent = message;
+            error.style.display = 'block';
+            setTimeout(() => {
+                error.style.display = 'none';
+            }, 5000);
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startARSession);
+        stopBtn.addEventListener('click', stopARSession);
+        captureBtn.addEventListener('click', capturePhoto);
+
+        // Effect button listeners
+        effectButtons.forEach(btn => {
+            btn.addEventListener('click', async () => {
+                // Remove active class from all buttons
+                effectButtons.forEach(b => b.classList.remove('active'));
+                // Add active class to clicked button
+                btn.classList.add('active');
+                
+                const effectName = btn.getAttribute('data-effect');
+                await loadEffect(effectName);
+            });
+        });
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', async () => {
+            status.textContent = `Khởi tạo cho sản phẩm #${productId}...`;
+            
+            // Auto-initialize Banuba Player
+            await initBanubaPlayer();
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (player) {
+                player.stopCamera();
+            }
+        });
+    </script>
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</body>
+</html>

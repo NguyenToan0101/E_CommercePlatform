@@ -300,14 +300,71 @@
                     <span id="selected-method-label" class="font-semibold">Thanh toán khi nhận hàng</span>
                     <button type="button" id="change-method-btn" class="text-blue-600 font-semibold hover:text-blue-800">THAY ĐỔI</button>
                 </div>
+                <!-- Hiển thị thông tin ví nếu có -->
+                <div id="wallet-info" class="mt-3 p-3 bg-blue-50 rounded-lg" th:if="${wallet != null}">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm font-medium text-blue-800">Ví MUSA</p>
+                            <p class="text-xs text-blue-600">Số dư: <span th:text="${#numbers.formatDecimal(wallet.balance, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</span></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-xs text-blue-600">ID: <span th:text="${wallet.id}">-</span></p>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div id="payment-method-tabs-container" class="hidden mt-4">
                 <div class="flex gap-2 mb-4">
                     <button type="button" class="payment-tab btn btn-primary" data-method="MUSA">Ví MUSA</button>
                     <button type="button" class="payment-tab btn" data-method="COD">Thanh toán khi nhận hàng</button>
                 </div>
+                <!-- Cảnh báo khi chưa có ví -->
+                <div id="wallet-warning" class="hidden bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle text-yellow-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-yellow-700">
+                                <strong>Lưu ý:</strong> Bạn chưa có ví MUSA. Vui lòng tạo ví trước khi sử dụng phương thức thanh toán này.
+                            </p>
+                        </div>
+                    </div>
+                </div>
                 <div id="payment-method-desc" class="bg-gray-100 p-4 rounded-lg">
-                    Thanh toán khi nhận hàng: Phí thu hộ 0 VNĐ.
+                    <div id="cod-desc">
+                        <p class="font-medium">Thanh toán khi nhận hàng (COD)</p>
+                        <p class="text-sm text-gray-600">• Phí thu hộ: 0 VNĐ</p>
+                        <p class="text-sm text-gray-600">• Thanh toán khi nhận hàng</p>
+                        <p class="text-sm text-gray-600">• Không cần nạp tiền trước</p>
+                    </div>
+                    <div id="musa-desc" class="hidden">
+                        <p class="font-medium">Ví MUSA</p>
+                        <p class="text-sm text-gray-600">• Thanh toán nhanh chóng và bảo mật</p>
+                        <p class="text-sm text-gray-600">• Trừ tiền trực tiếp từ ví</p>
+                        <p class="text-sm text-gray-600">• Cần có đủ số dư trong ví</p>
+                        <div th:if="${wallet != null}" class="mt-2 p-2 bg-blue-50 rounded">
+                            <div class="flex items-center justify-between">
+                                <p class="text-xs text-blue-800">Số dư hiện tại: <span id="currentWalletBalance" th:text="${#numbers.formatDecimal(wallet.balance, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'">0 VNĐ</span></p>
+                                <button type="button" id="refresh-balance-btn" class="text-xs text-blue-600 hover:text-blue-800" title="Cập nhật số dư">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <!-- Thông báo khi số dư không đủ -->
+                        <div id="insufficient-balance-warning" class="hidden mt-2 p-2 bg-red-50 rounded border-l-4 border-red-400">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-xs text-red-800 font-medium">Số dư không đủ!</p>
+                                    <p class="text-xs text-red-600">Cần: <span id="required-amount" class="font-semibold">0 VNĐ</span></p>
+                                    <p class="text-xs text-red-600">Có: <span id="current-amount" class="font-semibold">0 VNĐ</span></p>
+                                </div>
+                                <button type="button" id="deposit-now-btn" class="btn btn-primary text-xs px-3 py-1">
+                                    <i class="fas fa-plus mr-1"></i>Nạp ngay
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <button type="button" id="confirm-method-btn" class="btn btn-primary mt-4">XÁC NHẬN</button>
             </div>
@@ -327,6 +384,7 @@
                     <input type="hidden" id="cartAddress" name="address">
                     <input type="hidden" id="walletIdInput" name="walletId" value="">
                     <span id="musaWalletId" th:text="${wallet?.id}" class="hidden"></span>
+                    <span id="walletBalance" th:text="${wallet?.balance}" class="hidden"></span>
                     <table>
                         <thead>
                         <tr>
@@ -413,6 +471,7 @@
                                 <input type="hidden" name="freeshipId" id="selectedFreeshipId">
                                 <input type="hidden" name="discountId" id="selectedDiscountId">
                                 <input type="hidden" name="totalPrice" id="inputTotalPrice">
+                                <input type="hidden" name="walletId" id="buyNowWalletId">
                                 <button type="submit" class="btn btn-primary buyNowBtn">
                                     <i class="fas fa-lightning mr-2"></i>Thanh toán ngay
                                 </button>
@@ -801,6 +860,12 @@
         // Update the total price display
         document.getElementById("totalPrice").textContent = formatCurrency(finalTotal);
 
+        // Kiểm tra số dư ví nếu đang chọn phương thức MUSA
+        const selectedMethod = document.querySelector(".payment-tab.btn-primary")?.dataset.method;
+        if (selectedMethod === "MUSA") {
+            checkWalletBalance();
+        }
+
         console.log("Calculation breakdown:", {
             orderTotal,
             feeShip,
@@ -922,6 +987,38 @@
         }
     }
 
+    function checkWalletBalance() {
+        const walletBalance = parseFloat(document.getElementById("walletBalance")?.textContent?.replace(/[^\d]/g, "") || "0");
+        const buyNowTotal = calculateBuyNowTotal();
+        const cartTotal = calculateCartTotal();
+        const totalNeeded = Math.max(buyNowTotal, cartTotal);
+        
+        const insufficientBalanceWarning = document.getElementById("insufficient-balance-warning");
+        const requiredAmount = document.getElementById("required-amount");
+        const currentAmount = document.getElementById("current-amount");
+        
+        if (walletBalance < totalNeeded) {
+            // Hiển thị cảnh báo số dư không đủ
+            insufficientBalanceWarning.classList.remove("hidden");
+            requiredAmount.textContent = formatCurrency(totalNeeded);
+            currentAmount.textContent = formatCurrency(walletBalance);
+        } else {
+            // Ẩn cảnh báo nếu số dư đủ
+            insufficientBalanceWarning.classList.add("hidden");
+        }
+    }
+
+    function openDepositPage() {
+        // Mở trang nạp tiền trong tab mới
+        window.open("/wallet/deposit", "_blank");
+        showNotification("Đang mở trang nạp tiền... Sau khi nạp xong, hãy quay lại trang này để tiếp tục thanh toán.", "success");
+        
+        // Hiển thị hướng dẫn chi tiết
+        setTimeout(() => {
+            showNotification("💡 Mẹo: Sau khi nạp tiền, hãy refresh trang này để cập nhật số dư mới nhất!", "warning");
+        }, 2000);
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
         // Initialize
         fetchProvinces();
@@ -931,6 +1028,11 @@
         setTimeout(() => {
             calculateAndUpdateTotal();
             updateVoucherEligibility();
+            // Kiểm tra số dư ví nếu đang chọn phương thức MUSA
+            const selectedMethod = document.querySelector(".payment-tab.btn-primary")?.dataset.method;
+            if (selectedMethod === "MUSA") {
+                checkWalletBalance();
+            }
             showNotification("Đã tải thông tin đơn hàng!", "success");
         }, 500);
 
@@ -1052,6 +1154,16 @@
 
             document.getElementById("selected-method-label").textContent = methodLabel;
             document.getElementById("payment-method-tabs-container").classList.add("hidden");
+
+            // Cập nhật walletId dựa trên phương thức thanh toán được chọn
+            const walletIdInput = document.getElementById("walletIdInput");
+            const musaWalletId = document.getElementById("musaWalletId").textContent;
+
+            if (selectedMethod === "MUSA" && musaWalletId) {
+                walletIdInput.value = musaWalletId;
+            } else {
+                walletIdInput.value = "";
+            }
         });
 
         document.querySelectorAll(".payment-tab").forEach(tab => {
@@ -1060,8 +1172,31 @@
                 tab.classList.add("btn-primary");
 
                 const method = tab.dataset.method;
-                const desc = method === "MUSA" ? "Ví MUSA: Thanh toán nhanh chóng và bảo mật." : "Thanh toán khi nhận hàng: Phí thu hộ 0 VNĐ.";
-                document.getElementById("payment-method-desc").textContent = desc;
+                const codDesc = document.getElementById("cod-desc");
+                const musaDesc = document.getElementById("musa-desc");
+                const walletWarning = document.getElementById("wallet-warning");
+                const insufficientBalanceWarning = document.getElementById("insufficient-balance-warning");
+                const musaWalletId = document.getElementById("musaWalletId").textContent;
+                
+                if (method === "MUSA") {
+                    codDesc.classList.add("hidden");
+                    musaDesc.classList.remove("hidden");
+                    
+                    // Hiển thị cảnh báo nếu chưa có ví
+                    if (!musaWalletId || musaWalletId.trim() === "") {
+                        walletWarning.classList.remove("hidden");
+                        insufficientBalanceWarning.classList.add("hidden");
+                    } else {
+                        walletWarning.classList.add("hidden");
+                        // Kiểm tra số dư khi có ví
+                        checkWalletBalance();
+                    }
+                } else {
+                    codDesc.classList.remove("hidden");
+                    musaDesc.classList.add("hidden");
+                    walletWarning.classList.add("hidden");
+                    insufficientBalanceWarning.classList.add("hidden");
+                }
             });
         });
 
@@ -1078,17 +1213,6 @@
         }
 
         // Form submission handling
-        document.getElementById("cartSubmitBtn")?.addEventListener("click", () => {
-            const inputs = ["firstname", "lastname", "phone", "address"].map(id =>
-                document.getElementById(id).value.trim()
-            );
-
-            ["cartFirstName", "cartLastName", "cartPhone", "cartAddress"].forEach((id, i) => {
-                const element = document.getElementById(id);
-                if (element) element.value = inputs[i];
-            });
-        });
-
         document.querySelectorAll(".buyNowBtn").forEach(btn => {
             btn.addEventListener("click", e => {
                 const form = btn.closest("form");
@@ -1114,7 +1238,91 @@
                         showNotification("Lỗi hệ thống, vui lòng thử lại", "error");
                     }
                 });
+
+                // Kiểm tra phương thức thanh toán cho buy now
+                const selectedMethod = document.querySelector(".payment-tab.btn-primary")?.dataset.method || "COD";
+                const buyNowWalletIdInput = form.querySelector("input[name='walletId']");
+                const musaWalletId = document.getElementById("musaWalletId").textContent;
+                const walletBalance = parseFloat(document.getElementById("walletBalance")?.textContent?.replace(/[^\d]/g, "") || "0");
+                const totalPrice = parseFloat(document.getElementById("totalPrice").textContent.replace(/[^\d]/g, ""));
+
+                if (selectedMethod === "MUSA") {
+                    // Kiểm tra ví có tồn tại không
+                    if (!musaWalletId || musaWalletId.trim() === "") {
+                        e.preventDefault();
+                        showNotification("Vui lòng tạo ví trước khi thanh toán", "error");
+                        return;
+                    }
+                    
+                    // Kiểm tra số dư ví có đủ không
+                    if (walletBalance < totalPrice) {
+                        e.preventDefault();
+                        showNotification(`Số dư ví không đủ. Cần: ${formatCurrency(totalPrice)}, Có: ${formatCurrency(walletBalance)}`, "error");
+                        return;
+                    }
+                    
+                    // Set wallet ID cho thanh toán
+                    if (buyNowWalletIdInput) {
+                        buyNowWalletIdInput.value = musaWalletId;
+                    }
+                    
+                    showNotification("Đang thanh toán bằng ví MUSA...", "success");
+                } else {
+                    // Thanh toán COD - không cần wallet ID
+                    if (buyNowWalletIdInput) {
+                        buyNowWalletIdInput.value = "";
+                    }
+                    showNotification("Đang thanh toán khi nhận hàng...", "success");
+                }
             });
+        });
+
+        // Cập nhật xử lý cho cart submit
+        document.getElementById("cartSubmitBtn")?.addEventListener("click", (e) => {
+            const inputs = ["firstname", "lastname", "phone", "address"].map(id =>
+                document.getElementById(id).value.trim()
+            );
+
+            ["cartFirstName", "cartLastName", "cartPhone", "cartAddress"].forEach((id, i) => {
+                const element = document.getElementById(id);
+                if (element) element.value = inputs[i];
+            });
+
+            // Kiểm tra phương thức thanh toán cho cart
+            const selectedMethod = document.querySelector(".payment-tab.btn-primary")?.dataset.method || "COD";
+            const cartWalletIdInput = document.getElementById("walletIdInput");
+            const musaWalletId = document.getElementById("musaWalletId").textContent;
+            const walletBalance = parseFloat(document.getElementById("walletBalance")?.textContent?.replace(/[^\d]/g, "") || "0");
+            const cartTotal = calculateCartTotal();
+
+            if (selectedMethod === "MUSA") {
+                // Kiểm tra ví có tồn tại không
+                if (!musaWalletId || musaWalletId.trim() === "") {
+                    e.preventDefault();
+                    showNotification("Vui lòng tạo ví trước khi thanh toán", "error");
+                    return;
+                }
+                
+                // Kiểm tra số dư ví có đủ không
+                if (walletBalance < cartTotal) {
+                    e.preventDefault();
+                    showNotification(`Số dư ví không đủ. Cần: ${formatCurrency(cartTotal)}, Có: ${formatCurrency(walletBalance)}`, "error");
+                    return;
+                }
+                
+                // Set wallet ID cho thanh toán
+                if (cartWalletIdInput) {
+                    cartWalletIdInput.value = musaWalletId;
+                }
+                
+                showNotification("Đang thanh toán bằng ví MUSA...", "success");
+            } else {
+                // Thanh toán COD - không cần wallet ID
+                if (cartWalletIdInput) {
+                    cartWalletIdInput.value = "";
+                }
+                showNotification("Đang thanh toán khi nhận hàng...", "success");
+            }
         });
 
         // Voucher selection handling
@@ -1124,6 +1332,14 @@
                     document.getElementById("selectedFreeshipId").value = radio.value;
                 }
             });
+        });
+
+        // Nút nạp tiền ngay
+        document.getElementById("deposit-now-btn")?.addEventListener("click", openDepositPage);
+
+        // Nút refresh số dư
+        document.getElementById("refresh-balance-btn")?.addEventListener("click", () => {
+            location.reload();
         });
 
         document.querySelectorAll("input[name='discount']").forEach(radio => {

@@ -999,7 +999,10 @@
                             class="form-input"
                             placeholder="Nhập số tiền muốn nạp..."
                     >
-                    <div class="input-hint">Nhập số tiền bạn muốn nạp</div>
+                    <div class="input-hint">Nhập số tiền bạn muốn nạp (Tối thiểu: 10.000 VNĐ, Tối đa: 10.000.000 VNĐ)</div>
+                    <div id="amount-error" class="input-hint" style="color: var(--error-red); display: none;">
+                        Số tiền phải từ 10.000 VNĐ đến 10.000.000 VNĐ
+                    </div>
 
                     <!-- Quick Amount Selection -->
                     <div class="amount-suggestions">
@@ -1012,7 +1015,7 @@
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">
+                <button type="submit" class="submit-btn" id="submit-btn" disabled>
                     <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect x="1" y="4" width="22" height="16" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
                         <line x1="1" y1="10" x2="23" y2="10" stroke="currentColor" stroke-width="2"/>
@@ -1088,24 +1091,54 @@
             });
         });
 
-        // Enhance amount button selection
-        function setAmount(amount) {
+        // Make setAmount function globally available
+        window.setAmount = function(amount) {
             const input = document.getElementById('amount');
             input.value = amount;
             amountButtons.forEach(btn => btn.classList.remove('active'));
             const button = Array.from(amountButtons).find(btn => btn.textContent.includes(amount.toLocaleString('vi-VN')));
             if (button) button.classList.add('active');
-        }
+            validateAmount(); // Validate after setting amount
+        };
 
-        // Format number input with thousand separators
+        // Format number input with thousand separators and validation
         const amountInput = document.getElementById('amount');
+        const submitBtn = document.getElementById('submit-btn');
+        
+        function validateAmount() {
+            const amount = parseInt(amountInput.value) || 0;
+            const minAmount = 10000; // 10,000 VND minimum
+            const maxAmount = 10000000; // 10,000,000 VND maximum
+            const errorDiv = document.getElementById('amount-error');
+            
+            if (amount >= minAmount && amount <= maxAmount) {
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+                errorDiv.style.display = 'none';
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.style.opacity = '0.5';
+                submitBtn.style.cursor = 'not-allowed';
+                if (amount > 0) {
+                    errorDiv.style.display = 'block';
+                } else {
+                    errorDiv.style.display = 'none';
+                }
+            }
+        }
+        
         amountInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value) {
                 e.target.value = value;
                 amountButtons.forEach(btn => btn.classList.remove('active'));
             }
+            validateAmount();
         });
+        
+        // Initial validation
+        validateAmount();
 
         // Header menu functionality
         const userInfoBox = document.querySelector('.user-info-box');
