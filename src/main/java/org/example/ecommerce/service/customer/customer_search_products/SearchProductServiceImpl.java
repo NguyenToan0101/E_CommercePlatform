@@ -47,7 +47,7 @@ public class SearchProductServiceImpl implements SearchProductService {
         for (Product p : products) {
             if (p.getStatus().equals("available") && allCategoryIds.contains(p.getCategoryid().getId())) {
 
-                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
+                String imageUrl = productimageRepository.findFirstImageUrlByProductId(p.getId());
 
                 String fullAddress = p.getShopid().getFulladdress();
                 int index = fullAddress.lastIndexOf("-");
@@ -82,7 +82,7 @@ public class SearchProductServiceImpl implements SearchProductService {
         for (Product p : products) {
             if (p.getStatus().equals("available")) {
 
-                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
+                String imageUrl = productimageRepository.findFirstImageUrlByProductId(p.getId());
 
                 String fullAddress = p.getShopid().getFulladdress();
                 int index = fullAddress.lastIndexOf("-");
@@ -108,7 +108,7 @@ public class SearchProductServiceImpl implements SearchProductService {
         for (Product p : products) {
             if (p.getStatus().equals("available")) {
 
-                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
+                String imageUrl = productimageRepository.findFirstImageUrlByProductId(p.getId());
 
                 String fullAddress = p.getShopid().getFulladdress();
                 int index = fullAddress.lastIndexOf("-");
@@ -150,7 +150,7 @@ public class SearchProductServiceImpl implements SearchProductService {
         for (Product p : products) {
             if (p.getStatus().equals("available")&& allCategoryIds.contains(p.getCategoryid().getId())) {
 
-                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
+                String imageUrl = productimageRepository.findFirstImageUrlByProductId(p.getId());
 
                 String fullAddress = p.getShopid().getFulladdress();
                 int index = fullAddress.lastIndexOf("-");

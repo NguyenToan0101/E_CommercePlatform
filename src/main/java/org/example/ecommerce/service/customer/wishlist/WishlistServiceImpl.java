@@ -67,7 +67,7 @@ public class WishlistServiceImpl implements WishlistService {
             Product p = w.getProductid();
 
             if ("available".equals(p.getStatus())) {
-                String imageUrl = p.getProductimages().stream().findFirst().map(Productimage::getImageurl).orElse(null);
+                String imageUrl = productimageRepository.findFirstImageUrlByProductId(p.getId());
 
                 String fullAddress = p.getShopid().getFulladdress();
                 int index = fullAddress.lastIndexOf("-");

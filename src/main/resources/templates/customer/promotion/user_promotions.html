@@ -750,9 +750,6 @@
     <!-- Filter Tabs -->
     <div class="filter-tabs">
         <a href="/promotions" class="filter-tab" th:classappend="${type == null ? 'active' : ''}">Tất cả</a>
-        <a href="/promotions/type/PERCENTAGE" class="filter-tab" th:classappend="${type == 'PERCENTAGE' ? 'active' : ''}">Giảm %</a>
-        <a href="/promotions/type/FIXED" class="filter-tab" th:classappend="${type == 'FIXED' ? 'active' : ''}">Giảm tiền</a>
-        <a href="/promotions/type/SHIPPING" class="filter-tab" th:classappend="${type == 'SHIPPING' ? 'active' : ''}">Miễn phí vận chuyển</a>
         <a href="/promotions/my-vouchers" class="filter-tab" th:classappend="${type == 'MY_VOUCHERS' ? 'active' : ''}">💼 Kho voucher của tôi</a>
     </div>
 

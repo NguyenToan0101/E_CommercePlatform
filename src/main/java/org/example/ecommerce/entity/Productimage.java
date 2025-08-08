@@ -33,7 +33,7 @@ public class Productimage {
     )
     @org.hibernate.annotations.JdbcTypeCode(java.sql.Types.ARRAY)
     private Float[] embedding;
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

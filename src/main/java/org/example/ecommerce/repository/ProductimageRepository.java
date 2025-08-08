@@ -2,8 +2,11 @@ package org.example.ecommerce.repository;
 
 import org.example.ecommerce.entity.Product;
 import org.example.ecommerce.entity.Productimage;
+import org.example.ecommerce.service.SimilarImageProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,6 +22,16 @@ public interface ProductimageRepository extends JpaRepository<Productimage, Inte
     @Query(value = "SELECT imageurl FROM productimages WHERE productid = :productId ORDER BY imageid ASC LIMIT 1", nativeQuery = true)
     String findFirstImageUrlByProductId(@Param("productId") Integer productId);
 
+//
+//    @org.springframework.data.jpa.repository.Query("SELECT pi FROM Productimage pi WHERE pi.productid = :product ORDER BY pi.id ASC")
+//    List<Productimage> findAllByProductidOrderByIdAsc(@org.springframework.data.repository.query.Param("product") Product product);
+//
+//    @org.springframework.data.jpa.repository.Query("SELECT pi.id, pi.imageurl FROM Productimage pi WHERE pi.productid = :product ORDER BY pi.id ASC")
+//    List<Object[]> findImageDataByProductid(@org.springframework.data.repository.query.Param("product") Product product);
+
+    @org.springframework.data.jpa.repository.Query("SELECT pi.id, pi.imageurl FROM Productimage pi WHERE pi.productid.id = :productId ORDER BY pi.id ASC")
+    List<Object[]> findImageDataByProductId(@org.springframework.data.repository.query.Param("productId") Integer productId);
+
     // Lite images for edit form (no embedding)
     @Query("select pi.id as id, pi.imageurl as imageurl from Productimage pi where pi.productid.id = :productId order by pi.id asc")
     List<ProductImageLite> findLiteByProductId(@Param("productId") Integer productId);
@@ -27,4 +40,32 @@ public interface ProductimageRepository extends JpaRepository<Productimage, Inte
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query("delete from Productimage pi where pi.productid = :product")
     void deleteAllByProduct(@Param("product") Product product);
+
+    @Query(value = """
+        SELECT
+          p.imageid   AS imageId,
+          p.productid AS productId,
+          p.imageurl  AS imageUrl
+        FROM productimages p
+        WHERE p.embedding IS NOT NULL
+        ORDER BY p.embedding <-> CAST(:vectorLiteral AS vector(512))
+        LIMIT :limit
+        """,
+            nativeQuery = true
+    )
+    List<SimilarImageProjection> findTopKSimilarByLiteral(
+            @Param("vectorLiteral") String vectorLiteral,
+            @Param("limit") int limit
+    );
+
+    @Query(value = """
+        SELECT COUNT(*) FROM productimages WHERE embedding IS NOT NULL
+        """,
+            nativeQuery = true
+    )
+    Long countImagesWithEmbedding();
+
+    List<Productimage> findByEmbeddingIsNull();
+}
+
 }

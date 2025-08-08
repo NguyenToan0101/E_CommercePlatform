@@ -43,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
     private EmailService emailService;
 
 
+
     public ProductServiceImpl(ProductRepository productRepo, InventoryRepository inventoryRepo, ProductimageRepository imageRepo, ReviewRepository reviewRepo, ShopRepository shopRepo, WishlistRepository wishlistRepo) {
         this.productRepo = productRepo;
         this.inventoryRepo = inventoryRepo;
@@ -53,78 +54,95 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public ProductDetail getProductDetail(Integer productId) {
-        // Try optimized query first to get solditems
-        List<Object[]> detailResults = productRepo.findProductDetailOptimized(productId);
-        if (detailResults.isEmpty()) {
-            return null;
-        }
-        
-        Object[] detailRow = detailResults.get(0);
-        Long solditems = (Long) detailRow[12]; // solditems is at index 12
-        
-        // Get full product with relations for other data
-        Product product = productRepo.findWithAllRelationsById(productId).orElse(null);
-        if (product == null) {
-            return null;
-        }
-        
+        Product product = productRepo.findById(productId).orElse(null);
         Shop shop = product.getShopid();
-        // Create defensive copies to avoid ConcurrentModificationException
-        List<Inventory> inventories = new ArrayList<>();
-        for (Inventory inv : product.getInventories()) {
-            if (!inventories.contains(inv)) {
-                inventories.add(inv);
-            }
+        List<Inventory> inventories = product.getInventories();
+
+        List<Object[]> imageData = imageRepo.findImageDataByProductId(productId);
+        List<Productimage> images = new ArrayList<>();
+        for (Object[] data : imageData) {
+            Productimage img = new Productimage();
+            img.setId((Integer) data[0]);
+            img.setImageurl((String) data[1]);
+            img.setProductid(product);
+            images.add(img);
         }
-        List<Productimage> images = new ArrayList<>(product.getProductimages());
+
         List<Review> reviews = new ArrayList<>(product.getReviews());
         List<Wishlist> wishlists = new ArrayList<>(product.getWishlists());
 
-        float rate = (float) reviews.stream().mapToDouble(Review::getRating).average().orElse(0);
+        float rate = (float) product.getReviews().stream().mapToDouble(Review::getRating).average().orElse(0);
 
-        // Use solditems from optimized query
-        int solditemsInt = solditems != null ? solditems.intValue() : 0;
+        int solditems = product.getInventoriesView().stream().mapToInt(Inventory::getSolditems).sum();
 
-        int sumReviewRating = reviews.stream().mapToInt(Review::getRating).sum();
+        int sumReviewRating = product.getReviews().stream().mapToInt(Review::getRating).sum();
 
-        BigDecimal price = inventories.stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
+        BigDecimal price = product.getInventoriesView().stream().map(Inventory::getPrice).min(BigDecimal::compareTo).orElse(BigDecimal.ZERO);
 
-        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, price, rate, solditemsInt, sumReviewRating);
+        return new ProductDetail(product, shop, inventories, images, reviews, wishlists, price, rate, solditems, sumReviewRating);
     }
+
 
     //Admin Product Management
     @Override
     public List<ProductDTO> listAllProducts() {
-        return productRepo.findAll().stream()
-                .map(p -> {
-                    Inventory inv = p.getInventories().stream()
-                            .findFirst()
-                            .orElseGet(() -> {
-                                Inventory e = new Inventory();
-                                e.setPrice(BigDecimal.ZERO);
-                                e.setSolditems(0);
-                                return e;
-                            });
+        try {
+            return productRepo.findAllWithoutEmbeddingIssues().stream()
+                    .map(p -> {
+                        try {
+                            Inventory inv = p.getInventories().stream()
+                                    .findFirst()
+                                    .orElseGet(() -> {
+                                        Inventory e = new Inventory();
+                                        e.setPrice(BigDecimal.ZERO);
+                                        e.setSolditems(0);
+                                        return e;
+                                    });
 
+                            // Load image URL riêng biệt để tránh lỗi embedding
+                            String thumbnail = "";
+                            try {
+                                List<Object[]> imageData = imageRepo.findImageDataByProductId(p.getId());
+                                if (!imageData.isEmpty()) {
+                                    thumbnail = (String) imageData.get(0)[1]; // imageurl ở index 1
+                                }
+                            } catch (Exception e) {
+                                // Nếu có lỗi khi load image, bỏ qua
+                                System.err.println("Lỗi khi load image cho product " + p.getId() + ": " + e.getMessage());
+                            }
 
-                    String thumbnail = p.getProductimages().stream()
-                            .map(Productimage::getImageurl)
-                            .findFirst()
-                            .orElse("");
-
-                    return new ProductDTO(
-                            p.getId(),
-                            p.getName(),
-                            p.getShopid().getShopname(),
-                            p.getCategoryid().getCategoryname(),
-                            p.getStatus(),
-                            p.getCreatedat(),
-                            inv.getPrice(),
-                            inv.getSolditems(),
-                            thumbnail
-                    );
-                })
-                .collect(Collectors.toList());
+                            return new ProductDTO(
+                                    p.getId(),
+                                    p.getName(),
+                                    p.getShopid().getShopname(),
+                                    p.getCategoryid().getCategoryname(),
+                                    p.getStatus(),
+                                    p.getCreatedat(),
+                                    inv.getPrice(),
+                                    inv.getSolditems(),
+                                    thumbnail
+                            );
+                        } catch (Exception e) {
+                            // Fallback cho sản phẩm có lỗi
+                            return new ProductDTO(
+                                    p.getId(),
+                                    p.getName(),
+                                    p.getShopid() != null ? p.getShopid().getShopname() : "Unknown",
+                                    p.getCategoryid() != null ? p.getCategoryid().getCategoryname() : "Unknown",
+                                    p.getStatus(),
+                                    p.getCreatedat(),
+                                    BigDecimal.ZERO,
+                                    0,
+                                    ""
+                            );
+                        }
+                    })
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            // Log lỗi và trả về danh sách rỗng
+            System.err.println("Lỗi khi load products: " + e.getMessage());
+            return new ArrayList<>();
+        }
     }
 
     //danh muc chinh
@@ -134,29 +152,53 @@ public class ProductServiceImpl implements ProductService {
 
     private List<ProductDTO> mapToDTO(List<Product> products) {
         return products.stream().map(p -> {
-            Inventory inv = p.getInventories().stream()
-                    .findFirst()
-                    .orElseGet(() -> {
-                        var e = new Inventory();
-                        e.setPrice(BigDecimal.ZERO);
-                        e.setSolditems(0);
-                        return e;
-                    });
-            String thumb = p.getProductimages().stream()
-                    .map(Productimage::getImageurl)
-                    .findFirst()
-                    .orElse("");
-            return new ProductDTO(
-                    p.getId(),
-                    p.getName(),
-                    p.getShopid().getShopname(),
-                    p.getCategoryid().getCategoryname(),
-                    p.getStatus(),
-                    p.getCreatedat(),
-                    inv.getPrice(),
-                    inv.getSolditems(),
-                    thumb
-            );
+            try {
+                Inventory inv = p.getInventories().stream()
+                        .findFirst()
+                        .orElseGet(() -> {
+                            var e = new Inventory();
+                            e.setPrice(BigDecimal.ZERO);
+                            e.setSolditems(0);
+                            return e;
+                        });
+
+                // Load image URL riêng biệt để tránh lỗi embedding
+                String thumb = "";
+                try {
+                    List<Object[]> imageData = imageRepo.findImageDataByProductId(p.getId());
+                    if (!imageData.isEmpty()) {
+                        thumb = (String) imageData.get(0)[1]; // imageurl ở index 1
+                    }
+                } catch (Exception e) {
+                    // Nếu có lỗi khi load image, bỏ qua
+                    System.err.println("Lỗi khi load image cho product " + p.getId() + ": " + e.getMessage());
+                }
+
+                return new ProductDTO(
+                        p.getId(),
+                        p.getName(),
+                        p.getShopid().getShopname(),
+                        p.getCategoryid().getCategoryname(),
+                        p.getStatus(),
+                        p.getCreatedat(),
+                        inv.getPrice(),
+                        inv.getSolditems(),
+                        thumb
+                );
+            } catch (Exception e) {
+                // Fallback cho sản phẩm có lỗi
+                return new ProductDTO(
+                        p.getId(),
+                        p.getName(),
+                        p.getShopid() != null ? p.getShopid().getShopname() : "Unknown",
+                        p.getCategoryid() != null ? p.getCategoryid().getCategoryname() : "Unknown",
+                        p.getStatus(),
+                        p.getCreatedat(),
+                        BigDecimal.ZERO,
+                        0,
+                        ""
+                );
+            }
         }).collect(Collectors.toList());
     }
 
@@ -177,10 +219,16 @@ public class ProductServiceImpl implements ProductService {
                 ))
                 .collect(Collectors.toList());
 
-        // Map images
-        List<String> imgs = p.getProductimages().stream()
-                .map(pi -> pi.getImageurl())
-                .collect(Collectors.toList());
+        // Map images - load riêng biệt để tránh lỗi embedding
+        List<String> imgs = new ArrayList<>();
+        try {
+            List<Object[]> imageData = imageRepo.findImageDataByProductId(id);
+            for (Object[] data : imageData) {
+                imgs.add((String) data[1]); // imageurl ở index 1
+            }
+        } catch (Exception e) {
+            System.err.println("Lỗi khi load images cho product " + id + ": " + e.getMessage());
+        }
 
         return new AdminProductDetailDTO(
                 p.getId(),

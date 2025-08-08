@@ -88,13 +88,13 @@ public class HomeController {
             switch (shop.getStatus()) {
                 case "PENDING_APPROVAL":
                     System.out.println("PENDING APPROVAL");
-                    model.addAttribute("error", "Tài khoản người bán đang yêu cầu phê duyệt. Xin vui lòng đợi! Hãy thường xuyên kiểm tra thông báo");
+//                    model.addAttribute("error", "Tài khoản người bán đang yêu cầu phê duyệt. Xin vui lòng đợi! Hãy thường xuyên kiểm tra thông báo");
                     return "redirect:/home";
                 case "ACTIVE":
-                    return "seller/index";
+                    return "seller/dashboard";
                 case "LOCK":
                     System.out.println("LOCK");
-                    model.addAttribute("error", "Tài khoản người bán đang bị khóa. Hãy liên hệ hỗ trợ hoặc gửi đến email admin@gmail.com");
+//                    model.addAttribute("error", "Tài khoản người bán đang bị khóa. Hãy liên hệ hỗ trợ hoặc gửi đến email admin@gmail.com");
                     return "redirect:/home";
                 default:
                     return "redirect:/registrationSeller";

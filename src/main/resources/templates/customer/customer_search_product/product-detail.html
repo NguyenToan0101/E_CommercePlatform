@@ -852,6 +852,44 @@
             align-items: center;
             justify-content: center;
         }
+        .view-model-link {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .view-model-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #00f2fe, #4facfe); /* đảo màu */
+        }
+
+        .virtual-try-on-link {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 10px;
+        }
+
+        .virtual-try-on-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(45deg, #764ba2, #667eea);
+        }
 
         /* Report Modal Styles */
         #report-modal, #report-review-modal {
@@ -1051,7 +1089,11 @@
                 <button type="button" onclick="changeQty(1)" id="btn-plus">+</button>
                 <span id="stock-info"></span>
             </div>
-
+            <a href="/view-model" class="view-model-link">Xem model 3D</a>
+            <!-- Virtual try-on button - only show for specific product IDs (glasses, hats, rings) -->
+            <a th:if="${detail.product.id == 48 || detail.product.id == 49 || detail.product.id == 50}"
+               th:href="@{/virtual-ar(productId=${detail.product.id}, productName=${detail.product.name}, type=${detail.product.id == 49 ? 'glasses' : detail.product.id == 48 ? 'headwear' : 'rings'})}" 
+               class="virtual-try-on-link">Thử sản phẩm virtual AR</a>
             <div class="product-actions">
                 <button class="add-to-cart-btn" id="btn-add-cart">Thêm Vào Giỏ Hàng</button>
                 <button class="buy-now-btn" id="btn-buy-now">Mua Ngay</button>
@@ -1242,7 +1284,7 @@
 
 <script th:inline="javascript">
     // Lấy productId từ Thymeleaf
-    const productId = [[${detail.product.id}]];
+    const productId = /*[[${detail.product.id}]]*/ null;
     // Kiểm tra trạng thái đăng nhập của customer
     const isCustomerLoggedIn = /*[[${customer != null}]]*/ false;
 </script>

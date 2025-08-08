@@ -96,8 +96,10 @@ public class CheckoutController {
             Model model, HttpSession session) {
         Customer customer = (Customer) session.getAttribute("customer");
         List<CartPreviewDTO> preview = paymentService.getCheckoutPreview(customer, cartItemIds);
+        Wallet wallet = walletService.getOrCreateWallet(customer);
         model.addAttribute("customer", customer);
         model.addAttribute("items", preview);
+        model.addAttribute("wallet", wallet);
         return "customer/wallet/checkout-preview";
     }
 

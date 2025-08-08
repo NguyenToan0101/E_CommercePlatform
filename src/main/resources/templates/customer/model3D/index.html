@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TINT-VTO Widget Demo</title>
+
+    <!-- import of TINT-VTO widget -->
+    <script type="module" src="https://tintvto.com/widget.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+        #some-container {
+            max-width: 800px;
+            margin: 50px auto;
+            text-align: center;
+        }
+        tint-vto {
+            width: 100%;
+            height: 600px;
+            display: block;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: white;
+        }
+        button {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005fa3;
+        }
+    </style>
+</head>
+<body>
+<div id="some-container">
+    <h1>Virtual Try-On Demo</h1>
+    <!-- Use merchant-id only -->
+    <tint-vto merchant-id="712f3269-2271-f6a4f784e-7585f13e172"></tint-vto>
+
+    <button id="openVTO">Open VTO</button>
+</div>
+
+<script type="module">
+    window.addEventListener("DOMContentLoaded", () => {
+        const widget = document.querySelector("tint-vto");
+        const openBtn = document.getElementById("openVTO");
+
+        openBtn.addEventListener("click", async () => {
+            try {
+                await widget.open();
+            } catch (err) {
+                console.error("Error opening VTO widget:", err);
+            }
+        });
+    });
+</script>
+</body>
+</html>

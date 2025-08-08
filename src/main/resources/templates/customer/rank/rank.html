@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xếp Hạng Khách Hàng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .rank-card {
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        .rank-card:hover {
+            transform: translateY(-5px);
+        }
+        .rank-badge {
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 8px 16px;
+            border-radius: 25px;
+        }
+        .rank-bronze {
+            background: linear-gradient(45deg, #cd7f32, #b8860b);
+            color: white;
+        }
+        .rank-silver {
+            background: linear-gradient(45deg, #c0c0c0, #a9a9a9);
+            color: white;
+        }
+        .rank-gold {
+            background: linear-gradient(45deg, #ffd700, #ffb347);
+            color: white;
+        }
+        .rank-platinum {
+            background: linear-gradient(45deg, #e5e4e2, #b8b8b8);
+            color: white;
+        }
+        .rank-diamond {
+            background: linear-gradient(45deg, #b9f2ff, #87ceeb);
+            color: white;
+        }
+        .progress-custom {
+            height: 25px;
+            border-radius: 15px;
+        }
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 15px;
+        }
+        .leaderboard-item {
+            border-left: 4px solid #007bff;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .current-user {
+            border-left: 4px solid #28a745;
+            background: #d4edda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <!-- Header -->
+        <div class="row bg-primary text-white p-3">
+            <div class="col-12">
+                <h2><i class="fas fa-trophy"></i> Hệ Thống Xếp Hạng Khách Hàng</h2>
+                <p class="mb-0">Chào mừng <span th:text="${customer.firstname + ' ' + customer.lastname}"></span></p>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <!-- Thông tin xếp hạng cá nhân -->
+            <div class="col-lg-4">
+                <div class="card rank-card">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="fas fa-user-circle"></i> Thông Tin Xếp Hạng Của Bạn</h5>
+                    </div>
+                    <div class="card-body text-center">
+                        <div th:if="${customerRank != null}">
+                            <div class="mb-3">
+                                <span th:with="rankClass=${customerRank.rankType == 'ĐỒNG' ? 'bronze' : 
+                                     customerRank.rankType == 'BẠC' ? 'silver' : 
+                                     customerRank.rankType == 'VÀNG' ? 'gold' : 
+                                     customerRank.rankType == 'BẠCH KIM' ? 'platinum' : 'diamond'}"
+                                      th:class="${'rank-badge rank-' + rankClass}"
+                                      th:text="${customerRank.rankType}"></span>
+                            </div>
+                            
+                            <div class="row text-center">
+                                <div class="col-6">
+                                    <h4 th:text="${customerRank.points}">0</h4>
+                                    <small class="text-muted">Điểm</small>
+                                </div>
+                                <div class="col-6">
+                                    <h4 th:text="${customerRank.orderCount}">0</h4>
+                                    <small class="text-muted">Đơn hàng</small>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <h6>Tổng chi tiêu</h6>
+                                <h4 class="text-success" th:text="${#numbers.formatDecimal(customerRank.totalSpent, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</h4>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <small class="text-muted">Ngày tạo xếp hạng:</small><br>
+                                <small th:text="${#temporals.format(customerRank.createdAt, 'dd/MM/yyyy HH:mm')}">01/01/2024</small>
+                            </div>
+                        </div>
+                        <div th:if="${customerRank == null}" class="text-center">
+                            <i class="fas fa-spinner fa-spin fa-3x text-muted"></i>
+                            <p class="mt-3">Đang tính toán xếp hạng...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thông tin các cấp độ -->
+            <div class="col-lg-8">
+                <div class="card rank-card">
+                    <div class="card-header bg-info text-white">
+                        <h5><i class="fas fa-star"></i> Các Cấp Độ Xếp Hạng</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <span class="rank-badge rank-bronze me-3">ĐỒNG</span>
+                                    <div>
+                                        <strong>Từ 0 điểm</strong><br>
+                                        <small class="text-muted">Khách hàng mới</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <span class="rank-badge rank-silver me-3">BẠC</span>
+                                    <div>
+                                        <strong>Từ 2,000 điểm</strong><br>
+                                        <small class="text-muted">Khách hàng thân thiết</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <span class="rank-badge rank-gold me-3">VÀNG</span>
+                                    <div>
+                                        <strong>Từ 5,000 điểm</strong><br>
+                                        <small class="text-muted">Khách hàng VIP</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <span class="rank-badge rank-platinum me-3">BẠCH KIM</span>
+                                    <div>
+                                        <strong>Từ 7,000 điểm</strong><br>
+                                        <small class="text-muted">Khách hàng Premium</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="d-flex align-items-center p-3 border rounded">
+                                    <span class="rank-badge rank-diamond me-3">KIM CƯƠNG</span>
+                                    <div>
+                                        <strong>Từ 10,000 điểm</strong><br>
+                                        <small class="text-muted">Khách hàng Diamond</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bảng xếp hạng -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card rank-card">
+                    <div class="card-header bg-success text-white">
+                        <h5><i class="fas fa-medal"></i> Bảng Xếp Hạng Top 10 (Từ Cao Đến Thấp)</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Khách hàng</th>
+                                        <th>Xếp hạng</th>
+                                        <th>Điểm</th>
+                                        <th>Đơn hàng</th>
+                                        <th>Tổng chi tiêu</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="rank, stat : ${allRanks}" th:if="${stat.index < 10}"
+                                        th:class="${rank.customer.id == customer.id ? 'table-success' : ''}">
+                                        <td th:text="${stat.count}">1</td>
+                                        <td>
+                                            <strong th:text="${rank.customer.firstname + ' ' + rank.customer.lastname}">Tên khách hàng</strong>
+                                            <br>
+                                            <small class="text-muted" th:text="${rank.customer.email}">email@example.com</small>
+                                        </td>
+                                        <td>
+                                            <span th:with="rankClass=${rank.rankType == 'ĐỒNG' ? 'bronze' : 
+                                                 rank.rankType == 'BẠC' ? 'silver' : 
+                                                 rank.rankType == 'VÀNG' ? 'gold' : 
+                                                 rank.rankType == 'BẠCH KIM' ? 'platinum' : 'diamond'}"
+                                                  th:class="${'rank-badge rank-' + rankClass}"
+                                                  th:text="${rank.rankType}">ĐỒNG</span>
+                                        </td>
+                                        <td>
+                                            <strong th:text="${rank.points}">0</strong>
+                                        </td>
+                                        <td th:text="${rank.orderCount}">0</td>
+                                        <td th:text="${#numbers.formatDecimal(rank.totalSpent, 0, 'COMMA', 0, 'POINT') + ' VNĐ'}">0 VNĐ</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                <i class="fas fa-info-circle"></i> 
+                                Bảng xếp hạng hiển thị 10 khách hàng có điểm cao nhất theo thứ tự từ cao đến thấp
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="row mt-4 mb-4">
+            <div class="col-12 text-center">
+                <a href="/rank/all" class="btn btn-success me-2">
+                    <i class="fas fa-list"></i> Xem Tất Cả
+                </a>
+                <div class="btn-group" role="group">
+                    <a href="/rank/bronze" class="btn btn-outline-warning">
+                        <i class="fas fa-medal"></i> Xem ĐỒNG
+                    </a>
+                    <a href="/rank/silver" class="btn btn-outline-secondary">
+                        <i class="fas fa-medal"></i> Xem BẠC
+                    </a>
+                    <a href="/rank/gold" class="btn btn-outline-warning">
+                        <i class="fas fa-medal"></i> Xem VÀNG
+                    </a>
+                    <a href="/rank/platinum" class="btn btn-outline-info">
+                        <i class="fas fa-medal"></i> Xem BẠCH KIM
+                    </a>
+                    <a href="/rank/diamond" class="btn btn-outline-primary">
+                        <i class="fas fa-gem"></i> Xem KIM CƯƠNG
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
