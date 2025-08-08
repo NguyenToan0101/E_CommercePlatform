@@ -2,12 +2,14 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 
 @Entity
 @Table(name = "productimages")
+@Data
 public class Productimage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,35 +24,12 @@ public class Productimage {
     @Column(name = "imageurl", nullable = false, length = Integer.MAX_VALUE)
     private String imageurl;
 
-    @Column(name = "embedding", columnDefinition = "TEXT")
-    private String embedding;
+    @Column(
+            name = "embedding",
+            columnDefinition = "vector(512)"
+    )
+    @org.hibernate.annotations.JdbcTypeCode(java.sql.Types.ARRAY)
+    private Float[] embedding;
 
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Product getProductid() {
-        return productid;
-    }
-
-    public void setProductid(Product productid) {
-        this.productid = productid;
-    }
-
-    public String getImageurl() {
-        return imageurl;
-    }
-
-    public void setImageurl(String imageurl) {
-        this.imageurl = imageurl;
-    }
-
-    public String getEmbedding() {return embedding;}
-
-    public void setEmbedding(String embedding) {this.embedding = embedding;}
 }

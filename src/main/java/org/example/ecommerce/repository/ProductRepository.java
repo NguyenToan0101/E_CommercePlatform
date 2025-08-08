@@ -75,14 +75,12 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "shopid",
             "categoryid",
             "inventories",
-            "productimages",
             "reviews",
             "wishlists"
     })
     @Query("""
       SELECT DISTINCT p FROM Product p
       LEFT JOIN FETCH p.inventories
-      LEFT JOIN FETCH p.productimages
       LEFT JOIN FETCH p.shopid
       LEFT JOIN FETCH p.categoryid
       LEFT JOIN FETCH p.reviews

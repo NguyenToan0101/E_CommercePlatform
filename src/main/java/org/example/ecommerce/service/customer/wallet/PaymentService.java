@@ -248,8 +248,8 @@ public class PaymentService {
                     Optional.ofNullable(promotion.getRevenue()).orElse(BigDecimal.ZERO).add(price)
             );
             
-            promotion.setOrders(promotion.getOrders()+1);
-            promotion.setUsageCount(promotion.getUsageCount()+1);
+            promotion.setOrders(1);
+            promotion.setUsageCount(1);
             promotionRepository.save(promotion);
         }
         Activity activity;

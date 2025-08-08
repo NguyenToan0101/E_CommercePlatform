@@ -102,6 +102,7 @@ public class Customer {
     @OneToMany(mappedBy = "customerid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 
-
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer_id")
+    private List<RecommenderSystem> recommenderSystem;
 
 }

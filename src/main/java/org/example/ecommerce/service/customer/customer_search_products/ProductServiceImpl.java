@@ -76,7 +76,16 @@ public class ProductServiceImpl implements ProductService {
                 inventories.add(inv);
             }
         }
-        List<Productimage> images = new ArrayList<>(product.getProductimages());
+        // Load product images separately to avoid embedding field issues
+        List<Object[]> imageData = imageRepo.findImageDataByProductId(productId);
+        List<Productimage> images = new ArrayList<>();
+        for (Object[] data : imageData) {
+            Productimage img = new Productimage();
+            img.setId((Integer) data[0]);
+            img.setImageurl((String) data[1]);
+            img.setProductid(product);
+            images.add(img);
+        }
         List<Review> reviews = new ArrayList<>(product.getReviews());
         List<Wishlist> wishlists = new ArrayList<>(product.getWishlists());
 
