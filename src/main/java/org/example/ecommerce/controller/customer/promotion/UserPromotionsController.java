@@ -47,24 +47,6 @@ public class UserPromotionsController {
         return "customer/promotion/user_promotions";
     }
 
-    @GetMapping("/promotions/type/{type}")
-    public String showPromotionsByType(@PathVariable String type, 
-                                     HttpSession session, 
-                                     Model model) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        if (customer == null) {
-            return "redirect:/login";
-        }
-
-        List<PromotionDTO> promotions = userPromotionsService.getPromotionsByType(type);
-
-        model.addAttribute("customer", customer);
-        model.addAttribute("promotions", promotions);
-        model.addAttribute("type", type);
-        model.addAttribute("totalPromotions", promotions.size());
-
-        return "customer/promotion/user_promotions";
-    }
 
 
     @GetMapping("/promotions/{id}")

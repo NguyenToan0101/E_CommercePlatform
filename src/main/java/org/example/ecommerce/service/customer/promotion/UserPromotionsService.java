@@ -58,9 +58,6 @@ public class UserPromotionsService {
             })
             .collect(Collectors.toList());
         
-        // Cập nhật status cho promotions
-        updatePromotionStatuses(allPromotions);
-        
         return promotionMapper.toDTOs(availablePromotions);
     }
 
@@ -79,17 +76,17 @@ public class UserPromotionsService {
     public boolean canUsePromotion(Customer customer, Integer promotionId) {
         // Kiểm tra xem user đã sử dụng promotion này chưa
         List<Userpromotion> userPromotions = userPromotionsRepository.findByCustomeridAndPromotionid_Id(customer, promotionId);
-        
+
         if (userPromotions.isEmpty()) {
             return true;
         }
-        
+
         // Lấy promotion để kiểm tra perUserLimit
         Promotion promotion = promotionRepository.findById(promotionId).orElse(null);
         if (promotion == null) {
             return false;
         }
-        
+
         // Kiểm tra số lần sử dụng của user
         return userPromotions.size() < promotion.getPerUserLimit();
     }
@@ -110,68 +107,8 @@ public class UserPromotionsService {
     }
 
 
-    public List<PromotionDTO> getPromotionsByType(String type) {
-        LocalDateTime now = LocalDateTime.now();
-        
-        List<Promotion> promotions = promotionRepository.findAll().stream()
-            .filter(promotion -> {
-                if (!type.equalsIgnoreCase(promotion.getType())) {
-                    return false;
-                }
-                
-                if (!"ACTIVE".equalsIgnoreCase(promotion.getStatus())) {
-                    return false;
-                }
-                
-                if (promotion.getStartdate().isAfter(now) || promotion.getEnddate().isBefore(now)) {
-                    return false;
-                }
-                
-                return true;
-            })
-            .collect(Collectors.toList());
-        
-        return promotionMapper.toDTOs(promotions);
-    }
 
 
-    private void updatePromotionStatuses(List<Promotion> promotions) {
-        LocalDateTime now = LocalDateTime.now();
-        
-        for (Promotion promotion : promotions) {
-            boolean statusChanged = false;
-            
-            if (!"PAUSED".equalsIgnoreCase(promotion.getStatus())) {
-                if (promotion.getStartdate().isBefore(now) && promotion.getEnddate().isAfter(now)) {
-                    if (!"ACTIVE".equals(promotion.getStatus())) {
-                        promotion.setStatus("ACTIVE");
-                        statusChanged = true;
-                    }
-                } else if (promotion.getEnddate().isBefore(now)) {
-                    if (!"EXPIRED".equals(promotion.getStatus())) {
-                        promotion.setStatus("EXPIRED");
-                        statusChanged = true;
-                    }
-                } else if (promotion.getStartdate().isAfter(now)) {
-                    if (!"SCHEDULED".equals(promotion.getStatus())) {
-                        promotion.setStatus("SCHEDULED");
-                        statusChanged = true;
-                    }
-                }
-            }
-            
-            if (statusChanged) {
-                promotionRepository.save(promotion);
-                            }
-            }
-        }
-
-        /**
-         * Lưu promotion vào kho voucher của user
-         * @param customer Customer hiện tại
-         * @param promotionId ID của promotion
-         * @return true nếu lưu thành công
-         */
         public boolean saveUserPromotion(Customer customer, Integer promotionId) {
             try {
                 // Kiểm tra promotion có tồn tại không
