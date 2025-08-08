@@ -5,8 +5,11 @@ import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+import org.example.ecommerce.entity.conplaint.Complaint;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.math.BigDecimal;
@@ -18,8 +21,11 @@ import java.util.LinkedHashSet;
 
 import java.util.List;
 import java.util.Set;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"cartitems", "inventories", "inventoriesView", "orderitems", "productimages", "promotionTargets", "reviews", "wishlists"})
 @Entity
 @Table(name = "products")
 public class Product {
@@ -107,6 +113,4 @@ public class Product {
         REJECTED,
         HIDDEN
     }
-
-
 }

@@ -2,14 +2,17 @@ package org.example.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
+import java.util.Objects;
 
 @Entity
 @Table(name = "productimages")
-@Data
+@Getter
+@Setter
+@ToString(exclude = "productid")
 public class Productimage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +34,16 @@ public class Productimage {
     @org.hibernate.annotations.JdbcTypeCode(java.sql.Types.ARRAY)
     private Float[] embedding;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Productimage that = (Productimage) o;
+        return Objects.equals(id, that.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

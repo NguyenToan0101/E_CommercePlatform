@@ -18,7 +18,7 @@ import java.util.Optional;
 
 
 @Service
-public class PromotionService {
+public class    PromotionService {
     private final PromotionRepository promotionRepository;
     private final PromotionMapper promotionMapper;
     private final CategoryRepository categoryRepository;
