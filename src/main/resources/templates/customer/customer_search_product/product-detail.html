@@ -1391,8 +1391,12 @@
             return;
         }
 
-        showFullPageLoading(true);
-        fetch('/cart/add', {
+        // Disable button để tránh spam
+        const addCartBtn = document.getElementById('btn-add-cart');
+        addCartBtn.disabled = true;
+        addCartBtn.textContent = 'Đang thêm...';
+
+        fetch('/cart/api/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -1400,21 +1404,39 @@
             body: `productId=${productId}&inventoryId=${inventoryId}&quantity=${quantity}`
         })
             .then(response => {
-                showFullPageLoading(false);
                 if (response.ok) {
-                    showAddToCartSuccess();
+                    return response.json();
+                } else if (response.status === 401) {
+                    window.location.href = '/login';
+                    return;
                 } else {
-                    alert('Thêm vào giỏ hàng thất bại!');
+                    throw new Error('Network response was not ok');
                 }
             })
-            .catch(() => {
-                showFullPageLoading(false);
+            .then(data => {
+                if (data.status === 'ADDED') {
+                    showAddToCartSuccess('Đã thêm vào giỏ hàng!');
+                } else if (data.status === 'UPDATED') {
+                    showAddToCartSuccess('Đã cập nhật số lượng!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
                 alert('Có lỗi xảy ra khi thêm vào giỏ hàng!');
+            })
+            .finally(() => {
+                // Re-enable button
+                addCartBtn.disabled = false;
+                addCartBtn.textContent = 'Thêm vào giỏ hàng';
             });
     };
 
-    function showAddToCartSuccess() {
+    function showAddToCartSuccess(message = 'Đã thêm vào giỏ hàng!') {
         const box = document.getElementById('add-cart-success');
+        const messageElement = box.querySelector('.success-message');
+        if (messageElement) {
+            messageElement.textContent = message;
+        }
         box.style.display = 'block';
         setTimeout(() => {
             box.style.display = 'none';
