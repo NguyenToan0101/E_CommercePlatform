@@ -17,4 +17,7 @@ public interface CustomerRankService {
     String getRankTypeByPoints(Integer points);
     
     Integer getPointsBySpent(Double totalSpent, Integer orderCount);
+    
+    // Method mới để tự động update rank khi đơn hàng được giao
+    void updateRankWhenOrderDelivered(Integer customerId);
 }

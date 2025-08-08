@@ -49,12 +49,16 @@ public class CustomerRankServiceImpl implements CustomerRankService {
             return;
         }
 
-        // Tính tổng tiền đã chi và số đơn hàng
-        List<Order> orders = orderRepository.findByCustomeridId(customerId);
-        Double totalSpent = orders.stream()
+        // Tính tổng tiền đã chi và số đơn hàng - chỉ tính đơn hàng đã giao
+        List<Order> allOrders = orderRepository.findByCustomeridId(customerId);
+        List<Order> deliveredOrders = allOrders.stream()
+                .filter(order -> "Đã giao".equals(order.getStatus()))
+                .toList();
+        
+        Double totalSpent = deliveredOrders.stream()
                 .mapToDouble(order -> order.getTotalamount().doubleValue())
                 .sum();
-        Integer orderCount = orders.size();
+        Integer orderCount = deliveredOrders.size();
 
         // Tính điểm dựa trên chi tiêu và số đơn hàng
         Integer points = getPointsBySpent(totalSpent, orderCount);
@@ -105,5 +109,10 @@ public class CustomerRankServiceImpl implements CustomerRankService {
         Integer pointsFromSpent = (int) (totalSpent / 1000);
         Integer pointsFromOrders = orderCount * 50;
         return pointsFromSpent + pointsFromOrders;
+    }
+    
+    @Override
+    public void updateRankWhenOrderDelivered(Integer customerId) {
+        calculateAndUpdateRank(customerId);
     }
 }

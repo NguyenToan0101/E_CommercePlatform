@@ -26,14 +26,11 @@ public class CustomerRankController {
             return "redirect:/login";
         }
 
+        // Tự động tính lại rank mỗi khi truy cập
+        customerRankService.calculateAndUpdateRank(customer.getId());
+        
         // Lấy thông tin xếp hạng của khách hàng hiện tại
         CustomerRank customerRank = customerRankService.getCustomerRank(customer.getId());
-        
-        // Nếu chưa có xếp hạng, tính toán và tạo mới
-        if (customerRank == null) {
-            customerRankService.calculateAndUpdateRank(customer.getId());
-            customerRank = customerRankService.getCustomerRank(customer.getId());
-        }
 
         // Lấy danh sách tất cả xếp hạng để hiển thị bảng xếp hạng
         List<CustomerRank> allRanks = customerRankService.getAllRanks();
@@ -52,6 +49,9 @@ public class CustomerRankController {
             return "redirect:/login";
         }
 
+        // Tự động tính lại rank mỗi khi truy cập
+        customerRankService.calculateAndUpdateRank(customer.getId());
+        
         List<CustomerRank> allRanks = customerRankService.getAllRanks();
         
         model.addAttribute("customer", customer);
@@ -67,6 +67,9 @@ public class CustomerRankController {
             return "redirect:/login";
         }
 
+        // Tự động tính lại rank mỗi khi truy cập
+        customerRankService.calculateAndUpdateRank(customer.getId());
+        
         List<CustomerRank> bronzeRanks = customerRankService.getRanksByType("ĐỒNG");
         
         model.addAttribute("customer", customer);
@@ -83,6 +86,9 @@ public class CustomerRankController {
             return "redirect:/login";
         }
 
+        // Tự động tính lại rank mỗi khi truy cập
+        customerRankService.calculateAndUpdateRank(customer.getId());
+        
         List<CustomerRank> silverRanks = customerRankService.getRanksByType("BẠC");
         
         model.addAttribute("customer", customer);
@@ -99,6 +105,9 @@ public class CustomerRankController {
             return "redirect:/login";
         }
 
+        // Tự động tính lại rank mỗi khi truy cập
+        customerRankService.calculateAndUpdateRank(customer.getId());
+        
         List<CustomerRank> goldRanks = customerRankService.getRanksByType("VÀNG");
         
         model.addAttribute("customer", customer);
@@ -115,6 +124,9 @@ public class CustomerRankController {
             return "redirect:/login";
         }
 
+        // Tự động tính lại rank mỗi khi truy cập
+        customerRankService.calculateAndUpdateRank(customer.getId());
+        
         List<CustomerRank> platinumRanks = customerRankService.getRanksByType("BẠCH KIM");
         
         model.addAttribute("customer", customer);
@@ -131,6 +143,9 @@ public class CustomerRankController {
             return "redirect:/login";
         }
 
+        // Tự động tính lại rank mỗi khi truy cập
+        customerRankService.calculateAndUpdateRank(customer.getId());
+        
         List<CustomerRank> diamondRanks = customerRankService.getRanksByType("KIM CƯƠNG");
         
         model.addAttribute("customer", customer);
