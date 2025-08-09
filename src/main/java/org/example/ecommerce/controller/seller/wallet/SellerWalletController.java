@@ -17,7 +17,6 @@ import jakarta.servlet.http.HttpSession;
 
 
 import java.math.BigDecimal;
-import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.LocalDate;
 import org.springframework.data.domain.Page;
@@ -54,6 +53,7 @@ public class SellerWalletController {
         model.addAttribute("toDate", toDate);
         model.addAttribute("currentPage", page);
         model.addAttribute("pageSize", size);
+        model.addAttribute("activePage", "wallet");
         return "seller/wallet";
     }
 
@@ -89,6 +89,7 @@ public class SellerWalletController {
         model.addAttribute("balance", wallet.getBalance());
         if (error != null) model.addAttribute("withdrawError", error);
         if (success != null) model.addAttribute("withdrawSuccess", success);
+        model.addAttribute("activePage", "wallet");
         return "seller/wallet_withdraw";
     }
 } 

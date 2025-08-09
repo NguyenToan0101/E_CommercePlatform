@@ -131,4 +131,5 @@ public class Shop {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

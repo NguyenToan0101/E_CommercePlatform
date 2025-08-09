@@ -35,8 +35,10 @@
                         </div>
                         <div class="seller-order-detail-actions">
                             <button class="btn-primary">Cập nhật đơn hàng</button>
-                            <button class="order-action-btn" th:if="${order.status} == 'Chờ xác nhận'">Cập nhật trạng thái</button>
-                            <button class="order-action-btn" th:if="${order.status} == 'Yêu cầu trả hàng/hoàn tiền'">Xử lý trả hàng/hoàn tiền</button>
+                            <button class="order-action-btn" th:if="${order.status} == 'Chờ xác nhận'" th:onclick="|updateStatusDetail('Xác nhận', ${order.id})|">Xác nhận</button>
+                            <button class="order-action-btn" th:if="${order.status} == 'Đã xác nhận'" th:onclick="|updateStatusDetail('Gửi hàng đi', ${order.id})|">Gửi hàng đi</button>
+                            <a class="order-action-btn" th:if="${order.status} == 'Yêu cầu trả hàng/hoàn tiền'"
+                               th:href="@{/seller/refund_money/order/{id}(id=${order.id})}" role="button">Xử lý trả hàng/hoàn tiền</a>
                         </div>
                     </div>
                     <!-- Card tiến trình đơn hàng -->
@@ -84,7 +86,7 @@
                         <tbody>
                         <tr th:each="item : ${order.orderitems}">
                             <td>
-                                <img th:src="${item.productid != null && item.productid.productimages != null && !#lists.isEmpty(item.productid.productimages) ? item.productid.productimages[0].imageurl : 'https://via.placeholder.com/48x48?text=No+Image'}" class="seller-order-product-thumb" alt="Ảnh SP" />
+                                <img th:src="${item.productid != null && productImageUrls[item.productid.id] != null ? productImageUrls[item.productid.id] : 'https://via.placeholder.com/48x48?text=No+Image'}" class="seller-order-product-thumb" alt="Ảnh SP" />
                             </td>
                             <td class="product-name-cell" th:text="${item.productid != null ? item.productid.name : 'Sản phẩm đã xóa'}"></td>
                             <td th:text="${item.inventoryid != null ? item.inventoryid.color + ' / ' + item.inventoryid.dimension : ''}"></td>
@@ -100,5 +102,26 @@
         <div th:replace="~{seller/fragments/footer :: footer}"></div>
     </div>
 </div>
+<script>
+    function updateStatusDetail(action, orderId) {
+        fetch(`/seller/orders/${orderId}/status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: `action=${encodeURIComponent(action)}`
+        })
+        .then(res => res.text())
+        .then(msg => {
+            if (msg === 'success') {
+                window.location.reload();
+            } else {
+                alert('Cập nhật trạng thái thất bại');
+            }
+        })
+        .catch(() => alert('Có lỗi xảy ra.'));
+    }
+</script>
 </body>
 </html>

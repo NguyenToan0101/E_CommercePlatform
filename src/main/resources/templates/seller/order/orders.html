@@ -11,54 +11,53 @@
     <div class="main-content">
         <div th:replace="~{seller/fragments/header :: header}"></div>
         <div class="seller-order-content-wrapper">
-
             <div style="flex:1;">
                 <div class="seller-page-header">
                     <i class="fa-solid fa-cart-shopping header-icon"></i>
                     <div class="header-title-group">
                         <h1 class="header-title">Quản lý đơn hàng</h1>
                         <p class="header-subtitle">Theo dõi và quản lý tất cả đơn hàng một cách hiệu quả</p>
-    </div>
-</div>
-<div class="order-stats">
-    <div class="order-stat-card total">
-        <i class="fa-solid fa-list icon"></i>
-        <div>
-            <div class="stat-label">Tổng đơn hàng</div>
-            <div class="stat-value" th:text="${totalOrders}">0</div>
-        </div>
-    </div>
-    <div class="order-stat-card completed">
-        <i class="fa-solid fa-circle-check icon"></i>
-        <div>
-            <div class="stat-label">Đã hoàn thành</div>
-            <div class="stat-value" th:text="${completedOrders}">0</div>
-        </div>
-    </div>
-    <div class="order-stat-card processing">
-        <i class="fa-solid fa-clock icon"></i>
-        <div>
-            <div class="stat-label">Đang giao</div>
-            <div class="stat-value" th:text="${shippingOrders}">0</div>
-        </div>
-    </div>
-    <div class="order-stat-card revenue">
-        <i class="fa-solid fa-dollar-sign icon"></i>
-        <div>
-            <div class="stat-label">Doanh thu</div>
-            <div class="stat-value" th:text="${#numbers.formatDecimal(revenue, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></div>
-        </div>
-    </div>
-</div>
-<div class="order-list-section">
-    <div class="order-list-header">
-        <h2><i class="fa-solid fa-box"></i> Danh sách đơn hàng</h2>
-        <form method="get" th:action="@{/seller/orders/search}" class="order-search-form">
-            <div class="order-search-bar">
-                <input type="text" name="keyword" placeholder="Tìm kiếm theo tên khách, mã đơn, email..." th:value="${param.keyword}">
-            </div>
-            <select name="status" style="margin-left: 1rem; padding: 0.7rem 1.5rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #f7fafd; color: #222; font-size: 1rem;">
-                <option value="">Tất cả trạng thái</option>
+                    </div>
+                </div>
+                <div class="order-stats">
+                    <div class="order-stat-card total">
+                        <i class="fa-solid fa-list icon"></i>
+                        <div>
+                            <div class="stat-label">Tổng đơn hàng</div>
+                            <div class="stat-value" th:text="${totalOrders}">0</div>
+                        </div>
+                    </div>
+                    <div class="order-stat-card completed">
+                        <i class="fa-solid fa-circle-check icon"></i>
+                        <div>
+                            <div class="stat-label">Đã hoàn thành</div>
+                            <div class="stat-value" th:text="${completedOrders}">0</div>
+                        </div>
+                    </div>
+                    <div class="order-stat-card processing">
+                        <i class="fa-solid fa-clock icon"></i>
+                        <div>
+                            <div class="stat-label">Đang giao</div>
+                            <div class="stat-value" th:text="${shippingOrders}">0</div>
+                        </div>
+                    </div>
+                    <div class="order-stat-card revenue">
+                        <i class="fa-solid fa-dollar-sign icon"></i>
+                        <div>
+                            <div class="stat-label">Doanh thu</div>
+                            <div class="stat-value" th:text="${#numbers.formatDecimal(revenue, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="order-list-section">
+                    <div class="order-list-header">
+                        <h2><i class="fa-solid fa-box"></i> Danh sách đơn hàng</h2>
+                        <form method="get" th:action="@{/seller/orders/search}" class="order-search-form">
+                            <div class="order-search-bar">
+                                <input type="text" name="keyword" placeholder="Tìm kiếm theo tên khách, mã đơn, email..." th:value="${param.keyword}">
+                            </div>
+                            <select name="status" style="margin-left: 1rem; padding: 0.7rem 1.5rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #f7fafd; color: #222; font-size: 1rem;">
+                                <option value="">Tất cả trạng thái</option>
                                 <option value="Chờ xác nhận">Chờ xác nhận</option>
                                 <option value="Đã xác nhận">Đã xác nhận</option>
                                 <option value="Chờ lấy hàng">Chờ lấy hàng</option>
@@ -66,13 +65,13 @@
                                 <option value="Đã giao">Đã giao</option>
                                 <option value="Đã hủy">Đã hủy</option>
                                 <option value="Yêu cầu trả hàng/hoàn tiền">Yêu cầu trả hàng/hoàn tiền</option>
-            </select>
-            <button type="submit" style="margin-left: 1rem; padding: 0.7rem 1.5rem; border-radius: 10px; background: #4f8cff; color: #fff; border: none; font-size: 1rem;">
-                <i class="fa fa-search"></i> Tìm kiếm
-            </button>
-        </form>
-    </div>
-    <div class="order-tabs">
+                            </select>
+                            <button type="submit" style="margin-left: 1rem; padding: 0.7rem 1.5rem; border-radius: 10px; background: #4f8cff; color: #fff; border: none; font-size: 1rem;">
+                                <i class="fa fa-search"></i> Tìm kiếm
+                            </button>
+                        </form>
+                    </div>
+                    <div class="order-tabs">
                         <button class="order-tab" data-status="" onclick="filterByStatus('')" th:text="'Tất cả (' + ${statusCounts['Tất cả']} + ')'">Tất cả</button>
                         <button class="order-tab" data-status="Chờ xác nhận" onclick="filterByStatus('Chờ xác nhận')" th:text="'Chờ xác nhận (' + ${statusCounts['Chờ xác nhận']} + ')'">Chờ xác nhận</button>
                         <button class="order-tab" data-status="Đã xác nhận" onclick="filterByStatus('Đã xác nhận')" th:text="'Đã xác nhận (' + ${statusCounts['Đã xác nhận']} + ')'">Đã xác nhận</button>
@@ -81,59 +80,65 @@
                         <button class="order-tab" data-status="Đã giao" onclick="filterByStatus('Đã giao')" th:text="'Đã giao (' + ${statusCounts['Đã giao']} + ')'">Đã giao</button>
                         <button class="order-tab" data-status="Đã hủy" onclick="filterByStatus('Đã hủy')" th:text="'Đã hủy (' + ${statusCounts['Đã hủy']} + ')'">Đã hủy</button>
                         <button class="order-tab" data-status="Yêu cầu trả hàng/hoàn tiền" onclick="filterByStatus('Yêu cầu trả hàng/hoàn tiền')" th:text="'Yêu cầu trả hàng/hoàn tiền (' + ${statusCounts['Yêu cầu trả hàng/hoàn tiền']} + ')'">Yêu cầu trả hàng/hoàn tiền</button>
-    </div>
-    <table class="order-table">
-        <thead>
-        <tr>
-            <th>Đơn hàng</th>
-            <th>Khách hàng</th>
-            <th>Sản phẩm</th>
-            <th>Ngày đặt</th>
-            <th>Tổng tiền</th>
-            <th>Trạng thái</th>
-            <th>Thao tác</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="order : ${orders}" class="order-row">
-            <td><span class="order-id">#<span th:text="${order.id}"></span></span></td>
-            <td>
-                <div class="customer-info">
-                    <div class="customer-avatar"><i class="fa-solid fa-user"></i></div>
-                    <div>
-                        <div class="customer-name" th:text="${order.fullname}"></div>
-                        <div class="customer-email" th:text="${order.customerid.email}"></div>
-                        <div class="customer-phone" th:if="${order.customerid.phone != null and !#strings.isEmpty(order.customerid.phone) and order.customerid.phone != 'null'}" th:text="${order.customerid.phone}"></div>
                     </div>
-                </div>
-            </td>
-            <td>
-                <div class="order-product-summary" th:text="${#lists.size(order.orderitems)} + ' sản phẩm'"></div>
-            </td>
-            <td><i class="fa-regular fa-calendar"></i> <span th:text="${order.orderdate}"></span></td>
-            <td><span class="order-amount" th:text="${#numbers.formatDecimal(order.totalamount, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span></td>
-            <td>
+                    <table class="order-table">
+                        <thead>
+                        <tr>
+                            <th>Đơn hàng</th>
+                            <th>Khách hàng</th>
+                            <th>Sản phẩm</th>
+                            <th>Ngày đặt</th>
+                            <th>Tổng tiền</th>
+                            <th>Thanh toán</th>
+                            <th>Trạng thái</th>
+                            <th>Thao tác</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="order : ${orders}" class="order-row">
+                            <td><span class="order-id">#<span th:text="${order.id}"></span></span></td>
+                            <td>
+                                <div class="customer-info">
+                                    <div class="customer-avatar"><i class="fa-solid fa-user"></i></div>
+                                    <div>
+                                        <div class="customer-name" th:text="${order.fullname}"></div>
+                                        <div class="customer-email" th:text="${order.customerid.email}"></div>
+                                        <div class="customer-phone" th:if="${order.customerid.phone != null and !#strings.isEmpty(order.customerid.phone) and order.customerid.phone != 'null'}" th:text="${order.customerid.phone}"></div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="order-product-summary" th:text="${#lists.size(order.orderitems)} + ' sản phẩm'"></div>
+                            </td>
+                            <td><i class="fa-regular fa-calendar"></i> <span th:text="${order.orderdate}"></span></td>
+                            <td><span class="order-amount" th:text="${#numbers.formatDecimal(order.totalamount, 0, 'COMMA', 0, 'POINT') + ' ₫'}"></span></td>
+                            <td>
+                                <span class="payment-badge"
+                                      th:classappend="${#strings.equalsIgnoreCase(order.paymentStatus, 'Đã thanh toán')} ? ' paid' : (${#strings.equalsIgnoreCase(order.paymentStatus, 'Đã hoàn tiền')} ? ' refunded' : ' unpaid')"
+                                      th:text="${order.paymentStatus != null ? order.paymentStatus : 'Chưa xác định'}"></span>
+                            </td>
+                            <td>
                                 <span th:class="'seller-order-status-badge ' + ${order.statusClass}" th:text="${order.status}"></span>
-            </td>
-            <td>
-                <div class="order-action-menu">
-                    <button class="order-action-btn" title="Xem chi tiết" th:onclick="'window.location.href=\'/seller/orders/' + ${order.id} + '\''">Xem</button>
-                    <button class="order-action-btn" title="Cập nhật trạng thái" th:attr="data-id=${order.id}" onclick="showUpdateStatusModal(this)">Cập nhật</button>
-                    <button class="order-action-btn" title="Hủy đơn" th:attr="data-id=${order.id}" onclick="cancelOrder(this)">Hủy</button>
-                </div>
-            </td>
-        </tr>
-        <tr th:if="${orders == null or #lists.isEmpty(orders)}">
-            <td colspan="7" class="empty-state">
-                <div class="empty-content">
-                    <i class="fa-solid fa-box-open fa-2x"></i>
-                    <h3>Không có đơn hàng nào</h3>
-                    <p>Hãy kiểm tra lại bộ lọc hoặc thử tìm kiếm khác.</p>
-                </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+                            </td>
+                            <td>
+                                <div class="order-action-menu">
+                                    <button class="order-action-btn" title="Xem chi tiết" th:onclick="'window.location.href=\'/seller/orders/' + ${order.id} + '\''">Xem</button>
+                                    <button class="order-action-btn" title="Cập nhật trạng thái" th:attr="data-id=${order.id},data-status=${order.status}" th:if="${order.status == 'Chờ xác nhận' || order.status == 'Đã xác nhận'}" onclick="showUpdateStatusModal(this)">Cập nhật</button>
+                                    <button class="order-action-btn" title="Hủy đơn" th:attr="data-id=${order.id}" th:if="${order.status == 'Chờ xác nhận' || order.status == 'Đã xác nhận' || order.status == 'Chờ lấy hàng'}" onclick="cancelOrder(this)" >Hủy</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${orders == null or #lists.isEmpty(orders)}">
+                            <td colspan="8" class="empty-state">
+                                <div class="empty-content">
+                                    <i class="fa-solid fa-box-open fa-2x"></i>
+                                    <h3>Không có đơn hàng nào</h3>
+                                    <p>Hãy kiểm tra lại bộ lọc hoặc thử tìm kiếm khác.</p>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -142,151 +147,154 @@
 </div>
 <!-- Modal cập nhật trạng thái -->
 <div id="updateStatusModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.2); align-items:center; justify-content:center;">
-  <div style="background:#fff; border-radius:12px; padding:2rem; min-width:320px; max-width:90vw; margin:auto; position:relative;">
-    <span style="position:absolute; top:10px; right:18px; font-size:1.5rem; cursor:pointer;" onclick="closeUpdateStatusModal()">&times;</span>
-    <h3>Cập nhật trạng thái đơn hàng</h3>
-    <form id="updateStatusForm">
-      <input type="hidden" name="orderId" id="updateStatusOrderId">
-      <label for="newStatus">Trạng thái mới</label>
-      <select name="newStatus" id="newStatus" required style="width:100%; margin:1rem 0; padding:0.7rem; border-radius:8px;">
-        <option value="Chờ xác nhận">Chờ xác nhận</option>
-        <option value="Đã xác nhận">Đã xác nhận</option>
-        <option value="Chờ lấy hàng">Chờ lấy hàng</option>
-        <option value="Đang giao hàng">Đang giao hàng</option>
-        <option value="Đã giao">Đã giao</option>
-        <option value="Đã hủy">Đã hủy</option>
-      </select>
-      <button type="submit" style="background:#4f8cff; color:#fff; border:none; border-radius:8px; padding:0.7rem 1.5rem; font-weight:600; cursor:pointer;">Cập nhật</button>
-    </form>
-  </div>
+    <div style="background:#fff; border-radius:12px; padding:2rem; min-width:320px; max-width:90vw; margin:auto; position:relative;">
+        <span style="position:absolute; top:10px; right:18px; font-size:1.5rem; cursor:pointer;" onclick="closeUpdateStatusModal()">&times;</span>
+        <h3>Cập nhật trạng thái đơn hàng</h3>
+        <form id="updateStatusForm">
+            <input type="hidden" name="orderId" id="updateStatusOrderId">
+            <label for="newStatus">Thao tác</label>
+            <select name="newStatus" id="newStatus" required style="width:100%; margin:1rem 0; padding:0.7rem; border-radius:8px;">
+                <option value="" disabled selected>Chọn thao tác</option>
+            </select>
+            <button type="submit" style="background:#4f8cff; color:#fff; border:none; border-radius:8px; padding:0.7rem 1.5rem; font-weight:600; cursor:pointer;">Cập nhật</button>
+        </form>
+    </div>
+</div>
+<!-- Cancel confirm modal -->
+<div id="cancelConfirmModal" class="modal" style="display:none; position:fixed; z-index:9999; left:0; top:0; width:100vw; height:100vh; background:rgba(0,0,0,0.2); align-items:center; justify-content:center;">
+    <div style="background:#fff; border-radius:12px; padding:2rem; min-width:320px; max-width:90vw; margin:auto; position:relative;">
+        <span style="position:absolute; top:10px; right:18px; font-size:1.5rem; cursor:pointer;" onclick="closeCancelModal()">&times;</span>
+        <h3>Xác nhận hủy đơn</h3>
+        <p>Bạn có chắc chắn muốn hủy đơn #<span id="cancelOrderIdLabel"></span> không?</p>
+        <input type="hidden" id="cancelOrderId">
+        <div style="display:flex; gap:0.5rem; justify-content:flex-end; margin-top:1rem;">
+            <button onclick="confirmCancel()" style="background:#ef4444; color:#fff; border:none; border-radius:8px; padding:0.6rem 1.2rem; font-weight:600; cursor:pointer;">Hủy đơn</button>
+            <button onclick="closeCancelModal()" style="background:#f3f4f6; color:#374151; border:none; border-radius:8px; padding:0.6rem 1.2rem; font-weight:600; cursor:pointer;">Đóng</button>
+        </div>
+    </div>
 </div>
 <style>
-/* Toast notification styles */
-.toast {
-    visibility: hidden;
-    min-width: 250px;
-    margin-left: -125px;
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    border-radius: 8px;
-    padding: 16px;
-    position: fixed;
-    z-index: 10000;
-    left: 50%;
-    top: 30px;
-    font-size: 17px;
-    opacity: 0;
-    transition: opacity 0.3s, visibility 0.3s;
-}
-
-.toast.show {
-    visibility: visible;
-    opacity: 1;
-}
-
-.toast.success {
-    background-color: #4CAF50;
-}
-
-.toast.error {
-    background-color: #f44336;
-}
-
-.toast.info {
-    background-color: #2196F3;
-}
+    /* Toast notification styles */
+    .toast {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 8px;
+        padding: 16px;
+        position: fixed;
+        z-index: 10000;
+        left: 50%;
+        top: 30px;
+        font-size: 17px;
+        opacity: 0;
+        transition: opacity 0.3s, visibility 0.3s;
+    }
+    .toast.show {
+        visibility: visible;
+        opacity: 1;
+    }
+    .toast.success {
+        background-color: #4CAF50;
+    }
+    .toast.error {
+        background-color: #f44336;
+    }
+    .toast.info {
+        background-color: #2196F3;
+    }
 </style>
-
 <!-- Toast container -->
 <div id="toast" class="toast"></div>
-
 <script>
-// Hiển thị toast thông báo
-function showToast(message, type = 'info') {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.className = `toast show ${type}`;
-    
-    // Ẩn toast sau 3 giây
-    setTimeout(() => {
-        toast.className = toast.className.replace('show', '');
-    }, 3000);
-}
-
-function filterByStatus(status) {
-    const rows = document.querySelectorAll('.order-row');
-    rows.forEach(row => {
-        const rowStatus = row.querySelector('.seller-order-status-badge').textContent.trim();
-        if (!status || rowStatus === status) {
-            row.style.display = '';
-        } else {
-            row.style.display = 'none';
-        }
-    });
-    // Cập nhật trạng thái active cho nút
-    document.querySelectorAll('.order-tab').forEach(btn => {
-        if (btn.getAttribute('data-status') === status) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
-}
-function showUpdateStatusModal(btn) {
-    const orderId = btn.getAttribute('data-id');
-    document.getElementById('updateStatusOrderId').value = orderId;
-    document.getElementById('updateStatusModal').style.display = 'flex';
-}
-function closeUpdateStatusModal() {
-    document.getElementById('updateStatusModal').style.display = 'none';
-}
-document.getElementById('updateStatusForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const orderId = document.getElementById('updateStatusOrderId').value;
-    const newStatus = document.getElementById('newStatus').value;
-    
-    // Xác nhận trước khi cập nhật
-    if (newStatus === 'Đã hủy' && !confirm('Bạn có chắc chắn muốn hủy đơn hàng này?')) {
-        return;
+    function showToast(message, type = 'info') {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.className = `toast show ${type}`;
+        setTimeout(() => {
+            toast.className = toast.className.replace('show', '');
+        }, 3000);
     }
-    
-    fetch(`/seller/orders/${orderId}/status`, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-Requested-With': 'XMLHttpRequest'
-        },
-        body: `status=${encodeURIComponent(newStatus)}`
-    })
-    .then(res => {
-        if (!res.ok) throw new Error('Network response was not ok');
-        return res.text();
-    })
-    .then(msg => {
-        if (msg === 'success') {
-            showToast('Cập nhật trạng thái thành công!', 'success');
-            setTimeout(() => location.reload(), 1500);
-        } else {
-            throw new Error('Cập nhật thất bại');
+    function filterByStatus(status) {
+        window.location.href = `/seller/orders/search?status=${encodeURIComponent(status)}`;
+    }
+    function showUpdateStatusModal(btn) {
+        const orderId = btn.getAttribute('data-id');
+        const currentStatus = btn.getAttribute('data-status');
+        const select = document.getElementById('newStatus');
+        select.innerHTML = '<option value="" disabled selected>Chọn thao tác</option>';
+        if (currentStatus === 'Chờ xác nhận') {
+            select.innerHTML += '<option value="Xác nhận">Xác nhận</option>';
+        } else if (currentStatus === 'Đã xác nhận') {
+            select.innerHTML += '<option value="Gửi hàng đi">Gửi hàng đi</option>';
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showToast('Cập nhật trạng thái thất bại!', 'error');
+        document.getElementById('updateStatusOrderId').value = orderId;
+        document.getElementById('updateStatusModal').style.display = 'flex';
+    }
+    function closeUpdateStatusModal() {
+        document.getElementById('updateStatusModal').style.display = 'none';
+    }
+    document.getElementById('updateStatusForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const orderId = document.getElementById('updateStatusOrderId').value;
+        const action = document.getElementById('newStatus').value;
+        if (!action) {
+            showToast('Vui lòng chọn thao tác!', 'error');
+            return;
+        }
+        fetch(`/seller/orders/${orderId}/status`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: `action=${encodeURIComponent(action)}`
+        })
+            .then(res => {
+                if (!res.ok) throw new Error('Network response was not ok');
+                return res.text();
+            })
+            .then(msg => {
+                if (msg === 'success') {
+                    showToast('Cập nhật trạng thái thành công!', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    throw new Error('Cập nhật thất bại');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Cập nhật trạng thái thất bại!', 'error');
+            });
     });
-});
-function cancelOrder(btn) {
-    const orderId = btn.getAttribute('data-id');
-    if(confirm('Bạn có chắc chắn muốn hủy đơn #' + orderId + ' không?')) {
+    function cancelOrder(btn) {
+        const orderId = btn.getAttribute('data-id');
+        document.getElementById('cancelOrderId').value = orderId;
+        document.getElementById('cancelOrderIdLabel').textContent = orderId;
+        document.getElementById('cancelConfirmModal').style.display = 'flex';
+    }
+    function closeCancelModal() {
+        document.getElementById('cancelConfirmModal').style.display = 'none';
+    }
+    function confirmCancel() {
+        const orderId = document.getElementById('cancelOrderId').value;
         fetch(`/seller/orders/${orderId}/cancel`, {
-            method: 'POST'
-        }).then(res => res.text()).then(msg => {
-            if(msg === 'success') location.reload();
-            else alert('Hủy đơn thất bại!');
-        });
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+        })
+            .then(res => res.text())
+            .then(msg => {
+                closeCancelModal();
+                if (msg === 'success') {
+                    showToast('Hủy đơn hàng thành công!', 'success');
+                    setTimeout(() => location.reload(), 1500);
+                } else {
+                    showToast('Hủy đơn hàng thất bại!', 'error');
+                }
+            });
     }
-}
 </script>
 </body>
 </html>

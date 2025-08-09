@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
 
 @Controller
 public class ShopProfileController {
@@ -29,6 +28,7 @@ public class ShopProfileController {
         Seller seller = customer.getSeller();
         model.addAttribute("shop", shop);
         model.addAttribute("seller", seller);
+        model.addAttribute("activePage", "shop-profile");
         return "seller/shop/profile";
     }
 
@@ -40,6 +40,7 @@ public class ShopProfileController {
         Seller seller = customer.getSeller();
         model.addAttribute("shop", shop);
         model.addAttribute("seller", seller);
+        model.addAttribute("activePage", "shop-profile-edit");
         return "seller/shop/profile_edit";
     }
 

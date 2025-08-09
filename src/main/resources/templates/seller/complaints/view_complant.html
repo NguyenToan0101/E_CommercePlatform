@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="seller/fragments/head :: head">
+    <meta charset="UTF-8">
+    <title th:text="${orderId != null} ? ('Khiếu nại đơn #' + ${orderId}) : 'Khiếu nại trả/hoàn tiền'">Complaints</title>
+</head>
+<body>
+<div class="main-layout">
+    <div th:replace="~{seller/fragments/sidebar :: sidebar}"></div>
+    <div class="main-content">
+        <div th:replace="~{seller/fragments/header :: header}"></div>
+        <div class="content-wrapper" style="padding:20px;">
+            <h2 th:text="${orderId != null} ? ('Khiếu nại/hoàn tiền - Đơn hàng #' + ${orderId}) : 'Tất cả khiếu nại trả/hoàn tiền của shop'"></h2>
+
+            <div th:if="${complaints == null || #lists.isEmpty(complaints)}">Không có khiếu nại nào.</div>
+
+            <div th:each="c : ${complaints}" class="cmp-card" style="border:1px solid #e5e7eb; border-radius:10px; padding:16px; margin:12px 0;">
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;">
+                    <div>
+                        <div><b>Mã khiếu nại:</b> <span th:text="${c.complaintId}"></span></div>
+                        <div th:if="${c.orderId != null}"><b>Đơn hàng:</b> #<span th:text="${c.orderId}"></span></div>
+                        <div><b>Khách hàng:</b> <span th:text="${c.customer.firstname + ' ' + c.customer.lastname}"></span></div>
+                        <div><b>Trạng thái:</b> <span th:text="${c.status}"></span></div>
+                        <div><b>Ngày tạo:</b> <span th:text="${#temporals.format(c.createdAt, 'dd/MM/yyyy HH:mm')}"></span></div>
+                        <div><b>Mô tả:</b> <span th:text="${c.description}"></span></div>
+                    </div>
+                    <div>
+                        <!-- Refund button uses complaint.orderId when listing all returns; otherwise use page-level orderId -->
+                        <form th:action="${orderId != null} ? @{'/seller/refund_money/order/' + ${orderId} + '/refund'} : @{'/seller/refund_money/order/' + ${c.orderId} + '/refund'}" method="post">
+                            <button type="submit" class="btn-primary" style="padding:8px 14px;">Hoàn tiền cho khách</button>
+                        </form>
+                    </div>
+                </div>
+                <div th:if="${c.images != null && !#lists.isEmpty(c.images)}" style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <img th:each="img : ${c.images}" th:src="${img.imageUrl}" alt="evidence" style="width:96px; height:96px; object-fit:cover; border-radius:6px; border:1px solid #eee;" />
+                </div>
+            </div>
+
+            <div style="margin-top:12px;">
+                <a th:href="@{/seller/orders}" class="btn-secondary">&larr; Quay lại đơn hàng</a>
+            </div>
+        </div>
+        <div th:replace="~{seller/fragments/footer :: footer}"></div>
+    </div>
+</div>
+</body>
+</html>

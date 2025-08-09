@@ -140,6 +140,8 @@ public class Order {
                 return "seller-status-dang_giao";
             case "Đã giao":
                 return "seller-status-da_giao";
+            case "Đã hoàn tiền":
+                return "seller-status-da_hoan_tien";
             default:
                 return "";
         }

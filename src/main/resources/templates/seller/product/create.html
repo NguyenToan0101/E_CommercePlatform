@@ -2,6 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head th:replace="seller/fragments/head :: head"></head>
 <body>
+<div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+<div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
 <div class="dashboard-container">
     <div th:replace="seller/fragments/sidebar :: sidebar"></div>
     <main class="main-content product-create-page">
@@ -47,10 +49,10 @@
                                     </div>
                                 </div>
                                 <input type="file" id="imageFile" name="images" accept="image/*" multiple style="display: none;" onchange="handleProductImageUpload(this)">
-                                <div th:if="${product.id != null and product.productimages != null}">
+                                <div th:if="${product.id != null and images != null}">
                                     <p>Ảnh hiện tại:</p>
                                     <div class="current-images">
-                                        <div th:each="img,iterStat : ${product.productimages}" class="current-image-item">
+                                        <div th:each="img,iterStat : ${images}" class="current-image-item">
                                             <img th:src="@{${img.imageurl}}" class="product-image-preview"/>
                                         </div>
                                     </div>
@@ -599,6 +601,26 @@
         }
         updateShippingSectionDisplay();
     });
+</script>
+<script>
+ document.addEventListener('DOMContentLoaded', function() {
+     const alertBox = document.querySelector('.alert');
+     if (alertBox) {
+         setTimeout(() => {
+             alertBox.style.transition = 'opacity 0.5s';
+             alertBox.style.opacity = '0';
+             setTimeout(() => alertBox.remove(), 500);
+         }, 4000);
+     }
+     const alertSuccess = document.querySelector('.alert-success');
+     if (alertSuccess) {
+         setTimeout(() => {
+             alertSuccess.style.transition = 'opacity 0.5s';
+             alertSuccess.style.opacity = '0';
+             setTimeout(() => alertSuccess.remove(), 500);
+         }, 4000);
+     }
+ });
 </script>
 </body>
 </html>

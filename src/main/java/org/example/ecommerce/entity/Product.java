@@ -99,7 +99,6 @@ public class Product {
 
     @OneToMany(mappedBy = "productid")
     private Set<Review> reviews = new LinkedHashSet<>();
-
     @OneToMany(mappedBy = "productid")
     private Set<Wishlist> wishlists = new LinkedHashSet<>();
 

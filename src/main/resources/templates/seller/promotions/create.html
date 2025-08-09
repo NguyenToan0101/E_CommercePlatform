@@ -118,7 +118,7 @@
 
     // Load categories
     function loadCategories() {
-        fetch('/api/categories/all')
+        fetch('/api/categories/root')
             .then(res => res.json())
             .then(data => {
                 const select = document.querySelector('select[name="categoryIds"]');

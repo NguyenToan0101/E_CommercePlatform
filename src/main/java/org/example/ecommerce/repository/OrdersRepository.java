@@ -86,7 +86,7 @@ public interface OrdersRepository extends JpaRepository<Order, Integer> {
             "GROUP BY c.categoryname ORDER BY SUM(o.totalamount) DESC")
     List<Object[]> sumRevenueByCategoryAndShopId(@Param("shopId") Integer shopId);
 
-    @Query(value = "SELECT o.* FROM orders o " +
+    @Query(value = "SELECT DISTINCT o.* FROM orders o " +
             "JOIN orderitems oi ON o.orderid = oi.orderid " +
             "JOIN products p ON oi.productid = p.productid " +
             "WHERE p.shopid = :shopId " +

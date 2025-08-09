@@ -20,6 +20,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -58,6 +59,7 @@ public class ProductService {
         handleProductSaving(product, images, colorNames, colorImages, shopId, null);
     }
 
+    @Transactional
     public void updateProduct(Integer id, Product updatedProduct, MultipartFile[] images, String[] colorNames, MultipartFile[] colorImages) {
         // Kiểm tra sản phẩm đã từng có order chưa
         Product productInDb = productRepository.findById(id)
@@ -70,9 +72,16 @@ public class ProductService {
     }
     private void handleProductSaving(Product product, MultipartFile[] images, String[] colorNames, MultipartFile[] colorImages, Integer shopId, Integer productId) {
         Product targetProduct;
+        // Build preservation map for update: key by color|dimension
+        Map<String, Inventory> existingByColorSize = new HashMap<>();
         if (productId != null) { // Update
             targetProduct = productRepository.findById(productId)
                     .orElseThrow(() -> new RuntimeException("Product not found"));
+            for (Inventory existing : targetProduct.getInventories()) {
+                String key = (existing.getColor() == null ? "" : existing.getColor().trim().toLowerCase()) + "|" +
+                             (existing.getDimension() == null ? "" : existing.getDimension().trim().toLowerCase());
+                existingByColorSize.put(key, existing);
+            }
             targetProduct.getInventories().clear(); // Clear old inventories
         } else { // Create
             targetProduct = product;
@@ -133,6 +142,25 @@ public class ProductService {
                     if (inventory.getAlertQuantity() == null) {
                         inventory.setAlertQuantity(5);
                     }
+                } else { // Preserve when update
+                    String key = (inventory.getColor() == null ? "" : inventory.getColor().trim().toLowerCase()) + "|" +
+                                 (inventory.getDimension() == null ? "" : inventory.getDimension().trim().toLowerCase());
+                    Inventory oldInv = existingByColorSize.get(key);
+                    if (oldInv != null) {
+                        // keep solditems
+                        inventory.setSolditems(oldInv.getSolditems());
+                        // keep alertQuantity if not provided by form
+                        if (inventory.getAlertQuantity() == null) {
+                            inventory.setAlertQuantity(oldInv.getAlertQuantity());
+                        }
+                        // keep image if not overwritten by color image map and new value is empty
+                        if ((inventory.getImage() == null || inventory.getImage().isEmpty())) {
+                            inventory.setImage(oldInv.getImage());
+                        }
+                    }
+                    if (inventory.getAlertQuantity() == null) {
+                        inventory.setAlertQuantity(5);
+                    }
                 }
                 inventory.setProductid(targetProduct);
                 inventory.setUpdatedAt(Instant.now());
@@ -147,8 +175,8 @@ public class ProductService {
 
         if (images != null) {
             if (productId != null) {
-                // Xóa toàn bộ ảnh cũ của sản phẩm khi update
-                imageRepository.deleteAll(imageRepository.findAllByProductid(saved));
+                // Bulk delete old images to avoid fetching embedding
+                imageRepository.deleteAllByProduct(saved);
             }
             for (MultipartFile image : images) {
                 if (image != null && !image.isEmpty()) {
@@ -246,9 +274,11 @@ public class ProductService {
     public Page<ProductSalesDTO> getProductSalesData(Integer shopId, String status, String keyword, Integer categoryId, Pageable pageable) {
         List<Product> products;
         if (status != null && !status.isEmpty() && !status.equalsIgnoreCase("all")) {
-            products = productRepository.findByShopidIdAndStatus(shopId, status);
+            // Sử dụng method mới để load với images nhưng không load embedding
+            products = productRepository.findByShopidIdAndStatusWithImages(shopId, status);
         } else {
-            products = productRepository.findByShopidId(shopId);
+            // Sử dụng method mới để load với images nhưng không load embedding
+            products = productRepository.findByShopidIdWithImages(shopId);
         }
         // Filter by keyword
         if (keyword != null && !keyword.isEmpty()) {
@@ -326,8 +356,9 @@ public class ProductService {
                     );
                 }).collect(Collectors.toList());
 
-        String imageUrl = product.getProductimages().stream()
-                .map(Productimage::getImageurl)
+        String imageUrl = product.getInventories().stream()
+                .map(Inventory::getImage)
+                .filter(img -> img != null && !img.isEmpty())
                 .findFirst()
                 .orElse(""); // Trả về chuỗi rỗng nếu không có ảnh
 
@@ -357,14 +388,15 @@ public class ProductService {
         return productRepository.findByShopidId(shopId);
     }
 
+    @Transactional
     public void deleteProductHard(Integer id) {
         Product product = productRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("Không tìm thấy sản phẩm!"));
         if (!"pending_approval".equals(product.getStatus())) {
             throw new IllegalStateException("Chỉ được xóa sản phẩm đang chờ duyệt!");
         }
-        // Xóa ảnh sản phẩm
-        imageRepository.deleteAll(imageRepository.findAllByProductid(product));
+        // Xóa ảnh sản phẩm bằng bulk delete (tránh fetch embedding)
+        imageRepository.deleteAllByProduct(product);
         // Xóa biến thể
         inventoryRepository.deleteAll(inventoryRepository.findAllByProductid(product));
         // Xóa sản phẩm
