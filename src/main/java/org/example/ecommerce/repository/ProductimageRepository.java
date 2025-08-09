@@ -68,4 +68,4 @@ public interface ProductimageRepository extends JpaRepository<Productimage, Inte
     List<Productimage> findByEmbeddingIsNull();
 }
 
-}
+
